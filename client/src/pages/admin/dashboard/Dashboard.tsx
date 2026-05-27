@@ -2,9 +2,13 @@ import "./Dashboard.css";
 
 function Dashboard() {
   return (
-    <>
-      <h1>Hello from Dashboard</h1>
-    </>
+    <div>
+      <h1>Bonjour, Admin 👋</h1>
+      <p>
+        Bienvenue sur votre tableau de bord. Voici un aperçu de vos statistiques
+        récentes :
+      </p>
+    </div>
   );
 }
 
