@@ -7,10 +7,10 @@ import { RouterProvider, createBrowserRouter } from "react-router";
 
 // Import the main app component
 import App from "./App";
+import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import Home from "./pages/customer/home/Home";
-import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
