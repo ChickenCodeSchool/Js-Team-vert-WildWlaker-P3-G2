@@ -5,8 +5,8 @@ import CustomerNavBar from "./components/customer/CustomerNavBar";
 function App() {
   return (
     <main>
-      <CustomerNavBar />
       <Outlet />
+      <CustomerNavBar />
     </main>
   );
 }
