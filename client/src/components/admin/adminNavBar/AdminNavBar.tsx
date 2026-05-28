@@ -1,17 +1,17 @@
-import { NavLink } from "react-router";
 import {
-  FiHome,
-  FiUser,
-  FiScissors,
-  FiMessageSquare,
-  FiCalendar,
-  FiAlertTriangle,
-  FiCamera,
-  FiSettings,
-  FiBarChart2,
   FiAirplay,
+  FiAlertTriangle,
+  FiBarChart2,
+  FiCalendar,
+  FiCamera,
+  FiHome,
+  FiMessageSquare,
+  FiScissors,
+  FiSettings,
   FiStar,
+  FiUser,
 } from "react-icons/fi";
+import { NavLink } from "react-router";
 import "./AdminNavBar.css";
 
 function AdminNavBar() {
