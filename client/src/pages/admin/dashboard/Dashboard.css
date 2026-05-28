@@ -1,6 +1,7 @@
 .dashboard-main {
   width: 100%;
   height: 100vh;
+  background-color: var(--gray-50);
   .dashboard-header {
     padding: 20px;
     h1 {
@@ -18,6 +19,6 @@
   .dashboard-content-graphs {
     width: 100%;
     display: flex;
-    gap: 20px;
+    justify-content: space-around;
   }
 }
