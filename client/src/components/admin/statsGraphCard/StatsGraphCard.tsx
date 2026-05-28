@@ -3,7 +3,7 @@ import { Area, AreaChart, ResponsiveContainer } from "recharts";
 import "./StatsGraphCard.css";
 
 const data = [
-  { value: 10 },
+  { value: 12 },
   { value: 25 },
   { value: 20 },
   { value: 75 },
