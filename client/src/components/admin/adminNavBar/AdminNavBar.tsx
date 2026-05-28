@@ -13,11 +13,13 @@ import {
 } from "react-icons/fi";
 import { NavLink } from "react-router";
 import "./AdminNavBar.css";
+import icon from "../../../assets/images/icon.png";
 
 function AdminNavBar() {
   return (
     <nav className="adminNavBar-main">
-      <h2>SECARE</h2>
+      <img src={icon} alt="Icon" className="adminNavBar-icon" />
+
       <NavLink to="/admin" className="adminNavBar-menu">
         <FiHome /> Tableau de Bord
       </NavLink>

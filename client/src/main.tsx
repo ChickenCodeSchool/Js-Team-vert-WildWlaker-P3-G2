@@ -10,6 +10,7 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 
 // Import additional components for new routes
@@ -27,7 +28,11 @@ const router = createBrowserRouter([
     element: <App />,
     id: "app",
     children: [
-      { path: "/", element: <Home /> },
+      {
+        path: "/",
+        element: <CustomerLayout />,
+        children: [{ index: true, element: <Home /> }],
+      },
       {
         path: "/admin",
         element: <AdminLayout />,
