@@ -4,7 +4,7 @@ import Carrousel from "../../../components/carrousel/Carrousel";
 function Home() {
   return (
     <>
-      <h1>Hello from Home</h1>
+      <h1> from Home</h1>
       <Carrousel />
     </>
   );
