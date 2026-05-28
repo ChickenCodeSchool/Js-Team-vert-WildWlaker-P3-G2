@@ -1,6 +1,6 @@
 import "./Carrousel.css";
-import { MdOutlineStar } from "react-icons/md";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { MdOutlineStar } from "react-icons/md";
 
 type Barber = {
   id: number;
@@ -42,14 +42,13 @@ const barbers: Barber[] = [
     rating: "4,7",
     reviews: 55,
     city: "Chelle",
-    image: "/src/assets/images/espace coiffeur.jpg",
+    image: "/src/assets/images/espacecoiffeur.jpg",
   },
 ];
 
 function Carrousel() {
   return (
     <section className="carrousel">
-      
       <div className="carrousel__list">
         {barbers.map((barber) => (
           <article className="carrousel__card" key={barber.id}>
@@ -59,23 +58,20 @@ function Carrousel() {
                 src={barber.image}
                 alt={barber.name}
               />
-
             </div>
 
             <div className="carrousel__content">
               <h3 className="carrousel__name">{barber.name}</h3>
 
               <p className="carrousel__rating">
-                    <MdOutlineStar className="star-icon" />
-                    {barber.rating} ({barber.reviews})
-                    
-                </p>
-                
-                
+                <MdOutlineStar className="star-icon" />
+                {barber.rating} ({barber.reviews})
+              </p>
+
               <p className="carrousel__city">
-                    <FaMapMarkerAlt className="location-icon"/> 
-                    {barber.city}
-                </p>
+                <FaMapMarkerAlt className="location-icon" />
+                {barber.city}
+              </p>
             </div>
           </article>
         ))}
