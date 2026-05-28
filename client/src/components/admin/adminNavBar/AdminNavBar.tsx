@@ -1,5 +1,17 @@
 import { NavLink } from "react-router";
-
+import {
+  FiHome,
+  FiUser,
+  FiScissors,
+  FiMessageSquare,
+  FiCalendar,
+  FiAlertTriangle,
+  FiCamera,
+  FiSettings,
+  FiBarChart2,
+  FiAirplay,
+  FiStar,
+} from "react-icons/fi";
 import "./AdminNavBar.css";
 
 function AdminNavBar() {
@@ -7,41 +19,42 @@ function AdminNavBar() {
     <nav className="adminNavBar-main">
       <h2>SECARE</h2>
       <NavLink to="/admin" className="adminNavBar-menu">
-        🏠 Tableau de Bord
+        <FiHome /> Tableau de Bord
       </NavLink>
       <h3>GESTION</h3>
       <NavLink to="/admin/users" className="adminNavBar-menu">
-        🧑 Utilisateurs
+        <FiUser /> Utilisateurs
       </NavLink>
       <NavLink to="/admin/barbers" className="adminNavBar-menu">
-        💇 Coiffeurs
+        <FiScissors /> Coiffeurs
       </NavLink>
       <NavLink to="/admin/reservations" className="adminNavBar-menu">
-        🗓️ Réservations
+        <FiCalendar /> Réservations
       </NavLink>
       <NavLink to="/admin/reviews" className="adminNavBar-menu">
-        💬 Avis & Commentaires
+        <FiMessageSquare /> Avis & Commentaires
       </NavLink>
       <NavLink to="/admin/reporting" className="adminNavBar-menu">
-        📢 Signalements
+        <FiAlertTriangle /> Signalements
       </NavLink>
       <h3>CONTENU</h3>
       <NavLink to="/admin/events" className="adminNavBar-menu">
-        🎉 Événements
+        <FiStar /> Événements
       </NavLink>
       <NavLink to="/admin/banniere" className="adminNavBar-menu">
-        🖼️ Bannières
+        <FiCamera />
+        Bannières
       </NavLink>
       <h3>ANALYTICS</h3>
       <NavLink to="/admin/statistics" className="adminNavBar-menu">
-        📊 Statistiques
+        <FiBarChart2 /> Statistiques
       </NavLink>
       <h3>CONFIGURATION</h3>
       <NavLink to="/admin/admin" className="adminNavBar-menu">
-        🏢 Administrateurs
+        <FiAirplay /> Administrateurs
       </NavLink>
       <NavLink to="/admin/configuration" className="adminNavBar-menu">
-        🛠️ Paramètres
+        <FiSettings /> Paramètres
       </NavLink>
     </nav>
   );
