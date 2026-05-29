@@ -60,13 +60,13 @@ const RenderPieShape = (props: Partial<RenderPieShapeProps>) => {
   );
 };
 
-export const ReservationStatusChart: React.FC = () => {
+function ReservationStatusGraph() {
   return (
-    <div className="chart-card">
-      <h3 className="chart-title">Réservations par statut</h3>
+    <div className="ReservationStatusGraph-card">
+      <h3 className="ReservationStatusGraph-title">Réservations par statut</h3>
 
-      <div className="chart-content">
-        <div className="chart-wrapper">
+      <div className="ReservationStatusGraph-content">
+        <div className="ReservationStatusGraph-wrapper">
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
@@ -82,13 +82,13 @@ export const ReservationStatusChart: React.FC = () => {
             </PieChart>
           </ResponsiveContainer>
 
-          <div className="chart-center-text">
+          <div className="ReservationStatusGraph-center-text">
             <span className="total-number">{TOTAL_RESERVATIONS}</span>
             <span className="total-label">Total</span>
           </div>
         </div>
 
-        <div className="chart-legend">
+        <div className="ReservationStatusGraph-legend">
           {data.map((item) => (
             <div key={item.id} className="legend-item">
               <div className="legend-left">
@@ -107,9 +107,13 @@ export const ReservationStatusChart: React.FC = () => {
         </div>
       </div>
 
-      <NavLink to="/admin/reservations" className="chart-footer-btn">
+      <NavLink
+        to="/admin/reservations"
+        className="ReservationStatusGraph-footer-btn"
+      >
         Voir toutes les réservations
       </NavLink>
     </div>
   );
-};
+}
+export default ReservationStatusGraph;

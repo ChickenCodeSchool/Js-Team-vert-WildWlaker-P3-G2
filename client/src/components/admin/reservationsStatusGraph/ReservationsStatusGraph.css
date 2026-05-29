@@ -1,4 +1,4 @@
-.chart-card {
+.ReservationStatusGraph-card {
   background-color: var(--white);
   border-radius: var(--radius-lg);
   padding: 24px;
@@ -10,7 +10,7 @@
   flex-direction: column;
   transition: var(--transition);
 
-  .chart-title {
+  .ReservationStatusGraph-title {
     font-family: var(--font-title);
     font-size: 18px;
     font-weight: 600;
@@ -18,7 +18,7 @@
     margin: 0 0 20px 0;
   }
 
-  .chart-content {
+  .ReservationStatusGraph-content {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,7 +26,7 @@
     flex-grow: 1;
   }
 
-  .chart-wrapper {
+  .ReservationStatusGraph-wrapper {
     position: relative;
     width: 160px;
     height: 160px;
@@ -34,7 +34,7 @@
     align-items: center;
     justify-content: center;
 
-    .chart-center-text {
+    .ReservationStatusGraph-center-text {
       position: absolute;
       display: flex;
       flex-direction: column;
@@ -56,7 +56,7 @@
     }
   }
 
-  .chart-legend {
+  .ReservationStatusGraph-legend {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -98,7 +98,7 @@
     }
   }
 
-  .chart-footer-btn {
+  .ReservationStatusGraph-footer-btn {
     margin-top: 24px;
     background: transparent;
     border: 1px solid var(--gray-100);
