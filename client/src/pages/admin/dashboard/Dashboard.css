@@ -1,6 +1,6 @@
 .dashboard-main {
   width: 100%;
-  height: 100vh;
+
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -27,6 +27,15 @@
   .dashboard-content-big-graphs {
     width: 70%;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+
+    gap: 20px;
+    padding: 10px;
+    .dashboard-content-big-graphs-upper {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      width: 100%;
+    }
   }
 }
