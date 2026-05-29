@@ -4,7 +4,7 @@ import type { RequestHandler } from "express";
 import eventRepository from "./eventRepository";
 
 // The B of BREAD - Browse (Read All) operation
-const browse: RequestHandler = async (req, res, next) => {
+const browse: RequestHandler = async (_req, res, next) => {
   try {
     // Fetch all event
     const event = await eventRepository.readAll();

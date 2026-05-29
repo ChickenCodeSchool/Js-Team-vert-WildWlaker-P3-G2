@@ -8,8 +8,8 @@ const router = express.Router();
 
 // Define item-related routes
 import barberActions from "./modules/barber/barberActions";
-import prestationActions from "./modules/prestation/prestationActions";
 import eventActions from "./modules/event/eventActions";
+import prestationActions from "./modules/prestation/prestationActions";
 
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/prestations", prestationActions.browse);
