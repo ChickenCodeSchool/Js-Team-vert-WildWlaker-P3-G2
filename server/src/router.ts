@@ -7,13 +7,11 @@ const router = express.Router();
 /* ************************************************************************* */
 
 // Define item-related routes
-import barberActions from "./modules/barber/barberActions";
-import eventActions from "./modules/event/eventActions";
-import prestationActions from "./modules/prestation/prestationActions";
+import itemActions from "./modules/item/itemActions";
 
-router.get("/api/barbers", barberActions.browse);
-router.get("/api/prestations", prestationActions.browse);
-router.get("/api/events", eventActions.browse);
+router.get("/api/items", itemActions.browse);
+router.get("/api/items/:id", itemActions.read);
+router.post("/api/items", itemActions.add);
 
 /* ************************************************************************* */
 
