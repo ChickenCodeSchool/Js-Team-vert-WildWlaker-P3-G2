@@ -1,0 +1,9 @@
+.home {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding-inline: 20px;
+  padding-top: 20px;
+}
