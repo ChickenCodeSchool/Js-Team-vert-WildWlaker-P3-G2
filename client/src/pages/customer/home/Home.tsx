@@ -1,6 +1,6 @@
 import "./Home.css";
 import Carrousel from "../../../components/carrousel/Carrousel";
-import ServicesSection from "../../../components/customer/Services/ServicesSection";
+import ServicesSection from "../../../components/customer/Services/Services/ServicesSection";
 
 function Home() {
   return (
