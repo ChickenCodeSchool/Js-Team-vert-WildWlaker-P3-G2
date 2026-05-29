@@ -47,6 +47,7 @@ function StatsGraphCard({
               stroke="var(--gold)"
               strokeWidth={1.5}
               fill="transparent"
+              dot={true}
             />
           </AreaChart>
         </ResponsiveContainer>

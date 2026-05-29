@@ -1,6 +1,9 @@
 .dashboard-main {
   width: 100%;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
   background-color: var(--gray-50);
   .dashboard-header {
     padding: 20px;
@@ -20,5 +23,8 @@
     width: 100%;
     display: flex;
     justify-content: space-around;
+  }
+  .dashboard-content-big-graphs {
+    width: 100%;
   }
 }

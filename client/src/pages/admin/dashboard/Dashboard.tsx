@@ -7,6 +7,7 @@ import {
 } from "react-icons/fi";
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import "./Dashboard.css";
+import BigStatsGraphCard from "../../../components/admin/bigStatsGraphCard/BigStatsGraphCard";
 
 function Dashboard() {
   return (
@@ -49,6 +50,10 @@ function Dashboard() {
           value="23"
           evolution="↑ 4.2%"
         />
+      </div>
+
+      <div className="dashboard-content-big-graphs">
+        <BigStatsGraphCard title="Evolution des réservations" />
       </div>
     </div>
   );
