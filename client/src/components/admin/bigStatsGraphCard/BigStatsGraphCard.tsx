@@ -94,7 +94,7 @@ type TooltipProps = {
 };
 
 function CustomTooltip({ active, payload }: TooltipProps) {
-  if (active && payload && payload.length) {
+  if (active && payload?.length) {
     return (
       <div className="BigStatsGraphCard-tooltip-box">
         <p className="BigStatsGraphCard-tooltip-date">
