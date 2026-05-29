@@ -8,6 +8,7 @@ import {
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import "./Dashboard.css";
 import BigStatsGraphCard from "../../../components/admin/bigStatsGraphCard/BigStatsGraphCard";
+import { ReservationStatusChart } from "../../../components/admin/reservationsStatusGraph/ReservationsStatusGraph";
 
 function Dashboard() {
   return (
@@ -54,6 +55,7 @@ function Dashboard() {
 
       <div className="dashboard-content-big-graphs">
         <BigStatsGraphCard title="Evolution des réservations" />
+        <ReservationStatusChart />
       </div>
     </div>
   );
