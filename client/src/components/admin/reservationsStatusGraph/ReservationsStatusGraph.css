@@ -1,7 +1,7 @@
 .ReservationStatusGraph-card {
   background-color: var(--white);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   box-shadow: var(--shadow-md);
   font-family: var(--font-body);
   width: 40%;

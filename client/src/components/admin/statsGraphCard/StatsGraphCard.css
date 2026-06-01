@@ -1,13 +1,13 @@
 .StatsGraphCard-main {
   background-color: var(--white);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 20px;
   width: 16%;
   min-height: 10rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 
   .StatsGraphCard-upper {
     display: flex;

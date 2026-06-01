@@ -1,11 +1,11 @@
 .BigStatsGraphCard-main {
   background-color: var(--white);
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   padding: 20px;
   width: 60%;
   height: auto;
   min-height: 10rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 
   .BigStatsGraphCard-upper {
     h2 {

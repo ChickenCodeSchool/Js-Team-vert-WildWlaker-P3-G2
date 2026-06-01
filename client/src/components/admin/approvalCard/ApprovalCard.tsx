@@ -42,7 +42,7 @@ function ApprovalCard() {
     <div className="approval-card-main">
       <div className="approval-card-header">
         <h3>Coiffeurs en attente de validation</h3>
-        <a href="/admin/coiffeurs/validation" className="see-all-link">
+        <a href="/admin/barbers" className="see-all-link">
           Voir tout
         </a>
       </div>
