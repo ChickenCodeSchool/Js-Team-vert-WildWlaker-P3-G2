@@ -24,18 +24,29 @@
     display: flex;
     justify-content: space-around;
   }
-  .dashboard-content-big-graphs {
-    width: 70%;
+  .dashboard-body {
     display: flex;
-    flex-direction: column;
-
-    gap: 20px;
-    padding: 10px;
-    .dashboard-content-big-graphs-upper {
+    flex-direction: row;
+    .dashboard-content-big-graphs {
+      width: 70%;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+
       gap: 20px;
-      width: 100%;
+      padding: 10px;
+      .dashboard-content-big-graphs-upper {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        width: 100%;
+      }
+    }
+    .dashboard-body-side {
+      width: 30%;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      gap: 20px;
     }
   }
 }

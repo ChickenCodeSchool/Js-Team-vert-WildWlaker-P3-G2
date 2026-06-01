@@ -5,11 +5,12 @@ import {
   FiStar,
   FiUsers,
 } from "react-icons/fi";
-import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
-import "./Dashboard.css";
+import ApprovalCard from "../../../components/admin/approvalCard/ApprovalCard";
 import BigStatsGraphCard from "../../../components/admin/bigStatsGraphCard/BigStatsGraphCard";
 import LatestReservationsCard from "../../../components/admin/lastestReservationsCard/LastestReservationCard";
 import ReservationStatusGraph from "../../../components/admin/reservationsStatusGraph/ReservationsStatusGraph";
+import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
+import "./Dashboard.css";
 
 function Dashboard() {
   return (
@@ -53,13 +54,17 @@ function Dashboard() {
           evolution="↑ 4.2%"
         />
       </div>
-
-      <div className="dashboard-content-big-graphs">
-        <div className="dashboard-content-big-graphs-upper">
-          <BigStatsGraphCard title="Evolution des réservations" />
-          <ReservationStatusGraph />
+      <div className="dashboard-body">
+        <div className="dashboard-content-big-graphs">
+          <div className="dashboard-content-big-graphs-upper">
+            <BigStatsGraphCard title="Evolution des réservations" />
+            <ReservationStatusGraph />
+          </div>
+          <LatestReservationsCard />
         </div>
-        <LatestReservationsCard />
+        <div className="dashboard-body-side">
+          <ApprovalCard />
+        </div>
       </div>
     </div>
   );
