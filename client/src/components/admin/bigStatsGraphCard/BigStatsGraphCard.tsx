@@ -53,7 +53,7 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
       const currentYear = new Date().getFullYear();
       const month = months[monthStr] !== undefined ? months[monthStr] : 0;
 
-      return new Date(currentYear, month, parseInt(day, 10));
+      return new Date(currentYear, month, Number.parseInt(day, 10));
     }
     fetch(`${apiUrl}/api/appointements`)
       .then((res) => res.json())

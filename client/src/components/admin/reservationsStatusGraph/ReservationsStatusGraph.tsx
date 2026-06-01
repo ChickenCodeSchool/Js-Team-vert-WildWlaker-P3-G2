@@ -133,7 +133,7 @@ function ReservationStatusGraph() {
                 <span
                   className="legend-dot"
                   style={{ backgroundColor: item.color }}
-                ></span>
+                />
                 <span className="legend-name">{item.name}</span>
               </div>
               <span className="legend-stats">

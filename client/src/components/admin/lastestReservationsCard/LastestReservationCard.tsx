@@ -124,7 +124,7 @@ function LatestReservationsCard() {
               <th>Service</th>
               <th>Date & Heure</th>
               <th>Statut</th>
-              <th aria-label="Actions"></th>
+              <th aria-label="Actions" />
             </tr>
           </thead>
           <tbody>
