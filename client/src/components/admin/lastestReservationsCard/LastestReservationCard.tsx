@@ -1,5 +1,8 @@
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import "./LastestReservationCard.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface Reservation {
   id: string;
@@ -14,55 +17,20 @@ interface Reservation {
   statut: "Confirmée" | "En attente" | "Terminée" | "Annulée";
 }
 
-const reservationsData: Reservation[] = [
-  {
-    id: "1",
-    client: { name: "Thomas L.", avatar: "https://i.pravatar.cc/150?img=11" },
-    coiffeur: "The Barber Shop",
-    service: "Coupe + Barbe",
-    date: "26 Mai 2024",
-    heure: "15:00",
-    statut: "Confirmée",
-  },
-  {
-    id: "2",
-    client: { name: "Emma D.", avatar: "https://i.pravatar.cc/150?img=23" },
-    coiffeur: "Le Barbier Paris",
-    service: "Coupe simple",
-    date: "26 Mai 2024",
-    heure: "14:30",
-    statut: "En attente",
-  },
-  {
-    id: "3",
-    client: { name: "Lucas M.", avatar: "https://i.pravatar.cc/150?img=12" },
-    coiffeur: "La Maison Barber",
-    service: "Dégradé américain",
-    date: "26 Mai 2024",
-    heure: "13:00",
-    statut: "Terminée",
-  },
-  {
-    id: "4",
-    client: { name: "Julien R.", avatar: "https://i.pravatar.cc/150?img=59" },
-    coiffeur: "Gentlemen's Cut",
-    service: "Barbe sculptée",
-    date: "26 Mai 2024",
-    heure: "12:00",
-    statut: "Annulée",
-  },
-  {
-    id: "5",
-    client: { name: "Sophie T.", avatar: "https://i.pravatar.cc/150?img=47" },
-    coiffeur: "Studio 24",
-    service: "Coloration",
-    date: "26 Mai 2024",
-    heure: "11:30",
-    statut: "Confirmée",
-  },
-];
+type RawAppointment = {
+  id_appointement?: number;
+  appointment_date: string;
+  status: string;
+  barber_name: string;
+  customer_firstname: string;
+  customer_lastname: string;
+  prestation_name: string;
+  customer_avatar?: string;
+};
 
 function LatestReservationsCard() {
+  const [appointments, setAppointments] = useState<Reservation[]>([]);
+
   const getStatusClass = (status: Reservation["statut"]) => {
     switch (status) {
       case "Confirmée":
@@ -77,6 +45,66 @@ function LatestReservationsCard() {
         return "";
     }
   };
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/appointements`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Erreur réseau");
+        return res.json();
+      })
+      .then((rawData: RawAppointment[]) => {
+        const statusMap: { [key: string]: Reservation["statut"] } = {
+          confirmed: "Confirmée",
+          pending: "En attente",
+          completed: "Terminée",
+          cancelled: "Annulée",
+        };
+
+        rawData.sort((a, b) => {
+          return (
+            new Date(b.appointment_date).getTime() -
+            new Date(a.appointment_date).getTime()
+          );
+        });
+
+        const formattedAppointments: Reservation[] = rawData.map((app) => {
+          const dateObj = new Date(app.appointment_date);
+
+          const dateStr = dateObj.toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          });
+
+          const heureStr = dateObj.toLocaleTimeString("fr-FR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+          const finalId = app.id_appointement ?? Math.random();
+
+          return {
+            id: finalId.toString(),
+            client: {
+              name: `${app.customer_firstname || "Client"} ${(app.customer_lastname || "").charAt(0)}.`,
+              avatar:
+                app.customer_avatar ||
+                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+            },
+            coiffeur: app.barber_name || "Coiffeur inconnu",
+            service: app.prestation_name || "prestation",
+            date: dateStr,
+            heure: heureStr,
+            statut: statusMap[app.status] || "En attente",
+          };
+        });
+
+        setAppointments(formattedAppointments.slice(0, 5));
+      })
+      .catch((err) =>
+        console.error("Erreur chargement dernières réservations :", err),
+      );
+  }, []);
 
   return (
     <div className="reservations-card">
@@ -100,7 +128,7 @@ function LatestReservationsCard() {
             </tr>
           </thead>
           <tbody>
-            {reservationsData.map((res) => (
+            {appointments.map((res) => (
               <tr key={res.id}>
                 <td>
                   <div className="client-info">
@@ -139,8 +167,20 @@ function LatestReservationsCard() {
             ))}
           </tbody>
         </table>
+        {appointments.length === 0 && (
+          <p
+            style={{
+              textAlign: "center",
+              padding: "20px",
+              color: "var(--gray-300)",
+            }}
+          >
+            Aucune réservation récente.
+          </p>
+        )}
       </div>
     </div>
   );
 }
+
 export default LatestReservationsCard;
