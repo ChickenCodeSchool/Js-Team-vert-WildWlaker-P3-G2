@@ -12,6 +12,7 @@ import barberActions from "./modules/barber/barberActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
 import prestationActions from "./modules/prestation/prestationActions";
+import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
 router.get("/api/appointements", appointementActions.browse);
@@ -20,6 +21,7 @@ router.get("/api/customers", customerActions.browse);
 router.get("/api/events", eventActions.browse);
 router.get("/api/prestations", prestationActions.browse);
 router.get("/api/users", userActions.browse);
+router.get("/api/reviews", reviewActions.browse);
 
 /* ************************************************************************* */
 

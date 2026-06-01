@@ -15,11 +15,17 @@ import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphC
 import UpcomingEventCard from "../../../components/admin/upcomingEventCard/UpcomingEventCard";
 import "./Dashboard.css";
 
+type reviewItem = {
+  reported: boolean;
+  rating: number;
+};
+
 function Dashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [barbers, setBarbers] = useState([]);
   const [users, setUsers] = useState([]);
   const [appointements, setAppointements] = useState([]);
+  const [reviews, setReviews] = useState<reviewItem[]>([]);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/barbers`)
@@ -36,6 +42,11 @@ function Dashboard() {
     fetch(`${apiUrl}/api/appointements`)
       .then((res) => res.json())
       .then((data) => setAppointements(data));
+  }, []);
+  useEffect(() => {
+    fetch(`${apiUrl}/api/reviews`)
+      .then((res) => res.json())
+      .then((data) => setReviews(data));
   }, []);
 
   return (
@@ -69,13 +80,13 @@ function Dashboard() {
         <StatsGraphCard
           Icon={FiStar}
           title="Note moyenne"
-          value="4.8/5"
+          value={`${(reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length || 0).toFixed(1)}/5`}
           evolution="↑ 2.1%"
         />
         <StatsGraphCard
           Icon={FiFlag}
           title="Avis signalés"
-          value="23"
+          value={reviews.filter((review) => review.reported).length}
           evolution="↑ 4.2%"
         />
       </div>
