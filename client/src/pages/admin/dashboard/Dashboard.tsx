@@ -12,6 +12,7 @@ import ReservationStatusGraph from "../../../components/admin/reservationsStatus
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import UpcomingEventCard from "../../../components/admin/upcomingEventCard/UpcomingEventCard";
 import "./Dashboard.css";
+import RecentActivityCard from "../../../components/admin/recentActivityCard/RecentActivityCard";
 
 function Dashboard() {
   return (
@@ -66,6 +67,7 @@ function Dashboard() {
         <div className="dashboard-body-side">
           <ApprovalCard />
           <UpcomingEventCard />
+          <RecentActivityCard />
         </div>
       </div>
     </div>
