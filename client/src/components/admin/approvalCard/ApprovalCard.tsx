@@ -1,34 +1,23 @@
+import { useEffect, useState } from "react";
 import "./ApprovalCard.css";
 
-interface Hairdresser {
-  id: number;
+type BarberItems = {
+  id_user: number;
   name: string;
-  avatar: string;
-  registrationDate: string;
-}
-
-const pendingHairdressers: Hairdresser[] = [
-  {
-    id: 1,
-    name: "Le Barbier Paris",
-    avatar: "https://i.pravatar.cc/150?img=11",
-    registrationDate: "Inscrit le 25 Mai 2024",
-  },
-  {
-    id: 2,
-    name: "Gentlemen's Cut",
-    avatar: "https://i.pravatar.cc/150?img=23",
-    registrationDate: "Inscrit le 24 Mai 2024",
-  },
-  {
-    id: 3,
-    name: "Studio 24",
-    avatar: "https://i.pravatar.cc/150?img=12",
-    registrationDate: "Inscrit le 23 Mai 2024",
-  },
-];
+  avatar_url: string | null;
+  create_time: string;
+  status: string;
+};
 
 function ApprovalCard() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [barbers, setBarbers] = useState<BarberItems[]>([]);
+  useEffect(() => {
+    fetch(`${apiUrl}/api/barbers`)
+      .then((res) => res.json())
+      .then((data) => setBarbers(data));
+  }, []);
+
   const handleValidate = (id: number) => {
     console.log(`Validation du coiffeur avec l'ID : ${id}`);
     // Ajoute ici ta logique d'API (fetch/axios) plus tard
@@ -37,6 +26,18 @@ function ApprovalCard() {
   const handleMoreOptions = (id: number) => {
     console.log(`Plus d'options pour l'ID : ${id}`);
   };
+  const formatDate = (dateStr: string) => {
+    if (!dateStr) return "Date inconnue";
+    const dateObj = new Date(dateStr);
+    return `Inscrit le ${dateObj.toLocaleDateString("fr-FR", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    })}`;
+  };
+  const pendingBarbers = barbers
+    .filter((barber) => barber.status === "pending")
+    .slice(0, 3);
 
   return (
     <div className="approval-card-main">
@@ -48,18 +49,18 @@ function ApprovalCard() {
       </div>
 
       <div className="approval-card-list">
-        {pendingHairdressers.map((hairdresser) => (
-          <div key={hairdresser.id} className="hairdresser-item">
+        {pendingBarbers.map((barber) => (
+          <div key={barber.id_user} className="hairdresser-item">
             <div className="hairdresser-info">
               <img
-                src={hairdresser.avatar}
-                alt={hairdresser.name}
+                src={barber.avatar_url || "/default-avatar.png"}
+                alt={barber.name}
                 className="hairdresser-avatar"
               />
               <div className="hairdresser-text">
-                <span className="hairdresser-name">{hairdresser.name}</span>
+                <span className="hairdresser-name">{barber.name}</span>
                 <span className="hairdresser-date">
-                  {hairdresser.registrationDate}
+                  {formatDate(barber.create_time)}
                 </span>
               </div>
             </div>
@@ -68,14 +69,14 @@ function ApprovalCard() {
               <button
                 type="button"
                 className="validate-btn"
-                onClick={() => handleValidate(hairdresser.id)}
+                onClick={() => handleValidate(barber.id_user)}
               >
                 Valider
               </button>
               <button
                 type="button"
                 className="options-btn"
-                onClick={() => handleMoreOptions(hairdresser.id)}
+                onClick={() => handleMoreOptions(barber.id_user)}
                 aria-label="Plus d'options"
               >
                 ⋮

@@ -16,9 +16,15 @@ class BarberRepository {
   // The C of CRUD - Create operation
 
   async readAll() {
-    // Execute the SQL SELECT query to retrieve all Barbers from the "Barber" table
-    const [rows] = await databaseClient.query<Rows>("select * from barber");
-
+    const query = `
+    SELECT 
+      b.*,
+      u.avatar_url AS avatar_url, 
+      u.create_time AS create_time
+    FROM barber b
+    JOIN users u ON b.id_user = u.id_user
+  `;
+    const [rows] = await databaseClient.query<Rows>(query);
     // Return the array of Barbers
     return rows as Barber[];
   }
