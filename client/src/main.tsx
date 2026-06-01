@@ -32,12 +32,12 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <CustomerLayout />,
-        children: [{ index: true, element: <Home /> }],
+        children: [
+          { index: true, element: <Home /> },
+          { path: "search", element: <SearchPage /> },
+        ],
       },
-      {
-        path: "search",
-        element: <SearchPage />,
-      },
+
       {
         path: "/admin",
         element: <AdminLayout />,
