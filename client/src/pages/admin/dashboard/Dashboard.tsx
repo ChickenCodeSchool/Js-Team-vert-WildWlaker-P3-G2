@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   FiCalendar,
   FiFlag,
@@ -8,13 +9,35 @@ import {
 import ApprovalCard from "../../../components/admin/approvalCard/ApprovalCard";
 import BigStatsGraphCard from "../../../components/admin/bigStatsGraphCard/BigStatsGraphCard";
 import LatestReservationsCard from "../../../components/admin/lastestReservationsCard/LastestReservationCard";
+import RecentActivityCard from "../../../components/admin/recentActivityCard/RecentActivityCard";
 import ReservationStatusGraph from "../../../components/admin/reservationsStatusGraph/ReservationsStatusGraph";
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import UpcomingEventCard from "../../../components/admin/upcomingEventCard/UpcomingEventCard";
 import "./Dashboard.css";
-import RecentActivityCard from "../../../components/admin/recentActivityCard/RecentActivityCard";
 
 function Dashboard() {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [barbers, setBarbers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [appointements, setAppointements] = useState([]);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/barbers`)
+      .then((res) => res.json())
+      .then((data) => setBarbers(data));
+  }, []);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/api/users`)
+      .then((res) => res.json())
+      .then((data) => setUsers(data));
+  }, []);
+  useEffect(() => {
+    fetch(`${apiUrl}/api/appointements`)
+      .then((res) => res.json())
+      .then((data) => setAppointements(data));
+  }, []);
+
   return (
     <div className="dashboard-main">
       <header className="dashboard-header">
@@ -28,19 +51,19 @@ function Dashboard() {
         <StatsGraphCard
           Icon={FiUsers}
           title="Utilisateurs"
-          value="1 245"
+          value={users.length}
           evolution="↑ 12.5%"
         />
         <StatsGraphCard
           Icon={FiScissors}
           title="Coiffeurs"
-          value="186"
+          value={barbers.length}
           evolution="↑ 8.3%"
         />
         <StatsGraphCard
           Icon={FiCalendar}
           title="Réservations"
-          value="342"
+          value={appointements.length}
           evolution="↑ 15.7%"
         />
         <StatsGraphCard

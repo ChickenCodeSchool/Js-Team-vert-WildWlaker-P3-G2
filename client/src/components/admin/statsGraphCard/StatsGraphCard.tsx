@@ -14,7 +14,7 @@ const data = [
 type StatsGraphCardProps = {
   Icon: IconType;
   title: string;
-  value: string;
+  value: number | string;
   evolution: string;
 };
 function StatsGraphCard({

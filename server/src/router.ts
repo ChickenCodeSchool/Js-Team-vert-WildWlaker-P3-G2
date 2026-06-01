@@ -6,8 +6,8 @@ const router = express.Router();
 // Define Your API Routes Here
 /* ************************************************************************* */
 
-import appointementActions from "./modules/appointement/appointementActions";
 // Define item-related routes
+import appointementActions from "./modules/appointement/appointementActions";
 import barberActions from "./modules/barber/barberActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";

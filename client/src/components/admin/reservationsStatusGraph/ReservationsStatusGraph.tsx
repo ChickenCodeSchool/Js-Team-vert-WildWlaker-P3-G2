@@ -1,6 +1,9 @@
+import { useEffect, useState } from "react";
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 import "./ReservationsStatusGraph.css";
 import { NavLink } from "react-router";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface StatusData {
   id: number;
@@ -10,26 +13,11 @@ interface StatusData {
   color: string;
 }
 
-const data: StatusData[] = [
-  {
-    id: 1,
-    name: "Confirmées",
-    value: 178,
-    percentage: 52,
-    color: "var(--success)",
-  },
-  {
-    id: 2,
-    name: "En attente",
-    value: 78,
-    percentage: 23,
-    color: "var(--warning)",
-  },
-  { id: 3, name: "Terminées", value: 54, percentage: 16, color: "var(--info)" },
-  { id: 4, name: "Annulées", value: 22, percentage: 9, color: "var(--error)" },
-];
-
-const TOTAL_RESERVATIONS = 342;
+type RawAppointment = {
+  Id_appointement: number;
+  status: string;
+  appointment_date: string;
+};
 
 interface RenderPieShapeProps {
   cx: number;
@@ -44,7 +32,6 @@ interface RenderPieShapeProps {
 const RenderPieShape = (props: Partial<RenderPieShapeProps>) => {
   const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, payload } =
     props;
-
   if (!payload) return null;
 
   return (
@@ -61,6 +48,57 @@ const RenderPieShape = (props: Partial<RenderPieShapeProps>) => {
 };
 
 function ReservationStatusGraph() {
+  const [chartData, setChartData] = useState<StatusData[]>([]);
+  const [totalReservations, setTotalReservations] = useState<number>(0);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/appointements`)
+      .then((res) => res.json())
+      .then((rawData: RawAppointment[]) => {
+        const statusConfig: {
+          [key: string]: { id: number; name: string; color: string };
+        } = {
+          confirmed: { id: 1, name: "Confirmées", color: "var(--success)" },
+          pending: { id: 2, name: "En attente", color: "var(--warning)" },
+          completed: { id: 3, name: "Terminées", color: "var(--info)" },
+          cancelled: { id: 4, name: "Annulées", color: "var(--error)" },
+        };
+
+        const counts: { [key: string]: number } = {
+          confirmed: 0,
+          pending: 0,
+          completed: 0,
+          cancelled: 0,
+        };
+
+        rawData.forEach((app) => {
+          if (counts[app.status] !== undefined) {
+            counts[app.status]++;
+          }
+        });
+
+        const total = rawData.length;
+        setTotalReservations(total);
+
+        const formattedData: StatusData[] = Object.keys(statusConfig).map(
+          (key) => {
+            const count = counts[key];
+            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+
+            return {
+              id: statusConfig[key].id,
+              name: statusConfig[key].name,
+              value: count,
+              percentage: percent,
+              color: statusConfig[key].color,
+            };
+          },
+        );
+
+        setChartData(formattedData);
+      })
+      .catch((err) => console.error("Erreur fetch graph statuts :", err));
+  }, []);
   return (
     <div className="ReservationStatusGraph-card">
       <h3 className="ReservationStatusGraph-title">Réservations par statut</h3>
@@ -70,7 +108,7 @@ function ReservationStatusGraph() {
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
-                data={data}
+                data={chartData}
                 cx="50%"
                 cy="50%"
                 innerRadius={60}
@@ -83,13 +121,13 @@ function ReservationStatusGraph() {
           </ResponsiveContainer>
 
           <div className="ReservationStatusGraph-center-text">
-            <span className="total-number">{TOTAL_RESERVATIONS}</span>
+            <span className="total-number">{totalReservations}</span>{" "}
             <span className="total-label">Total</span>
           </div>
         </div>
 
         <div className="ReservationStatusGraph-legend">
-          {data.map((item) => (
+          {chartData.map((item) => (
             <div key={item.id} className="legend-item">
               <div className="legend-left">
                 <span
@@ -116,4 +154,5 @@ function ReservationStatusGraph() {
     </div>
   );
 }
+
 export default ReservationStatusGraph;

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -9,21 +10,82 @@ import {
 } from "recharts";
 import "./BigStatsGraphCard.css";
 
-const data = [
-  { date: "20 Mai", value: 38 },
-  { date: "21 Mai", value: 28 },
-  { date: "22 Mai", value: 42 },
-  { date: "23 Mai", value: 35 },
-  { date: "24 Mai", value: 62 },
-  { date: "25 Mai", value: 45 },
-  { date: "26 Mai", value: 55 },
-];
-
 type BigStatsGraphCardProps = {
   title: string;
 };
 
+type FormattedData = {
+  date: string;
+  value: number;
+};
+type RawAppointment = {
+  Id_appointement: number;
+  appointment_date: string;
+  status: string;
+  location_type: string;
+  Id_prestation: number;
+  id_user_barber: number;
+  id_user_customer: number;
+};
+
 function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [appointments, setAppointments] = useState<FormattedData[]>([]);
+
+  useEffect(() => {
+    function parseFrenchDate(dateStr: string): Date {
+      const months: { [key: string]: number } = {
+        janv: 0,
+        févr: 1,
+        mars: 2,
+        avr: 3,
+        mai: 4,
+        juin: 5,
+        juil: 6,
+        août: 7,
+        sept: 8,
+        oct: 9,
+        nov: 10,
+        déc: 11,
+      };
+
+      const [day, monthStr] = dateStr.toLowerCase().replace(".", "").split(" ");
+      const currentYear = new Date().getFullYear();
+      const month = months[monthStr] !== undefined ? months[monthStr] : 0;
+
+      return new Date(currentYear, month, parseInt(day, 10));
+    }
+    fetch(`${apiUrl}/api/appointements`)
+      .then((res) => res.json())
+      .then((rawData: RawAppointment[]) => {
+        const countsByDate: { [key: string]: number } = {};
+
+        rawData.forEach((app: RawAppointment) => {
+          const dateObj = new Date(app.appointment_date);
+          const formattedDate = dateObj.toLocaleDateString("fr-FR", {
+            day: "numeric",
+            month: "short",
+          });
+
+          countsByDate[formattedDate] = (countsByDate[formattedDate] || 0) + 1;
+        });
+
+        const chartData = Object.keys(countsByDate).map((date) => ({
+          date: date,
+          value: countsByDate[date],
+        }));
+
+        chartData.sort((a, b) => {
+          const dateA = parseFrenchDate(a.date);
+          const dateB = parseFrenchDate(b.date);
+          return dateA.getTime() - dateB.getTime();
+        });
+
+        setAppointments(chartData);
+      })
+      .catch((err) => console.error("Erreur fetch appointments:", err));
+  }, []);
+
   return (
     <div className="BigStatsGraphCard-main">
       <div className="BigStatsGraphCard-upper">
@@ -31,9 +93,9 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
       </div>
 
       <div className="BigStatsGraphCard-graph">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={200}>
           <AreaChart
-            data={data}
+            data={appointments}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <CartesianGrid vertical={false} stroke="var(--gray-100)" />
@@ -49,8 +111,7 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
             <YAxis
               tickLine={false}
               axisLine={false}
-              domain={[0, "dataMax + 20"]}
-              style={{ fontSize: "12px", fill: "var(--gray-300)" }}
+              domain={[0, "dataMax + 2"]}
             />
 
             <Tooltip
