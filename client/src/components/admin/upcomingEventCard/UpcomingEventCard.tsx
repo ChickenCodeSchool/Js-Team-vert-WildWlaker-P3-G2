@@ -1,49 +1,58 @@
+import { useEffect, useState } from "react";
 import "./UpcomingEventCard.css";
 
-interface UpcomingEvent {
-  id: number;
+const API_URL = import.meta.env.VITE_API_URL;
+
+type EventItem = {
+  Id_event: number;
   title: string;
-  date: string;
+  start_date: string;
+  end_date: string;
   location: string;
-  image: string;
-  status: "Publié" | "Brouillon" | "Planifié";
-  statusClass: "status-published" | "status-draft" | "status-planned";
+  image_url: string | null;
+};
+
+function formatEventDates(startStr: string, endStr: string): string {
+  const start = new Date(startStr);
+  const end = new Date(endStr);
+
+  const dayOptions: Intl.DateTimeFormatOptions = {
+    day: "numeric",
+    month: "short",
+  };
+  const yearOptions: Intl.DateTimeFormatOptions = { year: "numeric" };
+
+  const startDay = start.toLocaleDateString("fr-FR", dayOptions);
+  const endDay = end.toLocaleDateString("fr-FR", dayOptions);
+  const startYear = start.toLocaleDateString("fr-FR", yearOptions);
+  const endYear = end.toLocaleDateString("fr-FR", yearOptions);
+
+  if (start.toDateString() === end.toDateString()) {
+    const timeOptions: Intl.DateTimeFormatOptions = {
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return `${startDay} ${startYear} • ${start.toLocaleTimeString("fr-FR", timeOptions)} à ${end.toLocaleTimeString("fr-FR", timeOptions)}`;
+  }
+  return `Du ${startDay} au ${endDay} ${endYear}`;
 }
 
-const upcomingEvents: UpcomingEvent[] = [
-  {
-    id: 1,
-    title: "Summer Barber Fest",
-    date: "15 Juin - 30 Juin 2026",
-    location: "Paris",
-    image:
-      "https://beautyimages.bobitstudios.com/upload/_migratedbeauty/post/barberexpo-main-__-1000x784-s.JPG",
-    status: "Publié",
-    statusClass: "status-published",
-  },
-  {
-    id: 2,
-    title: "Back to School",
-    date: "15 Août - 31 Août 2026",
-    location: "Lyon",
-    image:
-      "https://i.pinimg.com/1200x/56/08/c1/5608c1a10589c38342af73f633449af2.jpg",
-    status: "Brouillon",
-    statusClass: "status-draft",
-  },
-  {
-    id: 3,
-    title: "Black Friday",
-    date: "24 Nov - 30 Nov 2026",
-    location: "Partout en France",
-    image:
-      "https://i.pinimg.com/736x/88/24/19/8824192fe1843a00b04c854b6febda9b.jpg",
-    status: "Planifié",
-    statusClass: "status-planned",
-  },
-];
-
 function UpcomingEventCard() {
+  const [events, setEvents] = useState<EventItem[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/events`)
+      .then((res) => res.json())
+      .then((data: EventItem[]) => {
+        data.sort(
+          (a, b) =>
+            new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
+        );
+        setEvents(data);
+      })
+      .catch((err) => console.error("Erreur fetch events:", err));
+  }, []);
+
   return (
     <div className="upcoming-event-card-main">
       <div className="event-card-header">
@@ -54,26 +63,39 @@ function UpcomingEventCard() {
       </div>
 
       <div className="event-card-list">
-        {upcomingEvents.map((event) => (
-          <div key={event.id} className="event-item">
+        {events.map((event) => (
+          <div key={event.Id_event} className="event-item">
+            {" "}
             <div className="event-info">
               <img
-                src={event.image}
+                src={
+                  event.image_url ||
+                  "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400"
+                }
                 alt={event.title}
                 className="event-image"
               />
               <div className="event-text">
                 <span className="event-title">{event.title}</span>
-                <span className="event-details">📅 {event.date}</span>
+                <span className="event-details">
+                  📅 {formatEventDates(event.start_date, event.end_date)}
+                </span>
                 <span className="event-details">📍 {event.location}</span>
               </div>
             </div>
-
-            <div className={`event-status-badge ${event.statusClass}`}>
-              {event.status}
-            </div>
           </div>
         ))}
+        {events.length === 0 && (
+          <p
+            style={{
+              textAlign: "center",
+              padding: "10px",
+              color: "var(--gray-300)",
+            }}
+          >
+            Aucun événement prévu.
+          </p>
+        )}
       </div>
     </div>
   );
