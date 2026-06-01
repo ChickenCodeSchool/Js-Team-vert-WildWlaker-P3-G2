@@ -64,18 +64,20 @@ function ReservationStatusGraph() {
           cancelled: { id: 4, name: "Annulées", color: "var(--error)" },
         };
 
-        const counts: { [key: string]: number } = {
-          confirmed: 0,
-          pending: 0,
-          completed: 0,
-          cancelled: 0,
-        };
-
-        rawData.forEach((app) => {
-          if (counts[app.status] !== undefined) {
-            counts[app.status]++;
-          }
-        });
+        const counts = rawData.reduce<{ [key: string]: number }>(
+          (acc, app) => {
+            if (acc[app.status] !== undefined) {
+              acc[app.status]++;
+            }
+            return acc;
+          },
+          {
+            confirmed: 0,
+            pending: 0,
+            completed: 0,
+            cancelled: 0,
+          },
+        );
 
         const total = rawData.length;
         setTotalReservations(total);
@@ -99,6 +101,7 @@ function ReservationStatusGraph() {
       })
       .catch((err) => console.error("Erreur fetch graph statuts :", err));
   }, []);
+
   return (
     <div className="ReservationStatusGraph-card">
       <h3 className="ReservationStatusGraph-title">Réservations par statut</h3>

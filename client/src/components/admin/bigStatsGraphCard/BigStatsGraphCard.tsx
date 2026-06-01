@@ -18,6 +18,7 @@ type FormattedData = {
   date: string;
   value: number;
 };
+
 type RawAppointment = {
   Id_appointement: number;
   appointment_date: string;
@@ -55,25 +56,33 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
 
       return new Date(currentYear, month, Number.parseInt(day, 10));
     }
+
     fetch(`${apiUrl}/api/appointements`)
       .then((res) => res.json())
       .then((rawData: RawAppointment[]) => {
-        const countsByDate: { [key: string]: number } = {};
+        const countsByDate = rawData.reduce<{ [key: string]: number }>(
+          (acc, app) => {
+            const dateObj = new Date(app.appointment_date);
+            const formattedDate = dateObj.toLocaleDateString("fr-FR", {
+              day: "numeric",
+              month: "short",
+            });
 
-        rawData.forEach((app: RawAppointment) => {
-          const dateObj = new Date(app.appointment_date);
-          const formattedDate = dateObj.toLocaleDateString("fr-FR", {
-            day: "numeric",
-            month: "short",
-          });
+            acc[formattedDate] = (acc[formattedDate] || 0) + 1;
 
-          countsByDate[formattedDate] = (countsByDate[formattedDate] || 0) + 1;
-        });
+            return acc;
+          },
+          {},
+        );
 
-        const chartData = Object.keys(countsByDate).map((date) => ({
-          date: date,
-          value: countsByDate[date],
-        }));
+        const chartData: FormattedData[] = Object.keys(countsByDate).map(
+          (date) => {
+            return {
+              date: date,
+              value: countsByDate[date],
+            };
+          },
+        );
 
         chartData.sort((a, b) => {
           const dateA = parseFrenchDate(a.date);
@@ -85,7 +94,6 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
       })
       .catch((err) => console.error("Erreur fetch appointments:", err));
   }, []);
-
   return (
     <div className="BigStatsGraphCard-main">
       <div className="BigStatsGraphCard-upper">
