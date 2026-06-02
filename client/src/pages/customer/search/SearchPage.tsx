@@ -1,42 +1,36 @@
-import "./SearchPage.css";
+import { useEffect, useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { useNavigate } from "react-router";
 import BarberCard from "../../../components/customer/Services/BarberCard/BarberCard";
 import Search from "../../../components/search/Search";
+import type { Barber } from "../../../types/barber";
+import "./SearchPage.css";
 
 function SearchPage() {
-  const barbers = [
-    {
-      id: 1,
-      name: "The Barber Shop",
-      rating: 4.8,
-      reviews: 156,
-      city: "75002 Paris",
-      distance: "1,2 km",
-      image: "/src/assets/images/Afro.jpg",
-    },
-
-    {
-      id: 2,
-      name: "Le Barbier Paris",
-      rating: 4.5,
-      reviews: 84,
-      city: "75011 Paris",
-      distance: "1,6 km",
-      image: "/src/assets/images/coiffeforall.jpg",
-    },
-    {
-      id: 3,
-      name: "La maison Barber",
-      rating: 4.7,
-      reviews: 70,
-      city: "75017 Paris",
-      distance: "2,1 km",
-      image: "/src/assets/images/Barbe.jpg",
-    },
-  ];
-
   const navigate = useNavigate();
+  const [barbers, setBarbers] = useState<Barber[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/barbers")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Erreur lors du chargement des coiffeurs");
+        }
+
+        return response.json();
+      })
+      .then((data: Barber[]) => {
+        setBarbers(data);
+      })
+      .catch(() => {
+        setError("Impossible de charger les coiffeurs pour le moment.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
 
   return (
     <main className="search">
@@ -56,9 +50,14 @@ function SearchPage() {
       <div className="search__bar">
         <Search />
       </div>
-      {barbers.map((barber) => (
-        <BarberCard key={barber.id} barber={barber} />
-      ))}
+
+      {isLoading && <p>Chargement...</p>}
+
+      {error != null && <p>{error}</p>}
+
+      {!isLoading &&
+        error == null &&
+        barbers.map((barber) => <BarberCard key={barber.id} barber={barber} />)}
     </main>
   );
 }
