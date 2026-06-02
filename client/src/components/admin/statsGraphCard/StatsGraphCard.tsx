@@ -14,7 +14,7 @@ const data = [
 type StatsGraphCardProps = {
   Icon: IconType;
   title: string;
-  value: string;
+  value: number | string;
   evolution: string;
 };
 function StatsGraphCard({
@@ -47,6 +47,7 @@ function StatsGraphCard({
               stroke="var(--gold)"
               strokeWidth={1.5}
               fill="transparent"
+              dot={true}
             />
           </AreaChart>
         </ResponsiveContainer>
