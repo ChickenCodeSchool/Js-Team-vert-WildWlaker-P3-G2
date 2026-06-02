@@ -1,5 +1,4 @@
 import "./Home.css";
-
 import { FiScissors } from "react-icons/fi";
 import SecareBarber from "../../../assets/images/SecareBarber.png";
 import Carrousel from "../../../components/carrousel/Carrousel";
