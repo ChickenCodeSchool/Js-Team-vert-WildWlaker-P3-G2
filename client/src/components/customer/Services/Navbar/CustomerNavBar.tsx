@@ -32,7 +32,7 @@ function CustomerNavBar() {
             isActive ? "navbar__center navbar__item--active" : "navbar__center"
           }
         >
-          <div className="navbar__center-button" aria-label="Réserver">
+          <div className="navbar__center-button">
             <FiPlus />
           </div>
 

@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
-/* ************************************************************************* */
+/* ********************************************************************** */
 
 // Import the main app component
 import App from "./App";
@@ -12,6 +12,7 @@ import Dashboard from "./pages/admin/dashboard/Dashboard";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
+import SearchPage from "./pages/customer/search/SearchPage";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -31,8 +32,12 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <CustomerLayout />,
-        children: [{ index: true, element: <Home /> }],
+        children: [
+          { index: true, element: <Home /> },
+          { path: "search", element: <SearchPage /> },
+        ],
       },
+
       {
         path: "/admin",
         element: <AdminLayout />,

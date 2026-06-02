@@ -1,8 +1,7 @@
 import "./ServicesSection.css";
 import { FiScissors } from "react-icons/fi";
 import { GiBeard } from "react-icons/gi";
-import { PiHairDryer } from "react-icons/pi";
-import { PiSprayBottleLight } from "react-icons/pi";
+import { PiHairDryer, PiSprayBottleLight } from "react-icons/pi";
 
 function ServicesSection() {
   const services = [

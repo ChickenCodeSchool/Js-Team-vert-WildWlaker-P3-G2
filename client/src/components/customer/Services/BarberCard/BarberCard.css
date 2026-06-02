@@ -1,0 +1,68 @@
+.barber-card {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.barber-card__image {
+  width: 95px;
+  height: 95px;
+  object-fit: cover;
+  border-radius: 16px;
+  flex-shrink: 0;
+}
+
+.barber-card__content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.barber-card__info {
+  flex: 1;
+}
+
+.barber-card__title {
+  font-size: 18px;
+  font-family: var(--font-title);
+
+  color: var(--black);
+  margin-bottom: 8px;
+}
+.barber-card__description {
+  display: -webkit-box;
+  margin: 0 0 6px;
+  overflow: hidden;
+  color: var(--gray-600);
+  font-size: 14px;
+  -webkit-box-orient: vertical;
+}
+
+.barber-card__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  color: var(--gray-600);
+}
+
+.barber-card__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.barber-card__distance {
+  font-size: 14px;
+  color: var(--gray-600);
+}
+
+.barber-card__arrow {
+  font-size: 20px;
+  color: var(--gray-600);
+}
