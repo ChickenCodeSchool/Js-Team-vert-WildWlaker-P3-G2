@@ -6,6 +6,7 @@ type Event = {
   title: string;
   image_url: string;
   description: string;
+  status: string;
   start_date: string;
   end_date: string;
   location: string;

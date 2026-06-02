@@ -18,6 +18,7 @@ CREATE TABLE event (
     title VARCHAR(150) NOT NULL,
     image_url VARCHAR(255) DEFAULT NULL,
     description TEXT,
+    status VARCHAR(50) DEFAULT 'brouillon', -- brouillon, publié, plannifié, terminé
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
@@ -62,7 +63,7 @@ CREATE TABLE barber (
     city VARCHAR(100) NOT NULL,
     adress VARCHAR(255) NOT NULL,
     delivery_radius INT NOT NULL DEFAULT 0,
-    status VARCHAR(50) DEFAULT 'active',
+    status VARCHAR(50) DEFAULT 'pending', -- pending, active, suspended
     CONSTRAINT pk_barber PRIMARY KEY (id_user),
     CONSTRAINT fk_barber_users FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
@@ -178,9 +179,9 @@ INSERT INTO prestation (id_prestation, name, price, duration_minutes) VALUES
 (5, 'Coloration / Décoloration', 55.00, 90);
 
 -- Événements créés par l'Admin
-INSERT INTO event (id_event, title,image_url, description, start_date, end_date, location) VALUES
-(1, 'Festival Rock & Barber 2026','https://beautyimages.bobitstudios.com/upload/_migratedbeauty/post/barberexpo-main-__-1000x784-s.JPG', 'Le plus grand rassemblement de coiffeurs et de musique rock de la région.', '2026-07-11 10:00:00', '2026-07-12 20:00:00', 'Hangar 14, Quai des Chartrons, Bordeaux'),
-(2, 'Salon du Mariage Bordeaux','https://i.pinimg.com/736x/88/24/19/8824192fe1843a00b04c854b6febda9b.jpg', 'Espace mise en beauté pour les futurs mariés.', '2026-10-24 09:00:00', '2026-10-25 18:00:00', 'Parc des Expositions, Bordeaux');
+INSERT INTO event (id_event, title,image_url, description,status, start_date, end_date, location) VALUES
+(1, 'Festival Rock & Barber 2026','https://beautyimages.bobitstudios.com/upload/_migratedbeauty/post/barberexpo-main-__-1000x784-s.JPG', 'Le plus grand rassemblement de coiffeurs et de musique rock de la région.', 'publié', '2026-07-11 10:00:00', '2026-07-12 20:00:00', 'Hangar 14, Quai des Chartrons, Bordeaux'),
+(2, 'Salon du Mariage Bordeaux','https://i.pinimg.com/736x/88/24/19/8824192fe1843a00b04c854b6febda9b.jpg', 'Espace mise en beauté pour les futurs mariés.', 'brouillon', '2026-10-24 09:00:00', '2026-10-25 18:00:00', 'Parc des Expositions, Bordeaux');
 
 -- =============================================================================
 -- 4. ASSOCIATIONS PRESTATIONS COIFFEURS (Table Propose)
