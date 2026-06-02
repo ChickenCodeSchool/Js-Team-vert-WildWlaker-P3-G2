@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
 
-/* ************************************************************************* */
+/* ********************************************************************** */
 
 // Import the main app component
 import App from "./App";
