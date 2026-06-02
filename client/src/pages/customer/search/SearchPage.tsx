@@ -57,7 +57,9 @@ function SearchPage() {
 
       {!isLoading &&
         error == null &&
-        barbers.map((barber) => <BarberCard key={barber.id} barber={barber} />)}
+        barbers.map((barber) => (
+          <BarberCard key={barber.id_user} barber={barber} />
+        ))}
     </main>
   );
 }

@@ -1,5 +1,6 @@
 import "./BarberCard.css";
-import { FiChevronRight, FiMapPin, FiStar } from "react-icons/fi";
+import { FiChevronRight, FiMapPin } from "react-icons/fi";
+import fallbackImage from "../../../../assets/images/Afro.jpg";
 import type { Barber } from "../../../../types/barber";
 
 type BarberCardProps = {
@@ -7,32 +8,39 @@ type BarberCardProps = {
 };
 
 function BarberCard({ barber }: BarberCardProps) {
+  const image =
+    barber.avatar_url?.startsWith("http") || barber.avatar_url?.startsWith("/")
+      ? barber.avatar_url
+      : fallbackImage;
+
   return (
     <article className="barber-card">
       <img
-        src={barber.image}
+        src={image}
         alt={barber.name}
         className="barber-card__image"
+        onError={(event) => {
+          event.currentTarget.src = fallbackImage;
+        }}
       />
       <div className="barber-card__content">
         <div className="barber-card__info">
           <h3 className="barber-card__title">{barber.name}</h3>
 
-          <div className="barber-card__rating">
-            <FiStar className="barber-card__star" />
+          <p className="barber-card__description">{barber.description}</p>
 
-            <span>{barber.rating}</span>
-
-            <span>({barber.reviews})</span>
-          </div>
           <div className="barber-card__location">
             <FiMapPin />
 
-            <span>{barber.city}</span>
+            <span>
+              {barber.postal_code} {barber.city}
+            </span>
           </div>
 
           <div className="barber-card__right">
-            <span className="barber-card__distance">{barber.distance}</span>
+            <span className="barber-card__distance">
+              {barber.delivery_radius} km
+            </span>
 
             <FiChevronRight className="barber-card__arrow" />
           </div>

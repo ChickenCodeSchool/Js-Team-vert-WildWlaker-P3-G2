@@ -1,9 +1,12 @@
 export type Barber = {
-  id: number;
+  id_user: number;
   name: string;
-  rating: number;
-  reviews: number;
+  description: string;
+  postal_code: string;
   city: string;
-  distance: string;
-  image: string;
+  adress: string;
+  delivery_radius: number;
+  status: string;
+  avatar_url: string;
+  create_time: string;
 };
