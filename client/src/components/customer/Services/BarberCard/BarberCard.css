@@ -40,7 +40,6 @@
   color: var(--gray-600);
   font-size: 14px;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
 }
 
 .barber-card__rating {
