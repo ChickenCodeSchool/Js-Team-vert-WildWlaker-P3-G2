@@ -14,22 +14,22 @@ CREATE TABLE users (
 );
 
 CREATE TABLE event (
-    Id_event INT AUTO_INCREMENT,
+    id_event INT AUTO_INCREMENT,
     title VARCHAR(150) NOT NULL,
     image_url VARCHAR(255) DEFAULT NULL,
     description TEXT,
     start_date DATETIME NOT NULL,
     end_date DATETIME NOT NULL,
     location VARCHAR(255) NOT NULL,
-    CONSTRAINT pk_event PRIMARY KEY (Id_event)
+    CONSTRAINT pk_event PRIMARY KEY (id_event)
 );
 
 CREATE TABLE prestation (
-    Id_prestation INT AUTO_INCREMENT,
+    id_prestation INT AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(6,2) NOT NULL,
     duration_minutes INT NOT NULL,
-    CONSTRAINT pk_prestation PRIMARY KEY (Id_prestation)
+    CONSTRAINT pk_prestation PRIMARY KEY (id_prestation)
 );
 
 -- =============================================================================
@@ -72,25 +72,25 @@ CREATE TABLE barber (
 -- =============================================================================
 
 CREATE TABLE barber_portfolio (
-    Id_picture INT AUTO_INCREMENT,
+    id_picture INT AUTO_INCREMENT,
     image_url VARCHAR(255) NOT NULL,
     title VARCHAR(100) DEFAULT NULL,
     uploaded_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_user INT NOT NULL, -- Clé étrangère pointant vers le coiffeur
-    CONSTRAINT pk_barber_portfolio PRIMARY KEY (Id_picture),
+    CONSTRAINT pk_barber_portfolio PRIMARY KEY (id_picture),
     CONSTRAINT fk_portfolio_barber FOREIGN KEY (id_user) REFERENCES barber(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE barber_availability (
-    Id_availability INT AUTO_INCREMENT,
+    id_availability INT AUTO_INCREMENT,
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     is_booked BOOLEAN NOT NULL DEFAULT FALSE,
     id_user INT NOT NULL,  -- Clé étrangère pointant vers le coiffeur
-    Id_event INT DEFAULT NULL, -- Optionnel (0,1) : rattaché à un événement
-    CONSTRAINT pk_barber_availability PRIMARY KEY (Id_availability),
+    id_event INT DEFAULT NULL, -- Optionnel (0,1) : rattaché à un événement
+    CONSTRAINT pk_barber_availability PRIMARY KEY (id_availability),
     CONSTRAINT fk_availability_barber FOREIGN KEY (id_user) REFERENCES barber(id_user) ON DELETE CASCADE,
-    CONSTRAINT fk_availability_event FOREIGN KEY (Id_event) REFERENCES event(Id_event) ON DELETE SET NULL
+    CONSTRAINT fk_availability_event FOREIGN KEY (id_event) REFERENCES event(id_event) ON DELETE SET NULL
 );
 
 -- =============================================================================
@@ -98,30 +98,30 @@ CREATE TABLE barber_availability (
 -- =============================================================================
 
 CREATE TABLE appointement (
-    Id_appointement INT AUTO_INCREMENT,
+    id_appointement INT AUTO_INCREMENT,
     appointment_date DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
     location_type VARCHAR(50) NOT NULL,
-    Id_prestation INT NOT NULL,
+    id_prestation INT NOT NULL,
     id_user_barber INT NOT NULL,   -- Coiffeur ayant reçu le RDV
     id_user_customer INT NOT NULL, -- Client ayant pris le RDV
-    Id_availability INT NOT NULL, -- Ajout Thomas
-    CONSTRAINT fk_barber_availability FOREIGN KEY (id_availability) REFERENCES barber_availability(id_availability), -- Thomas
-    CONSTRAINT pk_appointement PRIMARY KEY (Id_appointement),
-    CONSTRAINT fk_appointement_prestation FOREIGN KEY (Id_prestation) REFERENCES prestation(Id_prestation),
+    -- id_availability INT NOT NULL, -- Ajout Thomas
+    -- CONSTRAINT fk_barber_availability FOREIGN KEY (id_availability) REFERENCES barber_availability(id_availability), -- Thomas
+    CONSTRAINT pk_appointement PRIMARY KEY (id_appointement),
+    CONSTRAINT fk_appointement_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation),
     CONSTRAINT fk_appointement_barber FOREIGN KEY (id_user_barber) REFERENCES barber(id_user),
     CONSTRAINT fk_appointement_customer FOREIGN KEY (id_user_customer) REFERENCES customer(id_user)
 );
 
 CREATE TABLE review (
-    Id_review INT AUTO_INCREMENT,
+    id_review INT AUTO_INCREMENT,
     rating INT NOT NULL,
     comment TEXT,
     reporting INT DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Id_appointement INT NOT NULL, -- Lié à un rendez-vous (0,1)
-    CONSTRAINT pk_review PRIMARY KEY (Id_review),
-    CONSTRAINT fk_review_appointement FOREIGN KEY (Id_appointement) REFERENCES appointement(Id_appointement) ON DELETE CASCADE,
+    id_appointement INT NOT NULL, -- Lié à un rendez-vous (0,1)
+    CONSTRAINT pk_review PRIMARY KEY (id_review),
+    CONSTRAINT fk_review_appointement FOREIGN KEY (id_appointement) REFERENCES appointement(id_appointement) ON DELETE CASCADE,
     CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5)
 );
 
@@ -131,10 +131,10 @@ CREATE TABLE review (
 
 CREATE TABLE propose (
     id_user INT,          -- Clé étrangère vers barber
-    Id_prestation INT,    -- Clé étrangère vers prestation
-    CONSTRAINT pk_propose PRIMARY KEY (id_user, Id_prestation),
+    id_prestation INT,    -- Clé étrangère vers prestation
+    CONSTRAINT pk_propose PRIMARY KEY (id_user, id_prestation),
     CONSTRAINT fk_propose_barber FOREIGN KEY (id_user) REFERENCES barber(id_user) ON DELETE CASCADE,
-    CONSTRAINT fk_propose_prestation FOREIGN KEY (Id_prestation) REFERENCES prestation(Id_prestation) ON DELETE CASCADE
+    CONSTRAINT fk_propose_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation) ON DELETE CASCADE
 );
 
 
@@ -170,7 +170,7 @@ INSERT INTO barber (id_user, name, description, postal_code, city, adress, deliv
 -- 3. INSERTIONS DES PRESTATIONS ET ÉVÉNEMENTS
 -- =============================================================================
 -- Catalogue général des prestations
-INSERT INTO prestation (Id_prestation, name, price, duration_minutes) VALUES
+INSERT INTO prestation (id_prestation, name, price, duration_minutes) VALUES
 (1, 'Coupe Homme Classique', 25.00, 30),
 (2, 'Dégradé Américain (Fade)', 30.00, 45),
 (3, 'Taille de Barbe & Soin serviette chaude', 20.00, 30),
@@ -178,30 +178,30 @@ INSERT INTO prestation (Id_prestation, name, price, duration_minutes) VALUES
 (5, 'Coloration / Décoloration', 55.00, 90);
 
 -- Événements créés par l'Admin
-INSERT INTO event (Id_event, title, description, start_date, end_date, location) VALUES
-(1, 'Festival Rock & Barber 2026', 'Le plus grand rassemblement de coiffeurs et de musique rock de la région.', '2026-07-11 10:00:00', '2026-07-12 20:00:00', 'Hangar 14, Quai des Chartrons, Bordeaux'),
-(2, 'Salon du Mariage Bordeaux', 'Espace mise en beauté pour les futurs mariés.', '2026-10-24 09:00:00', '2026-10-25 18:00:00', 'Parc des Expositions, Bordeaux');
+INSERT INTO event (id_event, title,image_url, description, start_date, end_date, location) VALUES
+(1, 'Festival Rock & Barber 2026','https://beautyimages.bobitstudios.com/upload/_migratedbeauty/post/barberexpo-main-__-1000x784-s.JPG', 'Le plus grand rassemblement de coiffeurs et de musique rock de la région.', '2026-07-11 10:00:00', '2026-07-12 20:00:00', 'Hangar 14, Quai des Chartrons, Bordeaux'),
+(2, 'Salon du Mariage Bordeaux','https://i.pinimg.com/736x/88/24/19/8824192fe1843a00b04c854b6febda9b.jpg', 'Espace mise en beauté pour les futurs mariés.', '2026-10-24 09:00:00', '2026-10-25 18:00:00', 'Parc des Expositions, Bordeaux');
 
 -- =============================================================================
 -- 4. ASSOCIATIONS PRESTATIONS COIFFEURS (Table Propose)
 -- =============================================================================
 -- Thomas (4) propose Coupe classique, Dégradé, Barbe et Formule complète
-INSERT INTO propose (id_user, Id_prestation) VALUES 
+INSERT INTO propose (id_user, id_prestation) VALUES 
 (4, 1), (4, 2), (4, 3), (4, 4);
 
 -- Maxime (5) propose Coupe classique, Barbe et Coloration
-INSERT INTO propose (id_user, Id_prestation) VALUES 
+INSERT INTO propose (id_user, id_prestation) VALUES 
 (5, 1), (5, 3), (5, 5);
 
 -- =============================================================================
 -- 5. PLANNING ET DISPONIBILITÉS (Barber Availability)
 -- =============================================================================
-INSERT INTO barber_availability (Id_availability, start_time, end_time, is_booked, id_user, Id_event) VALUES
+INSERT INTO barber_availability (id_availability, start_time, end_time, is_booked, id_user, id_event) VALUES
 -- Thomas : journée normale à son salon / domicile (Pas d'événement)
 (1, '2026-06-02 09:00:00', '2026-06-02 10:00:00', TRUE, 4, NULL), -- Déjà réservé
 (2, '2026-06-02 10:00:00', '2026-06-02 11:00:00', FALSE, 4, NULL),
 (3, '2026-06-02 11:00:00', '2026-06-02 12:00:00', FALSE, 4, NULL),
--- Thomas : créneaux bloqués pour le Festival Rock (Id_event = 1)
+-- Thomas : créneaux bloqués pour le Festival Rock (id_event = 1)
 (4, '2026-07-11 14:00:00', '2026-07-11 15:00:00', TRUE, 4, 1),  -- Déjà réservé au festival
 (5, '2026-07-11 15:00:00', '2026-07-11 16:00:00', FALSE, 4, 1),
 -- Maxime : journée classique
@@ -211,22 +211,22 @@ INSERT INTO barber_availability (Id_availability, start_time, end_time, is_booke
 -- 6. FLUX DES RENDEZ-VOUS (Appointement)
 -- =============================================================================
 INSERT INTO appointement (
-    Id_appointement,
-    Id_availability,
+    id_appointement,
+    -- id_availability,
     appointment_date,
     status,
     location_type,
-    Id_prestation,
+    id_prestation,
     id_user_barber,
     id_user_customer
 ) VALUES
-(1, 1, '2026-05-20 10:00:00', 'completed', 'salon', 2, 4, 2),
-(2, 4, '2026-07-11 14:00:00', 'confirmed', 'event', 4, 4, 3),
-(3, 6, '2026-05-22 14:30:00', 'completed', 'domicile', 1, 5, 2);
+(1,  '2026-05-20 10:00:00', 'completed', 'salon', 2, 4, 2),
+(2,  '2026-07-11 14:00:00', 'confirmed', 'event', 4, 4, 3),
+(3,  '2026-05-22 14:30:00', 'completed', 'domicile', 1, 5, 2);
 -- =============================================================================
 -- 7. NOTATIONS ET AVIS (Review)
 -- =============================================================================
-INSERT INTO review (Id_review, rating, comment, created_at, Id_appointement) VALUES
+INSERT INTO review (id_review, rating, comment, created_at, id_appointement) VALUES
 -- Jean laisse un avis sur son dégradé fait par Thomas (RDV n°1)
 (1, 5, 'Excellent coiffeur, dégradé ultra propre et précis. Je reviendrai sans hésiter !', '2026-05-20 11:15:00', 1),
 -- Jean laisse un avis plus mitigé sur Maxime (RDV n°3)
@@ -235,7 +235,7 @@ INSERT INTO review (Id_review, rating, comment, created_at, Id_appointement) VAL
 -- =============================================================================
 -- 8. PORTFOLIO DES COIFFEURS (Photos de réalisations)
 -- =============================================================================
-INSERT INTO barber_portfolio (Id_picture, image_url, title, id_user) VALUES
+INSERT INTO barber_portfolio (id_picture, image_url, title, id_user) VALUES
 (1, 'uploads/portfolio/fade1.jpg', 'Dégradé à blanc parfait', 4),
 (2, 'uploads/portfolio/beard1.jpg', 'Taille de barbe sculptée', 4),
 (3, 'uploads/portfolio/retro1.jpg', 'Coupe Pompadour Vintage', 5);

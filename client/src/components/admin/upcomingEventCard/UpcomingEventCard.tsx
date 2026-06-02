@@ -4,7 +4,7 @@ import "./UpcomingEventCard.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type EventItem = {
-  Id_event: number;
+  id_event: number;
   title: string;
   start_date: string;
   end_date: string;
@@ -64,7 +64,7 @@ function UpcomingEventCard() {
 
       <div className="event-card-list">
         {events.map((event) => (
-          <div key={event.Id_event} className="event-item">
+          <div key={event.id_event} className="event-item">
             {" "}
             <div className="event-info">
               <img

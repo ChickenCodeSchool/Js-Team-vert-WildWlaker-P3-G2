@@ -20,7 +20,7 @@ type FormattedData = {
 };
 
 type RawAppointment = {
-  Id_appointement: number;
+  id_appointement: number;
   appointment_date: string;
   status: string;
   location_type: string;

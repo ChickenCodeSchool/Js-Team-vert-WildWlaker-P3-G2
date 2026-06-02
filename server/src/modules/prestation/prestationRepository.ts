@@ -2,7 +2,7 @@ import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Prestation = {
-  Id_prestation: number;
+  id_prestation: number;
   name: string;
   price: number;
   duration_minutes: number;
