@@ -42,20 +42,6 @@
   -webkit-box-orient: vertical;
 }
 
-.barber-card__rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: var(--gray-600);
-}
-
-.barber-card__star {
-  color: var(--warning);
-  fill: var(--warning);
-}
-
 .barber-card__location {
   display: flex;
   align-items: center;
