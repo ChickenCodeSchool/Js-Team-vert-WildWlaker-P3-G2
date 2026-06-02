@@ -2,7 +2,7 @@ import "./Home.css";
 import { FiScissors } from "react-icons/fi";
 import SecareBarber from "../../../assets/images/SecareBarber.png";
 import Carrousel from "../../../components/carrousel/Carrousel";
-import ServicesSection from "../../../components/customer/Services/ServicesSection";
+import ServicesSection from "../../../components/customer/Services/Services/ServicesSection";
 import EventBanner from "../../../components/event/EventBanner";
 import Search from "../../../components/search/Search";
 

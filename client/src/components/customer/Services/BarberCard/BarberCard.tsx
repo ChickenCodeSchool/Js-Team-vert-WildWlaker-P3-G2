@@ -1,0 +1,52 @@
+import "./BarberCard.css";
+import { FiChevronRight, FiMapPin } from "react-icons/fi";
+import fallbackImage from "../../../../assets/images/Afro.jpg";
+import type { Barber } from "../../../../types/barber";
+
+type BarberCardProps = {
+  barber: Barber;
+};
+
+function BarberCard({ barber }: BarberCardProps) {
+  const image =
+    barber.avatar_url?.startsWith("http") || barber.avatar_url?.startsWith("/")
+      ? barber.avatar_url
+      : fallbackImage;
+
+  return (
+    <article className="barber-card">
+      <img
+        src={image}
+        alt={barber.name}
+        className="barber-card__image"
+        onError={(event) => {
+          event.currentTarget.src = fallbackImage;
+        }}
+      />
+      <div className="barber-card__content">
+        <div className="barber-card__info">
+          <h3 className="barber-card__title">{barber.name}</h3>
+
+          <p className="barber-card__description">{barber.description}</p>
+
+          <div className="barber-card__location">
+            <FiMapPin />
+
+            <span>
+              {barber.postal_code} {barber.city}
+            </span>
+          </div>
+        </div>
+        <div className="barber-card__right">
+          <span className="barber-card__distance">
+            {barber.delivery_radius} km
+          </span>
+
+          <FiChevronRight className="barber-card__arrow" />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default BarberCard;
