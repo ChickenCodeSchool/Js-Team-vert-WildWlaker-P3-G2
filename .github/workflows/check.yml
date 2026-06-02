@@ -24,6 +24,8 @@ jobs:
 
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
+        with:
+          version: 2.4.9
 
       - name: Run checks
         run: biome ci --error-on-warnings --no-errors-on-unmatched --changed --since="origin/${GITHUB_BASE_REF}" .
