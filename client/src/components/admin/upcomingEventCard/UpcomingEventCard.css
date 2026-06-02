@@ -77,30 +77,30 @@
         }
       }
 
-      /* .event-status-badge {
+      .event-status-badge {
         font-family: var(--font-body);
-        font-size: 11px;
+        font-size: 12px;
         font-weight: 500;
         padding: 4px 10px;
-        border-radius: 20px;
+        border-radius: 5px;
         text-align: center;
         min-width: 65px;
 
-        &.status-published {
+        &.publié {
           background-color: #eaf7ed;
           color: var(--success);
         }
 
-        &.status-draft {
+        &.brouillon {
           background-color: var(--gray-100);
           color: var(--gray-600);
         }
 
-        &.status-planned {
+        &.plannifié {
           background-color: var(--gold-soft);
           color: var(--warning);
         }
-      } */
+      }
     }
   }
 }

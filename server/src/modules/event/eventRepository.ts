@@ -2,10 +2,11 @@ import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Event = {
-  Id_event: number;
+  id_event: number;
   title: string;
   image_url: string;
   description: string;
+  status: string;
   start_date: string;
   end_date: string;
   location: string;

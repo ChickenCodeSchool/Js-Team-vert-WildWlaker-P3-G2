@@ -14,7 +14,7 @@ interface StatusData {
 }
 
 type RawAppointment = {
-  Id_appointement: number;
+  id_appointement: number;
   status: string;
   appointment_date: string;
 };

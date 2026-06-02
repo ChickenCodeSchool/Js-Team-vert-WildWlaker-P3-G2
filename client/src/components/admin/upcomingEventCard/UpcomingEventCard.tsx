@@ -4,11 +4,12 @@ import "./UpcomingEventCard.css";
 const API_URL = import.meta.env.VITE_API_URL;
 
 type EventItem = {
-  Id_event: number;
+  id_event: number;
   title: string;
   start_date: string;
   end_date: string;
   location: string;
+  status: string;
   image_url: string | null;
 };
 
@@ -44,11 +45,17 @@ function UpcomingEventCard() {
     fetch(`${API_URL}/api/events`)
       .then((res) => res.json())
       .then((data: EventItem[]) => {
-        data.sort(
-          (a, b) =>
-            new Date(a.start_date).getTime() - new Date(b.start_date).getTime(),
-        );
-        setEvents(data);
+        const now = new Date();
+
+        const upcomingEvents = data
+          .filter((event) => new Date(event.end_date) >= now)
+          .sort(
+            (a, b) =>
+              new Date(a.start_date).getTime() -
+              new Date(b.start_date).getTime(),
+          );
+
+        setEvents(upcomingEvents);
       })
       .catch((err) => console.error("Erreur fetch events:", err));
   }, []);
@@ -64,7 +71,7 @@ function UpcomingEventCard() {
 
       <div className="event-card-list">
         {events.map((event) => (
-          <div key={event.Id_event} className="event-item">
+          <div key={event.id_event} className="event-item">
             {" "}
             <div className="event-info">
               <img
@@ -82,6 +89,9 @@ function UpcomingEventCard() {
                 </span>
                 <span className="event-details">📍 {event.location}</span>
               </div>
+            </div>
+            <div className={`event-status-badge ${event.status}`}>
+              {event.status}
             </div>
           </div>
         ))}

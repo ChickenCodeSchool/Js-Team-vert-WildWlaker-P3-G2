@@ -2,7 +2,7 @@ import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Review = {
-  Id_review: number;
+  id_review: number;
   reported: boolean;
   rating: number;
   comment: string;
