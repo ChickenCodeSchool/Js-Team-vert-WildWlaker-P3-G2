@@ -153,7 +153,7 @@ function Dashboard() {
     fetch(`${apiUrl}/api/users${params}`)
       .then((res) => res.json())
       .then((data) => setUsers(data));
-    fetch(`${apiUrl}/api/appointements${params}`)
+    fetch(`${apiUrl}/api/appointments${params}`)
       .then((res) => res.json())
       .then((data) => setAppointments(data));
     fetch(`${apiUrl}/api/reviews${params}`)
@@ -166,7 +166,7 @@ function Dashboard() {
     fetch(`${apiUrl}/api/users${prevParams}`)
       .then((res) => res.json())
       .then((data) => setPrevUsers(data));
-    fetch(`${apiUrl}/api/appointements${prevParams}`)
+    fetch(`${apiUrl}/api/appointments${prevParams}`)
       .then((res) => res.json())
       .then((data) => setPrevAppointments(data));
     fetch(`${apiUrl}/api/reviews${prevParams}`)
