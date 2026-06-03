@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { addWeeks, endOfWeek, format, startOfWeek } from "date-fns";
+import { fr } from "date-fns/locale";
+import { useEffect, useMemo, useState } from "react";
 import {
   FiCalendar,
   FiFlag,
@@ -6,6 +8,7 @@ import {
   FiStar,
   FiUsers,
 } from "react-icons/fi";
+
 import ApprovalCard from "../../../components/admin/approvalCard/ApprovalCard";
 import BigStatsGraphCard from "../../../components/admin/bigStatsGraphCard/BigStatsGraphCard";
 import LatestReservationsCard from "../../../components/admin/lastestReservationsCard/LastestReservationCard";
@@ -20,44 +23,91 @@ type reviewItem = {
   rating: number;
 };
 
+const generateDynamicWeeks = () => {
+  const options = [];
+  const now = new Date();
+
+  const currentMonday = startOfWeek(now, { weekStartsOn: 1 });
+
+  for (let i = -4; i <= 4; i++) {
+    const monday = addWeeks(currentMonday, i);
+    const sunday = endOfWeek(monday, { weekStartsOn: 1 });
+    const startISO = format(monday, "yyyy-MM-dd");
+    const endISO = format(sunday, "yyyy-MM-dd");
+    const labelStart = format(monday, "dd MMMM yyyy", { locale: fr });
+    const labelEnd = format(sunday, "dd MMMM yyyy", { locale: fr });
+    const formattedLabel = `${labelStart} - ${labelEnd}`;
+
+    options.push({
+      value: `week-${startISO}`,
+      label: i === 0 ? `${formattedLabel} (Cette semaine)` : formattedLabel,
+      start: startISO,
+      end: endISO,
+      isCurrent: i === 0,
+    });
+  }
+  return options;
+};
+
 function Dashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [barbers, setBarbers] = useState([]);
   const [users, setUsers] = useState([]);
   const [appointements, setAppointements] = useState([]);
   const [reviews, setReviews] = useState<reviewItem[]>([]);
+  const weekOptions = useMemo(() => generateDynamicWeeks(), []);
+  const defaultWeek = weekOptions.find((w) => w.isCurrent) || weekOptions[4];
+  const [selectedWeek, setSelectedWeek] = useState(defaultWeek.value);
+  const currentPeriod =
+    weekOptions.find((w) => w.value === selectedWeek) || defaultWeek;
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/barbers`)
+    const params = `?startDate=${currentPeriod.start}&endDate=${currentPeriod.end}`;
+
+    fetch(`${apiUrl}/api/barbers${params}`)
       .then((res) => res.json())
       .then((data) => setBarbers(data));
-  }, []);
 
-  useEffect(() => {
-    fetch(`${apiUrl}/api/users`)
+    fetch(`${apiUrl}/api/users${params}`)
       .then((res) => res.json())
       .then((data) => setUsers(data));
-  }, []);
-  useEffect(() => {
-    fetch(`${apiUrl}/api/appointements`)
+
+    fetch(`${apiUrl}/api/appointements${params}`)
       .then((res) => res.json())
       .then((data) => setAppointements(data));
-  }, []);
-  useEffect(() => {
-    fetch(`${apiUrl}/api/reviews`)
+
+    fetch(`${apiUrl}/api/reviews${params}`)
       .then((res) => res.json())
       .then((data) => setReviews(data));
-  }, []);
+  }, [currentPeriod.start, currentPeriod.end]);
 
   return (
     <div className="dashboard-main">
       <header className="dashboard-header">
-        <h1>Bonjour, Admin 👋</h1>
-        <p>
-          Bienvenue sur votre tableau de bord. Voici un aperçu de vos
-          statistiques récentes :
-        </p>
+        <div>
+          <h1>Bonjour, Admin 👋</h1>
+          <p>
+            Bienvenue sur votre tableau de bord. Voici un aperçu de vos
+            statistiques récentes :
+          </p>
+        </div>
+
+        <div className="week-selector-container">
+          <FiCalendar className="icon" />
+          <select
+            className="week-selector-select"
+            value={selectedWeek}
+            onChange={(e) => setSelectedWeek(e.target.value)}
+          >
+            {weekOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </div>
       </header>
+
       <div className="dashboard-content-graphs">
         <StatsGraphCard
           Icon={FiUsers}
@@ -80,7 +130,10 @@ function Dashboard() {
         <StatsGraphCard
           Icon={FiStar}
           title="Note moyenne"
-          value={`${(reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length || 0).toFixed(1)}/5`}
+          value={`${(
+            reviews.reduce((acc, review) => acc + review.rating, 0) /
+              reviews.length || 0
+          ).toFixed(1)}/5`}
           evolution="↑ 2.1%"
         />
         <StatsGraphCard

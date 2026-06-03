@@ -108,7 +108,7 @@ function ReservationStatusGraph() {
 
       <div className="ReservationStatusGraph-content">
         <div className="ReservationStatusGraph-wrapper">
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width={200} height={200}>
             <PieChart>
               <Pie
                 data={chartData}
