@@ -52,7 +52,7 @@ function ReservationStatusGraph() {
   const [totalReservations, setTotalReservations] = useState<number>(0);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/appointements`)
+    fetch(`${API_URL}/api/appointments`)
       .then((res) => res.json())
       .then((rawData: RawAppointment[]) => {
         const statusConfig: {

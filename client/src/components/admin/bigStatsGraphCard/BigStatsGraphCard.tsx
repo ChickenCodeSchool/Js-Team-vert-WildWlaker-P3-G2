@@ -57,7 +57,7 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
       return new Date(currentYear, month, Number.parseInt(day, 10));
     }
 
-    fetch(`${apiUrl}/api/appointements`)
+    fetch(`${apiUrl}/api/appointments`)
       .then((res) => res.json())
       .then((rawData: RawAppointment[]) => {
         const countsByDate = rawData.reduce<{ [key: string]: number }>(

@@ -24,7 +24,7 @@ function Dashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [barbers, setBarbers] = useState([]);
   const [users, setUsers] = useState([]);
-  const [appointements, setAppointements] = useState([]);
+  const [appointments, setAppointments] = useState([]);
   const [reviews, setReviews] = useState<reviewItem[]>([]);
 
   useEffect(() => {
@@ -39,9 +39,9 @@ function Dashboard() {
       .then((data) => setUsers(data));
   }, []);
   useEffect(() => {
-    fetch(`${apiUrl}/api/appointements`)
+    fetch(`${apiUrl}/api/appointments`)
       .then((res) => res.json())
-      .then((data) => setAppointements(data));
+      .then((data) => setAppointments(data));
   }, []);
   useEffect(() => {
     fetch(`${apiUrl}/api/reviews`)
@@ -74,7 +74,7 @@ function Dashboard() {
         <StatsGraphCard
           Icon={FiCalendar}
           title="Réservations"
-          value={appointements.length}
+          value={appointments.length}
           evolution="↑ 15.7%"
         />
         <StatsGraphCard
