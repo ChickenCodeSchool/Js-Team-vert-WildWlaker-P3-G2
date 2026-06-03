@@ -11,9 +11,9 @@ function SearchPage() {
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   useEffect(() => {
-    fetch("/api/barbers")
+    fetch(`${API_URL}/api/barbers`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Erreur lors du chargement des coiffeurs");

@@ -1,9 +1,6 @@
-import { useEffect, useState } from "react";
 import { Pie, PieChart, ResponsiveContainer, Sector } from "recharts";
 import "./ReservationsStatusGraph.css";
 import { NavLink } from "react-router";
-
-const API_URL = import.meta.env.VITE_API_URL;
 
 interface StatusData {
   id: number;
@@ -14,9 +11,13 @@ interface StatusData {
 }
 
 type RawAppointment = {
-  id_appointement: number;
+  id_appointment: number;
   status: string;
   appointment_date: string;
+};
+
+type ReservationStatusGraphProps = {
+  appointments: RawAppointment[];
 };
 
 interface RenderPieShapeProps {
@@ -47,60 +48,41 @@ const RenderPieShape = (props: Partial<RenderPieShapeProps>) => {
   );
 };
 
-function ReservationStatusGraph() {
-  const [chartData, setChartData] = useState<StatusData[]>([]);
-  const [totalReservations, setTotalReservations] = useState<number>(0);
+function ReservationStatusGraph({ appointments }: ReservationStatusGraphProps) {
+  const totalReservations = appointments.length;
 
-  useEffect(() => {
-    fetch(`${API_URL}/api/appointments`)
-      .then((res) => res.json())
-      .then((rawData: RawAppointment[]) => {
-        const statusConfig: {
-          [key: string]: { id: number; name: string; color: string };
-        } = {
-          confirmed: { id: 1, name: "Confirmées", color: "var(--success)" },
-          pending: { id: 2, name: "En attente", color: "var(--warning)" },
-          completed: { id: 3, name: "Terminées", color: "var(--info)" },
-          cancelled: { id: 4, name: "Annulées", color: "var(--error)" },
-        };
+  const statusConfig: {
+    [key: string]: { id: number; name: string; color: string };
+  } = {
+    confirmed: { id: 1, name: "Confirmées", color: "var(--success)" },
+    pending: { id: 2, name: "En attente", color: "var(--warning)" },
+    completed: { id: 3, name: "Terminées", color: "var(--info)" },
+    cancelled: { id: 4, name: "Annulées", color: "var(--error)" },
+  };
 
-        const counts = rawData.reduce<{ [key: string]: number }>(
-          (acc, app) => {
-            if (acc[app.status] !== undefined) {
-              acc[app.status]++;
-            }
-            return acc;
-          },
-          {
-            confirmed: 0,
-            pending: 0,
-            completed: 0,
-            cancelled: 0,
-          },
-        );
+  const counts = appointments.reduce<{ [key: string]: number }>(
+    (acc, app) => {
+      if (acc[app.status] !== undefined) {
+        acc[app.status]++;
+      }
+      return acc;
+    },
+    { confirmed: 0, pending: 0, completed: 0, cancelled: 0 },
+  );
 
-        const total = rawData.length;
-        setTotalReservations(total);
+  const chartData: StatusData[] = Object.keys(statusConfig).map((key) => {
+    const count = counts[key];
+    const percent =
+      totalReservations > 0 ? Math.round((count / totalReservations) * 100) : 0;
 
-        const formattedData: StatusData[] = Object.keys(statusConfig).map(
-          (key) => {
-            const count = counts[key];
-            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-
-            return {
-              id: statusConfig[key].id,
-              name: statusConfig[key].name,
-              value: count,
-              percentage: percent,
-              color: statusConfig[key].color,
-            };
-          },
-        );
-
-        setChartData(formattedData);
-      })
-      .catch((err) => console.error("Erreur fetch graph statuts :", err));
-  }, []);
+    return {
+      id: statusConfig[key].id,
+      name: statusConfig[key].name,
+      value: count,
+      percentage: percent,
+      color: statusConfig[key].color,
+    };
+  });
 
   return (
     <div className="ReservationStatusGraph-card">
@@ -108,7 +90,7 @@ function ReservationStatusGraph() {
 
       <div className="ReservationStatusGraph-content">
         <div className="ReservationStatusGraph-wrapper">
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width={200} height={200}>
             <PieChart>
               <Pie
                 data={chartData}

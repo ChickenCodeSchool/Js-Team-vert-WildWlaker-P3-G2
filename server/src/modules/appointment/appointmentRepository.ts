@@ -18,9 +18,9 @@ export type AppointmentWithDetails = Appointment & {
 class AppointmentRepository {
   // The C of CRUD - Create operation
 
-  async readAll() {
+  async readAll(filters?: { startDate?: string; endDate?: string }) {
     // Execute the SQL SELECT query to retrieve all Appointments from the "Appointment" table
-    const query = `
+    let query = `
       SELECT 
         a.*,
         b.name AS barber_name,
@@ -33,8 +33,18 @@ class AppointmentRepository {
       JOIN customer c ON a.id_user_customer = c.id_user
       JOIN users u ON c.id_user = u.id_user  
       JOIN prestation p ON a.id_prestation = p.id_prestation
-    `;
-    const [rows] = await databaseClient.query<Rows>(query);
+      `;
+    const queryParams: string[] = [];
+
+    if (filters?.startDate && filters?.endDate) {
+      query += " WHERE a.appointment_date BETWEEN ? AND ?";
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
+
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
 
     // Return the array of Appointments
     return rows as AppointmentWithDetails[];
