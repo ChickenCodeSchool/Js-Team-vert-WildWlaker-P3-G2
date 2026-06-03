@@ -118,7 +118,7 @@ CREATE TABLE review (
     id_review INT AUTO_INCREMENT,
     rating INT NOT NULL,
     comment TEXT,
-    reporting INT DEFAULT 0,
+    reporting BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_appointment INT NOT NULL, -- Lié à un rendez-vous (0,1)
     CONSTRAINT pk_review PRIMARY KEY (id_review),
