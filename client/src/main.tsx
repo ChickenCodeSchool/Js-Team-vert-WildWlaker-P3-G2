@@ -10,6 +10,7 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Login from "./pages/auth/Login";
+import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
@@ -37,16 +38,18 @@ const router = createBrowserRouter([
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
           { path: "login", element: <Login /> },
-          { path: "barberprofile", element: <BarberProfil /> },
         ],
       },
-
       {
         path: "/admin",
         element: <AdminLayout />,
         children: [{ index: true, element: <Dashboard /> }],
       },
-      { path: "/barber", element: <BarberProfil /> },
+      {
+        path: "/barber",
+        element: <BarberLayout />,
+        children: [{ path: "profile", element: <BarberProfil /> }],
+      },
     ],
   },
 ]);
