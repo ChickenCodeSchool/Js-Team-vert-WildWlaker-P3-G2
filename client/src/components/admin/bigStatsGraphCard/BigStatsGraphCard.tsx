@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Area,
   AreaChart,
@@ -10,90 +9,17 @@ import {
 } from "recharts";
 import "./BigStatsGraphCard.css";
 
-type BigStatsGraphCardProps = {
-  title: string;
-};
-
-type FormattedData = {
+type FormattedChartData = {
   date: string;
   value: number;
 };
 
-type RawAppointment = {
-  id_appointement: number;
-  appointment_date: string;
-  status: string;
-  location_type: string;
-  Id_prestation: number;
-  id_user_barber: number;
-  id_user_customer: number;
+type BigStatsGraphCardProps = {
+  title: string;
+  data: FormattedChartData[];
 };
 
-function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
-  const apiUrl = import.meta.env.VITE_API_URL;
-  const [appointments, setAppointments] = useState<FormattedData[]>([]);
-
-  useEffect(() => {
-    function parseFrenchDate(dateStr: string): Date {
-      const months: { [key: string]: number } = {
-        janv: 0,
-        févr: 1,
-        mars: 2,
-        avr: 3,
-        mai: 4,
-        juin: 5,
-        juil: 6,
-        août: 7,
-        sept: 8,
-        oct: 9,
-        nov: 10,
-        déc: 11,
-      };
-
-      const [day, monthStr] = dateStr.toLowerCase().replace(".", "").split(" ");
-      const currentYear = new Date().getFullYear();
-      const month = months[monthStr] !== undefined ? months[monthStr] : 0;
-
-      return new Date(currentYear, month, Number.parseInt(day, 10));
-    }
-
-    fetch(`${apiUrl}/api/appointements`)
-      .then((res) => res.json())
-      .then((rawData: RawAppointment[]) => {
-        const countsByDate = rawData.reduce<{ [key: string]: number }>(
-          (acc, app) => {
-            const dateObj = new Date(app.appointment_date);
-            const formattedDate = dateObj.toLocaleDateString("fr-FR", {
-              day: "numeric",
-              month: "short",
-            });
-
-            acc[formattedDate] = (acc[formattedDate] || 0) + 1;
-
-            return acc;
-          },
-          {},
-        );
-
-        const chartData: FormattedData[] = Object.keys(countsByDate).map(
-          (date) => {
-            return {
-              date: date,
-              value: countsByDate[date],
-            };
-          },
-        );
-
-        chartData.sort((a, b) => {
-          const dateA = parseFrenchDate(a.date);
-          const dateB = parseFrenchDate(b.date);
-          return dateA.getTime() - dateB.getTime();
-        });
-
-        setAppointments(chartData);
-      })
-      .catch((err) => console.error("Erreur fetch appointments:", err));
-  }, []);
+function BigStatsGraphCard({ title, data }: BigStatsGraphCardProps) {
   return (
     <div className="BigStatsGraphCard-main">
       <div className="BigStatsGraphCard-upper">
@@ -103,7 +29,7 @@ function BigStatsGraphCard({ title }: BigStatsGraphCardProps) {
       <div className="BigStatsGraphCard-graph">
         <ResponsiveContainer width="100%" height={200}>
           <AreaChart
-            data={appointments}
+            data={data}
             margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
           >
             <CartesianGrid vertical={false} stroke="var(--gray-100)" />
