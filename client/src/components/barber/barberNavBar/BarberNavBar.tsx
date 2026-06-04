@@ -5,12 +5,12 @@ import {
   FiMessageSquare,
   FiUser,
 } from "react-icons/fi";
-import "./NavBarHair.css";
+import "./BarberNavBar.css";
 import { useState } from "react";
 import { MdMenuOpen, MdPeopleAlt } from "react-icons/md";
 import { NavLink } from "react-router";
 
-function NavBarHair() {
+function BarberNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <>
@@ -49,4 +49,4 @@ function NavBarHair() {
   );
 }
 
-export default NavBarHair;
+export default BarberNavBar;

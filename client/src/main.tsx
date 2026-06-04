@@ -10,11 +10,11 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Login from "./pages/auth/Login";
+import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 import SearchPage from "./pages/customer/search/SearchPage";
-import BordHair from "./pages/hairdresser/BordHair";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -40,17 +40,15 @@ const router = createBrowserRouter([
           { path: "login", element: <Login /> },
         ],
       },
-
       {
         path: "/admin",
         element: <AdminLayout />,
         children: [{ index: true, element: <Dashboard /> }],
       },
-      { path: "/barber", element: <BarberProfil /> },
-
       {
-        path: "/hairdresser",
-        element: <BordHair />,
+        path: "/barber",
+        element: <BarberLayout />,
+        children: [{ path: "profile", element: <BarberProfil /> }],
       },
     ],
   },

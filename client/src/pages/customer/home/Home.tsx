@@ -15,7 +15,7 @@ function Home() {
           <FiScissors className="FiScissors" /> Secare{" "}
         </h1>
         <h2 className="home__title">
-          Trouve ton <span>coiffeur</span> idéal
+          Trouve ton <span className="home_span">coiffeur</span> idéal
         </h2>
       </div>
       <Search />
