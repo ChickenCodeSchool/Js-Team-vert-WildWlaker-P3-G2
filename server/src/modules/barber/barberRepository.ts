@@ -15,8 +15,8 @@ type Barber = {
 class BarberRepository {
   // The C of CRUD - Create operation
 
-  async readAll() {
-    const query = `
+  async readAll(filters?: { startDate?: string; endDate?: string }) {
+    let query = `
     SELECT 
       b.*,
       u.avatar_url AS avatar_url, 
@@ -24,7 +24,15 @@ class BarberRepository {
     FROM barber b
     JOIN users u ON b.id_user = u.id_user
   `;
-    const [rows] = await databaseClient.query<Rows>(query);
+    const queryParams: string[] = [];
+    if (filters?.startDate && filters?.endDate) {
+      query += ` WHERE u.create_time BETWEEN ? AND ?`;
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
     // Return the array of Barbers
     return rows as Barber[];
   }

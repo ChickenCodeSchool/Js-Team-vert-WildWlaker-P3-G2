@@ -1,8 +1,8 @@
 .StatsGraphCard-main {
   background-color: var(--white);
   border-radius: var(--radius-lg);
-  padding: 20px;
-  width: 16%;
+  padding: 20px 5px 20px 5px;
+  width: 18%;
   min-height: 10rem;
   display: flex;
   flex-direction: column;
@@ -42,7 +42,13 @@
       .StatsGraphCard-evolution {
         font-family: var(--font-body);
         font-size: 16px;
-        color: var(--success);
+
+        &.up {
+          color: var(--success);
+        }
+        &.down {
+          color: var(--error);
+        }
       }
       p {
         font-family: var(--font-body);
