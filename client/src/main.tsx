@@ -13,6 +13,7 @@ import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 import SearchPage from "./pages/customer/search/SearchPage";
+import BordHair from "./pages/hairdresser/BordHair";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
@@ -44,6 +45,11 @@ const router = createBrowserRouter([
         children: [{ index: true, element: <Dashboard /> }],
       },
       { path: "/barber", element: <BarberProfil /> },
+
+      {
+        path: "/hairdresser",
+        element: <BordHair />,
+      },
     ],
   },
 ]);
