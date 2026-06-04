@@ -6,8 +6,8 @@
   padding-top: 20px;
 }
 
-h2 {
-  margin-top: -1rem;
+.home__title {
+  margin-top: 1rem;
 }
 
 .FiScissors {
@@ -15,6 +15,6 @@ h2 {
   font-size: 25px;
 }
 
-span {
+.home_span {
   color: var(--gold-dark);
 }

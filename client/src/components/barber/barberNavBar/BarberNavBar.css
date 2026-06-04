@@ -1,0 +1,67 @@
+.NavBarHair-main {
+  background-color: var(--black);
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 100vh;
+  width: 39vw;
+  color: var(--gray-100);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  left: 0;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+
+  h1 {
+    text-align: center;
+    margin-top: 4rem;
+  }
+  h3 {
+    font-family: var(--font-title);
+    font-size: 15px;
+    color: var(--gray-600);
+    width: 100%;
+    text-align: start;
+    margin-top: 50px;
+  }
+  .NavBarHair-menu {
+    margin-top: 15px;
+    color: var(--white);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: var(--font-title);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    &.active {
+      color: var(--black);
+      border: 8px solid var(--warning);
+      background-color: var(--warning);
+      border-radius: 5px;
+    }
+  }
+}
+
+.NavBarHair-main.open {
+  transform: translateX(0);
+}
+
+.button_Nav {
+  background-color: var(--gold-dark);
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  z-index: 1000;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: var(--warning);
+  justify-content: center;
+  padding: 5px;
+  display: flex;
+  border-radius: 50%;
+}
