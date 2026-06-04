@@ -9,4 +9,6 @@ export type Barber = {
   status: string;
   avatar_url: string;
   create_time: string;
+  telephone: string;
+  date_naissance: string;
 };
