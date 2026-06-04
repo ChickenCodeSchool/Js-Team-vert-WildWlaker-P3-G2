@@ -147,37 +147,23 @@ function Dashboard() {
     const params = `?startDate=${currentPeriod.start}&endDate=${currentPeriod.end}`;
     const prevParams = `?startDate=${prevPeriod.start}&endDate=${prevPeriod.end}`;
 
-    fetch(`${apiUrl}/api/barbers${params}`)
+    fetch(`${apiUrl}/api/admin-dashboard${params}`)
       .then((res) => res.json())
-      .then((data) => setBarbers(data));
-    fetch(`${apiUrl}/api/users${params}`)
+      .then(({ barbers, users, appointments, reviews }) => {
+        setBarbers(barbers);
+        setUsers(users);
+        setAppointments(appointments);
+        setReviews(reviews);
+      });
+    fetch(`${apiUrl}/api/admin-dashboard${prevParams}`)
       .then((res) => res.json())
-      .then((data) => setUsers(data));
-    fetch(`${apiUrl}/api/appointments${params}`)
-      .then((res) => res.json())
-      .then((data) => setAppointments(data));
-    fetch(`${apiUrl}/api/reviews${params}`)
-      .then((res) => res.json())
-      .then((data) => setReviews(data));
-
-    fetch(`${apiUrl}/api/barbers${prevParams}`)
-      .then((res) => res.json())
-      .then((data) => setPrevBarbers(data));
-    fetch(`${apiUrl}/api/users${prevParams}`)
-      .then((res) => res.json())
-      .then((data) => setPrevUsers(data));
-    fetch(`${apiUrl}/api/appointments${prevParams}`)
-      .then((res) => res.json())
-      .then((data) => setPrevAppointments(data));
-    fetch(`${apiUrl}/api/reviews${prevParams}`)
-      .then((res) => res.json())
-      .then((data) => setPrevReviews(data));
-  }, [
-    currentPeriod.start,
-    currentPeriod.end,
-    prevPeriod.start,
-    prevPeriod.end,
-  ]);
+      .then(({ barbers, users, appointments, reviews }) => {
+        setPrevBarbers(barbers);
+        setPrevUsers(users);
+        setPrevAppointments(appointments);
+        setPrevReviews(reviews);
+      });
+  }, [currentPeriod, prevPeriod]);
 
   const daysOfWeek = useMemo(() => {
     return eachDayOfInterval({
