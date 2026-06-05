@@ -12,6 +12,7 @@ import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Login from "./pages/auth/Login";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 import SearchPage from "./pages/customer/search/SearchPage";
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
+          { path: "booking", element: <BookingPage /> },
           { path: "login", element: <Login /> },
         ],
       },

@@ -35,3 +35,8 @@
 .search__spacer {
   width: 28px;
 }
+.search__barber-link {
+  all: unset;
+  display: block;
+  cursor: pointer;
+}
