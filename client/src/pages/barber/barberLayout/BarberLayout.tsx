@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import BarberNavBar from "../../../components/barber/BarberNavBar/BarberNavBar";
+import BarberNavBar from "../../../components/barber/barberNavBar/BarberNavBar";
 import "./BarberLayout.css";
 
 function BarberLayout() {
