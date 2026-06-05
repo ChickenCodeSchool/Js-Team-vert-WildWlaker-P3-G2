@@ -10,6 +10,8 @@ type Props = {
   onNext: () => void;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function BookingForm({ booking, setBooking, onNext }: Props) {
   const [prestations, setPrestations] = useState<Prestation[]>([]);
 
@@ -39,11 +41,10 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
     "18h00",
     "18h30",
     "19h00",
-    "19h30",
   ];
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/prestations")
+    fetch(`${API_URL}/api/prestations`)
       .then((res) => res.json())
       .then((data) => {
         console.log("DATA PRESTATIONS :", data);
