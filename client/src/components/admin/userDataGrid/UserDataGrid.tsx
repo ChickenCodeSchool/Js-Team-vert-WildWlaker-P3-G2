@@ -30,37 +30,24 @@ function UserDataGrid<T extends { id: string | number }>({
   const endIndex = Math.min(startIndex + rowsPerPage, totalRows);
   const paginatedData = data.slice(startIndex, endIndex);
 
-  // --- LOGIQUE DE TRONCATION DES PAGES ---
   const getVisiblePages = () => {
     const pages: (number | string)[] = [];
-
-    // Nombre de pages adjacentes à afficher autour de la page active
     const neighbors = 1;
-
-    // Toujours afficher la première page
     pages.push(1);
-
     if (currentPage - neighbors > 2) {
       pages.push("...");
     }
-
-    // Calculer l'intervalle des pages centrales à afficher
     const start = Math.max(2, currentPage - neighbors);
     const end = Math.min(totalPages - 1, currentPage + neighbors);
-
     for (let i = start; i <= end; i++) {
       pages.push(i);
     }
-
     if (currentPage + neighbors < totalPages - 1) {
       pages.push("...");
     }
-
-    // Toujours afficher la dernière page (si elle existe et qu'elle n'est pas déjà la première)
     if (totalPages > 1) {
       pages.push(totalPages);
     }
-
     return pages;
   };
 

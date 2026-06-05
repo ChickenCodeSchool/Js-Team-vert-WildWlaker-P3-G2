@@ -1,8 +1,9 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useState } from "react";
-import { FiCalendar, FiPause, FiUserPlus } from "react-icons/fi";
+import { useEffect, useMemo, useState } from "react";
+import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
 
+import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
@@ -11,6 +12,14 @@ import UserDataGrid, {
 import "./Users.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+
+const today = new Date();
+const thirtyDaysAgo = subDays(today, 30);
+const thisMonthRange = {
+  start: format(thirtyDaysAgo, "yyyy-MM-dd"),
+  end: format(today, "yyyy-MM-dd"),
+};
+const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
 interface Customer {
   id_user: number;
@@ -23,18 +32,15 @@ interface Customer {
   create_time: string;
   email: string;
 }
-const today = new Date();
-const thirtyDaysAgo = subDays(today, 30);
-const thisMonthRange = {
-  start: format(thirtyDaysAgo, "yyyy-MM-dd"),
-  end: format(today, "yyyy-MM-dd"),
-};
-const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
   const [monthlyNewUsers, setMonthlyNewUsers] = useState([]);
   const [monthlyAppointments, setMonthlyAppointements] = useState([]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
 
   useEffect(() => {
     fetch(`${API_URL}/api/customers`)
@@ -55,18 +61,52 @@ function Users() {
 
     fetch(`${API_URL}/api/customers${params}`)
       .then((res) => res.json())
-      .then((data) => {
-        setMonthlyNewUsers(data);
-      })
+      .then((data) => setMonthlyNewUsers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
 
     fetch(`${API_URL}/api/appointments${params}`)
       .then((res) => res.json())
-      .then((data) => {
-        setMonthlyAppointements(data);
-      })
+      .then((data) => setMonthlyAppointements(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
+
+  const uniqueDepartments = useMemo(() => {
+    const depts = customers
+      .map((c) => (c.postal_code ? c.postal_code.substring(0, 2) : ""))
+      .filter((dept) => dept.length === 2);
+    return Array.from(new Set(depts)).sort();
+  }, [customers]);
+
+  const filteredCustomers = useMemo(() => {
+    let result = [...customers];
+
+    if (searchTerm.trim() !== "") {
+      const lowerSearch = searchTerm.toLowerCase();
+      result = result.filter(
+        (c) =>
+          c.firstname.toLowerCase().includes(lowerSearch) ||
+          c.lastname.toLowerCase().includes(lowerSearch),
+      );
+    }
+
+    if (departmentFilter !== "") {
+      result = result.filter((c) => c.postal_code.startsWith(departmentFilter));
+    }
+
+    if (dateSortOrder === "desc") {
+      result.sort(
+        (a, b) =>
+          new Date(b.create_time).getTime() - new Date(a.create_time).getTime(),
+      );
+    } else if (dateSortOrder === "asc") {
+      result.sort(
+        (a, b) =>
+          new Date(a.create_time).getTime() - new Date(b.create_time).getTime(),
+      );
+    }
+
+    return result;
+  }, [customers, searchTerm, departmentFilter, dateSortOrder]);
 
   const columns: DataGridColumn<Customer & { id: number }>[] = [
     {
@@ -122,15 +162,17 @@ function Users() {
     {
       key: "actions",
       header: "Actions",
-      width: "60px",
       render: (customer) => (
-        <button
-          type="button"
-          className="user-grid-action-btn"
-          onClick={() => console.log("Ouvrir détails de", customer.id_user)}
-        >
-          ⋮
-        </button>
+        <div className="user-grid-actions-cell">
+          <button
+            type="button"
+            className="user-grid-icon-btn"
+            onClick={() => console.log("Voir", customer.id_user)}
+            title="Voir"
+          >
+            <FiEye />
+          </button>
+        </div>
       ),
     },
   ];
@@ -144,6 +186,7 @@ function Users() {
         </div>
         <p>Gérez et suivez les utilisateurs de votre plateforme</p>
       </div>
+
       <div className="admin-users-body">
         <div className="admin-users-body-stats">
           <StatsCard
@@ -174,7 +217,22 @@ function Users() {
             cycle="Les 30 derniers jours"
           />
         </div>
-        <UserDataGrid columns={columns} data={customers} rowsPerPage={7} />
+        <AdminFilterBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          departmentFilter={departmentFilter}
+          setDepartmentFilter={setDepartmentFilter}
+          dateSortOrder={dateSortOrder}
+          setDateSortOrder={setDateSortOrder}
+          departments={uniqueDepartments}
+        />
+        <div>
+          <UserDataGrid
+            columns={columns}
+            data={filteredCustomers}
+            rowsPerPage={6}
+          />
+        </div>
       </div>
     </div>
   );
