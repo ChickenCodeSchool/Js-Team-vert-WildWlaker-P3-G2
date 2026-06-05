@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { FiCalendar, FiPause, FiUserPlus } from "react-icons/fi";
@@ -23,9 +23,18 @@ interface Customer {
   create_time: string;
   email: string;
 }
+const today = new Date();
+const thirtyDaysAgo = subDays(today, 30);
+const thisMonthRange = {
+  start: format(thirtyDaysAgo, "yyyy-MM-dd"),
+  end: format(today, "yyyy-MM-dd"),
+};
+const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
+  const [monthlyNewUsers, setMonthlyNewUsers] = useState([]);
+  const [monthlyAppointments, setMonthlyAppointements] = useState([]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/customers`)
@@ -43,6 +52,20 @@ function Users() {
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
+
+    fetch(`${API_URL}/api/customers${params}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMonthlyNewUsers(data);
+      })
+      .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
+
+    fetch(`${API_URL}/api/appointments${params}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMonthlyAppointements(data);
+      })
+      .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
   const columns: DataGridColumn<Customer & { id: number }>[] = [
@@ -126,15 +149,15 @@ function Users() {
           <StatsCard
             Icon={FiUserPlus}
             title="utilisateurs"
-            value={150}
+            value={customers.length}
             cycle="Total"
           />
           <StatsCard
             Icon={FiUserPlus}
             iconColor="icon-success"
             title="Nouveaux utilisateurs"
-            value={120}
-            cycle="Ce mois-ci"
+            value={monthlyNewUsers.length}
+            cycle="Les 30 derniers jours"
           />
           <StatsCard
             Icon={FiPause}
@@ -147,11 +170,11 @@ function Users() {
             Icon={FiCalendar}
             iconColor="icon-info"
             title="Réservations"
-            value={30}
-            cycle="Ce mois-ci"
+            value={monthlyAppointments.length}
+            cycle="Les 30 derniers jours"
           />
         </div>
-        <UserDataGrid columns={columns} data={customers} rowsPerPage={10} />
+        <UserDataGrid columns={columns} data={customers} rowsPerPage={7} />
       </div>
     </div>
   );
