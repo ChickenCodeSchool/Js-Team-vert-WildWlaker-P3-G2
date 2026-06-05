@@ -5,9 +5,10 @@ import type { Barber } from "../../../../types/barber";
 
 type BarberCardProps = {
   barber: Barber;
+  onProfileClick?: (barber: Barber) => void;
 };
 
-function BarberCard({ barber }: BarberCardProps) {
+function BarberCard({ barber, onProfileClick }: BarberCardProps) {
   const image =
     barber.avatar_url?.startsWith("http") || barber.avatar_url?.startsWith("/")
       ? barber.avatar_url
@@ -41,8 +42,14 @@ function BarberCard({ barber }: BarberCardProps) {
           <span className="barber-card__distance">
             {barber.delivery_radius} km
           </span>
-
-          <FiChevronRight className="barber-card__arrow" />
+          <button
+            type="button"
+            className="barber-card__profile-button"
+            onClick={() => onProfileClick?.(barber)}
+          >
+            <span>Voir le profil</span>
+            <FiChevronRight className="barber-card__arrow" />
+          </button>
         </div>
       </div>
     </article>

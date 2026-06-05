@@ -27,7 +27,7 @@ function CustomerNavBar() {
         </NavLink>
 
         <NavLink
-          to="reserve"
+          to="booking"
           className={({ isActive }) =>
             isActive ? "navbar__center navbar__item--active" : "navbar__center"
           }
