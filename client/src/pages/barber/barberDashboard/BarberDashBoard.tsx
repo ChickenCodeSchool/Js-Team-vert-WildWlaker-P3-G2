@@ -39,7 +39,7 @@ function BarberDashBoard() {
         Icon={GoClock}
         value={60}
         title={" attent"}
-        cycle={"test"}
+        cycle={"avenir"}
       />
       <StatsGraphCardBarber
         Icon={PiStarThin}
