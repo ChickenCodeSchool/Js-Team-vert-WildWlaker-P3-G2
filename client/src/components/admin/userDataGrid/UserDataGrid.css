@@ -10,6 +10,7 @@
     background-color: transparent;
 
     .custom-data-grid {
+      justify-content: center;
       width: 100%;
       border-collapse: separate;
       border-spacing: 0 8px;
