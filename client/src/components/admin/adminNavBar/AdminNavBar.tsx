@@ -20,7 +20,7 @@ function AdminNavBar() {
     <nav className="adminNavBar-main">
       <img src={icon} alt="Icon" className="adminNavBar-icon" />
 
-      <NavLink to="/admin" className="adminNavBar-menu">
+      <NavLink to="/admin/dashboard" className="adminNavBar-menu">
         <FiHome /> Tableau de Bord
       </NavLink>
       <h3>GESTION</h3>

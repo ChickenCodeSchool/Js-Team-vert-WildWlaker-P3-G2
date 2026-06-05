@@ -12,10 +12,18 @@ type Customer = {
 
 class CustomerRepository {
   // The C of CRUD - Create operation
-
   async readAll() {
     // Execute the SQL SELECT query to retrieve all Customers from the "Customer" table
-    const [rows] = await databaseClient.query<Rows>("select * from customer");
+    const query = `
+        SELECT 
+          c.*,
+          u.avatar_url AS avatar_url, 
+          u.create_time AS create_time,
+          u.email AS email
+        FROM customer c
+        JOIN users u ON c.id_user = u.id_user
+      `;
+    const [rows] = await databaseClient.query<Rows>(query);
 
     // Return the array of Customers
     return rows as Customer[];
