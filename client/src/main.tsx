@@ -11,6 +11,7 @@ import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
+import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BookingPage from "./pages/customer/booking/BookingPage";
@@ -55,7 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/barber",
         element: <BarberLayout />,
-        children: [{ path: "profile", element: <BarberProfil /> }],
+        children: [
+          { path: "profile", element: <BarberProfil /> },
+          { path: "dashboard", element: <BarberDashBoard /> },
+        ],
       },
     ],
   },
