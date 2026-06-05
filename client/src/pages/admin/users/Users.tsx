@@ -36,7 +36,7 @@ interface Customer {
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
   const [monthlyNewUsers, setMonthlyNewUsers] = useState([]);
-  const [monthlyAppointments, setMonthlyAppointements] = useState([]);
+  const [monthlyAppointments, setMonthlyAppointments] = useState([]);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
@@ -66,7 +66,7 @@ function Users() {
 
     fetch(`${API_URL}/api/appointments${params}`)
       .then((res) => res.json())
-      .then((data) => setMonthlyAppointements(data))
+      .then((data) => setMonthlyAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
