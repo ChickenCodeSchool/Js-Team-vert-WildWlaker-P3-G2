@@ -98,8 +98,8 @@ CREATE TABLE barber_availability (
 -- 4. FLUX D'ACTIVITÉ (Réservations & Avis - Niveau 3)
 -- =============================================================================
 
-CREATE TABLE appointement (
-    id_appointement INT AUTO_INCREMENT,
+CREATE TABLE appointment (
+    id_appointment INT AUTO_INCREMENT,
     appointment_date DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
     location_type VARCHAR(50) NOT NULL,
@@ -108,21 +108,21 @@ CREATE TABLE appointement (
     id_user_customer INT NOT NULL, -- Client ayant pris le RDV
     -- id_availability INT NOT NULL, -- Ajout Thomas
     -- CONSTRAINT fk_barber_availability FOREIGN KEY (id_availability) REFERENCES barber_availability(id_availability), -- Thomas
-    CONSTRAINT pk_appointement PRIMARY KEY (id_appointement),
-    CONSTRAINT fk_appointement_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation),
-    CONSTRAINT fk_appointement_barber FOREIGN KEY (id_user_barber) REFERENCES barber(id_user),
-    CONSTRAINT fk_appointement_customer FOREIGN KEY (id_user_customer) REFERENCES customer(id_user)
+    CONSTRAINT pk_appointment PRIMARY KEY (id_appointment),
+    CONSTRAINT fk_appointment_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation),
+    CONSTRAINT fk_appointment_barber FOREIGN KEY (id_user_barber) REFERENCES barber(id_user),
+    CONSTRAINT fk_appointment_customer FOREIGN KEY (id_user_customer) REFERENCES customer(id_user)
 );
 
 CREATE TABLE review (
     id_review INT AUTO_INCREMENT,
     rating INT NOT NULL,
     comment TEXT,
-    reporting INT DEFAULT 0,
+    reporting BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    id_appointement INT NOT NULL, -- Lié à un rendez-vous (0,1)
+    id_appointment INT NOT NULL, -- Lié à un rendez-vous (0,1)
     CONSTRAINT pk_review PRIMARY KEY (id_review),
-    CONSTRAINT fk_review_appointement FOREIGN KEY (id_appointement) REFERENCES appointement(id_appointement) ON DELETE CASCADE,
+    CONSTRAINT fk_review_appointement FOREIGN KEY (id_appointment) REFERENCES appointment(id_appointment) ON DELETE CASCADE,
     CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5)
 );
 
@@ -211,8 +211,8 @@ INSERT INTO barber_availability (id_availability, start_time, end_time, is_booke
 -- =============================================================================
 -- 6. FLUX DES RENDEZ-VOUS (Appointement)
 -- =============================================================================
-INSERT INTO appointement (
-    id_appointement,
+INSERT INTO appointment (
+    id_appointment,
     -- id_availability,
     appointment_date,
     status,
@@ -227,7 +227,7 @@ INSERT INTO appointement (
 -- =============================================================================
 -- 7. NOTATIONS ET AVIS (Review)
 -- =============================================================================
-INSERT INTO review (id_review, rating, comment, created_at, id_appointement) VALUES
+INSERT INTO review (id_review, rating, comment, created_at, id_appointment) VALUES
 -- Jean laisse un avis sur son dégradé fait par Thomas (RDV n°1)
 (1, 5, 'Excellent coiffeur, dégradé ultra propre et précis. Je reviendrai sans hésiter !', '2026-05-20 11:15:00', 1),
 -- Jean laisse un avis plus mitigé sur Maxime (RDV n°3)

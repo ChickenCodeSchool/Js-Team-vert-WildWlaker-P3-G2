@@ -6,15 +6,24 @@ type Review = {
   reported: boolean;
   rating: number;
   comment: string;
-  create_at: string;
-  Id_appointement: number;
+  created_at: string;
+  id_appointment: number;
 };
 
 class ReviewRepository {
   // The C of CRUD - Create operation
 
-  async readAll() {
-    const [rows] = await databaseClient.query<Rows>("SELECT * FROM review");
+  async readAll(filters?: { startDate?: string; endDate?: string }) {
+    const queryParams: string[] = [];
+    let query = `SELECT * FROM review`;
+    if (filters?.startDate && filters?.endDate) {
+      query += ` WHERE created_at BETWEEN ? AND ?`;
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
     // Return the array of reviews
     return rows as Review[];
   }

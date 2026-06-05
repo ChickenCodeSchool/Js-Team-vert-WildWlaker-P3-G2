@@ -4,10 +4,14 @@ import type { RequestHandler } from "express";
 import userRepository from "./userRepository";
 
 // The B of BREAD - Browse (Read All) operation
-const browse: RequestHandler = async (_req, res, next) => {
+const browse: RequestHandler = async (req, res, next) => {
   try {
     // Fetch all users
-    const users = await userRepository.readAll();
+    const { startDate, endDate } = req.query;
+    const users = await userRepository.readAll({
+      startDate: typeof startDate === "string" ? startDate : undefined,
+      endDate: typeof endDate === "string" ? endDate : undefined,
+    });
 
     // Respond with the users in JSON format
     res.json(users);

@@ -12,7 +12,6 @@ function SearchPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const API_URL = import.meta.env.VITE_API_URL;
-
   useEffect(() => {
     fetch(`${API_URL}/api/barbers`)
       .then((response) => {

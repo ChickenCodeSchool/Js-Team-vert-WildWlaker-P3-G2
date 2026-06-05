@@ -4,10 +4,14 @@ import type { RequestHandler } from "express";
 import reviewRepository from "./reviewRepository";
 
 // The B of BREAD - Browse (Read All) operation
-const browse: RequestHandler = async (_req, res, next) => {
+const browse: RequestHandler = async (req, res, next) => {
   try {
     // Fetch all reviews
-    const reviews = await reviewRepository.readAll();
+    const { startDate, endDate } = req.query;
+    const reviews = await reviewRepository.readAll({
+      startDate: typeof startDate === "string" ? startDate : undefined,
+      endDate: typeof endDate === "string" ? endDate : undefined,
+    });
 
     // Respond with the reviews in JSON format
     res.json(reviews);

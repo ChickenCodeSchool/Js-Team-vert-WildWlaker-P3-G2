@@ -47,7 +47,7 @@ function LatestReservationsCard() {
   };
 
   useEffect(() => {
-    fetch(`${API_URL}/api/appointements`)
+    fetch(`${API_URL}/api/appointments`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();

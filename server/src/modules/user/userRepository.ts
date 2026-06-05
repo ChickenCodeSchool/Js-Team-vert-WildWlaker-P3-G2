@@ -14,9 +14,18 @@ type user = {
 class UserRepository {
   // The C of CRUD - Create operation
 
-  async readAll() {
+  async readAll(filters?: { startDate?: string; endDate?: string }) {
+    let query = "SELECT * FROM users";
+    const queryParams: string[] = [];
+    if (filters?.startDate && filters?.endDate) {
+      query += " WHERE create_time BETWEEN ? AND ?";
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
     // Execute the SQL SELECT query to retrieve all users from the "user" table
-    const [rows] = await databaseClient.query<Rows>("select * from users");
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
 
     // Return the array of users
     return rows as user[];
