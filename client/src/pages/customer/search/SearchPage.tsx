@@ -52,14 +52,21 @@ function SearchPage() {
         <Search />
       </div>
 
-      {isLoading && <p>Chargement...</p>}
-
-      {error != null && <p>{error}</p>}
-
       {!isLoading &&
         error == null &&
         barbers.map((barber) => (
-          <BarberCard key={barber.id_user} barber={barber} />
+          <button
+            key={barber.id_user}
+            type="button"
+            className="search__barber-link"
+            onClick={() =>
+              navigate("/booking", {
+                state: { barber },
+              })
+            }
+          >
+            <BarberCard barber={barber} />
+          </button>
         ))}
     </main>
   );

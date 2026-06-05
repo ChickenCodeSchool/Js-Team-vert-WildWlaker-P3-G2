@@ -4,7 +4,7 @@
   align-items: center;
   gap: 18px;
 
-  border-bottom: 1px solid var(--gray-100);
+  border-bottom: 1px solid var(--gray-300);
 }
 
 .barber-card__image {
@@ -20,10 +20,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  margin-bottom: 1rem;
 }
 
 .barber-card__info {
   flex: 1;
+  min-width: 0;
 }
 
 .barber-card__title {
@@ -33,21 +36,30 @@
   color: var(--black);
   margin-bottom: 8px;
 }
+
 .barber-card__description {
   display: -webkit-box;
   margin: 0 0 6px;
   overflow: hidden;
   color: var(--gray-600);
   font-size: 14px;
+  font-family: var(--font-body);
   -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
 }
 
 .barber-card__location {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   font-size: 14px;
+
+  color: var(--black);
+}
+.barber-card__location span {
   color: var(--gray-600);
+  font-family: var(--font-body);
 }
 
 .barber-card__right {
@@ -55,14 +67,35 @@
   flex-direction: column;
   align-items: flex-end;
   gap: 16px;
+  flex-shrink: 0;
 }
 
 .barber-card__distance {
   font-size: 14px;
+  font-family: var(--font-body);
   color: var(--gray-600);
 }
 
 .barber-card__arrow {
-  font-size: 20px;
-  color: var(--gray-600);
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--gold);
+}
+
+.barber-card__profile-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  padding: 0;
+  cursor: pointer;
+}
+.barber-card__profile-button span {
+  line-height: 1;
+}
+.barber-card__profile-button:hover .barber-card__arrow {
+  color: var(--black);
 }

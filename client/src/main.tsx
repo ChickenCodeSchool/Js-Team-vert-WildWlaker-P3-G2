@@ -10,6 +10,7 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 import SearchPage from "./pages/customer/search/SearchPage";
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
+          { path: "booking", element: <BookingPage /> },
         ],
       },
 
