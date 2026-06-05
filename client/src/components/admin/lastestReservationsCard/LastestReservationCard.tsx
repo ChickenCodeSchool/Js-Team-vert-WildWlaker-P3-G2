@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
 import "./LastestReservationCard.css";
@@ -6,14 +8,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 interface Reservation {
   id: string;
-  client: {
-    name: string;
-    avatar: string;
-  };
+  client: { name: string; avatar: string };
   coiffeur: string;
   service: string;
-  date: string;
-  heure: string;
+  formattedDate: string;
   statut: "Confirmée" | "En attente" | "Terminée" | "Annulée";
 }
 
@@ -28,23 +26,18 @@ type RawAppointment = {
   customer_avatar?: string;
 };
 
+const STATUS_CONFIG: Record<
+  string,
+  { label: Reservation["statut"]; className: string }
+> = {
+  confirmed: { label: "Confirmée", className: "status-confirmed" },
+  pending: { label: "En attente", className: "status-pending" },
+  completed: { label: "Terminée", className: "status-completed" },
+  cancelled: { label: "Annulée", className: "status-cancelled" },
+};
+
 function LatestReservationsCard() {
   const [appointments, setAppointments] = useState<Reservation[]>([]);
-
-  const getStatusClass = (status: Reservation["statut"]) => {
-    switch (status) {
-      case "Confirmée":
-        return "status-confirmed";
-      case "En attente":
-        return "status-pending";
-      case "Terminée":
-        return "status-completed";
-      case "Annulée":
-        return "status-cancelled";
-      default:
-        return "";
-    }
-  };
 
   useEffect(() => {
     fetch(`${API_URL}/api/appointments`)
@@ -53,57 +46,36 @@ function LatestReservationsCard() {
         return res.json();
       })
       .then((rawData: RawAppointment[]) => {
-        const statusMap: { [key: string]: Reservation["statut"] } = {
-          confirmed: "Confirmée",
-          pending: "En attente",
-          completed: "Terminée",
-          cancelled: "Annulée",
-        };
+        const formatted = rawData
+          .sort((a, b) => b.appointment_date.localeCompare(a.appointment_date))
+          .slice(0, 5)
+          .map((app) => {
+            const dateObj = new Date(app.appointment_date);
+            const statusInfo = STATUS_CONFIG[app.status] || {
+              label: "En attente",
+              className: "status-pending",
+            };
 
-        rawData.sort((a, b) => {
-          return (
-            new Date(b.appointment_date).getTime() -
-            new Date(a.appointment_date).getTime()
-          );
-        });
-
-        const formattedAppointments: Reservation[] = rawData.map((app) => {
-          const dateObj = new Date(app.appointment_date);
-
-          const dateStr = dateObj.toLocaleDateString("fr-FR", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
+            return {
+              id: (app.id_appointement ?? Math.random()).toString(),
+              client: {
+                name: `${app.customer_firstname || "Client"} ${(app.customer_lastname || "").charAt(0)}.`,
+                avatar:
+                  app.customer_avatar ||
+                  "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
+              },
+              coiffeur: app.barber_name || "Coiffeur inconnu",
+              service: app.prestation_name || "Prestation",
+              formattedDate: format(dateObj, "dd MMM yyyy, HH:mm", {
+                locale: fr,
+              }),
+              statut: statusInfo.label,
+            };
           });
 
-          const heureStr = dateObj.toLocaleTimeString("fr-FR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-
-          const finalId = app.id_appointement ?? Math.random();
-
-          return {
-            id: finalId.toString(),
-            client: {
-              name: `${app.customer_firstname || "Client"} ${(app.customer_lastname || "").charAt(0)}.`,
-              avatar:
-                app.customer_avatar ||
-                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150",
-            },
-            coiffeur: app.barber_name || "Coiffeur inconnu",
-            service: app.prestation_name || "prestation",
-            date: dateStr,
-            heure: heureStr,
-            statut: statusMap[app.status] || "En attente",
-          };
-        });
-
-        setAppointments(formattedAppointments.slice(0, 5));
+        setAppointments(formatted);
       })
-      .catch((err) =>
-        console.error("Erreur chargement dernières réservations :", err),
-      );
+      .catch((err) => console.error("Erreur chargement réservations :", err));
   }, []);
 
   return (
@@ -128,45 +100,50 @@ function LatestReservationsCard() {
             </tr>
           </thead>
           <tbody>
-            {appointments.map((res) => (
-              <tr key={res.id}>
-                <td>
-                  <div className="client-info">
-                    <img
-                      src={res.client.avatar}
-                      alt={res.client.name}
-                      className="client-avatar"
-                    />
-                    <span className="client-name">{res.client.name}</span>
-                  </div>
-                </td>
+            {appointments.map((res) => {
+              const config = Object.values(STATUS_CONFIG).find(
+                (c) => c.label === res.statut,
+              );
 
-                <td>{res.coiffeur}</td>
-                <td>{res.service}</td>
-
-                <td>
-                  <span className="res-date">
-                    {res.date}, {res.heure}
-                  </span>
-                </td>
-
-                <td>
-                  <span
-                    className={`status-badge ${getStatusClass(res.statut)}`}
-                  >
-                    {res.statut}
-                  </span>
-                </td>
-
-                <td>
-                  <button type="button" className="action-btn" title="Options">
-                    &#8942;
-                  </button>
-                </td>
-              </tr>
-            ))}
+              return (
+                <tr key={res.id}>
+                  <td>
+                    <div className="client-info">
+                      <img
+                        src={res.client.avatar}
+                        alt={res.client.name}
+                        className="client-avatar"
+                      />
+                      <span className="client-name">{res.client.name}</span>
+                    </div>
+                  </td>
+                  <td>{res.coiffeur}</td>
+                  <td>{res.service}</td>
+                  <td>
+                    <span className="res-date">{res.formattedDate}</span>
+                  </td>
+                  <td>
+                    <span
+                      className={`status-badge ${config?.className || "status-pending"}`}
+                    >
+                      {res.statut}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      className="action-btn"
+                      title="Options"
+                    >
+                      &#8942;
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
+
         {appointments.length === 0 && (
           <p
             style={{
