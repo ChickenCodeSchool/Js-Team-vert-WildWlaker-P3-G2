@@ -1,7 +1,7 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 
 /* ********************************************************************** */
 
@@ -9,10 +9,12 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
+import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
 import SearchPage from "./pages/customer/search/SearchPage";
@@ -38,13 +40,18 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
+          { path: "booking", element: <BookingPage /> },
           { path: "login", element: <Login /> },
         ],
       },
       {
         path: "/admin",
         element: <AdminLayout />,
-        children: [{ index: true, element: <Dashboard /> }],
+        children: [
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          { path: "dashboard", element: <Dashboard /> },
+          { path: "users", element: <Users /> },
+        ],
       },
       {
         path: "/barber",

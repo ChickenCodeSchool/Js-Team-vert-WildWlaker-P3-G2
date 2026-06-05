@@ -122,7 +122,7 @@ CREATE TABLE review (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_appointment INT NOT NULL, -- Lié à un rendez-vous (0,1)
     CONSTRAINT pk_review PRIMARY KEY (id_review),
-    CONSTRAINT fk_review_appointement FOREIGN KEY (id_appointment) REFERENCES appointment(id_appointment) ON DELETE CASCADE,
+    CONSTRAINT fk_review_appointment FOREIGN KEY (id_appointment) REFERENCES appointment(id_appointment) ON DELETE CASCADE,
     CONSTRAINT chk_review_rating CHECK (rating BETWEEN 1 AND 5)
 );
 

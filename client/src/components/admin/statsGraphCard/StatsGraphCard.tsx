@@ -22,7 +22,9 @@ function StatsGraphCard({
   return (
     <div className="StatsGraphCard-main">
       <div className="StatsGraphCard-upper">
-        <Icon className="StatsGraphCard-icon" />
+        <div className="StatsGraphCard-wrapper">
+          <Icon className="StatsGraphCard-icon" />
+        </div>
         <div className="StatsGraphCard-info">
           <h2>{title}</h2>
           <span className="StatsGraphCard-value">{value}</span>
