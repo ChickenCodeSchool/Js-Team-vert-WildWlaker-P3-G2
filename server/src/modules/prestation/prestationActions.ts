@@ -17,4 +17,41 @@ const browse: RequestHandler = async (_req, res, next) => {
   }
 };
 
-export default { browse };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const { name, price, duration_minutes } = req.body;
+    const insertId = await PrestationRepository.create({
+      name,
+      price,
+      duration_minutes,
+    });
+    res
+      .status(201)
+      .json({ id_prestation: insertId, name, price, duration_minutes });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const { name, price, duration_minutes } = req.body;
+    await PrestationRepository.update(id, { name, price, duration_minutes });
+    res.json({ id_prestation: id, name, price, duration_minutes });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await PrestationRepository.delete(id);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, add, edit, destroy };
