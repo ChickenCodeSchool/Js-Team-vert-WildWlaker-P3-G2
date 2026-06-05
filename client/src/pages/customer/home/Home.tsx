@@ -42,7 +42,6 @@ function Home() {
         <div className="Carrousel_title">
           <h1>Coiffeurs populaires</h1>
         </div>
-        <ServicesSection />
       </div>
       <div className="Carrousel_control">
         <Carrousel barbers={barbers} />
