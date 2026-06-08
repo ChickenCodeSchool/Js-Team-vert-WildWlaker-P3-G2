@@ -5,8 +5,8 @@ import "./BarberLayout.css";
 function BarberLayout() {
   return (
     <div className="barberLayout-main">
-      <Outlet />
       <BarberNavBar />
+      <Outlet />
     </div>
   );
 }
