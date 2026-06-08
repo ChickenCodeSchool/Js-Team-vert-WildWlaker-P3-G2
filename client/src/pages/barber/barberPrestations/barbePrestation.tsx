@@ -1,12 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import usePrestations from "../../../hooks/usePrestations";
 import type { Prestation } from "../../../types/prestation";
 import "./barberPrestation.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
 const emptyForm = { name: "", duration: "", price: "" };
 
 function BarberPrestation() {
-  const { prestations, refetch } = usePrestations();
+  const initialPrestations = usePrestations();
+  const [prestations, setPrestations] = useState<Prestation[]>([]);
+
+  useEffect(() => {
+    setPrestations(initialPrestations);
+  }, [initialPrestations]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -29,8 +35,8 @@ function BarberPrestation() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`/api/prestations/${id}`, { method: "DELETE" });
-    refetch();
+    await fetch(`${API_URL}/api/prestations/${id}`, { method: "DELETE" });
+    setPrestations((prev) => prev.filter((p) => p.Id_prestation !== id));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -42,20 +48,26 @@ function BarberPrestation() {
     };
 
     if (editingId !== null) {
-      await fetch(`/api/prestations/${editingId}`, {
+      await fetch(`${API_URL}/api/prestations/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      setPrestations((prev) =>
+        prev.map((p) =>
+          p.Id_prestation === editingId ? { ...p, ...body } : p,
+        ),
+      );
     } else {
-      await fetch("/api/prestations", {
+      const res = await fetch(`${API_URL}/api/prestations`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
+      const newPrestation = await res.json();
+      setPrestations((prev) => [...prev, newPrestation]);
     }
 
-    refetch();
     handleCancel();
   }
 
