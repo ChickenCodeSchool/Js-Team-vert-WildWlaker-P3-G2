@@ -14,16 +14,17 @@ function Home() {
 
   return (
     <div className="home_">
-      <div className="Home_title">
+      <div className="home__title">
         <h1>
-          {" "}
-          <FiScissors className="FiScissors" /> Secare{" "}
+          <FiScissors className="FiScissors" /> Secare
         </h1>
         <h2 className="home__title">
           Trouve ton <span className="home_span">coiffeur</span> idéal
         </h2>
       </div>
-      <Search />
+      <div className="home_search">
+        <Search />
+      </div>
       <section className="home__banner">
         {event && (
           <EventBanner
@@ -37,8 +38,10 @@ function Home() {
           />
         )}
       </section>
-      <div className="Carrousel_first">
-        <h1>Coiffeur populaire</h1>
+      <div className="element_import">
+        <div className="Carrousel_title">
+          <h1>Coiffeurs populaires</h1>
+        </div>
       </div>
       <div className="Carrousel_control">
         <Carrousel barbers={barbers} />

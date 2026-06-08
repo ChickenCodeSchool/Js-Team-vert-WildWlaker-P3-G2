@@ -6,7 +6,7 @@ function Carrousel({ barbers }: { barbers: Barber[] }) {
   return (
     <section className="carrousel">
       <div className="carrousel__list">
-        {barbers.map((barber) => (
+        {barbers.slice(0, 4).map((barber) => (
           <article className="carrousel__card" key={barber.id_user}>
             <div className="carrousel__image-wrapper">
               <img
