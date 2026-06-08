@@ -13,6 +13,7 @@ interface DataGridProps<T> {
   data: T[];
   emptyMessage?: string;
   rowsPerPage: number;
+  onRowClick?: (item: T) => void; // AJOUT : Prop optionnelle pour gérer le clic sur la ligne
 }
 
 function UserDataGrid<T extends { id: string | number }>({
@@ -20,6 +21,7 @@ function UserDataGrid<T extends { id: string | number }>({
   data,
   emptyMessage = "Aucune donnée disponible.",
   rowsPerPage,
+  onRowClick, // AJOUT : Récupération de la prop
 }: DataGridProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -68,7 +70,12 @@ function UserDataGrid<T extends { id: string | number }>({
           </thead>
           <tbody>
             {paginatedData.map((item) => (
-              <tr key={item.id}>
+              <tr
+                key={item.id}
+                // AJOUT : Gestion du clic et ajout d'une classe CSS conditionnelle
+                onClick={() => onRowClick?.(item)}
+                className={onRowClick ? "clickable-row" : ""}
+              >
                 {columns.map((col) => (
                   <td key={`${item.id}-${col.key}`}>
                     {col.render
@@ -104,6 +111,7 @@ function UserDataGrid<T extends { id: string | number }>({
             {visiblePages.map((page) => {
               if (page === "...") {
                 return (
+                  // Utilisation d'un index pour éviter les clés dupliquées si deux "..." apparaissent
                   <span key={`ellipsis`} className="pagination-ellipsis">
                     ...
                   </span>

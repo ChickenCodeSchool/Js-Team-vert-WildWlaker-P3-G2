@@ -8,6 +8,7 @@ import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
+import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
 
 import "./Users.css";
 
@@ -33,14 +34,45 @@ interface Customer {
   email: string;
 }
 
+interface Appointment {
+  id_appointment: number;
+  appointment_date: string;
+  status: "pending" | "confirmed" | "completed" | "cancelled";
+  location_type: string;
+  id_prestation: number;
+  id_user_barber: number;
+  id_user_customer: number;
+  barber_name: string;
+  customer_firstname: string;
+  customer_lastname: string;
+  customer_avatar: string;
+  prestation_name: string;
+}
+
+interface Review {
+  id_review: number;
+  rating: number;
+  comment: string;
+  reporting: number;
+  created_at: string;
+  id_appointment: number;
+}
+
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
-  const [monthlyNewUsers, setMonthlyNewUsers] = useState([]);
-  const [monthlyAppointments, setMonthlyAppointments] = useState([]);
+  const [monthlyNewUsers, setMonthlyNewUsers] = useState<Customer[]>([]);
+  const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
+    [],
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
+
+  const [selectedCustomer, setSelectedCustomer] = useState<
+    (Customer & { id: number }) | null
+  >(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/customers`)
@@ -54,21 +86,55 @@ function Users() {
           id: item.id_user,
         }));
         setCustomers(formattedData);
+        if (formattedData.length > 0) {
+          setSelectedCustomer(formattedData[0]);
+        }
       })
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
 
+    fetch(`${API_URL}/api/reviews`)
+      .then((res) => res.json())
+      .then((data: Review[]) => setReviews(data))
+      .catch((err) => console.error("Erreur lors du fetch des avis :", err));
+
     fetch(`${API_URL}/api/customers${params}`)
       .then((res) => res.json())
-      .then((data) => setMonthlyNewUsers(data))
+      .then((data: Customer[]) => setMonthlyNewUsers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
 
     fetch(`${API_URL}/api/appointments${params}`)
       .then((res) => res.json())
-      .then((data) => setMonthlyAppointments(data))
+      .then((data: Appointment[]) => setMonthlyAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
+
+  const selectedCustomerStats = useMemo(() => {
+    if (!selectedCustomer) {
+      return { total: 0, canceled: 0, reviewsCount: 0, reported: 0 };
+    }
+    const customerApps = monthlyAppointments.filter(
+      (app: Appointment) => app.id_user_customer === selectedCustomer.id_user,
+    );
+
+    const total = customerApps.length;
+    const canceled = customerApps.filter(
+      (app: Appointment) => app.status === "cancelled",
+    ).length;
+    const customerAppIds = customerApps.map(
+      (app: Appointment) => app.id_appointment,
+    );
+    const customerReviews = reviews.filter((rev: Review) =>
+      customerAppIds.includes(rev.id_appointment),
+    );
+    const reviewsCount = customerReviews.length;
+    const reported = customerReviews.filter(
+      (rev: Review) => rev.reporting === 1,
+    ).length;
+
+    return { total, canceled, reviewsCount, reported };
+  }, [selectedCustomer, monthlyAppointments, reviews]);
 
   const uniqueDepartments = useMemo(() => {
     const depts = customers
@@ -167,7 +233,10 @@ function Users() {
           <button
             type="button"
             className="user-grid-icon-btn"
-            onClick={() => console.log("Voir", customer.id_user)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedCustomer(customer);
+            }}
             title="Voir"
           >
             <FiEye />
@@ -178,7 +247,7 @@ function Users() {
   ];
 
   return (
-    <div className="admin-users-main">
+    <div className="admin-users-body">
       <div className="admin-users-header">
         <div className="admin-users-title">
           <FiUserPlus className="admin-users-title-icon" />
@@ -186,54 +255,81 @@ function Users() {
         </div>
         <p>Gérez et suivez les utilisateurs de votre plateforme</p>
       </div>
-
-      <div className="admin-users-body">
-        <div className="admin-users-body-stats">
-          <StatsCard
-            Icon={FiUserPlus}
-            title="utilisateurs"
-            value={customers.length}
-            cycle="Total"
+      <main className="admin-users-main">
+        <section className="admin-users-main-left">
+          <div className="admin-users-body-stats">
+            <StatsCard
+              Icon={FiUserPlus}
+              title="utilisateurs"
+              value={customers.length}
+              cycle="Total"
+            />
+            <StatsCard
+              Icon={FiUserPlus}
+              iconColor="icon-success"
+              title="Nouveaux utilisateurs"
+              value={monthlyNewUsers.length}
+              cycle="Les 30 derniers jours"
+            />
+            <StatsCard
+              Icon={FiPause}
+              iconColor="icon-warning"
+              title="Comptes suspendus"
+              value={25}
+              cycle="Total"
+            />
+            <StatsCard
+              Icon={FiCalendar}
+              iconColor="icon-info"
+              title="Réservations"
+              value={monthlyAppointments.length}
+              cycle="Les 30 derniers jours"
+            />
+          </div>
+          <AdminFilterBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            departmentFilter={departmentFilter}
+            setDepartmentFilter={setDepartmentFilter}
+            dateSortOrder={dateSortOrder}
+            setDateSortOrder={setDateSortOrder}
+            departments={uniqueDepartments}
           />
-          <StatsCard
-            Icon={FiUserPlus}
-            iconColor="icon-success"
-            title="Nouveaux utilisateurs"
-            value={monthlyNewUsers.length}
-            cycle="Les 30 derniers jours"
-          />
-          <StatsCard
-            Icon={FiPause}
-            iconColor="icon-warning"
-            title="Comptes suspendus"
-            value={25}
-            cycle="Total"
-          />
-          <StatsCard
-            Icon={FiCalendar}
-            iconColor="icon-info"
-            title="Réservations"
-            value={monthlyAppointments.length}
-            cycle="Les 30 derniers jours"
-          />
-        </div>
-        <AdminFilterBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          departmentFilter={departmentFilter}
-          setDepartmentFilter={setDepartmentFilter}
-          dateSortOrder={dateSortOrder}
-          setDateSortOrder={setDateSortOrder}
-          departments={uniqueDepartments}
-        />
-        <div>
-          <UserDataGrid
-            columns={columns}
-            data={filteredCustomers}
-            rowsPerPage={6}
-          />
-        </div>
-      </div>
+          <div>
+            <UserDataGrid
+              columns={columns}
+              data={filteredCustomers}
+              onRowClick={(customer) => setSelectedCustomer(customer)}
+              rowsPerPage={6}
+            />
+          </div>
+        </section>
+        <aside className="admin-users-main-aside">
+          {selectedCustomer ? (
+            <UserProfilCard
+              avatar={selectedCustomer.avatar_url}
+              name={`${selectedCustomer.firstname} ${selectedCustomer.lastname}`}
+              createTime={format(
+                new Date(selectedCustomer.create_time),
+                "dd MMM yyyy",
+                { locale: fr },
+              )}
+              email={selectedCustomer.email}
+              city={selectedCustomer.city}
+              postalcode={selectedCustomer.postal_code}
+              phonenum="Non renseigné"
+              reservationsCount={selectedCustomerStats.total}
+              reservationsCanceledCount={selectedCustomerStats.canceled}
+              reviewsCount={selectedCustomerStats.reviewsCount}
+              repordedsCount={selectedCustomerStats.reported}
+            />
+          ) : (
+            <div className="no-user-selected">
+              <p>Sélectionnez un utilisateur pour voir son profil</p>
+            </div>
+          )}
+        </aside>
+      </main>
     </div>
   );
 }
