@@ -22,6 +22,9 @@ router.get("/api/barbers", barberActions.browse);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/events", eventActions.browse);
 router.get("/api/prestations", prestationActions.browse);
+router.post("/api/prestations", prestationActions.add);
+router.put("/api/prestations/:id", prestationActions.edit);
+router.delete("/api/prestations/:id", prestationActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/users", userActions.browse);
 

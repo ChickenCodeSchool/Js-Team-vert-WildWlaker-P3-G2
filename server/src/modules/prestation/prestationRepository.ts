@@ -1,4 +1,4 @@
-import type { Rows } from "../../../database/client";
+import type { Result, Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Prestation = {
@@ -19,19 +19,27 @@ class PrestationRepository {
     return rows as Prestation[];
   }
 
-  // The U of CRUD - Update operation
-  // TODO: Implement the update operation to modify an existing Prestation
+  async create(prestation: Omit<Prestation, "id_prestation">) {
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO prestation (name, price, duration_minutes) VALUES (?, ?, ?)",
+      [prestation.name, prestation.price, prestation.duration_minutes],
+    );
+    return result.insertId;
+  }
 
-  // async update(Prestation: Prestation) {
-  //   ...
-  // }
+  async update(id: number, prestation: Omit<Prestation, "id_prestation">) {
+    await databaseClient.query<Result>(
+      "UPDATE prestation SET name = ?, price = ?, duration_minutes = ? WHERE id_prestation = ?",
+      [prestation.name, prestation.price, prestation.duration_minutes, id],
+    );
+  }
 
-  // The D of CRUD - Delete operation
-  // TODO: Implement the delete operation to remove an Prestation by its ID
-
-  // async delete(id: number) {
-  //   ...
-  // }
+  async delete(id: number) {
+    await databaseClient.query<Result>(
+      "DELETE FROM prestation WHERE id_prestation = ?",
+      [id],
+    );
+  }
 }
 
 export default new PrestationRepository();
