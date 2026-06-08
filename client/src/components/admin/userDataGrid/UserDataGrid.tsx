@@ -14,6 +14,7 @@ interface DataGridProps<T> {
   emptyMessage?: string;
   rowsPerPage: number;
   onRowClick?: (item: T) => void;
+  selectedId?: number;
 }
 
 function UserDataGrid<T extends { id: string | number }>({
@@ -22,6 +23,7 @@ function UserDataGrid<T extends { id: string | number }>({
   emptyMessage = "Aucune donnée disponible.",
   rowsPerPage,
   onRowClick,
+  selectedId,
 }: DataGridProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -73,7 +75,9 @@ function UserDataGrid<T extends { id: string | number }>({
               <tr
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
-                className={onRowClick ? "clickable-row" : ""}
+                className={`${onRowClick ? "clickable-row" : ""} ${
+                  selectedId === item.id ? "selected-row" : ""
+                }`}
               >
                 {columns.map((col) => (
                   <td key={`${item.id}-${col.key}`}>

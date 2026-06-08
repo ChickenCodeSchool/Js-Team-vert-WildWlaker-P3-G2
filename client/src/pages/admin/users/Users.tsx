@@ -301,6 +301,7 @@ function Users() {
               data={filteredCustomers}
               onRowClick={(customer) => setSelectedCustomer(customer)}
               rowsPerPage={6}
+              selectedId={selectedCustomer?.id}
             />
           </div>
         </section>
