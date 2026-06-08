@@ -37,7 +37,7 @@
           &:hover {
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
-            background: var(--second-gradient);
+            background: var(--gold-soft);
           }
 
           td {
