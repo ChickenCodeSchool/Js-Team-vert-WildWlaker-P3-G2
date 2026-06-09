@@ -86,9 +86,9 @@ function BarberSignalement() {
               <FiScissors size={20} />
             </span>
             <div>
-              <p className="barber-signalement__target-label">Un salon</p>
+              <p className="barber-signalement__target-label">Un coiffeur</p>
               <p className="barber-signalement__target-desc">
-                Signalement concernant un salon
+                Signalement concernant un coiffeur
               </p>
             </div>
             <span className="barber-signalement__radio" />
