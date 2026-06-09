@@ -6,43 +6,25 @@ const REPORT_TYPES = [
     id: "comportement",
     label: "Comportement inapproprié",
     description: "Insultes, harcèlement, menace...",
-    icon: "⚠️",
-    disabled: false,
+    icon: "!",
   },
   {
     id: "non-presentation",
     label: "Non-présentation",
     description: "Client ne s'est pas présenté sans prévenir",
     icon: "📅",
-    disabled: false,
-  },
-  {
-    id: "paiement",
-    label: "Problème de paiement",
-    description: "Paiement refusé, fausse information...",
-    icon: "💳",
-    disabled: true,
-  },
-  {
-    id: "message",
-    label: "Message inapproprié",
-    description: "Contenu offensant ou déplacé",
-    icon: "💬",
-    disabled: true,
   },
   {
     id: "avis",
     label: "Avis abusif",
     description: "Avis injustifié ou malveillant",
-    icon: "⭐",
-    disabled: false,
+    icon: "☆",
   },
   {
     id: "autre",
     label: "Autre",
     description: "Autre raison",
     icon: "•••",
-    disabled: false,
   },
 ];
 
@@ -108,9 +90,8 @@ function BarberSignalement() {
             <button
               key={type.id}
               type="button"
-              disabled={type.disabled}
-              className={`barber-signalement__type-card ${type.disabled ? "barber-signalement__type-card--disabled" : ""} ${reportType === type.id ? "barber-signalement__type-card--selected" : ""}`}
-              onClick={() => !type.disabled && setReportType(type.id)}
+              className={`barber-signalement__type-card ${reportType === type.id ? "barber-signalement__type-card--selected" : ""}`}
+              onClick={() => setReportType(type.id)}
             >
               <span className="barber-signalement__type-icon">{type.icon}</span>
               <div className="barber-signalement__type-content">

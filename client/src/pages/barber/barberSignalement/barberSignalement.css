@@ -1,18 +1,18 @@
 .barber-signalement {
-  min-height: 100vh;
   background-color: var(--gray-50);
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  min-height: 100vh;
 }
 
 .barber-signalement__subtitle {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .barber-signalement__section {
@@ -23,12 +23,12 @@
 
 .barber-signalement__section-title {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 700;
   color: var(--black);
 }
 
-/* Target cards */
+/* ── Target cards (Un client / Un salon) ── */
 
 .barber-signalement__target-grid {
   display: grid;
@@ -41,7 +41,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 0.875rem;
   background-color: var(--white);
   border: 1.5px solid var(--gray-200);
   border-radius: var(--radius-md);
@@ -53,11 +53,17 @@
 
 .barber-signalement__target-card--selected {
   border-color: var(--gold-dark);
-  background-color: #fffbf2;
 }
 
 .barber-signalement__target-icon {
-  font-size: 1.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.125rem;
 }
 
 .barber-signalement__target-label {
@@ -70,31 +76,11 @@
 .barber-signalement__target-desc {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-600);
-  margin-top: 0.125rem;
+  color: var(--gray-500);
+  line-height: 1.4;
 }
 
-/* Radio indicator */
-
-.barber-signalement__radio {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 1.125rem;
-  height: 1.125rem;
-  border-radius: 50%;
-  border: 1.5px solid var(--gray-300);
-  background-color: var(--white);
-}
-
-.barber-signalement__target-card--selected .barber-signalement__radio,
-.barber-signalement__type-card--selected .barber-signalement__radio {
-  border-color: var(--gold-dark);
-  background-color: var(--gold-dark);
-  box-shadow: inset 0 0 0 3px var(--white);
-}
-
-/* Type grid */
+/* ── Type cards ── */
 
 .barber-signalement__type-grid {
   display: grid;
@@ -104,7 +90,8 @@
 
 .barber-signalement__type-card {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 0.5rem;
   padding: 0.875rem;
   background-color: var(--white);
@@ -118,32 +105,19 @@
 
 .barber-signalement__type-card--selected {
   border-color: var(--gold-dark);
-  background-color: #fffbf2;
-}
-
-.barber-signalement__type-card--disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  position: relative;
-}
-
-.barber-signalement__type-card--disabled::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    rgba(200, 0, 0, 0.15) 8px,
-    rgba(200, 0, 0, 0.15) 9px
-  );
-  border-radius: var(--radius-md);
-  pointer-events: none;
 }
 
 .barber-signalement__type-icon {
-  font-size: 1.125rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background-color: var(--gold-dark);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
   flex-shrink: 0;
 }
 
@@ -153,19 +127,42 @@
 
 .barber-signalement__type-label {
   font-family: var(--font-title);
-  font-size: 0.8125rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: var(--black);
+  line-height: 1.3;
 }
 
 .barber-signalement__type-desc {
   font-family: var(--font-body);
   font-size: 0.6875rem;
-  color: var(--gray-600);
-  margin-top: 0.125rem;
+  color: var(--gray-500);
+  margin-top: 0.2rem;
+  line-height: 1.3;
 }
 
-/* Form */
+/* ── Radio indicator ── */
+
+.barber-signalement__radio {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--gray-300);
+  background-color: var(--white);
+  flex-shrink: 0;
+}
+
+.barber-signalement__target-card--selected .barber-signalement__radio,
+.barber-signalement__type-card--selected .barber-signalement__radio {
+  border-color: var(--gold-dark);
+  background-color: var(--gold-dark);
+  box-shadow: inset 0 0 0 3px var(--white);
+}
+
+/* ── Form ── */
 
 .barber-signalement__form {
   display: flex;
@@ -179,12 +176,13 @@
 
 .barber-signalement__textarea {
   width: 100%;
-  height: 7rem;
-  padding: 0.875rem 1rem;
-  border: 1px solid var(--gray-300);
+  height: 7.5rem;
+  padding: 0.875rem 1rem 2rem;
+  border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: 0.875rem;
+  color: var(--black);
   background-color: var(--white);
   resize: none;
   outline: none;
@@ -197,34 +195,36 @@
 
 .barber-signalement__char-count {
   position: absolute;
-  bottom: 0.5rem;
-  right: 0.75rem;
+  bottom: 0.625rem;
+  right: 0.875rem;
   font-family: var(--font-body);
   font-size: 0.75rem;
   color: var(--gray-400);
 }
 
-/* Preuves */
+/* ── Preuves ── */
 
 .barber-signalement__proof-subtitle {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
+  margin-top: -0.25rem;
 }
 
 .barber-signalement__file-upload {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.875rem;
   padding: 1rem;
-  background-color: var(--gold-light, #fdf3dc);
+  background-color: #fdf6e3;
   border: 1px solid var(--gold-dark);
   border-radius: var(--radius-md);
   cursor: pointer;
 }
 
 .barber-signalement__file-icon {
-  font-size: 1.25rem;
+  font-size: 1.375rem;
+  color: var(--gold-dark);
 }
 
 .barber-signalement__file-label {
@@ -237,7 +237,7 @@
 .barber-signalement__file-desc {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
   margin-top: 0.125rem;
 }
 
@@ -247,7 +247,7 @@
   color: var(--gray-400);
 }
 
-/* Submit */
+/* ── Submit ── */
 
 .barber-signalement__submit-btn {
   width: 100%;
@@ -270,6 +270,6 @@
 .barber-signalement__footer {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-400);
   text-align: center;
 }
