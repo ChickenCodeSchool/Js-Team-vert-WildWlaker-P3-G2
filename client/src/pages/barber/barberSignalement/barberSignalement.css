@@ -261,6 +261,10 @@
   color: var(--white);
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .barber-signalement__submit-btn:hover {
@@ -272,4 +276,8 @@
   font-size: 0.75rem;
   color: var(--gray-400);
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
 }

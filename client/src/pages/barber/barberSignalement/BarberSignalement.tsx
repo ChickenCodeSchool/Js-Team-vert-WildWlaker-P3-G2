@@ -1,4 +1,15 @@
 import { useState } from "react";
+import {
+  FiAlertCircle,
+  FiCalendar,
+  FiLock,
+  FiMoreHorizontal,
+  FiScissors,
+  FiSend,
+  FiStar,
+  FiUpload,
+  FiUser,
+} from "react-icons/fi";
 import "./barberSignalement.css";
 
 const REPORT_TYPES = [
@@ -6,25 +17,25 @@ const REPORT_TYPES = [
     id: "comportement",
     label: "Comportement inapproprié",
     description: "Insultes, harcèlement, menace...",
-    icon: "!",
+    Icon: FiAlertCircle,
   },
   {
     id: "non-presentation",
     label: "Non-présentation",
     description: "Client ne s'est pas présenté sans prévenir",
-    icon: "📅",
+    Icon: FiCalendar,
   },
   {
     id: "avis",
     label: "Avis abusif",
     description: "Avis injustifié ou malveillant",
-    icon: "☆",
+    Icon: FiStar,
   },
   {
     id: "autre",
     label: "Autre",
     description: "Autre raison",
-    icon: "•••",
+    Icon: FiMoreHorizontal,
   },
 ];
 
@@ -55,7 +66,9 @@ function BarberSignalement() {
             className={`barber-signalement__target-card ${target === "client" ? "barber-signalement__target-card--selected" : ""}`}
             onClick={() => setTarget("client")}
           >
-            <span className="barber-signalement__target-icon">👤</span>
+            <span className="barber-signalement__target-icon">
+              <FiUser size={20} />
+            </span>
             <div>
               <p className="barber-signalement__target-label">Un client</p>
               <p className="barber-signalement__target-desc">
@@ -69,7 +82,9 @@ function BarberSignalement() {
             className={`barber-signalement__target-card ${target === "salon" ? "barber-signalement__target-card--selected" : ""}`}
             onClick={() => setTarget("salon")}
           >
-            <span className="barber-signalement__target-icon">🏪</span>
+            <span className="barber-signalement__target-icon">
+              <FiScissors size={20} />
+            </span>
             <div>
               <p className="barber-signalement__target-label">Un salon</p>
               <p className="barber-signalement__target-desc">
@@ -93,7 +108,9 @@ function BarberSignalement() {
               className={`barber-signalement__type-card ${reportType === type.id ? "barber-signalement__type-card--selected" : ""}`}
               onClick={() => setReportType(type.id)}
             >
-              <span className="barber-signalement__type-icon">{type.icon}</span>
+              <span className="barber-signalement__type-icon">
+                <type.Icon size={16} />
+              </span>
               <div className="barber-signalement__type-content">
                 <p className="barber-signalement__type-label">{type.label}</p>
                 <p className="barber-signalement__type-desc">
@@ -131,7 +148,7 @@ function BarberSignalement() {
             Ajoutez des captures d'écran, photos ou documents utiles.
           </p>
           <label className="barber-signalement__file-upload">
-            <span className="barber-signalement__file-icon">⬆️</span>
+            <FiUpload size={22} className="barber-signalement__file-icon" />
             <div>
               <p className="barber-signalement__file-label">
                 Ajouter des fichiers
@@ -146,10 +163,12 @@ function BarberSignalement() {
         </section>
 
         <button type="submit" className="barber-signalement__submit-btn">
-          ✉️ Envoyer le signalement
+          <FiSend size={18} />
+          Envoyer le signalement
         </button>
         <p className="barber-signalement__footer">
-          🔒 Vos informations sont sécurisées et confidentielles.
+          <FiLock size={13} />
+          Vos informations sont sécurisées et confidentielles.
         </p>
       </form>
     </div>
