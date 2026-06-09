@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./BookingForm.css";
 import { FiCheckCircle, FiScissors } from "react-icons/fi";
-import BarberCard from "../Services/BarberCard/BarberCard";
+import BarberCard from "../BarberCard/BarberCard";
 import type { Booking, Prestation } from "./BookingTypes";
 
 type Props = {
@@ -9,6 +9,8 @@ type Props = {
   setBooking: React.Dispatch<React.SetStateAction<Booking>>;
   onNext: () => void;
 };
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 function BookingForm({ booking, setBooking, onNext }: Props) {
   const [prestations, setPrestations] = useState<Prestation[]>([]);
@@ -39,11 +41,10 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
     "18h00",
     "18h30",
     "19h00",
-    "19h30",
   ];
 
   useEffect(() => {
-    fetch("http://localhost:3310/api/prestations")
+    fetch(`${API_URL}/api/prestations`)
       .then((res) => res.json())
       .then((data) => {
         console.log("DATA PRESTATIONS :", data);
