@@ -11,25 +11,9 @@ import {
   FiX,
 } from "react-icons/fi";
 
-import "./EditUserModal.css";
+import type { Customer } from "../../../types/Customer";
 
-interface Customer {
-  id_user: number;
-  id: number;
-  firstname: string;
-  lastname: string;
-  postal_code: string;
-  city: string;
-  adress: string;
-  avatar_url: string;
-  create_time: string;
-  email: string;
-  phone?: string;
-  birthday?: string;
-  genre?: string;
-  status?: string;
-  annotations?: string;
-}
+import "./EditUserModal.css";
 
 interface EditUserModalProps {
   isOpen: boolean;

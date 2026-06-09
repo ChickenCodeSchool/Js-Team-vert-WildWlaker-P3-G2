@@ -11,7 +11,9 @@ import UserDataGrid, {
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
 
+import type { Appointment } from "../../../types/appointment";
 import type { Customer } from "../../../types/Customer";
+import type { Review } from "../../../types/review";
 
 import "./Users.css";
 
@@ -24,30 +26,6 @@ const thisMonthRange = {
   end: format(today, "yyyy-MM-dd"),
 };
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
-
-interface Appointment {
-  id_appointment: number;
-  appointment_date: string;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
-  location_type: string;
-  id_prestation: number;
-  id_user_barber: number;
-  id_user_customer: number;
-  barber_name: string;
-  customer_firstname: string;
-  customer_lastname: string;
-  customer_avatar: string;
-  prestation_name: string;
-}
-
-interface Review {
-  id_review: number;
-  rating: number;
-  comment: string;
-  reporting: number;
-  created_at: string;
-  id_appointment: number;
-}
 
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
@@ -105,6 +83,11 @@ function Users() {
       .then((data: Appointment[]) => setMonthlyAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
+
+  const suspendedAccountsCount = useMemo(() => {
+    return customers.filter((c) => c.status?.toLowerCase() === "suspendu")
+      .length;
+  }, [customers]);
 
   const selectedCustomerStats = useMemo(() => {
     if (!selectedCustomer) {
@@ -211,6 +194,13 @@ function Users() {
       ),
     },
     {
+      key: "status",
+      header: "Status",
+      render: (customer) => (
+        <div className="user-grid-info">{customer.status}</div>
+      ),
+    },
+    {
       key: "create_time",
       header: "Date de création",
       render: (customer) => (
@@ -260,25 +250,17 @@ function Users() {
         throw new Error("Erreur lors de la mise à jour du client");
       }
 
-      const updatedCustomerFromApi = await response.json();
-
-      const finalData = updatedCustomerFromApi.data
-        ? updatedCustomerFromApi.data
-        : updatedData;
-
-      const formattedCustomer = {
-        ...finalData,
-        id: finalData.id_user,
-      };
-
       setCustomers((prevCustomers) =>
-        prevCustomers.map((cust) =>
-          cust.id_user === formattedCustomer.id_user ? formattedCustomer : cust,
+        prevCustomers.map((c) =>
+          c.id_user === updatedData.id_user ? { ...c, ...updatedData } : c,
         ),
       );
 
-      if (selectedCustomer?.id_user === formattedCustomer.id_user) {
-        setSelectedCustomer(formattedCustomer);
+      if (selectedCustomer?.id_user === updatedData.id_user) {
+        setSelectedCustomer({
+          ...selectedCustomer,
+          ...updatedData,
+        });
       }
 
       setIsEditModalOpen(false);
@@ -317,7 +299,7 @@ function Users() {
               Icon={FiPause}
               iconColor="icon-warning"
               title="Comptes suspendus"
-              value={25}
+              value={suspendedAccountsCount}
               cycle="Total"
             />
             <StatsCard
