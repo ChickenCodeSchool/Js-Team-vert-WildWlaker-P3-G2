@@ -1,7 +1,7 @@
 import { Outlet } from "react-router";
 
 import "./CustomerLayout.css";
-import CustomerNavBar from "../../../components/customer/Services/Navbar/CustomerNavBar";
+import CustomerNavBar from "../../../components/customer/Navbar/CustomerNavBar";
 
 function CustomerLayout() {
   return (

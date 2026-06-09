@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "./BookingForm.css";
 import { FiCheckCircle, FiScissors } from "react-icons/fi";
-import BarberCard from "../Services/BarberCard/BarberCard";
+import BarberCard from "../BarberCard/BarberCard";
 import type { Booking, Prestation } from "./BookingTypes";
 
 type Props = {

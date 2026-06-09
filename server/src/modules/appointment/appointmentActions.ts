@@ -20,5 +20,15 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const readwithuserid: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const appointment = await appointmentRepository.readwithuserid(id);
+    res.json(appointment);
+  } catch (err) {
+    // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
 
-export default { browse };
+export default { browse, readwithuserid };

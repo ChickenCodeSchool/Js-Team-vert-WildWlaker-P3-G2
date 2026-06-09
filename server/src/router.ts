@@ -16,6 +16,7 @@ import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
 router.get("/api/appointments", appointmentActions.browse);
+router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/events", eventActions.browse);
