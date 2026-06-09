@@ -1,7 +1,7 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 
 /* ********************************************************************** */
 
@@ -9,9 +9,13 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
+import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
+import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
+import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
@@ -47,12 +51,21 @@ const router = createBrowserRouter([
       {
         path: "/admin",
         element: <AdminLayout />,
-        children: [{ index: true, element: <Dashboard /> }],
+        children: [
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          { path: "dashboard", element: <Dashboard /> },
+          { path: "users", element: <Users /> },
+        ],
       },
       {
         path: "/barber",
         element: <BarberLayout />,
-        children: [{ path: "profile", element: <BarberProfil /> }],
+        children: [
+          { path: "profile", element: <BarberProfil /> },
+          { path: "prestations", element: <BarberPrestation /> },
+          { path: "dashboard", element: <BarberDashBoard /> },
+          { path: "signalement", element: <BarberSignalement /> },
+        ],
       },
     ],
   },
