@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { useNavigate } from "react-router";
-import BarberCard from "../../../components/customer/Services/BarberCard/BarberCard";
+import BarberCard from "../../../components/customer/BarberCard/BarberCard";
 import Search from "../../../components/search/Search";
 import type { Barber } from "../../../types/barber";
 import "./SearchPage.css";
@@ -54,18 +54,17 @@ function SearchPage() {
       {!isLoading &&
         error == null &&
         barbers.map((barber) => (
-          <button
+          <BarberCard
             key={barber.id_user}
-            type="button"
-            className="search__barber-link"
-            onClick={() =>
-              navigate("/booking", {
-                state: { barber },
+            barber={barber}
+            onProfileClick={(selectedBarber) =>
+              navigate("/profile", {
+                state: {
+                  barber: selectedBarber,
+                },
               })
             }
-          >
-            <BarberCard barber={barber} />
-          </button>
+          />
         ))}
     </main>
   );

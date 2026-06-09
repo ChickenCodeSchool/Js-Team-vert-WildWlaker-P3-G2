@@ -1,7 +1,7 @@
 import "./BarberCard.css";
 import { FiChevronRight, FiMapPin } from "react-icons/fi";
-import fallbackImage from "../../../../assets/images/Afro.jpg";
-import type { Barber } from "../../../../types/barber";
+import fallbackImage from "../../../assets/images/Afro.jpg";
+import type { Barber } from "../../../types/barber";
 
 type BarberCardProps = {
   barber: Barber;

@@ -15,9 +15,11 @@ import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
+import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
+import Reservations from "./pages/customer/reservations/Reservations";
 import SearchPage from "./pages/customer/search/SearchPage";
 
 // Import additional components for new routes
@@ -42,6 +44,7 @@ const router = createBrowserRouter([
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
           { path: "booking", element: <BookingPage /> },
+          { path: "reservations/:id", element: <Reservations /> },
           { path: "login", element: <Login /> },
         ],
       },
@@ -61,6 +64,7 @@ const router = createBrowserRouter([
           { path: "profile", element: <BarberProfil /> },
           { path: "prestations", element: <BarberPrestation /> },
           { path: "dashboard", element: <BarberDashBoard /> },
+          { path: "signalement", element: <BarberSignalement /> },
         ],
       },
     ],

@@ -49,7 +49,26 @@ class AppointmentRepository {
     // Return the array of Appointments
     return rows as AppointmentWithDetails[];
   }
+  async readwithuserid(id: number) {
+    const query = `
+      SELECT 
+        a.*,
+        b.name AS barber_name,
+        c.firstname AS customer_firstname,
+        c.lastname AS customer_lastname,
+        u.avatar_url AS barber_avatar, 
+        p.name AS prestation_name
+      FROM appointment a
+      JOIN barber b ON a.id_user_barber = b.id_user
+      JOIN customer c ON a.id_user_customer = c.id_user
+      JOIN users u ON b.id_user = u.id_user  
+      JOIN prestation p ON a.id_prestation = p.id_prestation
+      WHERE a.id_user_customer = ? 
+      `;
+    const [rows] = await databaseClient.query<Rows>(query, [id]);
 
+    return rows as AppointmentWithDetails[];
+  }
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Appointment
 
