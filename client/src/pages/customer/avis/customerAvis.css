@@ -7,6 +7,15 @@
   padding: 1rem 1.25rem 2rem;
 }
 
+/* ── Page title ── */
+
+.customer-avis__page-title {
+  font-family: var(--font-title);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
 /* ── Tabs ── */
 
 .customer-avis__tabs {
@@ -82,11 +91,11 @@
 }
 
 .customer-avis__star--full {
-  color: var(--gold-dark);
+  color: var(--gold);
 }
 
 .customer-avis__star--empty {
-  color: var(--gray-300);
+  color: var(--gray-200);
 }
 
 /* ── Distribution bars ── */

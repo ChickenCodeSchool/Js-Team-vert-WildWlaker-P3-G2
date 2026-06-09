@@ -3,8 +3,7 @@ import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
 import "./customerAvis.css";
 
-type SortOption = "best" | "worst" | "recent" | "oldest";
-type Tab = "avis" | "commentaires";
+type SortOption = "recent" | "oldest";
 
 const MOCK_REVIEWS = [
   {
@@ -71,8 +70,6 @@ const TOTAL = DISTRIBUTION.reduce((sum, d) => sum + d.count, 0);
 const AVERAGE = 4.8;
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "best", label: "Meilleur au pire" },
-  { value: "worst", label: "Pire au meilleur" },
   { value: "recent", label: "Plus récents" },
   { value: "oldest", label: "Plus anciens" },
 ];
@@ -107,36 +104,20 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function CustomerAvis() {
-  const [activeTab, setActiveTab] = useState<Tab>("avis");
-  const [sort, setSort] = useState<SortOption>("best");
+  const [sort, setSort] = useState<SortOption>("recent");
   const [sortOpen, setSortOpen] = useState(false);
 
   const sortedReviews = [...MOCK_REVIEWS].sort((a, b) => {
-    if (sort === "best") return b.rating - a.rating;
-    if (sort === "worst") return a.rating - b.rating;
     if (sort === "recent") return b.id - a.id;
     return a.id - b.id;
   });
 
   return (
     <div className="customer-avis">
-      {/* Tabs */}
-      <div className="customer-avis__tabs">
-        <button
-          type="button"
-          className={`customer-avis__tab ${activeTab === "avis" ? "customer-avis__tab--active" : ""}`}
-          onClick={() => setActiveTab("avis")}
-        >
-          Tous les avis
-        </button>
-        <button
-          type="button"
-          className={`customer-avis__tab ${activeTab === "commentaires" ? "customer-avis__tab--active" : ""}`}
-          onClick={() => setActiveTab("commentaires")}
-        >
-          Commentaires
-        </button>
-      </div>
+      {/* Titre */}
+      <h1 className="customer-avis__page-title">
+        Tous les avis et commentaires
+      </h1>
 
       {/* Note moyenne */}
       <div className="customer-avis__summary">
