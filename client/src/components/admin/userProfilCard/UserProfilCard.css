@@ -1,0 +1,123 @@
+.userProfilCard-main {
+  width: 100%;
+  background-color: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 20px 10px 20px 10px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  gap: 30px;
+  h2 {
+    font-family: var(--font-title);
+    font-size: 16px;
+    color: var(--black);
+    padding-left: 10px;
+  }
+  .userProfilCard-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    .userProfilCard-avatar {
+      width: 40%;
+      border-radius: 50%;
+    }
+    h3 {
+      font-family: var(--font-title);
+      font-size: 16px;
+      color: var(--black);
+    }
+    p {
+      font-family: var(--font-body);
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+  }
+  .userProfilCard-info {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    span {
+      display: flex;
+      align-items: center;
+      font-family: var(--font-body);
+      font-size: 16px;
+      .userProfilCard-info-icon {
+        color: var(--gold);
+        padding: 10px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+  .userProfilCard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    background-color: var(--gray-100);
+    gap: 1px;
+    overflow: hidden;
+    .userProfilCard-grid-case {
+      height: 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      background-color: var(--white);
+      span {
+        font-family: var(--font-body);
+        font-size: 16px;
+      }
+      p {
+        font-family: var(--font-body);
+        font-size: 12px;
+        color: var(--gray-600);
+      }
+    }
+  }
+  .userProfilCard-action {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    h2 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      color: var(--black);
+    }
+    .userProfilCard-action-button {
+      background-color: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-300);
+      box-shadow: none;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 16px;
+      padding: 10px 0;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding-left: 15px;
+
+      &:hover {
+        background-color: var(--gray-50);
+      }
+    }
+
+    .userProfilCard-action-button:last-child {
+      color: var(--error);
+      border: 1px solid var(--error);
+
+      &:hover {
+        background-color: #fff5f5;
+      }
+    }
+  }
+}

@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
+import type { Event } from "../../../types/event";
+
 import "./UpcomingEventCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-type EventItem = {
-  id_event: number;
-  title: string;
-  start_date: string;
-  end_date: string;
-  location: string;
-  status: string;
-  image_url: string | null;
-};
 
 function formatEventDates(startStr: string, endStr: string): string {
   const start = new Date(startStr);
@@ -39,12 +31,12 @@ function formatEventDates(startStr: string, endStr: string): string {
 }
 
 function UpcomingEventCard() {
-  const [events, setEvents] = useState<EventItem[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
     fetch(`${API_URL}/api/events`)
       .then((res) => res.json())
-      .then((data: EventItem[]) => {
+      .then((data: Event[]) => {
         const now = new Date();
 
         const upcomingEvents = data
