@@ -1,9 +1,6 @@
 import "./ReservationCardPlanning.css";
 
-type ReservationStatus =
-  | "confirmed"
-  | "pending"
-  | "cancelled";
+type ReservationStatus = "confirmed" | "pending" | "cancelled";
 
 type Props = {
   avatar: string;
@@ -36,9 +33,7 @@ function ReservationCardPlanning({
         className="reservation-card-avatar"
       />
 
-      <span className="reservation-card-time">
-        {time}
-      </span>
+      <span className="reservation-card-time">{time}</span>
 
       <div className="reservation-card-content">
         <h4>{customerName}</h4>
@@ -46,15 +41,11 @@ function ReservationCardPlanning({
       </div>
 
       <div className="reservation-card-right">
-        <span
-          className={`reservation-card-status ${status}`}
-        >
+        <span className={`reservation-card-status ${status}`}>
           {statusLabel[status]}
         </span>
 
-        <span className="reservation-card-duration">
-          {duration}
-        </span>
+        <span className="reservation-card-duration">{duration}</span>
       </div>
     </article>
   );

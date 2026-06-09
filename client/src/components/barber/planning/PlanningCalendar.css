@@ -22,8 +22,6 @@
   display: center;
 }
 
-
-
 .calendar-day {
   border: none;
   background: transparent;
@@ -32,11 +30,12 @@
 
 .icon-button {
   font-size: 34px;
-  color: var(--black);}
+  color: var(--black);
+}
 
 .filter-button {
   font-size: 26px;
-  color:var(--gold-dark);
+  color: var(--gold-dark);
   font-weight: 800;
 }
 
@@ -46,7 +45,6 @@
   justify-content: space-between;
   margin-bottom: 25px;
 }
-
 
 .circle-button {
   width: 38px;
@@ -62,7 +60,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color:var(--gold-dark);
+  color: var(--gold-dark);
   font-size: 20px;
   font-weight: 800;
   text-transform: capitalize;
@@ -129,7 +127,7 @@
 }
 
 .calendar-day.muted span {
-  color:var(--gray-600);
+  color: var(--gray-600);
 }
 
 .calendar-day.selected {

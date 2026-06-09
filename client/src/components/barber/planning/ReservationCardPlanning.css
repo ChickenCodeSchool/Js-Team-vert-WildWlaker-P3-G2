@@ -29,7 +29,7 @@
 }
 
 .reservation-card.cancelled::before {
-  background:var(--gray-600);
+  background: var(--gray-600);
 }
 
 .reservation-card-avatar {

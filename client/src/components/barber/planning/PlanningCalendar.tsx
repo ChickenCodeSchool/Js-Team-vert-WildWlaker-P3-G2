@@ -68,14 +68,11 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
 
   const [currentMonth, setCurrentMonth] = useState(
-    new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1)
+    new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1),
   );
 
   const calendarDays = useMemo(() => {
-    return getMonthDays(
-      currentMonth.getFullYear(),
-      currentMonth.getMonth()
-    );
+    return getMonthDays(currentMonth.getFullYear(), currentMonth.getMonth());
   }, [currentMonth]);
 
   const monthLabel = currentMonth.toLocaleDateString("fr-FR", {
@@ -85,21 +82,13 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
 
   function handlePreviousMonth() {
     setCurrentMonth(
-      new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth() - 1,
-        1
-      )
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1),
     );
   }
 
   function handleNextMonth() {
     setCurrentMonth(
-      new Date(
-        currentMonth.getFullYear(),
-        currentMonth.getMonth() + 1,
-        1
-      )
+      new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1),
     );
   }
 
@@ -107,9 +96,7 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
     onSelectDate(date);
 
     if (date.getMonth() !== currentMonth.getMonth()) {
-      setCurrentMonth(
-        new Date(date.getFullYear(), date.getMonth(), 1)
-      );
+      setCurrentMonth(new Date(date.getFullYear(), date.getMonth(), 1));
     }
   }
 
@@ -120,7 +107,11 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
       </header>
 
       <div className="planning-month-navigation">
-        <button type="button" className="circle-button" onClick={handlePreviousMonth}>
+        <button
+          type="button"
+          className="circle-button"
+          onClick={handlePreviousMonth}
+        >
           ‹
         </button>
 
@@ -129,7 +120,11 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
           <strong>{monthLabel}</strong>
         </div>
 
-        <button type="button" className="circle-button" onClick={handleNextMonth}>
+        <button
+          type="button"
+          className="circle-button"
+          onClick={handleNextMonth}
+        >
           ›
         </button>
       </div>
