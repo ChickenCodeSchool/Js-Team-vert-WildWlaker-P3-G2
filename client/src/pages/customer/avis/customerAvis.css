@@ -91,7 +91,7 @@
 }
 
 .customer-avis__star--full {
-  color: var(--gold);
+  color: var(--warning);
 }
 
 .customer-avis__star--empty {
