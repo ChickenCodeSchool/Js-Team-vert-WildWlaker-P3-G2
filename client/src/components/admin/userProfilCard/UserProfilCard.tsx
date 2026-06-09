@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import {
   FiAtSign,
   FiMapPin,
@@ -7,77 +9,86 @@ import {
   FiUser,
 } from "react-icons/fi";
 
+import type { Customer } from "../../../types/Customer";
+
 import "./UserProfilCard.css";
-type userProfilCardProps = {
-  avatar: string;
-  name: string;
-  createTime: string;
-  email: string;
-  phonenum: string;
-  city: string;
-  postalcode: string;
-  reservationsCount: number;
-  reservationsCanceledCount: number;
+
+interface CustomerStats {
+  total: number;
+  canceled: number;
   reviewsCount: number;
-  repordedsCount: number;
-};
+  reported: number;
+}
+
+interface UserProfilCardProps {
+  selectedCustomer: Customer & { id: number };
+  selectedCustomerStats: CustomerStats;
+  onEditClick: () => void;
+}
 
 function UserProfilCard({
-  avatar,
-  name,
-  createTime,
-  email,
-  phonenum,
-  city,
-  postalcode,
-  reservationsCount,
-  reservationsCanceledCount,
-  reviewsCount,
-  repordedsCount,
-}: userProfilCardProps) {
+  selectedCustomer,
+  selectedCustomerStats,
+  onEditClick,
+}: UserProfilCardProps) {
   return (
     <div className="userProfilCard-main">
       <h2>Détail utilisateur</h2>
       <div className="userProfilCard-header">
-        <img className="userProfilCard-avatar" src={avatar} alt={name} />
-        <h3>{name}</h3>
-        <p>Utilisateur depuis {createTime}</p>
+        <img
+          className="userProfilCard-avatar"
+          src={selectedCustomer.avatar_url}
+          alt={selectedCustomer.firstname}
+        />
+        <h3>
+          {selectedCustomer.firstname} {selectedCustomer.lastname}
+        </h3>
+        <p>
+          Utilisateur depuis{" "}
+          {format(new Date(selectedCustomer.create_time), "dd MMM yyyy", {
+            locale: fr,
+          })}
+        </p>
       </div>
       <div className="userProfilCard-info">
         <span>
           <FiAtSign className="userProfilCard-info-icon" />
-          {email}
+          {selectedCustomer.email}
         </span>
         <span>
           <FiPhone className="userProfilCard-info-icon" />
-          {phonenum}
+          {selectedCustomer.phone}
         </span>
         <span>
           <FiMapPin className="userProfilCard-info-icon" />
-          {city} {postalcode}
+          {selectedCustomer.city} {selectedCustomer.postal_code}
         </span>
       </div>
       <div className="userProfilCard-grid">
         <div className="userProfilCard-grid-case">
-          <span>{reservationsCount}</span>
+          <span>{selectedCustomerStats.total}</span>
           <p>Réservations</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{reservationsCanceledCount}</span>
+          <span>{selectedCustomerStats.canceled}</span>
           <p>Annulations</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{reviewsCount}</span>
+          <span>{selectedCustomerStats.reviewsCount}</span>
           <p>Avis laissés</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{repordedsCount}</span>
+          <span>{selectedCustomerStats.reported}</span>
           <p>Signalements</p>
         </div>
       </div>
       <div className="userProfilCard-action">
         <h2>Actions rapides</h2>
-        <button className="userProfilCard-action-button" type="button">
+        <button
+          className="userProfilCard-action-button"
+          type="button"
+          onClick={onEditClick}
+        >
           <FiUser />
           Voir le profil
         </button>

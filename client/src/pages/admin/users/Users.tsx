@@ -4,11 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
+import EditUserModal from "../../../components/admin/editUserModal/EditUserModal";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+
+import type { Customer } from "../../../types/Customer";
 
 import "./Users.css";
 
@@ -21,18 +24,6 @@ const thisMonthRange = {
   end: format(today, "yyyy-MM-dd"),
 };
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
-
-interface Customer {
-  id_user: number;
-  firstname: string;
-  lastname: string;
-  postal_code: string;
-  city: string;
-  adress: string;
-  avatar_url: string;
-  create_time: string;
-  email: string;
-}
 
 interface Appointment {
   id_appointment: number;
@@ -64,15 +55,14 @@ function Users() {
   const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
     [],
   );
-
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
-
   const [selectedCustomer, setSelectedCustomer] = useState<
     (Customer & { id: number }) | null
   >(null);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/customers`)
@@ -85,9 +75,15 @@ function Users() {
           ...item,
           id: item.id_user,
         }));
+        const sortedData = [...formattedData].sort((a, b) => {
+          return (
+            new Date(b.create_time).getTime() -
+            new Date(a.create_time).getTime()
+          );
+        });
         setCustomers(formattedData);
-        if (formattedData.length > 0) {
-          setSelectedCustomer(formattedData[0]);
+        if (sortedData.length > 0) {
+          setSelectedCustomer(sortedData[0]);
         }
       })
       .catch((err) =>
@@ -236,6 +232,7 @@ function Users() {
             onClick={(e) => {
               e.stopPropagation();
               setSelectedCustomer(customer);
+              setIsEditModalOpen(true);
             }}
             title="Voir"
           >
@@ -245,6 +242,51 @@ function Users() {
       ),
     },
   ];
+
+  const handleSaveCustomer = async (updatedData: Customer) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/customers/${updatedData.id_user}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour du client");
+      }
+
+      const updatedCustomerFromApi = await response.json();
+
+      const finalData = updatedCustomerFromApi.data
+        ? updatedCustomerFromApi.data
+        : updatedData;
+
+      const formattedCustomer = {
+        ...finalData,
+        id: finalData.id_user,
+      };
+
+      setCustomers((prevCustomers) =>
+        prevCustomers.map((cust) =>
+          cust.id_user === formattedCustomer.id_user ? formattedCustomer : cust,
+        ),
+      );
+
+      if (selectedCustomer?.id_user === formattedCustomer.id_user) {
+        setSelectedCustomer(formattedCustomer);
+      }
+
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error("Erreur onSave :", error);
+      alert("Une erreur est survenue lors de l'enregistrement.");
+    }
+  };
 
   return (
     <div className="admin-users-body">
@@ -308,21 +350,9 @@ function Users() {
         <aside className="admin-users-main-aside">
           {selectedCustomer ? (
             <UserProfilCard
-              avatar={selectedCustomer.avatar_url}
-              name={`${selectedCustomer.firstname} ${selectedCustomer.lastname}`}
-              createTime={format(
-                new Date(selectedCustomer.create_time),
-                "dd MMM yyyy",
-                { locale: fr },
-              )}
-              email={selectedCustomer.email}
-              city={selectedCustomer.city}
-              postalcode={selectedCustomer.postal_code}
-              phonenum="Non renseigné"
-              reservationsCount={selectedCustomerStats.total}
-              reservationsCanceledCount={selectedCustomerStats.canceled}
-              reviewsCount={selectedCustomerStats.reviewsCount}
-              repordedsCount={selectedCustomerStats.reported}
+              selectedCustomer={selectedCustomer}
+              selectedCustomerStats={selectedCustomerStats}
+              onEditClick={() => setIsEditModalOpen(true)}
             />
           ) : (
             <div className="no-user-selected">
@@ -331,6 +361,12 @@ function Users() {
           )}
         </aside>
       </main>
+      <EditUserModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        customer={selectedCustomer}
+        onSave={handleSaveCustomer}
+      />
     </div>
   );
 }
