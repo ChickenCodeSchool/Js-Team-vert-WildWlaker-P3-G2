@@ -40,7 +40,7 @@ function CustomerNavBar() {
         </NavLink>
 
         <NavLink
-          to="bookings"
+          to="reservations"
           className={({ isActive }) =>
             isActive ? "navbar__item navbar__item--active" : "navbar__item"
           }

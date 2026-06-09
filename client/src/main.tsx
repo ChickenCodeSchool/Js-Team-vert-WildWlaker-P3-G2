@@ -21,6 +21,7 @@ import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
+import Reservations from "./pages/customer/reservations/Reservations";
 import SearchPage from "./pages/customer/search/SearchPage";
 
 // Import additional components for new routes
@@ -44,6 +45,7 @@ const router = createBrowserRouter([
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
           { path: "booking", element: <BookingPage /> },
+          { path: "reservations/:id", element: <Reservations /> },
           { path: "login", element: <Login /> },
         ],
       },
