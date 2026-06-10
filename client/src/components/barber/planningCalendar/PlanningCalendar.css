@@ -1,9 +1,9 @@
 .planning-calendar {
-  width: 100%;
   max-width: 430px;
   background: #ffffff;
   padding: 18px 14px 28px;
   font-family: Inter, system-ui, sans-serif;
+  min-height: auto;
 }
 
 .planning-topbar {
@@ -19,7 +19,7 @@
   font-size: 22px;
   font-weight: 800;
   color: var(--black);
-  display: center;
+  font-family: var(--font-body);
 }
 
 .calendar-day {
@@ -81,12 +81,8 @@
   background: #ffffff;
   font-size: 16px;
   font-weight: 800;
-  color: #111827;
+  color: var(--black);
   cursor: pointer;
-}
-
-.planning-tabs button + button {
-  border-left: 1px solid var(--gold-soft);
 }
 
 .planning-tabs .active {
@@ -136,9 +132,71 @@
   margin: -6px auto;
   border-radius: 50%;
   background: linear-gradient(var(--gold-dark));
-  box-shadow: 0 8px 18px rgba(217, 154, 22, 0.35);
 }
 
 .calendar-day.selected span {
   color: #ffffff;
+}
+
+.day-week-selector {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 28px;
+  gap: 8px;
+}
+
+.day-week-item {
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.day-week-item span {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.day-week-item strong {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #111827;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.day-week-item.selected span {
+  color: var(--warning);
+}
+
+.day-week-item.selected strong {
+  background: var(--gold-dark);
+  color: #ffffff;
+}
+
+.week-placeholder {
+  text-align: center;
+  color: var(--gray-50);
+  padding: 40px 0;
+}
+
+.planning-calendar.day {
+  padding-bottom: 12px;
+}
+
+.planning-calendar.day,
+.planning-tabs {
+  margin-bottom: 12px;
+}
+
+.planning-calendar.day + .barber-planning-reservations {
+  margin-top: -3rem;
 }
