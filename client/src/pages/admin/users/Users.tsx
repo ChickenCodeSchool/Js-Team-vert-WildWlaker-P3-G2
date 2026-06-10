@@ -2,6 +2,7 @@ import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
 import EditUserModal from "../../../components/admin/editUserModal/EditUserModal";
@@ -268,11 +269,24 @@ function Users() {
 
     if (originalCustomer && originalCustomer.status !== updatedData.status) {
       const isGoingToSuspend = updatedData.status?.toLowerCase() === "suspendu";
-      const confirmMessage = isGoingToSuspend
-        ? `Vous changez le statut vers "Suspendu". Êtes-vous sûr de vouloir suspendre ${updatedData.firstname} ${updatedData.lastname} ?`
-        : `Vous allez réactiver le compte de ${updatedData.firstname} ${updatedData.lastname}. Confirmer ?`;
 
-      if (!window.confirm(confirmMessage)) {
+      const result = await Swal.fire({
+        title: isGoingToSuspend
+          ? "Suspendre le compte ?"
+          : "Réactiver le compte ?",
+        text: isGoingToSuspend
+          ? `Vous changez le statut vers "Suspendu". Êtes-vous sûr de vouloir suspendre ${updatedData.firstname} ${updatedData.lastname} ?`
+          : `Vous allez réactiver le compte de ${updatedData.firstname} ${updatedData.lastname}. Confirmer ?`,
+        icon: isGoingToSuspend ? "warning" : "success",
+        showCancelButton: true,
+        confirmButtonColor: isGoingToSuspend ? "#ff9f43" : "#10ac84",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, confirmer",
+        cancelButtonText: "Annuler",
+        backdrop: `rgba(0,0,0,0.4)`,
+      });
+
+      if (!result.isConfirmed) {
         return;
       }
     }
@@ -300,24 +314,45 @@ function Users() {
         throw new Error("Erreur lors de la mise à jour du client");
       }
 
+      Swal.fire({
+        icon: "success",
+        title: "Succès !",
+        text: "Le profil a été mis à jour avec succès.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       loadAllData();
       setIsEditModalOpen(false);
     } catch (error) {
       console.error("Erreur onSave :", error);
-      alert("Une erreur est survenue lors de l'enregistrement.");
+      Swal.fire({
+        icon: "error",
+        title: "Oups...",
+        text: "Une erreur est survenue lors de l'enregistrement.",
+      });
     }
   };
+
   const handleToggleSuspendCustomer = async (
     customer: Customer & { id: number },
   ) => {
     const isCurrentlySuspended = customer.status?.toLowerCase() === "suspendu";
     const nextStatus = isCurrentlySuspended ? "Actif" : "Suspendu";
 
-    const confirmMessage = isCurrentlySuspended
-      ? `Êtes-vous sûr de vouloir réactiver le compte de l'utilisateur ${customer.firstname} ${customer.lastname} ?`
-      : `Êtes-vous sûr de vouloir suspendre le compte de l'utilisateur ${customer.firstname} ${customer.lastname} ?`;
-
-    if (!window.confirm(confirmMessage)) {
+    const result = await Swal.fire({
+      title: isCurrentlySuspended
+        ? "Réactiver le compte ?"
+        : "Suspendre le compte ?",
+      text: `Êtes-vous sûr de vouloir ${isCurrentlySuspended ? "réactiver" : "suspendre"} le compte de ${customer.firstname} ${customer.lastname} ?`,
+      icon: isCurrentlySuspended ? "success" : "warning",
+      showCancelButton: true,
+      confirmButtonColor: isCurrentlySuspended ? "#10ac84" : "#ff9f43",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, confirmer",
+      cancelButtonText: "Annuler",
+    });
+    if (!result.isConfirmed) {
       return;
     }
 
@@ -346,10 +381,16 @@ function Users() {
       }
 
       loadAllData();
-      alert(`Le compte a bien été basculé sur le statut : ${nextStatus}`);
+      Swal.fire({
+        icon: "success",
+        title: "Succès !",
+        text: `Le compte est maintenant ${nextStatus}`,
+        timer: 2000,
+        showConfirmButton: false,
+      });
     } catch (error) {
       console.error("Erreur lors de la suspension :", error);
-      alert("Une erreur est survenue lors du changement de statut.");
+      Swal.fire("Erreur", "Une erreur est survenue", "error");
     }
   };
 
