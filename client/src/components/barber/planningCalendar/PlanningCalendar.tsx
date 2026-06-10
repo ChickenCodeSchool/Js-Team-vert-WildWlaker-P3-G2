@@ -19,13 +19,12 @@ const weekDays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 function getMonthDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-
   const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
   const days: CalendarDay[] = [];
 
   for (let i = startDay; i > 0; i--) {
     const date = new Date(year, month, 1 - i);
-
     days.push({
       date,
       day: date.getDate(),
@@ -35,7 +34,6 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
 
   for (let day = 1; day <= lastDay.getDate(); day++) {
     const date = new Date(year, month, day);
-
     days.push({
       date,
       day,
@@ -45,7 +43,6 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
 
   while (days.length % 7 !== 0) {
     const date = new Date(year, month, days.length - startDay + 1);
-
     days.push({
       date,
       day: date.getDate(),
@@ -54,6 +51,19 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
   }
 
   return days;
+}
+
+function getWeekDays(date: Date): Date[] {
+  const day = date.getDay() === 0 ? 6 : date.getDay() - 1;
+  const monday = new Date(date);
+
+  monday.setDate(date.getDate() - day);
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const weekDate = new Date(monday);
+    weekDate.setDate(monday.getDate() + index);
+    return weekDate;
+  });
 }
 
 function isSameDate(dateA: Date, dateB: Date) {
@@ -75,10 +85,20 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
     return getMonthDays(currentMonth.getFullYear(), currentMonth.getMonth());
   }, [currentMonth]);
 
+  const currentWeekDays = useMemo(() => {
+    return getWeekDays(selectedDate);
+  }, [selectedDate]);
+
   const monthLabel = currentMonth.toLocaleDateString("fr-FR", {
     month: "long",
     year: "numeric",
   });
+
+  // const _dayLabel = selectedDate.toLocaleDateString("fr-FR", {
+  //   day: "numeric",
+  //   month: "long",
+  //   year: "numeric",
+  // });
 
   function handlePreviousMonth() {
     setCurrentMonth(
@@ -101,7 +121,7 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
   }
 
   return (
-    <section className="planning-calendar">
+    <section className={`planning-calendar ${viewMode}`}>
       <header className="planning-topbar">
         <h2>Planning</h2>
       </header>
@@ -117,7 +137,7 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
 
         <div className="planning-month-label">
           <span>📅</span>
-          <strong>{monthLabel}</strong>
+          <strong>{viewMode === "day" ? "Aujourd'hui" : monthLabel}</strong>
         </div>
 
         <button
@@ -128,6 +148,26 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
           ›
         </button>
       </div>
+
+      {viewMode === "day" && (
+        <div className="day-week-selector">
+          {currentWeekDays.map((date, index) => {
+            const selected = isSameDate(date, selectedDate);
+
+            return (
+              <button
+                key={date.toISOString()}
+                type="button"
+                className={`day-week-item ${selected ? "selected" : ""}`}
+                onClick={() => handleSelectDay(date)}
+              >
+                <span>{weekDays[index]}</span>
+                <strong>{date.getDate()}</strong>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="planning-tabs">
         <button
@@ -155,30 +195,38 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
         </button>
       </div>
 
-      <div className="calendar-weekdays">
-        {weekDays.map((day) => (
-          <span key={day}>{day}</span>
-        ))}
-      </div>
+      {viewMode === "month" && (
+        <>
+          <div className="calendar-weekdays">
+            {weekDays.map((day) => (
+              <span key={day}>{day}</span>
+            ))}
+          </div>
 
-      <div className="calendar-grid">
-        {calendarDays.map((item) => {
-          const selected = isSameDate(item.date, selectedDate);
+          <div className="calendar-grid">
+            {calendarDays.map((item) => {
+              const selected = isSameDate(item.date, selectedDate);
 
-          return (
-            <button
-              key={item.date.toISOString()}
-              type="button"
-              onClick={() => handleSelectDay(item.date)}
-              className={`calendar-day ${
-                !item.isCurrentMonth ? "muted" : ""
-              } ${selected ? "selected" : ""}`}
-            >
-              <span>{item.day}</span>
-            </button>
-          );
-        })}
-      </div>
+              return (
+                <button
+                  key={item.date.toISOString()}
+                  type="button"
+                  onClick={() => handleSelectDay(item.date)}
+                  className={`calendar-day ${
+                    !item.isCurrentMonth ? "muted" : ""
+                  } ${selected ? "selected" : ""}`}
+                >
+                  <span>{item.day}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {viewMode === "week" && (
+        <p className="week-placeholder">Vue semaine à venir</p>
+      )}
     </section>
   );
 }

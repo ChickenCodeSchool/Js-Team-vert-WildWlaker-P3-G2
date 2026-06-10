@@ -1,4 +1,4 @@
-.reservation-card {
+.planning-reservation-card {
   display: grid;
   grid-template-columns: 56px 70px 1fr auto;
   align-items: center;
@@ -6,11 +6,11 @@
   padding: 14px 18px;
   margin-bottom: 12px;
   border-radius: 14px;
-  background: var(grey);
+  background: var(--gray-50);
   position: relative;
 }
 
-.reservation-card::before {
+.planning-reservation-card::before {
   content: "";
   position: absolute;
   left: 0;
@@ -20,74 +20,74 @@
   border-radius: 10px;
 }
 
-.reservation-card.confirmed::before {
+.planning-reservation-card.confirmed::before {
   background: var(--gold-dark);
 }
 
-.reservation-card.pending::before {
+.planning-reservation-card.pending::before {
   background: var(--gold-dark);
 }
 
-.reservation-card.cancelled::before {
+.planning-reservation-card.cancelled::before {
   background: var(--gray-600);
 }
 
-.reservation-card-avatar {
+.planning-reservation-card-avatar {
   width: 52px;
   height: 52px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.reservation-card-time {
+.planning-reservation-card-time {
   font-size: 1rem;
   font-weight: 700;
   color: var(--gold-dark);
 }
 
-.reservation-card-content h4 {
+.planning-reservation-card-content h4 {
   margin: 0;
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--black);
 }
 
-.reservation-card-content p {
+.planning-reservation-card-content p {
   margin: 6px 0 0;
   font-size: 0.95rem;
   color: var(--gray-600);
 }
 
-.reservation-card-right {
+.planning-reservation-card-right {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 8px;
 }
 
-.reservation-card-status {
+.planning-reservation-card-status {
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 0.8rem;
   font-weight: 700;
 }
 
-.reservation-card-status.confirmed {
+.planning-reservation-card-status.confirmed {
   background: #f7f0df;
   color: var(--gold-dark);
 }
 
-.reservation-card-status.pending {
+.planning-reservation-card-status.pending {
   background: #fff0d9;
   color: var(--gold-dark);
 }
 
-.reservation-card-status.cancelled {
+.planning-reservation-card-status.cancelled {
   background: #efefef;
   color: var(--gray-600);
 }
 
-.reservation-card-duration {
+.planning-reservation-card-duration {
   font-size: 0.9rem;
   font-weight: 700;
   color: var(--gray-600);
