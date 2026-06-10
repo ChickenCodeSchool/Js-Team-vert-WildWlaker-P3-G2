@@ -1,0 +1,75 @@
+import { useMemo, useState } from "react";
+
+export interface AdminFilterState {
+  searchTerm: string;
+  departmentFilter: string;
+  statusFilter: string;
+  dateSortOrder: "asc" | "desc";
+}
+
+export function useAdminFilters<
+  T extends {
+    create_time: string;
+    status?: string;
+    postal_code?: string;
+    firstname?: string;
+    lastname?: string;
+  },
+>(initialData: T[], searchFields: (keyof T)[] = ["firstname", "lastname"]) {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
+
+  const filteredData = useMemo(() => {
+    let result = [...initialData];
+
+    if (searchTerm.trim()) {
+      const lower = searchTerm.toLowerCase();
+      result = result.filter((item) =>
+        searchFields.some((field) => {
+          const val = item[field];
+          return val && String(val).toLowerCase().includes(lower);
+        }),
+      );
+    }
+
+    if (departmentFilter) {
+      result = result.filter((item) => {
+        const val = item.postal_code;
+        return val && String(val).startsWith(departmentFilter);
+      });
+    }
+
+    if (statusFilter) {
+      result = result.filter((item) => item.status === statusFilter);
+    }
+
+    result.sort((a, b) => {
+      const dateA = new Date(a.create_time).getTime();
+      const dateB = new Date(b.create_time).getTime();
+      return dateSortOrder === "desc" ? dateB - dateA : dateA - dateB;
+    });
+
+    return result;
+  }, [
+    initialData,
+    searchTerm,
+    departmentFilter,
+    statusFilter,
+    dateSortOrder,
+    searchFields,
+  ]);
+
+  return {
+    searchTerm,
+    setSearchTerm,
+    departmentFilter,
+    setDepartmentFilter,
+    statusFilter,
+    setStatusFilter,
+    dateSortOrder,
+    setDateSortOrder,
+    filteredData,
+  };
+}

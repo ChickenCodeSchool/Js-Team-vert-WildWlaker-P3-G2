@@ -2,7 +2,6 @@ import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
-import Swal from "sweetalert2";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
 import EditUserModal from "../../../components/admin/editUserModal/EditUserModal";
@@ -11,6 +10,8 @@ import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+import { useAdminFilters } from "../../../hooks/useAdminFilter";
+import { useEntityActions } from "../../../hooks/useEntityActions";
 
 import type { Appointment } from "../../../types/appointment";
 import type { Customer } from "../../../types/Customer";
@@ -34,10 +35,6 @@ function Users() {
   const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
     [],
   );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedCustomer, setSelectedCustomer] = useState<
     (Customer & { id: number }) | null
   >(null);
@@ -55,12 +52,11 @@ function Users() {
           ...item,
           id: item.id_user,
         }));
-        const sortedData = [...formattedData].sort((a, b) => {
-          return (
+        const sortedData = [...formattedData].sort(
+          (a, b) =>
             new Date(b.create_time).getTime() -
-            new Date(a.create_time).getTime()
-          );
-        });
+            new Date(a.create_time).getTime(),
+        );
         setCustomers(formattedData);
         if (sortedData.length > 0) {
           setSelectedCustomer((prev) => {
@@ -94,6 +90,29 @@ function Users() {
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
+  const {
+    searchTerm,
+    setSearchTerm,
+    departmentFilter,
+    setDepartmentFilter,
+    statusFilter,
+    setStatusFilter,
+    dateSortOrder,
+    setDateSortOrder,
+    filteredData,
+  } = useAdminFilters<Customer & { id: number }>(customers, [
+    "firstname",
+    "lastname",
+  ]);
+
+  const { handleSave, handleToggleSuspend } = useEntityActions<
+    Customer & { id: number }
+  >({
+    apiBase: API_URL,
+    idField: "customers",
+    onActionComplete: loadAllData,
+  });
+
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
@@ -104,28 +123,23 @@ function Users() {
   }, [customers]);
 
   const selectedCustomerStats = useMemo(() => {
-    if (!selectedCustomer) {
+    if (!selectedCustomer)
       return { total: 0, canceled: 0, reviewsCount: 0, reported: 0 };
-    }
     const customerApps = monthlyAppointments.filter(
-      (app: Appointment) => app.id_user_customer === selectedCustomer.id_user,
+      (app) => app.id_user_customer === selectedCustomer.id_user,
     );
-
     const total = customerApps.length;
     const canceled = customerApps.filter(
-      (app: Appointment) => app.status === "cancelled",
+      (app) => app.status === "cancelled",
     ).length;
-    const customerAppIds = customerApps.map(
-      (app: Appointment) => app.id_appointment,
-    );
-    const customerReviews = reviews.filter((rev: Review) =>
+    const customerAppIds = customerApps.map((app) => app.id_appointment);
+    const customerReviews = reviews.filter((rev) =>
       customerAppIds.includes(rev.id_appointment),
     );
     const reviewsCount = customerReviews.length;
     const reported = customerReviews.filter(
-      (rev: Review) => rev.reporting === 1,
+      (rev) => rev.reporting === 1,
     ).length;
-
     return { total, canceled, reviewsCount, reported };
   }, [selectedCustomer, monthlyAppointments, reviews]);
 
@@ -139,44 +153,9 @@ function Users() {
   const uniqueStatus = useMemo(() => {
     const statusList = customers
       .map((c) => c.status || "")
-      .filter((status) => status.trim() !== "");
+      .filter((s) => s.trim() !== "");
     return Array.from(new Set(statusList)).sort();
   }, [customers]);
-
-  const filteredCustomers = useMemo(() => {
-    let result = [...customers];
-
-    if (searchTerm.trim() !== "") {
-      const lowerSearch = searchTerm.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.firstname.toLowerCase().includes(lowerSearch) ||
-          c.lastname.toLowerCase().includes(lowerSearch),
-      );
-    }
-
-    if (departmentFilter !== "") {
-      result = result.filter((c) => c.postal_code.startsWith(departmentFilter));
-    }
-
-    if (statusFilter !== "") {
-      result = result.filter((c) => c.status === statusFilter);
-    }
-
-    if (dateSortOrder === "desc") {
-      result.sort(
-        (a, b) =>
-          new Date(b.create_time).getTime() - new Date(a.create_time).getTime(),
-      );
-    } else if (dateSortOrder === "asc") {
-      result.sort(
-        (a, b) =>
-          new Date(a.create_time).getTime() - new Date(b.create_time).getTime(),
-      );
-    }
-
-    return result;
-  }, [customers, searchTerm, departmentFilter, statusFilter, dateSortOrder]);
 
   const columns: DataGridColumn<Customer & { id: number }>[] = [
     {
@@ -248,8 +227,7 @@ function Users() {
           <button
             type="button"
             className="user-grid-icon-btn"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               setSelectedCustomer(customer);
               setIsEditModalOpen(true);
             }}
@@ -261,138 +239,6 @@ function Users() {
       ),
     },
   ];
-
-  const handleSaveCustomer = async (updatedData: Customer & { id: number }) => {
-    const originalCustomer = customers.find(
-      (c) => c.id_user === updatedData.id_user,
-    );
-
-    if (originalCustomer && originalCustomer.status !== updatedData.status) {
-      const isGoingToSuspend = updatedData.status?.toLowerCase() === "suspendu";
-
-      const result = await Swal.fire({
-        title: isGoingToSuspend
-          ? "Suspendre le compte ?"
-          : "Réactiver le compte ?",
-        text: isGoingToSuspend
-          ? `Vous changez le statut vers "Suspendu". Êtes-vous sûr de vouloir suspendre ${updatedData.firstname} ${updatedData.lastname} ?`
-          : `Vous allez réactiver le compte de ${updatedData.firstname} ${updatedData.lastname}. Confirmer ?`,
-        icon: isGoingToSuspend ? "warning" : "success",
-        showCancelButton: true,
-        confirmButtonColor: isGoingToSuspend ? "#ff9f43" : "#10ac84",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Oui, confirmer",
-        cancelButtonText: "Annuler",
-        backdrop: `rgba(0,0,0,0.4)`,
-      });
-
-      if (!result.isConfirmed) {
-        return;
-      }
-    }
-
-    try {
-      const payload = {
-        ...updatedData,
-        birthday: updatedData.birthday
-          ? new Date(updatedData.birthday).toISOString().split("T")[0]
-          : null,
-      };
-
-      const response = await fetch(
-        `${API_URL}/api/customers/${updatedData.id_user}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour du client");
-      }
-
-      Swal.fire({
-        icon: "success",
-        title: "Succès !",
-        text: "Le profil a été mis à jour avec succès.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-
-      loadAllData();
-      setIsEditModalOpen(false);
-    } catch (error) {
-      console.error("Erreur onSave :", error);
-      Swal.fire({
-        icon: "error",
-        title: "Oups...",
-        text: "Une erreur est survenue lors de l'enregistrement.",
-      });
-    }
-  };
-
-  const handleToggleSuspendCustomer = async (
-    customer: Customer & { id: number },
-  ) => {
-    const isCurrentlySuspended = customer.status?.toLowerCase() === "suspendu";
-    const nextStatus = isCurrentlySuspended ? "Actif" : "Suspendu";
-
-    const result = await Swal.fire({
-      title: isCurrentlySuspended
-        ? "Réactiver le compte ?"
-        : "Suspendre le compte ?",
-      text: `Êtes-vous sûr de vouloir ${isCurrentlySuspended ? "réactiver" : "suspendre"} le compte de ${customer.firstname} ${customer.lastname} ?`,
-      icon: isCurrentlySuspended ? "success" : "warning",
-      showCancelButton: true,
-      confirmButtonColor: isCurrentlySuspended ? "#10ac84" : "#ff9f43",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Oui, confirmer",
-      cancelButtonText: "Annuler",
-    });
-    if (!result.isConfirmed) {
-      return;
-    }
-
-    try {
-      const payload = {
-        ...customer,
-        status: nextStatus,
-        birthday: customer.birthday
-          ? new Date(customer.birthday).toISOString().split("T")[0]
-          : null,
-      };
-
-      const response = await fetch(
-        `${API_URL}/api/customers/${customer.id_user}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour du client");
-      }
-
-      loadAllData();
-      Swal.fire({
-        icon: "success",
-        title: "Succès !",
-        text: `Le compte est maintenant ${nextStatus}`,
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      console.error("Erreur lors de la suspension :", error);
-      Swal.fire("Erreur", "Une erreur est survenue", "error");
-    }
-  };
 
   return (
     <div className="admin-users-body">
@@ -449,7 +295,7 @@ function Users() {
           <div>
             <UserDataGrid
               columns={columns}
-              data={filteredCustomers}
+              data={filteredData}
               onRowClick={(customer) => setSelectedCustomer(customer)}
               rowsPerPage={6}
               selectedId={selectedCustomer?.id}
@@ -462,9 +308,7 @@ function Users() {
               selectedCustomer={selectedCustomer}
               selectedCustomerStats={selectedCustomerStats}
               onEditClick={() => setIsEditModalOpen(true)}
-              onToggleSuspendClick={() =>
-                handleToggleSuspendCustomer(selectedCustomer)
-              }
+              onToggleSuspendClick={() => handleToggleSuspend(selectedCustomer)}
             />
           ) : (
             <div className="no-user-selected">
@@ -477,8 +321,8 @@ function Users() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         customer={selectedCustomer}
-        onSave={handleSaveCustomer}
-        onToggleSuspend={handleToggleSuspendCustomer}
+        onSave={handleSave}
+        onToggleSuspend={handleToggleSuspend}
       />
     </div>
   );
