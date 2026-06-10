@@ -16,6 +16,8 @@ import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
+import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
+import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
@@ -25,7 +27,6 @@ import SearchPage from "./pages/customer/search/SearchPage";
 
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
-
 // import About from "./pages/About";
 // import Contact from "./pages/Contact";
 
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
           { path: "booking", element: <BookingPage /> },
           { path: "reservations/:id", element: <Reservations /> },
           { path: "profile", element: <UserProfile /> },
+          { path: "avis", element: <CustomerAvis /> },
           { path: "login", element: <Login /> },
         ],
       },
@@ -63,9 +65,11 @@ const router = createBrowserRouter([
         path: "/barber",
         element: <BarberLayout />,
         children: [
+          { index: true, element: <Navigate to="dashBoard" replace /> },
           { path: "profile", element: <BarberProfil /> },
           { path: "prestations", element: <BarberPrestation /> },
           { path: "dashboard", element: <BarberDashBoard /> },
+          { path: "planning", element: <BarberPlanning /> },
           { path: "signalement", element: <BarberSignalement /> },
         ],
       },

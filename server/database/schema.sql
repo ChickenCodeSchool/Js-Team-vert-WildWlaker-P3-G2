@@ -10,6 +10,10 @@ CREATE TABLE users (
     user_type VARCHAR(20) NOT NULL,
     avatar_url VARCHAR(255) DEFAULT 'default-avatar.png',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
+    phone VARCHAR(20) DEFAULT NULL,
+    birthday DATE DEFAULT NULL,
+    genre VARCHAR(20) DEFAULT NULL,
+    annotations TEXT DEFAULT NULL,
     CONSTRAINT pk_users PRIMARY KEY (id_user)
 );
 
@@ -51,6 +55,7 @@ CREATE TABLE customer (
     postal_code VARCHAR(10) NOT NULL,
     city VARCHAR(100) NOT NULL,
     adress VARCHAR(255) NOT NULL,
+    status VARCHAR(20) NOT NULL DEFAULT 'Actif',
     CONSTRAINT pk_customer PRIMARY KEY (id_user),
     CONSTRAINT fk_customer_users FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );

@@ -37,9 +37,13 @@
           &:hover {
             transform: translateY(-1px);
             box-shadow: var(--shadow-md);
-            background: var(--second-gradient);
+            background: var(--gold-soft);
           }
-
+          &.selected-row {
+            background-color: var(--gold-soft);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--gold);
+          }
           td {
             padding: 16px;
             color: var(--black);
@@ -68,7 +72,6 @@
     }
   }
 
-  /* Style de la pagination Secare */
   .grid-pagination-container {
     display: flex;
     justify-content: space-between;
