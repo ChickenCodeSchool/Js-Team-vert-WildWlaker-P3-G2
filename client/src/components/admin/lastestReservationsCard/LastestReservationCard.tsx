@@ -79,7 +79,7 @@ function LatestReservationsCard() {
   }, []);
 
   return (
-    <div className="reservations-card">
+    <div className="lastestreservations-card">
       <div className="card-header">
         <h3 className="card-title">Dernières réservations</h3>
         <NavLink to="/admin/reservations" className="see-all-link">
