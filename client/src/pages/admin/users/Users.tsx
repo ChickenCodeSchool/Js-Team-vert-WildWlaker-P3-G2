@@ -111,6 +111,7 @@ function Users() {
     apiBase: API_URL,
     idField: "customers",
     onActionComplete: loadAllData,
+    onClose: () => setIsEditModalOpen(false),
   });
 
   useEffect(() => {

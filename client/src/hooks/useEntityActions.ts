@@ -9,16 +9,18 @@ export interface BaseEntity {
   birthday?: string | null;
 }
 
-const formatBirthday = (val: string | null | undefined) => {
+const formatBirthday = (val: string | null | undefined): string | null => {
   if (!val) return null;
   return String(val).substring(0, 10);
 };
+
 export function useEntityActions<T extends BaseEntity>(options: {
   apiBase: string;
   idField: string;
   onActionComplete?: () => void;
+  onClose?: () => void;
 }) {
-  const { apiBase, idField, onActionComplete } = options;
+  const { apiBase, idField, onActionComplete, onClose } = options;
 
   const handleSave = useCallback(
     async (entity: T) => {
@@ -64,6 +66,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
           showConfirmButton: false,
         });
         onActionComplete?.();
+        onClose?.();
       } catch (error) {
         console.error("Erreur onSave :", error);
         Swal.fire({
@@ -73,7 +76,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
         });
       }
     },
-    [apiBase, idField, onActionComplete],
+    [apiBase, idField, onActionComplete, onClose],
   );
 
   const handleToggleSuspend = useCallback(
@@ -117,12 +120,13 @@ export function useEntityActions<T extends BaseEntity>(options: {
           showConfirmButton: false,
         });
         onActionComplete?.();
+        onClose?.();
       } catch (error) {
         console.error("Erreur toggle :", error);
         Swal.fire("Erreur", "Une erreur est survenue", "error");
       }
     },
-    [apiBase, idField, onActionComplete],
+    [apiBase, idField, onActionComplete, onClose],
   );
 
   return { handleSave, handleToggleSuspend };
