@@ -15,9 +15,9 @@ import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
-// import PlanningCalendar from "./components/barber/planning/PlanningCalendar";
+import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
-// import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
+import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import Home from "./pages/customer/home/Home";
@@ -46,6 +46,7 @@ const router = createBrowserRouter([
           { path: "search", element: <SearchPage /> },
           { path: "booking", element: <BookingPage /> },
           { path: "reservations/:id", element: <Reservations /> },
+          { path: "avis", element: <CustomerAvis /> },
           { path: "login", element: <Login /> },
         ],
       },
@@ -67,6 +68,7 @@ const router = createBrowserRouter([
           { path: "prestations", element: <BarberPrestation /> },
           { path: "dashboard", element: <BarberDashBoard /> },
           { path: "planning", element: <BarberPlanning /> },
+          { path: "signalement", element: <BarberSignalement /> },
         ],
       },
     ],

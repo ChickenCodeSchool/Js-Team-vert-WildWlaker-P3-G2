@@ -4,10 +4,16 @@ import { useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
+import EditUserModal from "../../../components/admin/editUserModal/EditUserModal";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
+import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+
+import type { Appointment } from "../../../types/appointment";
+import type { Customer } from "../../../types/Customer";
+import type { Review } from "../../../types/review";
 
 import "./Users.css";
 
@@ -21,26 +27,20 @@ const thisMonthRange = {
 };
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
-interface Customer {
-  id_user: number;
-  firstname: string;
-  lastname: string;
-  postal_code: string;
-  city: string;
-  adress: string;
-  avatar_url: string;
-  create_time: string;
-  email: string;
-}
-
 function Users() {
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
-  const [monthlyNewUsers, setMonthlyNewUsers] = useState([]);
-  const [monthlyAppointments, setMonthlyAppointments] = useState([]);
-
+  const [monthlyNewUsers, setMonthlyNewUsers] = useState<Customer[]>([]);
+  const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
+    [],
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
+  const [selectedCustomer, setSelectedCustomer] = useState<
+    (Customer & { id: number }) | null
+  >(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/customers`)
@@ -53,22 +53,67 @@ function Users() {
           ...item,
           id: item.id_user,
         }));
+        const sortedData = [...formattedData].sort((a, b) => {
+          return (
+            new Date(b.create_time).getTime() -
+            new Date(a.create_time).getTime()
+          );
+        });
         setCustomers(formattedData);
+        if (sortedData.length > 0) {
+          setSelectedCustomer(sortedData[0]);
+        }
       })
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
 
+    fetch(`${API_URL}/api/reviews`)
+      .then((res) => res.json())
+      .then((data: Review[]) => setReviews(data))
+      .catch((err) => console.error("Erreur lors du fetch des avis :", err));
+
     fetch(`${API_URL}/api/customers${params}`)
       .then((res) => res.json())
-      .then((data) => setMonthlyNewUsers(data))
+      .then((data: Customer[]) => setMonthlyNewUsers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
 
     fetch(`${API_URL}/api/appointments${params}`)
       .then((res) => res.json())
-      .then((data) => setMonthlyAppointments(data))
+      .then((data: Appointment[]) => setMonthlyAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
+
+  const suspendedAccountsCount = useMemo(() => {
+    return customers.filter((c) => c.status?.toLowerCase() === "suspendu")
+      .length;
+  }, [customers]);
+
+  const selectedCustomerStats = useMemo(() => {
+    if (!selectedCustomer) {
+      return { total: 0, canceled: 0, reviewsCount: 0, reported: 0 };
+    }
+    const customerApps = monthlyAppointments.filter(
+      (app: Appointment) => app.id_user_customer === selectedCustomer.id_user,
+    );
+
+    const total = customerApps.length;
+    const canceled = customerApps.filter(
+      (app: Appointment) => app.status === "cancelled",
+    ).length;
+    const customerAppIds = customerApps.map(
+      (app: Appointment) => app.id_appointment,
+    );
+    const customerReviews = reviews.filter((rev: Review) =>
+      customerAppIds.includes(rev.id_appointment),
+    );
+    const reviewsCount = customerReviews.length;
+    const reported = customerReviews.filter(
+      (rev: Review) => rev.reporting === 1,
+    ).length;
+
+    return { total, canceled, reviewsCount, reported };
+  }, [selectedCustomer, monthlyAppointments, reviews]);
 
   const uniqueDepartments = useMemo(() => {
     const depts = customers
@@ -149,6 +194,13 @@ function Users() {
       ),
     },
     {
+      key: "status",
+      header: "Status",
+      render: (customer) => (
+        <div className="user-grid-info">{customer.status}</div>
+      ),
+    },
+    {
       key: "create_time",
       header: "Date de création",
       render: (customer) => (
@@ -167,7 +219,11 @@ function Users() {
           <button
             type="button"
             className="user-grid-icon-btn"
-            onClick={() => console.log("Voir", customer.id_user)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedCustomer(customer);
+              setIsEditModalOpen(true);
+            }}
             title="Voir"
           >
             <FiEye />
@@ -177,8 +233,45 @@ function Users() {
     },
   ];
 
+  const handleSaveCustomer = async (updatedData: Customer) => {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/customers/${updatedData.id_user}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedData),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour du client");
+      }
+
+      setCustomers((prevCustomers) =>
+        prevCustomers.map((c) =>
+          c.id_user === updatedData.id_user ? { ...c, ...updatedData } : c,
+        ),
+      );
+
+      if (selectedCustomer?.id_user === updatedData.id_user) {
+        setSelectedCustomer({
+          ...selectedCustomer,
+          ...updatedData,
+        });
+      }
+
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error("Erreur onSave :", error);
+      alert("Une erreur est survenue lors de l'enregistrement.");
+    }
+  };
+
   return (
-    <div className="admin-users-main">
+    <div className="admin-users-body">
       <div className="admin-users-header">
         <div className="admin-users-title">
           <FiUserPlus className="admin-users-title-icon" />
@@ -186,54 +279,76 @@ function Users() {
         </div>
         <p>Gérez et suivez les utilisateurs de votre plateforme</p>
       </div>
-
-      <div className="admin-users-body">
-        <div className="admin-users-body-stats">
-          <StatsCard
-            Icon={FiUserPlus}
-            title="utilisateurs"
-            value={customers.length}
-            cycle="Total"
+      <main className="admin-users-main">
+        <section className="admin-users-main-left">
+          <div className="admin-users-body-stats">
+            <StatsCard
+              Icon={FiUserPlus}
+              title="utilisateurs"
+              value={customers.length}
+              cycle="Total"
+            />
+            <StatsCard
+              Icon={FiUserPlus}
+              iconColor="icon-success"
+              title="Nouveaux utilisateurs"
+              value={monthlyNewUsers.length}
+              cycle="Les 30 derniers jours"
+            />
+            <StatsCard
+              Icon={FiPause}
+              iconColor="icon-warning"
+              title="Comptes suspendus"
+              value={suspendedAccountsCount}
+              cycle="Total"
+            />
+            <StatsCard
+              Icon={FiCalendar}
+              iconColor="icon-info"
+              title="Réservations"
+              value={monthlyAppointments.length}
+              cycle="Les 30 derniers jours"
+            />
+          </div>
+          <AdminFilterBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            departmentFilter={departmentFilter}
+            setDepartmentFilter={setDepartmentFilter}
+            dateSortOrder={dateSortOrder}
+            setDateSortOrder={setDateSortOrder}
+            departments={uniqueDepartments}
           />
-          <StatsCard
-            Icon={FiUserPlus}
-            iconColor="icon-success"
-            title="Nouveaux utilisateurs"
-            value={monthlyNewUsers.length}
-            cycle="Les 30 derniers jours"
-          />
-          <StatsCard
-            Icon={FiPause}
-            iconColor="icon-warning"
-            title="Comptes suspendus"
-            value={25}
-            cycle="Total"
-          />
-          <StatsCard
-            Icon={FiCalendar}
-            iconColor="icon-info"
-            title="Réservations"
-            value={monthlyAppointments.length}
-            cycle="Les 30 derniers jours"
-          />
-        </div>
-        <AdminFilterBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          departmentFilter={departmentFilter}
-          setDepartmentFilter={setDepartmentFilter}
-          dateSortOrder={dateSortOrder}
-          setDateSortOrder={setDateSortOrder}
-          departments={uniqueDepartments}
-        />
-        <div>
-          <UserDataGrid
-            columns={columns}
-            data={filteredCustomers}
-            rowsPerPage={6}
-          />
-        </div>
-      </div>
+          <div>
+            <UserDataGrid
+              columns={columns}
+              data={filteredCustomers}
+              onRowClick={(customer) => setSelectedCustomer(customer)}
+              rowsPerPage={6}
+              selectedId={selectedCustomer?.id}
+            />
+          </div>
+        </section>
+        <aside className="admin-users-main-aside">
+          {selectedCustomer ? (
+            <UserProfilCard
+              selectedCustomer={selectedCustomer}
+              selectedCustomerStats={selectedCustomerStats}
+              onEditClick={() => setIsEditModalOpen(true)}
+            />
+          ) : (
+            <div className="no-user-selected">
+              <p>Sélectionnez un utilisateur pour voir son profil</p>
+            </div>
+          )}
+        </aside>
+      </main>
+      <EditUserModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        customer={selectedCustomer}
+        onSave={handleSaveCustomer}
+      />
     </div>
   );
 }

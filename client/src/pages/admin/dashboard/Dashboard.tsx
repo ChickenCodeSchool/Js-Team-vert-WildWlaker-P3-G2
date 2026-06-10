@@ -25,39 +25,15 @@ import ReservationStatusGraph from "../../../components/admin/reservationsStatus
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import UpcomingEventCard from "../../../components/admin/upcomingEventCard/UpcomingEventCard";
 
+import type { Barber } from "../../../types/barber";
+import type { Review } from "../../../types/review";
+import type { User } from "../../../types/user";
 import "./Dashboard.css";
-
-type reviewItem = {
-  reported: boolean;
-  rating: number;
-  created_at: string;
-};
 
 type RawAppointment = {
   id_appointment: number;
   appointment_date: string;
   status: string;
-};
-
-type RawUser = {
-  id_user: number;
-  email: string;
-  user_type: string;
-  avatar_url: string;
-  create_time: string;
-};
-
-type RawBarber = {
-  id_user: number;
-  name: string;
-  description: string;
-  postal_code: string;
-  city: string;
-  adress: string;
-  delivery_radius: number;
-  status: string;
-  avatar_url: string;
-  create_time: string;
 };
 
 type FormattedChartData = {
@@ -115,17 +91,17 @@ const calculateEvolution = (current: number, previous: number): string => {
 function Dashboard() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const [barbers, setBarbers] = useState<RawBarber[]>([]);
-  const [users, setUsers] = useState<RawUser[]>([]);
+  const [barbers, setBarbers] = useState<Barber[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [appointments, setAppointments] = useState<RawAppointment[]>([]);
-  const [reviews, setReviews] = useState<reviewItem[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-  const [prevBarbers, setPrevBarbers] = useState<RawBarber[]>([]);
-  const [prevUsers, setPrevUsers] = useState<RawUser[]>([]);
+  const [prevBarbers, setPrevBarbers] = useState<Barber[]>([]);
+  const [prevUsers, setPrevUsers] = useState<User[]>([]);
   const [prevAppointments, setPrevAppointments] = useState<RawAppointment[]>(
     [],
   );
-  const [prevReviews, setPrevReviews] = useState<reviewItem[]>([]);
+  const [prevReviews, setPrevReviews] = useState<Review[]>([]);
 
   const weekOptions = useMemo(() => generateDynamicWeeks(), []);
   const defaultWeek = weekOptions.find((w) => w.isCurrent) || weekOptions[4];
@@ -197,7 +173,7 @@ function Dashboard() {
 
   const reportedReviewsTrend = useMemo(() => {
     const reportedItems = reviews
-      .filter((r) => r.reported)
+      .filter((r) => r.reporting)
       .map((rev) => ({ create_time: rev.created_at }));
     return getTrendData(reportedItems, daysOfWeek);
   }, [reviews, daysOfWeek]);
@@ -225,8 +201,8 @@ function Dashboard() {
   }, [reviews, prevReviews]);
 
   const reportedReviewsEvolution = useMemo(() => {
-    const currentReported = reviews.filter((r) => r.reported).length;
-    const prevReported = prevReviews.filter((r) => r.reported).length;
+    const currentReported = reviews.filter((r) => r.reporting).length;
+    const prevReported = prevReviews.filter((r) => r.reporting).length;
     return calculateEvolution(currentReported, prevReported);
   }, [reviews, prevReviews]);
 
@@ -316,7 +292,7 @@ function Dashboard() {
         <StatsGraphCard
           Icon={FiFlag}
           title="Avis signalés"
-          value={reviews.filter((review) => review.reported).length}
+          value={reviews.filter((review) => review.reporting).length}
           evolution={reportedReviewsEvolution}
           graphData={reportedReviewsTrend}
         />
