@@ -1,6 +1,6 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
@@ -35,6 +35,7 @@ function Users() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState(""); // Filtre existant
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedCustomer, setSelectedCustomer] = useState<
     (Customer & { id: number }) | null
@@ -42,7 +43,7 @@ function Users() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  useEffect(() => {
+  const loadAllData = useCallback(() => {
     fetch(`${API_URL}/api/customers`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
@@ -84,6 +85,10 @@ function Users() {
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
+  useEffect(() => {
+    loadAllData();
+  }, [loadAllData]);
+
   const suspendedAccountsCount = useMemo(() => {
     return customers.filter((c) => c.status?.toLowerCase() === "suspendu")
       .length;
@@ -122,6 +127,13 @@ function Users() {
     return Array.from(new Set(depts)).sort();
   }, [customers]);
 
+  const uniqueStatus = useMemo(() => {
+    const statusList = customers
+      .map((c) => c.status || "")
+      .filter((status) => status.trim() !== "");
+    return Array.from(new Set(statusList)).sort();
+  }, [customers]);
+
   const filteredCustomers = useMemo(() => {
     let result = [...customers];
 
@@ -138,6 +150,10 @@ function Users() {
       result = result.filter((c) => c.postal_code.startsWith(departmentFilter));
     }
 
+    if (statusFilter !== "") {
+      result = result.filter((c) => c.status === statusFilter);
+    }
+
     if (dateSortOrder === "desc") {
       result.sort(
         (a, b) =>
@@ -151,7 +167,7 @@ function Users() {
     }
 
     return result;
-  }, [customers, searchTerm, departmentFilter, dateSortOrder]);
+  }, [customers, searchTerm, departmentFilter, statusFilter, dateSortOrder]);
 
   const columns: DataGridColumn<Customer & { id: number }>[] = [
     {
@@ -197,7 +213,9 @@ function Users() {
       key: "status",
       header: "Status",
       render: (customer) => (
-        <div className="user-grid-info">{customer.status}</div>
+        <div className={`user-grid-info ${customer.status}`}>
+          {customer.status}
+        </div>
       ),
     },
     {
@@ -250,18 +268,7 @@ function Users() {
         throw new Error("Erreur lors de la mise à jour du client");
       }
 
-      setCustomers((prevCustomers) =>
-        prevCustomers.map((c) =>
-          c.id_user === updatedData.id_user ? { ...c, ...updatedData } : c,
-        ),
-      );
-
-      if (selectedCustomer?.id_user === updatedData.id_user) {
-        setSelectedCustomer({
-          ...selectedCustomer,
-          ...updatedData,
-        });
-      }
+      loadAllData();
 
       setIsEditModalOpen(false);
     } catch (error) {
@@ -315,9 +322,12 @@ function Users() {
             setSearchTerm={setSearchTerm}
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
             dateSortOrder={dateSortOrder}
             setDateSortOrder={setDateSortOrder}
             departments={uniqueDepartments}
+            status={uniqueStatus}
           />
           <div>
             <UserDataGrid
