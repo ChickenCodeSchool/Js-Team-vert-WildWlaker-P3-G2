@@ -91,32 +91,87 @@
       color: var(--black);
     }
     .userProfilCard-action-button {
-      background-color: var(--white);
-      border-radius: var(--radius-md);
-      border: 1px solid var(--gray-300);
-      box-shadow: none;
-      outline: none;
-      font-family: var(--font-body);
-      font-size: 16px;
-      padding: 10px 0;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
       display: flex;
       align-items: center;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 16px;
+      padding: 10px 10px 10px 10px;
       gap: 15px;
-      padding-left: 15px;
-
-      &:hover {
-        background-color: var(--gray-50);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      color: var(--gray-900);
+      background-color: var(--white);
+      transition: var(--transition);
+      svg {
+        color: var(--gray-600);
+        transition: var(--transition);
       }
-    }
-
-    .userProfilCard-action-button:last-child {
-      color: var(--error);
-      border: 1px solid var(--error);
 
       &:hover {
-        background-color: #fff5f5;
+        background: var(--gold-soft);
+        border-color: var(--gold);
+        color: var(--gold-dark);
+
+        svg {
+          color: var(--gold-dark);
+        }
+      }
+
+      &.suspend-btn {
+        background: var(--white);
+        border-color: var(--warning);
+        color: var(--warning);
+
+        svg {
+          color: var(--warning);
+        }
+
+        &:hover {
+          background: var(--warning);
+          color: var(--white);
+
+          svg {
+            color: var(--white);
+          }
+        }
+      }
+      &.active-btn {
+        background: var(--white);
+        border-color: var(--success);
+        color: var(--success);
+
+        svg {
+          color: var(--success);
+        }
+
+        &:hover {
+          background: var(--success);
+          color: var(--white);
+
+          svg {
+            color: var(--white);
+          }
+        }
+      }
+
+      &.delete-btn {
+        background: var(--white);
+        border-color: var(--error);
+        color: var(--error);
+
+        svg {
+          color: var(--error);
+        }
+
+        &:hover {
+          background: var(--error);
+          color: var(--white);
+
+          svg {
+            color: var(--white);
+          }
+        }
       }
     }
   }

@@ -265,6 +265,24 @@
               }
             }
           }
+          &.active-btn {
+            background: var(--white);
+            border-color: var(--success);
+            color: var(--success);
+
+            svg {
+              color: var(--success);
+            }
+
+            &:hover {
+              background: var(--success);
+              color: var(--white);
+
+              svg {
+                color: var(--white);
+              }
+            }
+          }
 
           &.delete-btn {
             background: var(--white);

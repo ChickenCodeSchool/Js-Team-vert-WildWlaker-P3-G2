@@ -67,14 +67,14 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
-        &.Actif {
+        &.status-actif {
           align-items: center;
           padding: 5px 0px 5px 0px;
           border-radius: var(--radius-md);
           color: var(--success);
           background-color: #e6f4ea;
         }
-        &.Suspendu {
+        &.status-suspendu {
           align-items: center;
           padding: 5px 0px 5px 0px;
           border-radius: var(--radius-md);

@@ -35,7 +35,7 @@ function Users() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState(""); // Filtre existant
+  const [statusFilter, setStatusFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedCustomer, setSelectedCustomer] = useState<
     (Customer & { id: number }) | null
@@ -62,7 +62,15 @@ function Users() {
         });
         setCustomers(formattedData);
         if (sortedData.length > 0) {
-          setSelectedCustomer(sortedData[0]);
+          setSelectedCustomer((prev) => {
+            if (prev) {
+              const current = formattedData.find(
+                (c) => c.id_user === prev.id_user,
+              );
+              return current || sortedData[0];
+            }
+            return sortedData[0];
+          });
         }
       })
       .catch((err) =>
@@ -213,7 +221,9 @@ function Users() {
       key: "status",
       header: "Status",
       render: (customer) => (
-        <div className={`user-grid-info ${customer.status}`}>
+        <div
+          className={`user-grid-info status-${customer.status?.toLowerCase()}`}
+        >
           {customer.status}
         </div>
       ),
@@ -251,8 +261,30 @@ function Users() {
     },
   ];
 
-  const handleSaveCustomer = async (updatedData: Customer) => {
+  const handleSaveCustomer = async (updatedData: Customer & { id: number }) => {
+    const originalCustomer = customers.find(
+      (c) => c.id_user === updatedData.id_user,
+    );
+
+    if (originalCustomer && originalCustomer.status !== updatedData.status) {
+      const isGoingToSuspend = updatedData.status?.toLowerCase() === "suspendu";
+      const confirmMessage = isGoingToSuspend
+        ? `Vous changez le statut vers "Suspendu". Êtes-vous sûr de vouloir suspendre ${updatedData.firstname} ${updatedData.lastname} ?`
+        : `Vous allez réactiver le compte de ${updatedData.firstname} ${updatedData.lastname}. Confirmer ?`;
+
+      if (!window.confirm(confirmMessage)) {
+        return;
+      }
+    }
+
     try {
+      const payload = {
+        ...updatedData,
+        birthday: updatedData.birthday
+          ? new Date(updatedData.birthday).toISOString().split("T")[0]
+          : null,
+      };
+
       const response = await fetch(
         `${API_URL}/api/customers/${updatedData.id_user}`,
         {
@@ -260,7 +292,7 @@ function Users() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedData),
+          body: JSON.stringify(payload),
         },
       );
 
@@ -269,11 +301,55 @@ function Users() {
       }
 
       loadAllData();
-
       setIsEditModalOpen(false);
     } catch (error) {
       console.error("Erreur onSave :", error);
       alert("Une erreur est survenue lors de l'enregistrement.");
+    }
+  };
+  const handleToggleSuspendCustomer = async (
+    customer: Customer & { id: number },
+  ) => {
+    const isCurrentlySuspended = customer.status?.toLowerCase() === "suspendu";
+    const nextStatus = isCurrentlySuspended ? "Actif" : "Suspendu";
+
+    const confirmMessage = isCurrentlySuspended
+      ? `Êtes-vous sûr de vouloir réactiver le compte de l'utilisateur ${customer.firstname} ${customer.lastname} ?`
+      : `Êtes-vous sûr de vouloir suspendre le compte de l'utilisateur ${customer.firstname} ${customer.lastname} ?`;
+
+    if (!window.confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      const payload = {
+        ...customer,
+        status: nextStatus,
+        birthday: customer.birthday
+          ? new Date(customer.birthday).toISOString().split("T")[0]
+          : null,
+      };
+
+      const response = await fetch(
+        `${API_URL}/api/customers/${customer.id_user}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la mise à jour du client");
+      }
+
+      loadAllData();
+      alert(`Le compte a bien été basculé sur le statut : ${nextStatus}`);
+    } catch (error) {
+      console.error("Erreur lors de la suspension :", error);
+      alert("Une erreur est survenue lors du changement de statut.");
     }
   };
 
@@ -345,6 +421,9 @@ function Users() {
               selectedCustomer={selectedCustomer}
               selectedCustomerStats={selectedCustomerStats}
               onEditClick={() => setIsEditModalOpen(true)}
+              onToggleSuspendClick={() =>
+                handleToggleSuspendCustomer(selectedCustomer)
+              }
             />
           ) : (
             <div className="no-user-selected">
@@ -358,6 +437,7 @@ function Users() {
         onClose={() => setIsEditModalOpen(false)}
         customer={selectedCustomer}
         onSave={handleSaveCustomer}
+        onToggleSuspend={handleToggleSuspendCustomer}
       />
     </div>
   );

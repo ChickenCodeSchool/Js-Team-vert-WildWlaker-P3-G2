@@ -5,6 +5,7 @@ import {
   FiMapPin,
   FiPause,
   FiPhone,
+  FiPlay,
   FiTrash2,
   FiUser,
 } from "react-icons/fi";
@@ -24,13 +25,17 @@ interface UserProfilCardProps {
   selectedCustomer: Customer & { id: number };
   selectedCustomerStats: CustomerStats;
   onEditClick: () => void;
+  onToggleSuspendClick: () => void;
 }
 
 function UserProfilCard({
   selectedCustomer,
   selectedCustomerStats,
   onEditClick,
+  onToggleSuspendClick,
 }: UserProfilCardProps) {
+  const isSuspended = selectedCustomer.status?.toLowerCase() === "suspendu";
+
   return (
     <div className="userProfilCard-main">
       <h2>Détail utilisateur</h2>
@@ -89,15 +94,32 @@ function UserProfilCard({
           type="button"
           onClick={onEditClick}
         >
-          <FiUser />
-          Voir le profil
+          <FiUser /> Voir le profil
         </button>
-        <button className="userProfilCard-action-button" type="button">
-          <FiPause /> Suspendre le compte
+
+        <button
+          className={`userProfilCard-action-button ${
+            isSuspended ? "active-btn" : "suspend-btn"
+          }`}
+          type="button"
+          onClick={onToggleSuspendClick}
+        >
+          {isSuspended ? (
+            <>
+              <FiPlay /> Réactiver le compte
+            </>
+          ) : (
+            <>
+              <FiPause /> Suspendre le compte
+            </>
+          )}
         </button>
-        <button className="userProfilCard-action-button" type="button">
-          <FiTrash2 />
-          Supprimer le compte
+
+        <button
+          className="userProfilCard-action-button delete-btn"
+          type="button"
+        >
+          <FiTrash2 /> Supprimer le compte
         </button>
       </div>
     </div>
