@@ -1,27 +1,42 @@
-import { FiMail, FiMapPin, FiPhone } from "react-icons/fi";
-import type { User } from "../../../types/user";
+import { FiCalendar, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
+import type { Customer } from "../../../types/Customer";
 import "./ProfileInfo.css";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 
 type Props = {
-  user: User;
+  customer: Customer;
 };
 
-function ProfileInfo({ user }: Props) {
+function ProfileInfo({ customer }: Props) {
   return (
     <section className="profile-info">
-      <div className="profile-info__item">
-        <FiMail />
-        <span>{user.email}</span>
-      </div>
+      <div className="profile-info__card">
+        <div className="profile-info__item">
+          <FiMail className="profile-info__icon" />
+          <span className="profile-info__label">{customer.email}</span>
+        </div>
 
-      <div className="profile-info__item">
-        <FiPhone />
-        <span>Non renseigné</span>
-      </div>
+        <div className="profile-info__item">
+          <FiPhone className="profile-info__icon" />
+          <span className="profile-info__label">{customer.phone}</span>
+        </div>
 
-      <div className="profile-info__item">
-        <FiMapPin />
-        <span>Non renseigné</span>
+        <div className="profile-info__item">
+          <FiMapPin className="profile-info__icon" />
+          <span className="profile-info__label">{customer.city}</span>
+        </div>
+
+        <div className="profile-info__item">
+          <FiCalendar className="profile-info__icon" />
+          <span className="profile-info__label">
+            {customer.birthday
+              ? format(new Date(customer.birthday), "dd MMMM yyyy", {
+                  locale: fr,
+                })
+              : ""}
+          </span>
+        </div>
       </div>
     </section>
   );
