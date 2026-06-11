@@ -134,3 +134,6 @@
     }
   }
 }
+.swal2-container {
+  font-family: var(--font-body);
+}
