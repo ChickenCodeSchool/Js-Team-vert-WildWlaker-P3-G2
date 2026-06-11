@@ -36,8 +36,8 @@ function BarberProfil({
   name = "Thomas Laurent",
   email = "thomas.laurent@gmail.com",
   avatar_url,
-  telephone = "06 12 34 56 78",
-  date_naissance = "15 / 06 / 1990",
+  phone = "06 12 34 56 78",
+  birthday = "15 / 06 / 1990",
 }: BarberProfilProps) {
   const [activeTab, setActiveTab] = useState("informations");
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
@@ -129,7 +129,7 @@ function BarberProfil({
             </div>
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Téléphone</span>
-              <span className="barber-profil__info-value">{telephone}</span>
+              <span className="barber-profil__info-value">{phone}</span>
             </div>
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Email</span>
@@ -139,9 +139,7 @@ function BarberProfil({
               <span className="barber-profil__info-label">
                 Date de naissance
               </span>
-              <span className="barber-profil__info-value">
-                {date_naissance}
-              </span>
+              <span className="barber-profil__info-value">{birthday}</span>
             </div>
           </div>
 

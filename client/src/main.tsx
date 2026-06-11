@@ -8,6 +8,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 // Import the main app component
 import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
+import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "users", element: <Users /> },
+          { path: "barbers", element: <Barbers /> },
         ],
       },
       {

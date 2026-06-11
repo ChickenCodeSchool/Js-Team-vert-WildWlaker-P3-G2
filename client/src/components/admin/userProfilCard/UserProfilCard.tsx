@@ -9,12 +9,12 @@ import {
   FiTrash2,
   FiUser,
 } from "react-icons/fi";
-
+import type { Barber } from "../../../types/barber";
 import type { Customer } from "../../../types/Customer";
 
 import "./UserProfilCard.css";
 
-interface CustomerStats {
+interface UserStats {
   total: number;
   canceled: number;
   reviewsCount: number;
@@ -22,19 +22,24 @@ interface CustomerStats {
 }
 
 interface UserProfilCardProps {
-  selectedCustomer: Customer & { id: number };
-  selectedCustomerStats: CustomerStats;
+  selectedUser: (Customer | Barber) & { id: number };
+  selectedUserStats: UserStats;
   onEditClick: () => void;
   onToggleSuspendClick: () => void;
 }
 
 function UserProfilCard({
-  selectedCustomer,
-  selectedCustomerStats,
+  selectedUser,
+  selectedUserStats,
   onEditClick,
   onToggleSuspendClick,
 }: UserProfilCardProps) {
-  const isSuspended = selectedCustomer.status?.toLowerCase() === "suspendu";
+  const isSuspended = selectedUser.status?.toLowerCase() === "suspendu";
+  const isPending = selectedUser.status?.toLowerCase() === "en attente";
+  const displayName =
+    "name" in selectedUser
+      ? selectedUser.name
+      : `${selectedUser.firstname} ${selectedUser.lastname}`;
 
   return (
     <div className="userProfilCard-main">
@@ -42,48 +47,48 @@ function UserProfilCard({
       <div className="userProfilCard-header">
         <img
           className="userProfilCard-avatar"
-          src={selectedCustomer.avatar_url}
-          alt={selectedCustomer.firstname}
+          src={selectedUser.avatar_url}
+          alt={displayName}
         />
-        <h3>
-          {selectedCustomer.firstname} {selectedCustomer.lastname}
-        </h3>
+        <h3>{displayName}</h3>
         <p>
           Utilisateur depuis{" "}
-          {format(new Date(selectedCustomer.create_time), "dd MMM yyyy", {
-            locale: fr,
-          })}
+          {selectedUser.create_time
+            ? format(new Date(selectedUser.create_time), "dd MMM yyyy", {
+                locale: fr,
+              })
+            : "Date inconnue"}
         </p>
       </div>
       <div className="userProfilCard-info">
         <span>
           <FiAtSign className="userProfilCard-info-icon" />
-          {selectedCustomer.email}
+          {selectedUser.email}
         </span>
         <span>
           <FiPhone className="userProfilCard-info-icon" />
-          {selectedCustomer.phone}
+          {selectedUser.phone}
         </span>
         <span>
           <FiMapPin className="userProfilCard-info-icon" />
-          {selectedCustomer.city} {selectedCustomer.postal_code}
+          {selectedUser.city} {selectedUser.postal_code}
         </span>
       </div>
       <div className="userProfilCard-grid">
         <div className="userProfilCard-grid-case">
-          <span>{selectedCustomerStats.total}</span>
+          <span>{selectedUserStats.total}</span>
           <p>Réservations</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedCustomerStats.canceled}</span>
+          <span>{selectedUserStats.canceled}</span>
           <p>Annulations</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedCustomerStats.reviewsCount}</span>
+          <span>{selectedUserStats.reviewsCount}</span>
           <p>Avis laissés</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedCustomerStats.reported}</span>
+          <span>{selectedUserStats.reported}</span>
           <p>Signalements</p>
         </div>
       </div>
@@ -99,7 +104,11 @@ function UserProfilCard({
 
         <button
           className={`userProfilCard-action-button ${
-            isSuspended ? "active-btn" : "suspend-btn"
+            isSuspended
+              ? "active-btn"
+              : isPending
+                ? "active-btn"
+                : "suspend-btn"
           }`}
           type="button"
           onClick={onToggleSuspendClick}
@@ -107,6 +116,10 @@ function UserProfilCard({
           {isSuspended ? (
             <>
               <FiPlay /> Réactiver le compte
+            </>
+          ) : isPending ? (
+            <>
+              <FiPlay /> Approuver le profil
             </>
           ) : (
             <>
