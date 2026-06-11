@@ -1,6 +1,6 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
@@ -10,6 +10,8 @@ import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+import { useAdminFilters } from "../../../hooks/useAdminFilter";
+import { useEntityActions } from "../../../hooks/useEntityActions";
 
 import type { Appointment } from "../../../types/appointment";
 import type { Customer } from "../../../types/Customer";
@@ -33,16 +35,13 @@ function Users() {
   const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
     [],
   );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
-  const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
   const [selectedCustomer, setSelectedCustomer] = useState<
     (Customer & { id: number }) | null
   >(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  useEffect(() => {
+  const loadAllData = useCallback(() => {
     fetch(`${API_URL}/api/customers`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
@@ -53,15 +52,22 @@ function Users() {
           ...item,
           id: item.id_user,
         }));
-        const sortedData = [...formattedData].sort((a, b) => {
-          return (
+        const sortedData = [...formattedData].sort(
+          (a, b) =>
             new Date(b.create_time).getTime() -
-            new Date(a.create_time).getTime()
-          );
-        });
+            new Date(a.create_time).getTime(),
+        );
         setCustomers(formattedData);
         if (sortedData.length > 0) {
-          setSelectedCustomer(sortedData[0]);
+          setSelectedCustomer((prev) => {
+            if (prev) {
+              const current = formattedData.find(
+                (c) => c.id_user === prev.id_user,
+              );
+              return current || sortedData[0];
+            }
+            return sortedData[0];
+          });
         }
       })
       .catch((err) =>
@@ -84,34 +90,57 @@ function Users() {
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
+  const {
+    searchTerm,
+    setSearchTerm,
+    departmentFilter,
+    setDepartmentFilter,
+    statusFilter,
+    setStatusFilter,
+    dateSortOrder,
+    setDateSortOrder,
+    filteredData,
+  } = useAdminFilters<Customer & { id: number }>(customers, [
+    "firstname",
+    "lastname",
+  ]);
+
+  const { handleSave, handleToggleSuspend } = useEntityActions<
+    Customer & { id: number }
+  >({
+    apiBase: API_URL,
+    idField: "api/customers",
+    onActionComplete: loadAllData,
+    onClose: () => setIsEditModalOpen(false),
+  });
+
+  useEffect(() => {
+    loadAllData();
+  }, [loadAllData]);
+
   const suspendedAccountsCount = useMemo(() => {
     return customers.filter((c) => c.status?.toLowerCase() === "suspendu")
       .length;
   }, [customers]);
 
   const selectedCustomerStats = useMemo(() => {
-    if (!selectedCustomer) {
+    if (!selectedCustomer)
       return { total: 0, canceled: 0, reviewsCount: 0, reported: 0 };
-    }
     const customerApps = monthlyAppointments.filter(
-      (app: Appointment) => app.id_user_customer === selectedCustomer.id_user,
+      (app) => app.id_user_customer === selectedCustomer.id_user,
     );
-
     const total = customerApps.length;
     const canceled = customerApps.filter(
-      (app: Appointment) => app.status === "cancelled",
+      (app) => app.status === "cancelled",
     ).length;
-    const customerAppIds = customerApps.map(
-      (app: Appointment) => app.id_appointment,
-    );
-    const customerReviews = reviews.filter((rev: Review) =>
+    const customerAppIds = customerApps.map((app) => app.id_appointment);
+    const customerReviews = reviews.filter((rev) =>
       customerAppIds.includes(rev.id_appointment),
     );
     const reviewsCount = customerReviews.length;
     const reported = customerReviews.filter(
-      (rev: Review) => rev.reporting === 1,
+      (rev) => rev.reporting === 1,
     ).length;
-
     return { total, canceled, reviewsCount, reported };
   }, [selectedCustomer, monthlyAppointments, reviews]);
 
@@ -122,36 +151,12 @@ function Users() {
     return Array.from(new Set(depts)).sort();
   }, [customers]);
 
-  const filteredCustomers = useMemo(() => {
-    let result = [...customers];
-
-    if (searchTerm.trim() !== "") {
-      const lowerSearch = searchTerm.toLowerCase();
-      result = result.filter(
-        (c) =>
-          c.firstname.toLowerCase().includes(lowerSearch) ||
-          c.lastname.toLowerCase().includes(lowerSearch),
-      );
-    }
-
-    if (departmentFilter !== "") {
-      result = result.filter((c) => c.postal_code.startsWith(departmentFilter));
-    }
-
-    if (dateSortOrder === "desc") {
-      result.sort(
-        (a, b) =>
-          new Date(b.create_time).getTime() - new Date(a.create_time).getTime(),
-      );
-    } else if (dateSortOrder === "asc") {
-      result.sort(
-        (a, b) =>
-          new Date(a.create_time).getTime() - new Date(b.create_time).getTime(),
-      );
-    }
-
-    return result;
-  }, [customers, searchTerm, departmentFilter, dateSortOrder]);
+  const uniqueStatus = useMemo(() => {
+    const statusList = customers
+      .map((c) => c.status || "")
+      .filter((s) => s.trim() !== "");
+    return Array.from(new Set(statusList)).sort();
+  }, [customers]);
 
   const columns: DataGridColumn<Customer & { id: number }>[] = [
     {
@@ -197,7 +202,11 @@ function Users() {
       key: "status",
       header: "Status",
       render: (customer) => (
-        <div className="user-grid-info">{customer.status}</div>
+        <div
+          className={`user-grid-info status-${customer.status?.toLowerCase()}`}
+        >
+          {customer.status}
+        </div>
       ),
     },
     {
@@ -219,8 +228,7 @@ function Users() {
           <button
             type="button"
             className="user-grid-icon-btn"
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               setSelectedCustomer(customer);
               setIsEditModalOpen(true);
             }}
@@ -232,43 +240,6 @@ function Users() {
       ),
     },
   ];
-
-  const handleSaveCustomer = async (updatedData: Customer) => {
-    try {
-      const response = await fetch(
-        `${API_URL}/api/customers/${updatedData.id_user}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedData),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Erreur lors de la mise à jour du client");
-      }
-
-      setCustomers((prevCustomers) =>
-        prevCustomers.map((c) =>
-          c.id_user === updatedData.id_user ? { ...c, ...updatedData } : c,
-        ),
-      );
-
-      if (selectedCustomer?.id_user === updatedData.id_user) {
-        setSelectedCustomer({
-          ...selectedCustomer,
-          ...updatedData,
-        });
-      }
-
-      setIsEditModalOpen(false);
-    } catch (error) {
-      console.error("Erreur onSave :", error);
-      alert("Une erreur est survenue lors de l'enregistrement.");
-    }
-  };
 
   return (
     <div className="admin-users-body">
@@ -315,14 +286,17 @@ function Users() {
             setSearchTerm={setSearchTerm}
             departmentFilter={departmentFilter}
             setDepartmentFilter={setDepartmentFilter}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
             dateSortOrder={dateSortOrder}
             setDateSortOrder={setDateSortOrder}
             departments={uniqueDepartments}
+            status={uniqueStatus}
           />
           <div>
             <UserDataGrid
               columns={columns}
-              data={filteredCustomers}
+              data={filteredData}
               onRowClick={(customer) => setSelectedCustomer(customer)}
               rowsPerPage={6}
               selectedId={selectedCustomer?.id}
@@ -335,6 +309,7 @@ function Users() {
               selectedCustomer={selectedCustomer}
               selectedCustomerStats={selectedCustomerStats}
               onEditClick={() => setIsEditModalOpen(true)}
+              onToggleSuspendClick={() => handleToggleSuspend(selectedCustomer)}
             />
           ) : (
             <div className="no-user-selected">
@@ -347,7 +322,8 @@ function Users() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         customer={selectedCustomer}
-        onSave={handleSaveCustomer}
+        onSave={handleSave}
+        onToggleSuspend={handleToggleSuspend}
       />
     </div>
   );
