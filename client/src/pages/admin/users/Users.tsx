@@ -109,7 +109,7 @@ function Users() {
     Customer & { id: number }
   >({
     apiBase: API_URL,
-    idField: "customers",
+    idField: "api/customers",
     onActionComplete: loadAllData,
     onClose: () => setIsEditModalOpen(false),
   });

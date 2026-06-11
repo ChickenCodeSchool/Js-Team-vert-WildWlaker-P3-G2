@@ -50,7 +50,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
           birthday: formatBirthday(entity.birthday),
         };
 
-        const response = await fetch(`${apiBase}/api/${idField}/${entity.id}`, {
+        const response = await fetch(`${apiBase}/${idField}/${entity.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -104,7 +104,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
           birthday: formatBirthday(entity.birthday),
         };
 
-        const response = await fetch(`${apiBase}/api/${idField}/${entity.id}`, {
+        const response = await fetch(`${apiBase}/${idField}/${entity.id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
