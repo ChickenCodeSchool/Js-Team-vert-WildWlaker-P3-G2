@@ -1,6 +1,6 @@
 .planning-reservation-card {
-  display: grid;
-  grid-template-columns: 56px 70px 1fr auto;
+  display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 16px;
   padding: 14px 18px;
@@ -39,6 +39,11 @@
   object-fit: cover;
 }
 
+.planning-reservation-card-left {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
 .planning-reservation-card-time {
   font-size: 1rem;
   font-weight: 700;
