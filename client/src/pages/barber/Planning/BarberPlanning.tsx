@@ -65,6 +65,7 @@ function BarberPlanning() {
       <PlanningCalendar
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
+        reservations={reservations}
       />
 
       <section className="barber-planning-reservations">

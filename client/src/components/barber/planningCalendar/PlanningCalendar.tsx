@@ -9,12 +9,41 @@ type CalendarDay = {
   isCurrentMonth: boolean;
 };
 
+type ApiReservation = {
+  id_appointment: number;
+  appointment_date: string;
+  status: string;
+  customer_firstname: string;
+  customer_lastname: string;
+  customer_avatar: string;
+  prestation_name: string;
+  duration_minutes: number;
+};
+
 type Props = {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
+  reservations: ApiReservation[];
 };
 
 const weekDays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+
+const hours = ["09:00", "11:30", "14:00", "15:30", "17:00"];
+
+function formatDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function formatHour(date: string) {
+  return new Date(date).toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
 
 function getMonthDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1);
@@ -25,6 +54,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
 
   for (let i = startDay; i > 0; i--) {
     const date = new Date(year, month, 1 - i);
+
     days.push({
       date,
       day: date.getDate(),
@@ -34,6 +64,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
 
   for (let day = 1; day <= lastDay.getDate(); day++) {
     const date = new Date(year, month, day);
+
     days.push({
       date,
       day,
@@ -43,6 +74,7 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
 
   while (days.length % 7 !== 0) {
     const date = new Date(year, month, days.length - startDay + 1);
+
     days.push({
       date,
       day: date.getDate(),
@@ -62,6 +94,7 @@ function getWeekDays(date: Date): Date[] {
   return Array.from({ length: 7 }, (_, index) => {
     const weekDate = new Date(monday);
     weekDate.setDate(monday.getDate() + index);
+
     return weekDate;
   });
 }
@@ -74,7 +107,7 @@ function isSameDate(dateA: Date, dateB: Date) {
   );
 }
 
-function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
+function PlanningCalendar({ selectedDate, onSelectDate, reservations }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
 
   const [currentMonth, setCurrentMonth] = useState(
@@ -93,12 +126,6 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
     month: "long",
     year: "numeric",
   });
-
-  // const _dayLabel = selectedDate.toLocaleDateString("fr-FR", {
-  //   day: "numeric",
-  //   month: "long",
-  //   year: "numeric",
-  // });
 
   function handlePreviousMonth() {
     setCurrentMonth(
@@ -225,7 +252,64 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
       )}
 
       {viewMode === "week" && (
-        <p className="week-placeholder">Vue semaine à venir</p>
+        <div className="week-planning">
+          <div className="week-planning-header">
+            <div />
+
+            {currentWeekDays.map((date, index) => (
+              <button
+                key={date.toISOString()}
+                type="button"
+                className={`week-planning-day ${
+                  isSameDate(date, selectedDate) ? "selected" : ""
+                }`}
+                onClick={() => handleSelectDay(date)}
+              >
+                <span>{weekDays[index]}</span>
+                <strong>{date.getDate()}</strong>
+              </button>
+            ))}
+          </div>
+
+          <div className="week-planning-body">
+            {hours.map((hour) => (
+              <div key={hour} className="week-planning-row">
+                <div className="week-planning-hour">{hour}</div>
+
+                {currentWeekDays.map((date) => {
+                  const dateKey = formatDateKey(date);
+
+                  const reservation = reservations.find((item) => {
+                    const reservationDate = new Date(item.appointment_date);
+
+                    return (
+                      formatDateKey(reservationDate) === dateKey &&
+                      formatHour(item.appointment_date) === hour
+                    );
+                  });
+
+                  return (
+                    <button
+                      key={`${dateKey}-${hour}`}
+                      type="button"
+                      className={`week-planning-cell ${
+                        reservation ? "has-reservation" : ""
+                      }`}
+                      onClick={() => handleSelectDay(date)}
+                    >
+                      {reservation && (
+                        <div className="week-reservation">
+                          <strong>{reservation.customer_firstname}</strong>
+                          <span>{reservation.prestation_name}</span>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </section>
   );

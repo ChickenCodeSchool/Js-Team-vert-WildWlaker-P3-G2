@@ -1,8 +1,8 @@
 .planning-calendar {
   max-width: 430px;
   background: #ffffff;
-  padding: 18px 14px 28px;
-  font-family: Inter, system-ui, sans-serif;
+  padding: 18px 15px;
+  font-family: var(--font-title);
   min-height: auto;
 }
 
@@ -19,7 +19,7 @@
   font-size: 22px;
   font-weight: 800;
   color: var(--black);
-  font-family: var(--font-body);
+  font-family: var(--font-title);
 }
 
 .calendar-day {
@@ -37,6 +37,7 @@
   font-size: 26px;
   color: var(--gold-dark);
   font-weight: 800;
+  font-family: var(--font-title);
 }
 
 .planning-month-navigation {
@@ -198,5 +199,130 @@
 }
 
 .planning-calendar.day + .barber-planning-reservations {
-  margin-top: -3rem;
+  font-family: var(--font-body);
+}
+
+.week-view {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.week-view-day {
+  border: 1px solid #eeeeee;
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 12px 0;
+  cursor: pointer;
+}
+
+.week-view-day span {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray-600);
+}
+
+.week-view-day strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 20px;
+  color: #111827;
+}
+
+.week-view-day.selected {
+  background: var(--gold-dark);
+  border-color: var(--gold-dark);
+}
+
+.week-view-day.selected span,
+.week-view-day.selected strong {
+  color: #ffffff;
+}
+
+.week-planning {
+  margin-top: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  border: 1px solid #eeeeee;
+  border-radius: 14px;
+}
+
+.week-planning-header,
+.week-planning-row {
+  display: grid;
+  grid-template-columns: 80px repeat(7, 140px);
+}
+
+.week-planning-header {
+  border-bottom: 1px solid #eeeeee;
+}
+
+.week-planning-day {
+  border: none;
+  border-left: 1px solid #eeeeee;
+  background: #ffffff;
+  padding: 14px 0;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.week-planning-day.selected {
+  background: #fff3dd;
+  color: var(--gold-dark);
+}
+
+.week-planning-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.week-planning-row {
+  min-height: 118px;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.week-planning-row:last-child {
+  border-bottom: none;
+}
+
+.week-planning-hour {
+  padding-top: 18px;
+  text-align: center;
+  font-weight: 800;
+  color: var(--black);
+  border-right: 1px solid #eeeeee;
+}
+
+.week-planning-cell {
+  border: none;
+  border-left: 1px solid #eeeeee;
+  background: #ffffff;
+  padding: 8px;
+  min-height: 118px;
+  cursor: pointer;
+}
+
+.week-reservation {
+  min-height: 82px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #fff3dd;
+  border-left: 4px solid var(--gold-dark);
+  text-align: left;
+}
+
+.week-reservation strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--black);
+}
+
+.week-reservation span {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--gray-600);
 }
