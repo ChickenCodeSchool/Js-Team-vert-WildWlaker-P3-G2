@@ -27,14 +27,15 @@ function ReservationCardPlanning({
 
   return (
     <article className={`planning-reservation-card ${status}`}>
-      <img
-        src={avatar}
-        alt={customerName}
-        className="planning-reservation-card-avatar"
-      />
+      <div className="planning-reservation-card-left">
+        <img
+          src={avatar}
+          alt={customerName}
+          className="planning-reservation-card-avatar"
+        />
 
-      <span className="planning-reservation-card-time">{time}</span>
-
+        <span className="planning-reservation-card-time">{time}</span>
+      </div>
       <div className="planning-reservation-card-content">
         <h4>{customerName}</h4>
         <p>{service}</p>
