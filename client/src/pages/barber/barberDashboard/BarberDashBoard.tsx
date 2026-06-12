@@ -16,6 +16,7 @@ type ApiReservation = {
   customer_lastname: string;
   customer_avatar: string;
   prestation_name: string;
+  duration: number;
 };
 
 type Review = {
@@ -124,12 +125,12 @@ function BarberDashBoard() {
               )}
               customerName={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
               service={reservation.prestation_name}
-              duration="--"
               status={
                 reservation.status === "completed"
                   ? "confirmed"
                   : reservation.status
               }
+              duration={reservation.duration}
             />
           ))
         ) : (

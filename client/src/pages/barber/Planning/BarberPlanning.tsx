@@ -12,6 +12,7 @@ type ApiReservation = {
   customer_lastname: string;
   customer_avatar: string;
   prestation_name: string;
+  duration_minutes: number;
 };
 
 function formatDateKey(date: Date) {
@@ -64,6 +65,7 @@ function BarberPlanning() {
       <PlanningCalendar
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
+        reservations={reservations}
       />
 
       <section className="barber-planning-reservations">
@@ -85,7 +87,7 @@ function BarberPlanning() {
               )}
               customerName={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
               service={reservation.prestation_name}
-              duration="--"
+              duration={reservation.duration_minutes}
               status={reservation.status}
             />
           ))

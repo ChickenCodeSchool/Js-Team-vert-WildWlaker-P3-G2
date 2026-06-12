@@ -7,9 +7,12 @@ interface TableFiltersProps {
   setSearchTerm: (value: string) => void;
   departmentFilter: string;
   setDepartmentFilter: (value: string) => void;
+  statusFilter: string;
+  setStatusFilter: (value: string) => void;
   dateSortOrder: "asc" | "desc";
   setDateSortOrder: (value: "asc" | "desc") => void;
   departments: string[];
+  status: string[];
 }
 
 function AdminFilterBar({
@@ -17,9 +20,12 @@ function AdminFilterBar({
   setSearchTerm,
   departmentFilter,
   setDepartmentFilter,
+  statusFilter,
+  setStatusFilter,
   dateSortOrder,
   setDateSortOrder,
   departments,
+  status,
 }: TableFiltersProps) {
   return (
     <div className="admin-users-filters-bar">
@@ -52,6 +58,22 @@ function AdminFilterBar({
         </div>
 
         <div className="filter-select-wrapper">
+          <FiFilter className="filter-icon" />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">Tous les statuts</option>
+            {status.map((stat) => (
+              <option key={stat} value={stat}>
+                Statut : {stat}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="filter-select-wrapper">
           <FiCalendar className="filter-icon" />
           <select
             value={dateSortOrder}
@@ -66,4 +88,5 @@ function AdminFilterBar({
     </div>
   );
 }
+
 export default AdminFilterBar;

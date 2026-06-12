@@ -1,13 +1,9 @@
-import {
-  FiAlertTriangle,
-  FiCalendar,
-  FiHome,
-  FiMessageSquare,
-  FiUser,
-} from "react-icons/fi";
+import { FiAlertTriangle, FiCalendar, FiHome, FiUser } from "react-icons/fi";
 import "./BarberNavBar.css";
 import { useState } from "react";
+import { GrDocumentConfig } from "react-icons/gr";
 import { MdMenuOpen, MdPeopleAlt } from "react-icons/md";
+import { SiSimpleanalytics } from "react-icons/si";
 import { NavLink } from "react-router";
 
 function BarberNavBar() {
@@ -25,24 +21,30 @@ function BarberNavBar() {
       <nav className={`NavBarHair-main ${isOpen ? "open" : ""}`}>
         <h1>SECARE</h1>
 
-        <NavLink to="/hairdresser" className="NavBarHair-menu">
+        <NavLink to="/barber/dashBoard" className="NavBarHair-menu">
           <FiHome /> Tableau de Bord
         </NavLink>
         <h3>GESTION</h3>
-        <NavLink to="/hairdresser/users" className="NavBarHair-menu">
+        <NavLink to="/barber/profile" className="NavBarHair-menu">
           <FiUser /> Mon profil
         </NavLink>
-        <NavLink to="/hairdresser/barbers" className="NavBarHair-menu">
+        <NavLink to="/barber/prestations" className="NavBarHair-menu">
           <MdPeopleAlt /> Mes services
         </NavLink>
-        <NavLink to="/hairdresser/calendar" className="NavBarHair-menu">
-          <FiCalendar /> Mes disponibilité
+        <NavLink to="/barber/planning" className="NavBarHair-menu">
+          <FiCalendar /> Planning reservations
         </NavLink>
-        <NavLink to="/hairdresser/reservations" className="NavBarHair-menu">
-          <FiMessageSquare /> Réservation
-        </NavLink>
-        <NavLink to="/hairdresser/reporting" className="NavBarHair-menu">
+        <NavLink to="/barber/signalement" className="NavBarHair-menu">
           <FiAlertTriangle /> Signalements
+        </NavLink>
+        <h3>ANALYTICS</h3>
+        <NavLink to="/barber/reservation" className="NavBarHair-menu">
+          <SiSimpleanalytics /> Statistiques
+        </NavLink>
+        <h3>CONFIGURATION</h3>
+        <NavLink to="/hairdresser/reporting" className="NavBarHair-menu">
+          <GrDocumentConfig />
+          Aide & Support
         </NavLink>
       </nav>
     </>

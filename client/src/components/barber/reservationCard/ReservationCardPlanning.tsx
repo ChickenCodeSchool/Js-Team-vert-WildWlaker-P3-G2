@@ -7,7 +7,7 @@ type Props = {
   time: string;
   customerName: string;
   service: string;
-  duration: string;
+  duration: number;
   status: ReservationStatus;
 };
 
@@ -26,26 +26,29 @@ function ReservationCardPlanning({
   };
 
   return (
-    <article className={`reservation-card ${status}`}>
-      <img
-        src={avatar}
-        alt={customerName}
-        className="reservation-card-avatar"
-      />
+    <article className={`planning-reservation-card ${status}`}>
+      <div className="planning-reservation-card-left">
+        <img
+          src={avatar}
+          alt={customerName}
+          className="planning-reservation-card-avatar"
+        />
 
-      <span className="reservation-card-time">{time}</span>
-
-      <div className="reservation-card-content">
+        <span className="planning-reservation-card-time">{time}</span>
+      </div>
+      <div className="planning-reservation-card-content">
         <h4>{customerName}</h4>
         <p>{service}</p>
       </div>
 
-      <div className="reservation-card-right">
-        <span className={`reservation-card-status ${status}`}>
+      <div className="planning-reservation-card-right">
+        <span className={`planning-reservation-card-status ${status}`}>
           {statusLabel[status]}
         </span>
 
-        <span className="reservation-card-duration">{duration}</span>
+        <span className="planning-reservation-card-duration">
+          {duration} min{" "}
+        </span>
       </div>
     </article>
   );

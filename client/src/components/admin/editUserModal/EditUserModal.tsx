@@ -7,6 +7,7 @@ import {
   FiEye,
   FiMessageSquare,
   FiPause,
+  FiPlay,
   FiTrash2,
   FiX,
 } from "react-icons/fi";
@@ -18,8 +19,9 @@ import "./EditUserModal.css";
 interface EditUserModalProps {
   isOpen: boolean;
   onClose: () => void;
-  customer: Customer | null;
-  onSave: (updatedData: Customer) => void;
+  customer: (Customer & { id: number }) | null;
+  onSave: (updatedData: Customer & { id: number }) => void;
+  onToggleSuspend: (customer: Customer & { id: number }) => Promise<void>;
 }
 
 function EditUserModal({
@@ -27,6 +29,7 @@ function EditUserModal({
   onClose,
   customer,
   onSave,
+  onToggleSuspend,
 }: EditUserModalProps) {
   const [formData, setFormData] = useState({
     firstname: "",
@@ -56,15 +59,17 @@ function EditUserModal({
         city: customer.city || "",
         postal_code: customer.postal_code || "",
         genre: customer.genre || "Homme",
-        adress: customer.adress || "",
         status: customer.status || "Actif",
         annotations: customer.annotations || "",
+        adress: customer.adress || "",
         birthday: customer.birthday ? customer.birthday.split("T")[0] : "",
       });
     }
   }, [customer]);
 
   if (!isOpen || !customer) return null;
+
+  const isSuspended = formData.status?.toLowerCase() === "suspendu";
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -284,9 +289,28 @@ function EditUserModal({
               <button type="button" className="action-btn">
                 <FiAlertTriangle /> Voir les signalements
               </button>
-              <button type="button" className="action-btn suspend-btn">
-                <FiPause /> Suspendre le compte
+
+              <button
+                type="button"
+                className={`action-btn ${isSuspended ? "active-btn" : "suspend-btn"}`}
+                onClick={async () => {
+                  if (customer) {
+                    await onToggleSuspend(customer);
+                    onClose();
+                  }
+                }}
+              >
+                {isSuspended ? (
+                  <>
+                    <FiPlay /> Réactiver le compte
+                  </>
+                ) : (
+                  <>
+                    <FiPause /> Suspendre le compte
+                  </>
+                )}
               </button>
+
               <button type="button" className="action-btn delete-btn">
                 <FiTrash2 /> Supprimer le compte
               </button>

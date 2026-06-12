@@ -67,6 +67,20 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
+        &.status-actif {
+          align-items: center;
+          padding: 5px 0px 5px 0px;
+          border-radius: var(--radius-md);
+          color: var(--success);
+          background-color: #e6f4ea;
+        }
+        &.status-suspendu {
+          align-items: center;
+          padding: 5px 0px 5px 0px;
+          border-radius: var(--radius-md);
+          color: var(--warning);
+          background-color: #fffbeb;
+        }
 
         .user-grid-fullname {
           font-weight: 600;
@@ -119,4 +133,7 @@
       display: flex;
     }
   }
+}
+.swal2-container {
+  font-family: var(--font-body);
 }

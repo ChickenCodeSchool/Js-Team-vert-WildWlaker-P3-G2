@@ -9,18 +9,47 @@ type CalendarDay = {
   isCurrentMonth: boolean;
 };
 
+type ApiReservation = {
+  id_appointment: number;
+  appointment_date: string;
+  status: string;
+  customer_firstname: string;
+  customer_lastname: string;
+  customer_avatar: string;
+  prestation_name: string;
+  duration_minutes: number;
+};
+
 type Props = {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
+  reservations: ApiReservation[];
 };
 
 const weekDays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
+const hours = ["09:00", "11:30", "14:00", "15:30", "17:00"];
+
+function formatDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
+function formatHour(date: string) {
+  return new Date(date).toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 function getMonthDays(year: number, month: number): CalendarDay[] {
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-
   const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+
   const days: CalendarDay[] = [];
 
   for (let i = startDay; i > 0; i--) {
@@ -56,6 +85,20 @@ function getMonthDays(year: number, month: number): CalendarDay[] {
   return days;
 }
 
+function getWeekDays(date: Date): Date[] {
+  const day = date.getDay() === 0 ? 6 : date.getDay() - 1;
+  const monday = new Date(date);
+
+  monday.setDate(date.getDate() - day);
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const weekDate = new Date(monday);
+    weekDate.setDate(monday.getDate() + index);
+
+    return weekDate;
+  });
+}
+
 function isSameDate(dateA: Date, dateB: Date) {
   return (
     dateA.getDate() === dateB.getDate() &&
@@ -64,7 +107,7 @@ function isSameDate(dateA: Date, dateB: Date) {
   );
 }
 
-function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
+function PlanningCalendar({ selectedDate, onSelectDate, reservations }: Props) {
   const [viewMode, setViewMode] = useState<ViewMode>("month");
 
   const [currentMonth, setCurrentMonth] = useState(
@@ -74,6 +117,10 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
   const calendarDays = useMemo(() => {
     return getMonthDays(currentMonth.getFullYear(), currentMonth.getMonth());
   }, [currentMonth]);
+
+  const currentWeekDays = useMemo(() => {
+    return getWeekDays(selectedDate);
+  }, [selectedDate]);
 
   const monthLabel = currentMonth.toLocaleDateString("fr-FR", {
     month: "long",
@@ -101,7 +148,7 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
   }
 
   return (
-    <section className="planning-calendar">
+    <section className={`planning-calendar ${viewMode}`}>
       <header className="planning-topbar">
         <h2>Planning</h2>
       </header>
@@ -117,7 +164,7 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
 
         <div className="planning-month-label">
           <span>📅</span>
-          <strong>{monthLabel}</strong>
+          <strong>{viewMode === "day" ? "Aujourd'hui" : monthLabel}</strong>
         </div>
 
         <button
@@ -128,6 +175,26 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
           ›
         </button>
       </div>
+
+      {viewMode === "day" && (
+        <div className="day-week-selector">
+          {currentWeekDays.map((date, index) => {
+            const selected = isSameDate(date, selectedDate);
+
+            return (
+              <button
+                key={date.toISOString()}
+                type="button"
+                className={`day-week-item ${selected ? "selected" : ""}`}
+                onClick={() => handleSelectDay(date)}
+              >
+                <span>{weekDays[index]}</span>
+                <strong>{date.getDate()}</strong>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="planning-tabs">
         <button
@@ -155,30 +222,95 @@ function PlanningCalendar({ selectedDate, onSelectDate }: Props) {
         </button>
       </div>
 
-      <div className="calendar-weekdays">
-        {weekDays.map((day) => (
-          <span key={day}>{day}</span>
-        ))}
-      </div>
+      {viewMode === "month" && (
+        <>
+          <div className="calendar-weekdays">
+            {weekDays.map((day) => (
+              <span key={day}>{day}</span>
+            ))}
+          </div>
 
-      <div className="calendar-grid">
-        {calendarDays.map((item) => {
-          const selected = isSameDate(item.date, selectedDate);
+          <div className="calendar-grid">
+            {calendarDays.map((item) => {
+              const selected = isSameDate(item.date, selectedDate);
 
-          return (
-            <button
-              key={item.date.toISOString()}
-              type="button"
-              onClick={() => handleSelectDay(item.date)}
-              className={`calendar-day ${
-                !item.isCurrentMonth ? "muted" : ""
-              } ${selected ? "selected" : ""}`}
-            >
-              <span>{item.day}</span>
-            </button>
-          );
-        })}
-      </div>
+              return (
+                <button
+                  key={item.date.toISOString()}
+                  type="button"
+                  onClick={() => handleSelectDay(item.date)}
+                  className={`calendar-day ${
+                    !item.isCurrentMonth ? "muted" : ""
+                  } ${selected ? "selected" : ""}`}
+                >
+                  <span>{item.day}</span>
+                </button>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {viewMode === "week" && (
+        <div className="week-planning">
+          <div className="week-planning-header">
+            <div />
+
+            {currentWeekDays.map((date, index) => (
+              <button
+                key={date.toISOString()}
+                type="button"
+                className={`week-planning-day ${
+                  isSameDate(date, selectedDate) ? "selected" : ""
+                }`}
+                onClick={() => handleSelectDay(date)}
+              >
+                <span>{weekDays[index]}</span>
+                <strong>{date.getDate()}</strong>
+              </button>
+            ))}
+          </div>
+
+          <div className="week-planning-body">
+            {hours.map((hour) => (
+              <div key={hour} className="week-planning-row">
+                <div className="week-planning-hour">{hour}</div>
+
+                {currentWeekDays.map((date) => {
+                  const dateKey = formatDateKey(date);
+
+                  const reservation = reservations.find((item) => {
+                    const reservationDate = new Date(item.appointment_date);
+
+                    return (
+                      formatDateKey(reservationDate) === dateKey &&
+                      formatHour(item.appointment_date) === hour
+                    );
+                  });
+
+                  return (
+                    <button
+                      key={`${dateKey}-${hour}`}
+                      type="button"
+                      className={`week-planning-cell ${
+                        reservation ? "has-reservation" : ""
+                      }`}
+                      onClick={() => handleSelectDay(date)}
+                    >
+                      {reservation && (
+                        <div className="week-reservation">
+                          <strong>{reservation.customer_firstname}</strong>
+                          <span>{reservation.prestation_name}</span>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
