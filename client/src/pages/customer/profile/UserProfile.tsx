@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import EditProfileModal from "../../../components/customer/Profile/EditProfileModal";
 import ProfileActions from "../../../components/customer/Profile/ProfileActions";
 import ProfileHeader from "../../../components/customer/Profile/ProfileHeader";
@@ -9,15 +9,26 @@ function UserProfile() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const API_URL = import.meta.env.VITE_API_URL;
   const [isEditing, setIsEditing] = useState(false);
+  const handleSaveCustomer = (updatedCustomer: {
+    firstname: string;
+    lastname: string;
+    email: string;
+    city: string;
+  }) => {
+    setCustomer((prev) => (prev ? { ...prev, ...updatedCustomer } : prev));
+  };
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
     fetch(`${API_URL}/api/customers/`)
       .then((res) => res.json())
       .then((data) => {
-        const found = data.find((c: Customer) => c.id_user === 10);
+        const found = data.find((c: Customer) => c.id_user === 18);
         setCustomer(found);
       });
   }, []);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   if (!customer) return <p>Chargement...</p>;
 
@@ -31,6 +42,8 @@ function UserProfile() {
         <EditProfileModal
           customer={customer}
           onClose={() => setIsEditing(false)}
+          onSave={handleSaveCustomer}
+          loadData={loadData}
         />
       )}
     </main>

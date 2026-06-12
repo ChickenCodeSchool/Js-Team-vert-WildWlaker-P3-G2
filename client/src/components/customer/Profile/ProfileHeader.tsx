@@ -10,7 +10,13 @@ type Props = {
 function ProfileHeader({ customer, onEdit }: Props) {
   return (
     <section className="profile-header">
-      <FiChevronLeft />
+      <button
+        type="button"
+        className="profile-header__back-button"
+        onClick={() => window.history.back()}
+      >
+        <FiChevronLeft />
+      </button>
       <button
         type="button"
         className="profile-page__edit-button"
