@@ -20,6 +20,7 @@ router.get("/api/admin-dashboard", adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
 router.get("/api/barbers", barberActions.browse);
+router.put("/api/barbers/:id", barberActions.edit);
 router.get("/api/customers", customerActions.browse);
 router.put("/api/customers/:id", customerActions.edit);
 router.get("/api/events", eventActions.browse);

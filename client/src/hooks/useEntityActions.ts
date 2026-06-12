@@ -6,6 +6,7 @@ export interface BaseEntity {
   status?: string;
   firstname?: string;
   lastname?: string;
+  name?: string;
   birthday?: string | null;
 }
 
@@ -24,26 +25,6 @@ export function useEntityActions<T extends BaseEntity>(options: {
 
   const handleSave = useCallback(
     async (entity: T) => {
-      const originalStatus = entity.status?.toLowerCase();
-      const newStatus = entity.status?.toLowerCase();
-
-      if (originalStatus && originalStatus !== newStatus) {
-        const isSuspend = newStatus === "suspendu";
-        const result = await Swal.fire({
-          title: isSuspend ? "Suspendre le compte ?" : "Réactiver le compte ?",
-          text: isSuspend
-            ? `Vous changez le statut vers "Suspendu". Êtes-vous sûr ?`
-            : `Vous allez réactiver le compte. Confirmer ?`,
-          icon: isSuspend ? "warning" : "success",
-          showCancelButton: true,
-          confirmButtonColor: isSuspend ? "#ff9f43" : "#10ac84",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "Oui, confirmer",
-          cancelButtonText: "Annuler",
-        });
-        if (!result.isConfirmed) return;
-      }
-
       try {
         const payload = {
           ...entity,
@@ -81,15 +62,41 @@ export function useEntityActions<T extends BaseEntity>(options: {
 
   const handleToggleSuspend = useCallback(
     async (entity: T) => {
-      const isSuspended = entity.status?.toLowerCase() === "suspendu";
-      const nextStatus = isSuspended ? "Actif" : "Suspendu";
+      const currentStatus = entity.status?.toLowerCase();
+
+      let nextStatus = "Actif";
+      let swalTitle = "Suspendre le compte ?";
+      let swalText = "Êtes-vous sûr de vouloir suspendre le compte ?";
+      let swalIcon: "warning" | "success" = "warning";
+      let swalConfirmColor = "#ff9f43";
+
+      if (currentStatus === "suspendu") {
+        nextStatus = "Actif";
+        swalTitle = "Réactiver le compte ?";
+        swalText = "Êtes-vous sûr de vouloir réactiver le compte ?";
+        swalIcon = "success";
+        swalConfirmColor = "#10ac84";
+      } else if (currentStatus === "en attente") {
+        nextStatus = "Actif";
+        swalTitle = "Approuver le profil ?";
+        swalText =
+          "Êtes-vous sûr de vouloir approuver et activer ce coiffeur ?";
+        swalIcon = "success";
+        swalConfirmColor = "#10ac84";
+      } else {
+        nextStatus = "Suspendu";
+        swalTitle = "Suspendre le compte ?";
+        swalText = "Êtes-vous sûr de vouloir suspendre le compte ?";
+        swalIcon = "warning";
+        swalConfirmColor = "#ff9f43";
+      }
 
       const result = await Swal.fire({
-        title: isSuspended ? "Réactiver le compte ?" : "Suspendre le compte ?",
-        text: `Êtes-vous sûr de vouloir ${isSuspended ? "réactiver" : "suspendre"} le compte ?`,
-        icon: isSuspended ? "success" : "warning",
+        title: swalTitle,
+        text: swalText,
+        icon: swalIcon,
         showCancelButton: true,
-        confirmButtonColor: isSuspended ? "#10ac84" : "#ff9f43",
+        confirmButtonColor: swalConfirmColor,
         cancelButtonColor: "#d33",
         confirmButtonText: "Oui, confirmer",
         cancelButtonText: "Annuler",
