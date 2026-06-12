@@ -22,6 +22,7 @@ interface EditUserModalProps<T> {
   user: (T & { id: number }) | null;
   onSave: (updatedData: T & { id: number }) => void;
   onToggleSuspend: (user: T & { id: number }) => Promise<void> | void;
+  deleteUser: () => void;
 }
 
 function EditUserModal<T extends Customer | Barber>({
@@ -30,6 +31,7 @@ function EditUserModal<T extends Customer | Barber>({
   user,
   onSave,
   onToggleSuspend,
+  deleteUser,
 }: EditUserModalProps<T>) {
   const [formData, setFormData] = useState({
     name: "",
@@ -356,7 +358,11 @@ function EditUserModal<T extends Customer | Barber>({
                 )}
               </button>
 
-              <button type="button" className="action-btn delete-btn">
+              <button
+                type="button"
+                className="action-btn delete-btn"
+                onClick={deleteUser}
+              >
                 <FiTrash2 /> Supprimer le compte
               </button>
             </div>

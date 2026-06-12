@@ -37,7 +37,11 @@ class UserRepository {
   // async update(user: user) {
   //   ...
   // }
-
+  async delete(id: number) {
+    const query = `DELETE FROM users WHERE id_user = ?`;
+    await databaseClient.query(query, [id]);
+    return true;
+  }
   // The D of CRUD - Delete operation
   // TODO: Implement the delete operation to remove an user by its ID
 

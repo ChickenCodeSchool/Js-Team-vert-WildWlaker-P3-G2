@@ -30,6 +30,7 @@ interface UserProfilCardProps {
   selectedUserStats: UserStats;
   onEditClick: () => void;
   onToggleSuspendClick: () => void;
+  deleteUser: () => void;
 }
 
 function UserProfilCard({
@@ -37,6 +38,7 @@ function UserProfilCard({
   selectedUserStats,
   onEditClick,
   onToggleSuspendClick,
+  deleteUser,
 }: UserProfilCardProps) {
   const isSuspended = selectedUser.status?.toLowerCase() === "suspendu";
   const isPending = selectedUser.status?.toLowerCase() === "en attente";
@@ -135,6 +137,7 @@ function UserProfilCard({
         <button
           className="userProfilCard-action-button delete-btn"
           type="button"
+          onClick={deleteUser}
         >
           <FiTrash2 /> Supprimer le compte
         </button>
