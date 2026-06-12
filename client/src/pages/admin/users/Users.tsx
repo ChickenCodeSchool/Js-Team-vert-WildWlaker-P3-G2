@@ -243,13 +243,13 @@ function Users() {
 
   return (
     <div className="admin-users-body">
-      <div className="admin-users-header">
+      <header className="admin-users-header">
         <div className="admin-users-title">
           <FiUserPlus className="admin-users-title-icon" />
           <h1>Gestion des utilisateurs</h1>
         </div>
         <p>Gérez et suivez les utilisateurs de votre plateforme</p>
-      </div>
+      </header>
       <main className="admin-users-main">
         <section className="admin-users-main-left">
           <div className="admin-users-body-stats">

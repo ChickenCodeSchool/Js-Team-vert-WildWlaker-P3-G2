@@ -204,17 +204,17 @@ function Barbers() {
   ];
 
   return (
-    <div className="admin-barber-body">
-      <div className="admin-users-header">
-        <div className="admin-users-title">
-          <FiScissors className="admin-users-title-icon" />
+    <div className="admin-barbers-body">
+      <header className="admin-barbers-header">
+        <div className="admin-barbers-title">
+          <FiScissors className="admin-barbers-title-icon" />
           <h1>Gestion des coiffeurs</h1>
         </div>
         <p>Gérez et suivez les Coiffeurs de votre plateforme</p>
-      </div>
-      <main className="admin-users-main">
-        <section className="admin-users-main-left">
-          <div className="admin-users-body-stats">
+      </header>
+      <main className="admin-barbers-main">
+        <section className="admin-barbers-main-left">
+          <div className="admin-barbers-body-stats">
             <StatsCard
               Icon={FiScissors}
               title="Coiffeurs"
@@ -265,7 +265,7 @@ function Barbers() {
             />
           </div>
         </section>
-        <aside className="admin-users-main-aside">
+        <aside className="admin-barbers-main-aside">
           {selectedBarber ? (
             <UserProfilCard
               selectedUser={selectedBarber}
