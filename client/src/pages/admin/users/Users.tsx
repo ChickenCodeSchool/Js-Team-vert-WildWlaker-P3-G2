@@ -105,7 +105,7 @@ function Users() {
     "lastname",
   ]);
 
-  const { handleSave, handleToggleSuspend } = useEntityActions<
+  const { handleSave, handleToggleSuspend, deleteUser } = useEntityActions<
     Customer & { id: number }
   >({
     apiBase: API_URL,
@@ -332,6 +332,7 @@ function Users() {
               selectedUserStats={selectedCustomerStats}
               onEditClick={() => setIsEditModalOpen(true)}
               onToggleSuspendClick={() => handleToggleSuspend(selectedCustomer)}
+              deleteUser={() => deleteUser(selectedCustomer)}
             />
           ) : (
             <div className="no-user-selected">
@@ -346,6 +347,11 @@ function Users() {
         user={selectedCustomer}
         onSave={handleSave}
         onToggleSuspend={handleToggleSuspend}
+        deleteUser={() => {
+          if (selectedCustomer) {
+            deleteUser(selectedCustomer);
+          }
+        }}
       />
     </div>
   );

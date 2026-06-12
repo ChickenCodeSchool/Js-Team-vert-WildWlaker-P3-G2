@@ -135,6 +135,49 @@ export function useEntityActions<T extends BaseEntity>(options: {
     },
     [apiBase, idField, onActionComplete, onClose],
   );
+  const deleteUser = useCallback(
+    async (entity: T) => {
+      const result = await Swal.fire({
+        title: "Supprimer définitivement ?",
+        text: "Cette action est irréversible et supprimera toutes les données liées.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Oui, supprimer",
+        cancelButtonText: "Annuler",
+      });
 
-  return { handleSave, handleToggleSuspend };
+      if (!result.isConfirmed) return;
+
+      try {
+        const response = await fetch(`${apiBase}/api/users/${entity.id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) throw new Error("Erreur lors de la suppression");
+
+        Swal.fire({
+          icon: "success",
+          title: "Supprimé !",
+          text: "L'élément a été supprimé avec succès.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        onActionComplete?.();
+        onClose?.();
+      } catch (error) {
+        console.error("Erreur deleteUser :", error);
+        Swal.fire(
+          "Erreur",
+          "Une erreur est survenue lors de la suppression.",
+          "error",
+        );
+      }
+    },
+    [apiBase, onActionComplete, onClose],
+  );
+
+  return { handleSave, handleToggleSuspend, deleteUser };
 }

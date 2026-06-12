@@ -96,7 +96,7 @@ function Barbers() {
     filteredData,
   } = useAdminFilters<Barber & { id: number }>(barbers, ["name"]);
 
-  const { handleSave, handleToggleSuspend } = useEntityActions<
+  const { handleSave, handleToggleSuspend, deleteUser } = useEntityActions<
     Barber & { id: number }
   >({
     apiBase: API_URL,
@@ -319,6 +319,7 @@ function Barbers() {
               selectedUserStats={selectedBarberStats}
               onEditClick={() => setIsEditModalOpen(true)}
               onToggleSuspendClick={() => handleToggleSuspend(selectedBarber)}
+              deleteUser={() => deleteUser(selectedBarber)}
             />
           ) : (
             <div className="no-user-selected">
@@ -333,6 +334,11 @@ function Barbers() {
         user={selectedBarber}
         onSave={handleSave}
         onToggleSuspend={handleToggleSuspend}
+        deleteUser={() => {
+          if (selectedBarber) {
+            deleteUser(selectedBarber);
+          }
+        }}
       />
     </div>
   );

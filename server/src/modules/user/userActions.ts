@@ -20,5 +20,21 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const deleteUser: RequestHandler = async (req, res, next) => {
+  try {
+    const id_user = Number(req.params.id);
 
-export default { browse };
+    // Appel au repository pour sauvegarder en BDD
+    await userRepository.delete(id_user);
+
+    // On renvoie un statut 204 (No Content) ou 200 avec les données
+    res.status(200).json({
+      message: "Client supprimé avec succès",
+      id: id_user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, deleteUser };
