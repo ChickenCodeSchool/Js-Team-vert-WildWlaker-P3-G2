@@ -13,15 +13,12 @@ import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilC
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 
+import type { Appointment } from "../../../types/appointment";
 import type { Barber } from "../../../types/barber";
+import type { Review } from "../../../types/review";
 
 import "./Barber.css";
-const mockBarberStats = {
-  total: 24, // Exemple
-  canceled: 2,
-  reviewsCount: 15,
-  reported: 0,
-};
+
 const API_URL = import.meta.env.VITE_API_URL;
 const today = new Date();
 const thirtyDaysAgo = subDays(today, 30);
@@ -34,7 +31,8 @@ const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}
 function Barbers() {
   const [barbers, setBarbers] = useState<(Barber & { id: number })[]>([]);
   const [monthlyNewBarbers, setMonthlyNewBarbers] = useState<Barber[]>([]);
-
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [selectedBarber, setSelectedBarber] = useState<
     (Barber & { id: number }) | null
   >(null);
@@ -72,7 +70,14 @@ function Barbers() {
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
-
+    fetch(`${API_URL}/api/reviews`)
+      .then((res) => res.json())
+      .then((data: Review[]) => setReviews(data))
+      .catch((err) => console.error("Erreur lors du fetch des avis :", err));
+    fetch(`${API_URL}/api/appointments`)
+      .then((res) => res.json())
+      .then((data: Appointment[]) => setAppointments(data))
+      .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
     fetch(`${API_URL}/api/barbers${params}`)
       .then((res) => res.json())
       .then((data: Barber[]) => setMonthlyNewBarbers(data))
@@ -111,6 +116,48 @@ function Barbers() {
     return barbers.filter((b) => b.status?.toLowerCase() === "en attente")
       .length;
   }, [barbers]);
+  const selectedBarberStats = useMemo(() => {
+    if (!selectedBarber)
+      return {
+        gridValue1: 0,
+        gridValue2: 0,
+        gridValue3: 0,
+        gridValue4: 0,
+        gridTitle1: "",
+        gridTitle2: "",
+        gridTitle3: "",
+        gridTitle4: "",
+      };
+    const barberApps = appointments.filter(
+      (app) => app.id_user_barber === selectedBarber.id_user,
+    );
+    const barberAppIds = barberApps.map((app) => app.id_appointment);
+    const barberReviews = reviews.filter((rev) =>
+      barberAppIds.includes(rev.id_appointment),
+    );
+    const gridTitle1 = "Réservation";
+    const gridValue1 = barberApps.length;
+    const gridTitle2 = "Réservation annulé";
+    const gridValue2 = barberApps.filter(
+      (app) => app.status === "annulé",
+    ).length;
+    const gridTitle3 = "Avis reçu";
+    const gridValue3 = barberReviews.length;
+    const gridTitle4 = "Signalemments";
+    const gridValue4 = barberReviews.filter(
+      (rev) => rev.reporting === 1,
+    ).length;
+    return {
+      gridValue1,
+      gridValue2,
+      gridValue3,
+      gridValue4,
+      gridTitle1,
+      gridTitle2,
+      gridTitle3,
+      gridTitle4,
+    };
+  }, [selectedBarber, appointments, reviews]);
 
   const uniqueDepartments = useMemo(() => {
     const depts = barbers
@@ -269,7 +316,7 @@ function Barbers() {
           {selectedBarber ? (
             <UserProfilCard
               selectedUser={selectedBarber}
-              selectedUserStats={mockBarberStats}
+              selectedUserStats={selectedBarberStats}
               onEditClick={() => setIsEditModalOpen(true)}
               onToggleSuspendClick={() => handleToggleSuspend(selectedBarber)}
             />

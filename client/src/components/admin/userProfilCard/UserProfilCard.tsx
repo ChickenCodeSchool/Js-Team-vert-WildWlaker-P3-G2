@@ -15,10 +15,14 @@ import type { Customer } from "../../../types/Customer";
 import "./UserProfilCard.css";
 
 interface UserStats {
-  total: number;
-  canceled: number;
-  reviewsCount: number;
-  reported: number;
+  gridValue1: number;
+  gridValue2: number;
+  gridValue3: number;
+  gridValue4: number;
+  gridTitle1: string;
+  gridTitle2: string;
+  gridTitle3: string;
+  gridTitle4: string;
 }
 
 interface UserProfilCardProps {
@@ -76,20 +80,20 @@ function UserProfilCard({
       </div>
       <div className="userProfilCard-grid">
         <div className="userProfilCard-grid-case">
-          <span>{selectedUserStats.total}</span>
-          <p>Réservations</p>
+          <span>{selectedUserStats.gridValue1}</span>
+          <p>{selectedUserStats.gridTitle1}</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedUserStats.canceled}</span>
-          <p>Annulations</p>
+          <span>{selectedUserStats.gridValue2}</span>
+          <p>{selectedUserStats.gridTitle2}</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedUserStats.reviewsCount}</span>
-          <p>Avis laissés</p>
+          <span>{selectedUserStats.gridValue3}</span>
+          <p>{selectedUserStats.gridTitle3}</p>
         </div>
         <div className="userProfilCard-grid-case">
-          <span>{selectedUserStats.reported}</span>
-          <p>Signalements</p>
+          <span>{selectedUserStats.gridValue4}</span>
+          <p>{selectedUserStats.gridTitle4}</p>
         </div>
       </div>
       <div className="userProfilCard-action">

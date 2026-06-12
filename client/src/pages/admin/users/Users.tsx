@@ -125,23 +125,45 @@ function Users() {
 
   const selectedCustomerStats = useMemo(() => {
     if (!selectedCustomer)
-      return { total: 0, canceled: 0, reviewsCount: 0, reported: 0 };
+      return {
+        gridValue1: 0,
+        gridValue2: 0,
+        gridValue3: 0,
+        gridValue4: 0,
+        gridTitle1: "",
+        gridTitle2: "",
+        gridTitle3: "",
+        gridTitle4: "",
+      };
     const customerApps = monthlyAppointments.filter(
       (app) => app.id_user_customer === selectedCustomer.id_user,
     );
-    const total = customerApps.length;
-    const canceled = customerApps.filter(
-      (app) => app.status === "cancelled",
-    ).length;
     const customerAppIds = customerApps.map((app) => app.id_appointment);
     const customerReviews = reviews.filter((rev) =>
       customerAppIds.includes(rev.id_appointment),
     );
-    const reviewsCount = customerReviews.length;
-    const reported = customerReviews.filter(
+    const gridTitle1 = "Réservation";
+    const gridValue1 = customerApps.length;
+    const gridTitle2 = "Réservation annulé";
+    const gridValue2 = customerApps.filter(
+      (app) => app.status === "annulé",
+    ).length;
+    const gridTitle3 = "Avis laissés";
+    const gridValue3 = customerReviews.length;
+    const gridTitle4 = "Signalemments";
+    const gridValue4 = customerReviews.filter(
       (rev) => rev.reporting === 1,
     ).length;
-    return { total, canceled, reviewsCount, reported };
+    return {
+      gridValue1,
+      gridValue2,
+      gridValue3,
+      gridValue4,
+      gridTitle1,
+      gridTitle2,
+      gridTitle3,
+      gridTitle4,
+    };
   }, [selectedCustomer, monthlyAppointments, reviews]);
 
   const uniqueDepartments = useMemo(() => {
