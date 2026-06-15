@@ -67,10 +67,18 @@ class BarberStatisticsRepository {
     );
 
     return {
-      reservations: (reservationsRows as { current_week: number; last_week: number }[])[0],
-      customers: (customersRows as { current_week: number; last_week: number }[])[0],
+      reservations: (
+        reservationsRows as { current_week: number; last_week: number }[]
+      )[0],
+      customers: (
+        customersRows as { current_week: number; last_week: number }[]
+      )[0],
       revenueByDay: revenueRows as { day: string; revenue: number }[],
-      serviceDistribution: serviceRows as { name: string; count: number; revenue: number }[],
+      serviceDistribution: serviceRows as {
+        name: string;
+        count: number;
+        revenue: number;
+      }[],
       statusDistribution: statusRows as { status: string; count: number }[],
     };
   }
