@@ -10,6 +10,7 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
+import ReservationsDash from "./pages/admin/reservations/ReservationsDash";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
           { path: "dashboard", element: <Dashboard /> },
           { path: "users", element: <Users /> },
           { path: "barbers", element: <Barbers /> },
+          { path: "reservations", element: <ReservationsDash /> },
         ],
       },
       {
