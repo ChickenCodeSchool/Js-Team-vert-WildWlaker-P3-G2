@@ -12,6 +12,7 @@ import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
+import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
@@ -79,6 +80,7 @@ const router = createBrowserRouter([
           { path: "planning", element: <BarberPlanning /> },
           { path: "signalement", element: <BarberSignalement /> },
           { path: "statistics", element: <BarberStatistics /> },
+          { path: "annulations", element: <BarberAnnulations /> },
         ],
       },
     ],
