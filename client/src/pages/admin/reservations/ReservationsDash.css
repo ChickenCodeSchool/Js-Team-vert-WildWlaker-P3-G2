@@ -28,15 +28,100 @@
       font-size: 16px;
       color: var(--gray-600);
     }
+
+    .reservationsDash-top-graphs {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+    }
   }
   .reservationsDash-main {
-    .reservationsDash-section-top {
-      .reservationsDash-top-graphs {
-        max-width: 100%;
+    .reservationsDash-section {
+      width: 75%;
+      margin-left: 20px;
+      margin-right: 20px;
+      .user-grid-client-cell {
         display: flex;
-        justify-content: space-around;
-        gap: 1rem;
-        padding: 0px 16px 0px 16px;
+        align-items: center;
+        gap: 12px;
+
+        .user-grid-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background-color: var(--white);
+          object-fit: cover;
+        }
+      }
+
+      .user-grid-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 5px 0px 5px 0px;
+        border-radius: var(--radius-md);
+        &.status-confirmé {
+          color: var(--success);
+          background-color: #e6f4ea;
+        }
+        &.status-annulé {
+          color: var(--error);
+          background-color: #fef2f2;
+        }
+        &.attente {
+          color: var(--warning);
+          background-color: #fffbeb;
+        }
+        &.status-terminé {
+          color: var(--info);
+          background-color: #eff6ff;
+        }
+
+        /* .user-grid-fullname {
+          font-weight: 600;
+          color: var(--black);
+        } */
+      }
+
+      .user-grid-actions-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .user-grid-icon-btn {
+          background: none;
+          border: none;
+          color: var(--gray-600);
+          cursor: pointer;
+          padding: 6px;
+          border-radius: var(--radius-sm);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          transition: var(--transition);
+
+          &:hover {
+            background-color: var(--gray-100);
+            color: var(--black);
+          }
+        }
+      }
+
+      .user-grid-action-btn {
+        background: none;
+        border: none;
+        color: var(--gray-600);
+        font-size: 18px;
+        cursor: pointer;
+        padding: 4px 8px;
+        border-radius: var(--radius-sm);
+        transition: var(--transition);
+      }
+      .user-grid-action-btn:hover {
+        background-color: var(--gray-100);
+        color: var(--black);
       }
     }
   }
