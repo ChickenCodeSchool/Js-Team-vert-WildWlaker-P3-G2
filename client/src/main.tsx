@@ -1,7 +1,7 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { Navigate, RouterProvider, createBrowserRouter } from "react-router";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 
 /* ********************************************************************** */
 
@@ -12,13 +12,13 @@ import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
-import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BarberStatistics from "./pages/barber/barberStatistics/BarberStatistics";
+import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";

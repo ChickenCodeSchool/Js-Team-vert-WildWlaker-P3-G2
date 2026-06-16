@@ -13,8 +13,8 @@ import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilC
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 
-import type { Customer } from "../../../types/Customer";
 import type { Appointment } from "../../../types/appointment";
+import type { Customer } from "../../../types/Customer";
 import type { Review } from "../../../types/review";
 
 import "./Users.css";

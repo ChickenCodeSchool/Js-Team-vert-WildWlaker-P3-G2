@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import EditProfileModal from "../../../components/customer/Profile/EditProfileModal";
 import ProfileActions from "../../../components/customer/Profile/ProfileActions";
 import ProfileHeader from "../../../components/customer/Profile/ProfileHeader";

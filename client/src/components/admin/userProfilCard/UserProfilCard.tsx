@@ -9,8 +9,8 @@ import {
   FiTrash2,
   FiUser,
 } from "react-icons/fi";
-import type { Customer } from "../../../types/Customer";
 import type { Barber } from "../../../types/barber";
+import type { Customer } from "../../../types/Customer";
 
 import "./UserProfilCard.css";
 
