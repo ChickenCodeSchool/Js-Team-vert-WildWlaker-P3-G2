@@ -19,6 +19,7 @@ import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import CustomerAvis from "./pages/customer/avis/CustomerAvis";
+import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
           { path: "reservations/:id", element: <Reservations /> },
           { path: "avis", element: <CustomerAvis /> },
           { path: "give-avis", element: <GiveAvis /> },
+          { path: "avis-confirmation", element: <AvisConfirmation /> },
           { path: "login", element: <Login /> },
         ],
       },
