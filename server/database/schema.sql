@@ -68,7 +68,7 @@ CREATE TABLE barber (
     city VARCHAR(100) NOT NULL,
     adress VARCHAR(255) NOT NULL,
     delivery_radius INT NOT NULL DEFAULT 0,
-    status VARCHAR(50) DEFAULT 'pending', -- pending, active, suspended
+    status VARCHAR(50) DEFAULT 'En attente', -- pending, active, suspended
     CONSTRAINT pk_barber PRIMARY KEY (id_user),
     CONSTRAINT fk_barber_users FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
@@ -106,7 +106,7 @@ CREATE TABLE barber_availability (
 CREATE TABLE appointment (
     id_appointment INT AUTO_INCREMENT,
     appointment_date DATETIME NOT NULL,
-    status VARCHAR(50) NOT NULL DEFAULT 'pending',
+    status VARCHAR(50) NOT NULL DEFAULT 'En attente',
     location_type VARCHAR(50) NOT NULL,
     id_prestation INT NOT NULL,
     id_user_barber INT NOT NULL,   -- Coiffeur ayant reçu le RDV
@@ -114,9 +114,9 @@ CREATE TABLE appointment (
     -- id_availability INT NOT NULL, -- Ajout Thomas
     -- CONSTRAINT fk_barber_availability FOREIGN KEY (id_availability) REFERENCES barber_availability(id_availability), -- Thomas
     CONSTRAINT pk_appointment PRIMARY KEY (id_appointment),
-    CONSTRAINT fk_appointment_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation),
-    CONSTRAINT fk_appointment_barber FOREIGN KEY (id_user_barber) REFERENCES barber(id_user),
-    CONSTRAINT fk_appointment_customer FOREIGN KEY (id_user_customer) REFERENCES customer(id_user)
+    CONSTRAINT fk_appointment_prestation FOREIGN KEY (id_prestation) REFERENCES prestation(id_prestation) ON DELETE CASCADE,
+    CONSTRAINT fk_appointment_barber FOREIGN KEY (id_user_barber) REFERENCES barber(id_user) ON DELETE CASCADE,
+    CONSTRAINT fk_appointment_customer FOREIGN KEY (id_user_customer) REFERENCES customer(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE review (
@@ -169,8 +169,8 @@ INSERT INTO customer (id_user, firstname, lastname, postal_code, city, adress) V
 
 -- Profils Coiffeurs (id_user 4 et 5)
 INSERT INTO barber (id_user, name, description, postal_code, city, adress, delivery_radius, status) VALUES
-(4, 'Thomas The Barber', 'Spécialiste du dégradé américain et de la taille de barbe traditionnelle. 10 ans d''expérience.', '33000', 'Bordeaux', '8 Place de la Victoire', 15, 'active'),
-(5, 'Maxime Gradient', 'Expert coloriste pour homme et coiffure vintage (styles rétro pompadour).', '33100', 'Bordeaux', '102 Rue de la Benauge', 10, 'active');
+(4, 'Thomas The Barber', 'Spécialiste du dégradé américain et de la taille de barbe traditionnelle. 10 ans d''expérience.', '33000', 'Bordeaux', '8 Place de la Victoire', 15, 'Actif'),
+(5, 'Maxime Gradient', 'Expert coloriste pour homme et coiffure vintage (styles rétro pompadour).', '33100', 'Bordeaux', '102 Rue de la Benauge', 10, 'Actif');
 
 -- =============================================================================
 -- 3. INSERTIONS DES PRESTATIONS ET ÉVÉNEMENTS
@@ -226,9 +226,9 @@ INSERT INTO appointment (
     id_user_barber,
     id_user_customer
 ) VALUES
-(1,  '2026-05-20 10:00:00', 'completed', 'salon', 2, 4, 2),
-(2,  '2026-07-11 14:00:00', 'confirmed', 'event', 4, 4, 3),
-(3,  '2026-05-22 14:30:00', 'completed', 'domicile', 1, 5, 2);
+(1,  '2026-05-20 10:00:00', 'terminé', 'salon', 2, 4, 2),
+(2,  '2026-07-11 14:00:00', 'confirmé', 'event', 4, 4, 3),
+(3,  '2026-05-22 14:30:00', 'terminé', 'domicile', 1, 5, 2);
 -- =============================================================================
 -- 7. NOTATIONS ET AVIS (Review)
 -- =============================================================================

@@ -58,7 +58,7 @@ function SearchPage() {
             key={barber.id_user}
             barber={barber}
             onProfileClick={(selectedBarber) =>
-              navigate("/profile", {
+              navigate("/booking", {
                 state: {
                   barber: selectedBarber,
                 },
