@@ -38,7 +38,7 @@ class UserRepository {
   //   ...
   // }
   async delete(id: number) {
-    const query = `DELETE FROM users WHERE id_user = ?`;
+    const query = "DELETE FROM users WHERE id_user = ?";
     await databaseClient.query(query, [id]);
     return true;
   }

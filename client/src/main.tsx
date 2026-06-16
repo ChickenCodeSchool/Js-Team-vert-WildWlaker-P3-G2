@@ -25,6 +25,7 @@ import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
 import Home from "./pages/customer/home/Home";
+import UserProfile from "./pages/customer/profile/UserProfile";
 import Reservations from "./pages/customer/reservations/Reservations";
 import SearchPage from "./pages/customer/search/SearchPage";
 
@@ -50,6 +51,7 @@ const router = createBrowserRouter([
           { path: "search", element: <SearchPage /> },
           { path: "booking", element: <BookingPage /> },
           { path: "reservations/:id", element: <Reservations /> },
+          { path: "profile/:id", element: <UserProfile /> },
           { path: "avis", element: <CustomerAvis /> },
           { path: "give-avis", element: <GiveAvis /> },
           { path: "avis-confirmation", element: <AvisConfirmation /> },

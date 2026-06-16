@@ -28,6 +28,9 @@ function BookingConfirmation({ booking }: Props) {
       </p>
       <div className="booking-confirmation__card">
         <p className="booking-confirmation__item">
+          <strong>Barber:</strong> {booking.barber?.name}
+        </p>
+        <p className="booking-confirmation__item">
           <strong>Service:</strong> {booking.prestation?.name}
         </p>
 

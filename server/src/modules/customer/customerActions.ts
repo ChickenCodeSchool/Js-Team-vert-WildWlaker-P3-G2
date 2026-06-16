@@ -16,6 +16,19 @@ const browse: RequestHandler = async (_req, res, next) => {
     next(err);
   }
 };
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    // Fetch all customers
+    const customer = await customerRepository.read(id);
+
+    // Respond with the customers in JSON format
+    res.json(customer);
+  } catch (err) {
+    // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
 const edit: RequestHandler = async (req, res, next) => {
   try {
     const id_user = Number(req.params.id);
@@ -34,4 +47,4 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, edit };
+export default { browse, edit, read };
