@@ -1,4 +1,3 @@
-import type React from "react";
 import { useEffect, useState } from "react";
 import {
   FiAlertTriangle,
@@ -13,25 +12,29 @@ import {
 } from "react-icons/fi";
 
 import type { Customer } from "../../../types/Customer";
+import type { Barber } from "../../../types/barber";
 
 import "./EditUserModal.css";
 
-interface EditUserModalProps {
+interface EditUserModalProps<T> {
   isOpen: boolean;
   onClose: () => void;
-  customer: (Customer & { id: number }) | null;
-  onSave: (updatedData: Customer & { id: number }) => void;
-  onToggleSuspend: (customer: Customer & { id: number }) => Promise<void>;
+  user: (T & { id: number }) | null;
+  onSave: (updatedData: T & { id: number }) => void;
+  onToggleSuspend: (user: T & { id: number }) => Promise<void> | void;
+  deleteUser: () => void;
 }
 
-function EditUserModal({
+function EditUserModal<T extends Customer | Barber>({
   isOpen,
   onClose,
-  customer,
+  user,
   onSave,
   onToggleSuspend,
-}: EditUserModalProps) {
+  deleteUser,
+}: EditUserModalProps<T>) {
   const [formData, setFormData] = useState({
+    name: "",
     firstname: "",
     lastname: "",
     email: "",
@@ -47,29 +50,38 @@ function EditUserModal({
   });
 
   useEffect(() => {
-    if (customer) {
+    if (user) {
       setFormData({
-        firstname: customer.firstname || "",
-        lastname: customer.lastname || "",
-        email: customer.email || "",
-        phone: customer.phone || "Non renseigné",
-        create_time: customer.create_time
-          ? customer.create_time.split("T")[0]
-          : "",
-        city: customer.city || "",
-        postal_code: customer.postal_code || "",
-        genre: customer.genre || "Homme",
-        status: customer.status || "Actif",
-        annotations: customer.annotations || "",
-        adress: customer.adress || "",
-        birthday: customer.birthday ? customer.birthday.split("T")[0] : "",
+        name: "name" in user ? user.name || "" : "",
+        firstname: "firstname" in user ? user.firstname || "" : "",
+        lastname: "lastname" in user ? user.lastname || "" : "",
+        email: user.email || "",
+        phone: user.phone || "Non renseigné",
+        create_time: user.create_time ? user.create_time.split("T")[0] : "",
+        city: user.city || "",
+        postal_code: user.postal_code || "",
+        genre: "genre" in user && user.genre ? user.genre : "Homme",
+        status: user.status || "Actif",
+        annotations:
+          "annotations" in user && user.annotations ? user.annotations : "",
+        adress: user.adress || "",
+        birthday:
+          "birthday" in user && user.birthday
+            ? user.birthday.split("T")[0]
+            : "",
       });
     }
-  }, [customer]);
+  }, [user]);
 
-  if (!isOpen || !customer) return null;
+  if (!isOpen || !user) return null;
 
   const isSuspended = formData.status?.toLowerCase() === "suspendu";
+  const isPending = formData.status?.toLowerCase() === "en attente";
+
+  const displayName =
+    "name" in user
+      ? formData.name
+      : `${formData.firstname} ${formData.lastname}`;
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -83,7 +95,7 @@ function EditUserModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
-      ...customer,
+      ...user,
       ...formData,
     });
   };
@@ -111,10 +123,7 @@ function EditUserModal({
             <div className="modal-grid-top">
               <div className="avatar-section">
                 <div className="avatar-wrapper">
-                  <img
-                    src={customer.avatar_url}
-                    alt="Avatar de l'utilisateur"
-                  />
+                  <img src={user.avatar_url} alt="Avatar de l'utilisateur" />
                   <div className="camera-icon">
                     <FiCamera size={14} />
                   </div>
@@ -126,11 +135,11 @@ function EditUserModal({
 
               <div className="form-fields-top">
                 <div className="form-group">
-                  <label htmlFor="fullname">Nom complet</label>
+                  <label htmlFor="fullname">Nom complet / Enseigne</label>
                   <input
                     id="fullname"
                     type="text"
-                    value={`${formData.firstname} ${formData.lastname}`}
+                    value={displayName}
                     disabled
                     className="disabled-input"
                   />
@@ -151,11 +160,10 @@ function EditUserModal({
                 <div className="form-group">
                   <label htmlFor="phone">Téléphone *</label>
                   <div className="phone-input-container">
-                    <span
-                      className="flag-icon"
-                      role="img"
-                      aria-label="Drapeau Français"
-                    ></span>
+                    <span>
+                      className="flag-icon" role="img" aria-label="Drapeau
+                      Français"
+                    </span>
                     <input
                       id="phone"
                       type="text"
@@ -202,6 +210,9 @@ function EditUserModal({
                   >
                     <option value="Actif">🟢 Actif</option>
                     <option value="Suspendu">🟠 Suspendu</option>
+                    {"name" in user && (
+                      <option value="En attente">🟡 En attente</option>
+                    )}
                   </select>
                 </div>
               </div>
@@ -211,16 +222,32 @@ function EditUserModal({
 
             <h3 className="section-title">Informations supplémentaires</h3>
             <div className="modal-grid-middle">
-              <div className="form-group">
-                <label htmlFor="birthday">Date de naissance</label>
-                <input
-                  id="birthday"
-                  type="date"
-                  name="birthday"
-                  value={formData.birthday}
-                  onChange={handleChange}
-                />
-              </div>
+              {"delivery_radius" in user ? (
+                <div className="form-group">
+                  <label htmlFor="delivery_radius">
+                    Rayon de livraison (km)
+                  </label>
+                  <input
+                    id="delivery_radius"
+                    type="number"
+                    name="delivery_radius"
+                    value={(user as Barber).delivery_radius || ""}
+                    disabled
+                    className="disabled-input"
+                  />
+                </div>
+              ) : (
+                <div className="form-group">
+                  <label htmlFor="birthday">Date de naissance</label>
+                  <input
+                    id="birthday"
+                    type="date"
+                    name="birthday"
+                    value={formData.birthday}
+                    onChange={handleChange}
+                  />
+                </div>
+              )}
 
               <div className="form-group">
                 <label htmlFor="genre">Genre</label>
@@ -266,11 +293,26 @@ function EditUserModal({
                   name="annotations"
                   value={formData.annotations}
                   onChange={handleChange}
-                  placeholder="Ajouter des détails importants sur l'utilisateur (préférences, comportement...)"
+                  placeholder="Ajouter des détails importants sur l'utilisateur..."
                   rows={3}
                   style={{ resize: "vertical" }}
                 />
               </div>
+
+              {"name" in user && (
+                <div className="form-group full-width">
+                  <label htmlFor="description">Description du salon</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    value={(user as Barber).description || ""}
+                    disabled
+                    className="disabled-input"
+                    rows={3}
+                    style={{ resize: "vertical" }}
+                  />
+                </div>
+              )}
             </div>
 
             <hr className="modal-divider" />
@@ -292,10 +334,10 @@ function EditUserModal({
 
               <button
                 type="button"
-                className={`action-btn ${isSuspended ? "active-btn" : "suspend-btn"}`}
+                className={`action-btn ${isSuspended ? "active-btn" : isPending ? "active-btn" : "suspend-btn"}`}
                 onClick={async () => {
-                  if (customer) {
-                    await onToggleSuspend(customer);
+                  if (user) {
+                    await onToggleSuspend(user);
                     onClose();
                   }
                 }}
@@ -304,6 +346,10 @@ function EditUserModal({
                   <>
                     <FiPlay /> Réactiver le compte
                   </>
+                ) : isPending ? (
+                  <>
+                    <FiPlay /> Approuver le profil
+                  </>
                 ) : (
                   <>
                     <FiPause /> Suspendre le compte
@@ -311,7 +357,11 @@ function EditUserModal({
                 )}
               </button>
 
-              <button type="button" className="action-btn delete-btn">
+              <button
+                type="button"
+                className="action-btn delete-btn"
+                onClick={deleteUser}
+              >
                 <FiTrash2 /> Supprimer le compte
               </button>
             </div>

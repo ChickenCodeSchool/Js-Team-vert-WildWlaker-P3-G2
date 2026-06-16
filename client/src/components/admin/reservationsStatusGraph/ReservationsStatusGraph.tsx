@@ -54,20 +54,21 @@ function ReservationStatusGraph({ appointments }: ReservationStatusGraphProps) {
   const statusConfig: {
     [key: string]: { id: number; name: string; color: string };
   } = {
-    confirmed: { id: 1, name: "Confirmées", color: "var(--success)" },
-    pending: { id: 2, name: "En attente", color: "var(--warning)" },
-    completed: { id: 3, name: "Terminées", color: "var(--info)" },
-    cancelled: { id: 4, name: "Annulées", color: "var(--error)" },
+    confirmé: { id: 1, name: "Confirmées", color: "var(--success)" },
+    "en attente": { id: 2, name: "En attente", color: "var(--warning)" },
+    terminé: { id: 3, name: "Terminées", color: "var(--info)" },
+    annulé: { id: 4, name: "Annulées", color: "var(--error)" },
   };
 
   const counts = appointments.reduce<{ [key: string]: number }>(
     (acc, app) => {
-      if (acc[app.status] !== undefined) {
-        acc[app.status]++;
+      const statusKey = app.status?.toLowerCase();
+      if (acc[statusKey] !== undefined) {
+        acc[statusKey]++;
       }
       return acc;
     },
-    { confirmed: 0, pending: 0, completed: 0, cancelled: 0 },
+    { confirmé: 0, "en attente": 0, terminé: 0, annulé: 0 },
   );
 
   const chartData: StatusData[] = Object.keys(statusConfig).map((key) => {

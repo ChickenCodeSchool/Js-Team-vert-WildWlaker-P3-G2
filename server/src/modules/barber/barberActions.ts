@@ -20,5 +20,22 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const edit: RequestHandler = async (req, res, next) => {
+  try {
+    const id_user = Number(req.params.id);
+    const updatedCustomerData = { ...req.body, id_user };
 
-export default { browse };
+    // Appel au repository pour sauvegarder en BDD
+    await barberRepository.update(updatedCustomerData);
+
+    // On renvoie un statut 204 (No Content) ou 200 avec les données
+    res.status(200).json({
+      message: "Client mis à jour avec succès",
+      data: updatedCustomerData,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, edit };

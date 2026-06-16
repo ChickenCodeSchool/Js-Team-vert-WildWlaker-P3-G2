@@ -1,7 +1,7 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiCalendar, FiEye, FiPause, FiUserPlus } from "react-icons/fi";
+import { FiCheck, FiEye, FiPause, FiScissors } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
 import EditUserModal from "../../../components/admin/editUserModal/EditUserModal";
@@ -13,14 +13,13 @@ import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilC
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 
-import type { Customer } from "../../../types/Customer";
 import type { Appointment } from "../../../types/appointment";
+import type { Barber } from "../../../types/barber";
 import type { Review } from "../../../types/review";
 
-import "./Users.css";
+import "./Barber.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
 const today = new Date();
 const thirtyDaysAgo = subDays(today, 30);
 const thisMonthRange = {
@@ -29,25 +28,23 @@ const thisMonthRange = {
 };
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
-function Users() {
-  const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
-  const [monthlyNewUsers, setMonthlyNewUsers] = useState<Customer[]>([]);
-  const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
-    [],
-  );
-  const [selectedCustomer, setSelectedCustomer] = useState<
-    (Customer & { id: number }) | null
-  >(null);
+function Barbers() {
+  const [barbers, setBarbers] = useState<(Barber & { id: number })[]>([]);
+  const [monthlyNewBarbers, setMonthlyNewBarbers] = useState<Barber[]>([]);
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+  const [selectedBarber, setSelectedBarber] = useState<
+    (Barber & { id: number }) | null
+  >(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const loadAllData = useCallback(() => {
-    fetch(`${API_URL}/api/customers`)
+    fetch(`${API_URL}/api/barbers`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();
       })
-      .then((data: Customer[]) => {
+      .then((data: Barber[]) => {
         const formattedData = data.map((item) => ({
           ...item,
           id: item.id_user,
@@ -57,9 +54,9 @@ function Users() {
             new Date(b.create_time).getTime() -
             new Date(a.create_time).getTime(),
         );
-        setCustomers(formattedData);
+        setBarbers(formattedData);
         if (sortedData.length > 0) {
-          setSelectedCustomer((prev) => {
+          setSelectedBarber((prev) => {
             if (prev) {
               const current = formattedData.find(
                 (c) => c.id_user === prev.id_user,
@@ -73,20 +70,17 @@ function Users() {
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
-
     fetch(`${API_URL}/api/reviews`)
       .then((res) => res.json())
       .then((data: Review[]) => setReviews(data))
       .catch((err) => console.error("Erreur lors du fetch des avis :", err));
-
-    fetch(`${API_URL}/api/customers${params}`)
+    fetch(`${API_URL}/api/appointments`)
       .then((res) => res.json())
-      .then((data: Customer[]) => setMonthlyNewUsers(data))
+      .then((data: Appointment[]) => setAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
-
-    fetch(`${API_URL}/api/appointments${params}`)
+    fetch(`${API_URL}/api/barbers${params}`)
       .then((res) => res.json())
-      .then((data: Appointment[]) => setMonthlyAppointments(data))
+      .then((data: Barber[]) => setMonthlyNewBarbers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
   }, []);
 
@@ -100,16 +94,13 @@ function Users() {
     dateSortOrder,
     setDateSortOrder,
     filteredData,
-  } = useAdminFilters<Customer & { id: number }>(customers, [
-    "firstname",
-    "lastname",
-  ]);
+  } = useAdminFilters<Barber & { id: number }>(barbers, ["name"]);
 
   const { handleSave, handleToggleSuspend, deleteUser } = useEntityActions<
-    Customer & { id: number }
+    Barber & { id: number }
   >({
     apiBase: API_URL,
-    idField: "api/customers",
+    idField: "api/barbers",
     onActionComplete: loadAllData,
     onClose: () => setIsEditModalOpen(false),
   });
@@ -118,13 +109,15 @@ function Users() {
     loadAllData();
   }, [loadAllData]);
 
-  const suspendedAccountsCount = useMemo(() => {
-    return customers.filter((c) => c.status?.toLowerCase() === "suspendu")
+  const suspendedBarbersCount = useMemo(() => {
+    return barbers.filter((b) => b.status?.toLowerCase() === "suspendu").length;
+  }, [barbers]);
+  const pendingBarbersCount = useMemo(() => {
+    return barbers.filter((b) => b.status?.toLowerCase() === "en attente")
       .length;
-  }, [customers]);
-
-  const selectedCustomerStats = useMemo(() => {
-    if (!selectedCustomer)
+  }, [barbers]);
+  const selectedBarberStats = useMemo(() => {
+    if (!selectedBarber)
       return {
         gridValue1: 0,
         gridValue2: 0,
@@ -135,23 +128,23 @@ function Users() {
         gridTitle3: "",
         gridTitle4: "",
       };
-    const customerApps = monthlyAppointments.filter(
-      (app) => app.id_user_customer === selectedCustomer.id_user,
+    const barberApps = appointments.filter(
+      (app) => app.id_user_barber === selectedBarber.id_user,
     );
-    const customerAppIds = customerApps.map((app) => app.id_appointment);
-    const customerReviews = reviews.filter((rev) =>
-      customerAppIds.includes(rev.id_appointment),
+    const barberAppIds = barberApps.map((app) => app.id_appointment);
+    const barberReviews = reviews.filter((rev) =>
+      barberAppIds.includes(rev.id_appointment),
     );
     const gridTitle1 = "Réservation";
-    const gridValue1 = customerApps.length;
+    const gridValue1 = barberApps.length;
     const gridTitle2 = "Réservation annulé";
-    const gridValue2 = customerApps.filter(
+    const gridValue2 = barberApps.filter(
       (app) => app.status === "annulé",
     ).length;
-    const gridTitle3 = "Avis laissés";
-    const gridValue3 = customerReviews.length;
+    const gridTitle3 = "Avis reçu";
+    const gridValue3 = barberReviews.length;
     const gridTitle4 = "Signalemments";
-    const gridValue4 = customerReviews.filter(
+    const gridValue4 = barberReviews.filter(
       (rev) => rev.reporting === 1,
     ).length;
     return {
@@ -164,37 +157,35 @@ function Users() {
       gridTitle3,
       gridTitle4,
     };
-  }, [selectedCustomer, monthlyAppointments, reviews]);
+  }, [selectedBarber, appointments, reviews]);
 
   const uniqueDepartments = useMemo(() => {
-    const depts = customers
-      .map((c) => (c.postal_code ? c.postal_code.substring(0, 2) : ""))
+    const depts = barbers
+      .map((b) => (b.postal_code ? b.postal_code.substring(0, 2) : ""))
       .filter((dept) => dept.length === 2);
     return Array.from(new Set(depts)).sort();
-  }, [customers]);
+  }, [barbers]);
 
   const uniqueStatus = useMemo(() => {
-    const statusList = customers
-      .map((c) => c.status || "")
+    const statusList = barbers
+      .map((b) => b.status || "")
       .filter((s) => s.trim() !== "");
     return Array.from(new Set(statusList)).sort();
-  }, [customers]);
+  }, [barbers]);
 
-  const columns: DataGridColumn<Customer & { id: number }>[] = [
+  const columns: DataGridColumn<Barber & { id: number }>[] = [
     {
       key: "name",
-      header: "Utilisateur",
-      render: (customer) => (
+      header: "Coiffeur",
+      render: (barber) => (
         <div className="user-grid-client-cell">
           <img
-            src={`${customer.avatar_url}`}
-            alt={`${customer.firstname} ${customer.lastname}`}
+            src={`${barber.avatar_url}`}
+            alt={barber.name}
             className="user-grid-avatar"
           />
           <div className="user-grid-info">
-            <span className="user-grid-fullname">
-              {customer.firstname} {customer.lastname}
-            </span>
+            <span className="user-grid-fullname">{barber.name}</span>
           </div>
         </div>
       ),
@@ -202,41 +193,37 @@ function Users() {
     {
       key: "email",
       header: "Email",
-      render: (customer) => (
-        <div className="user-grid-info">{customer.email}</div>
-      ),
+      render: (barber) => <div className="user-grid-info">{barber.email}</div>,
     },
     {
       key: "city",
       header: "Ville",
-      render: (customer) => (
-        <div className="user-grid-info">{customer.city}</div>
-      ),
+      render: (barber) => <div className="user-grid-info">{barber.city}</div>,
     },
     {
       key: "postal_code",
       header: "Code postal",
-      render: (customer) => (
-        <div className="user-grid-info">{customer.postal_code}</div>
+      render: (barber) => (
+        <div className="user-grid-info">{barber.postal_code}</div>
       ),
     },
     {
       key: "status",
       header: "Status",
-      render: (customer) => (
+      render: (barber) => (
         <div
-          className={`user-grid-info status-${customer.status?.toLowerCase()}`}
+          className={`user-grid-info status-${barber.status?.toLowerCase()}`}
         >
-          {customer.status}
+          {barber.status}
         </div>
       ),
     },
     {
       key: "create_time",
       header: "Date de création",
-      render: (customer) => (
+      render: (barber) => (
         <div className="user-grid-info">
-          {format(new Date(customer.create_time), "dd MMM yyyy", {
+          {format(new Date(barber.create_time), "dd MMM yyyy", {
             locale: fr,
           })}
         </div>
@@ -245,13 +232,13 @@ function Users() {
     {
       key: "actions",
       header: "Actions",
-      render: (customer) => (
+      render: (barber) => (
         <div className="user-grid-actions-cell">
           <button
             type="button"
             className="user-grid-icon-btn"
             onClick={() => {
-              setSelectedCustomer(customer);
+              setSelectedBarber(barber);
               setIsEditModalOpen(true);
             }}
             title="Voir"
@@ -264,43 +251,43 @@ function Users() {
   ];
 
   return (
-    <div className="admin-users-body">
-      <header className="admin-users-header">
-        <div className="admin-users-title">
-          <FiUserPlus className="admin-users-title-icon" />
-          <h1>Gestion des utilisateurs</h1>
+    <div className="admin-barbers-body">
+      <header className="admin-barbers-header">
+        <div className="admin-barbers-title">
+          <FiScissors className="admin-barbers-title-icon" />
+          <h1>Gestion des coiffeurs</h1>
         </div>
-        <p>Gérez et suivez les utilisateurs de votre plateforme</p>
+        <p>Gérez et suivez les Coiffeurs de votre plateforme</p>
       </header>
-      <main className="admin-users-main">
-        <section className="admin-users-main-left">
-          <div className="admin-users-body-stats">
+      <main className="admin-barbers-main">
+        <section className="admin-barbers-main-left">
+          <div className="admin-barbers-body-stats">
             <StatsCard
-              Icon={FiUserPlus}
-              title="utilisateurs"
-              value={customers.length}
+              Icon={FiScissors}
+              title="Coiffeurs"
+              value={barbers.length}
               cycle="Total"
             />
             <StatsCard
-              Icon={FiUserPlus}
+              Icon={FiScissors}
               iconColor="icon-success"
-              title="Nouveaux utilisateurs"
-              value={monthlyNewUsers.length}
+              title="Nouveaux coiffeurs"
+              value={monthlyNewBarbers.length}
               cycle="Les 30 derniers jours"
             />
             <StatsCard
               Icon={FiPause}
-              iconColor="icon-warning"
-              title="Comptes suspendus"
-              value={suspendedAccountsCount}
+              iconColor="icon-error"
+              title="Coiffeurs suspendus"
+              value={suspendedBarbersCount}
               cycle="Total"
             />
             <StatsCard
-              Icon={FiCalendar}
-              iconColor="icon-info"
-              title="Réservations"
-              value={monthlyAppointments.length}
-              cycle="Les 30 derniers jours"
+              Icon={FiCheck}
+              iconColor="icon-warning"
+              title="Coiffeurs en attente"
+              value={pendingBarbersCount}
+              cycle="Total"
             />
           </div>
           <AdminFilterBar
@@ -319,20 +306,20 @@ function Users() {
             <UserDataGrid
               columns={columns}
               data={filteredData}
-              onRowClick={(customer) => setSelectedCustomer(customer)}
+              onRowClick={(barber) => setSelectedBarber(barber)}
               rowsPerPage={6}
-              selectedId={selectedCustomer?.id}
+              selectedId={selectedBarber?.id}
             />
           </div>
         </section>
-        <aside className="admin-users-main-aside">
-          {selectedCustomer ? (
+        <aside className="admin-barbers-main-aside">
+          {selectedBarber ? (
             <UserProfilCard
-              selectedUser={selectedCustomer}
-              selectedUserStats={selectedCustomerStats}
+              selectedUser={selectedBarber}
+              selectedUserStats={selectedBarberStats}
               onEditClick={() => setIsEditModalOpen(true)}
-              onToggleSuspendClick={() => handleToggleSuspend(selectedCustomer)}
-              deleteUser={() => deleteUser(selectedCustomer)}
+              onToggleSuspendClick={() => handleToggleSuspend(selectedBarber)}
+              deleteUser={() => deleteUser(selectedBarber)}
             />
           ) : (
             <div className="no-user-selected">
@@ -344,12 +331,12 @@ function Users() {
       <EditUserModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
-        user={selectedCustomer}
+        user={selectedBarber}
         onSave={handleSave}
         onToggleSuspend={handleToggleSuspend}
         deleteUser={() => {
-          if (selectedCustomer) {
-            deleteUser(selectedCustomer);
+          if (selectedBarber) {
+            deleteUser(selectedBarber);
           }
         }}
       />
@@ -357,4 +344,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Barbers;

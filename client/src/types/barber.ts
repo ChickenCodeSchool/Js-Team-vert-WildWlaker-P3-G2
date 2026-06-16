@@ -7,8 +7,11 @@ export type Barber = {
   adress: string;
   delivery_radius: number;
   status: string;
-  avatar_url: string;
   create_time: string;
-  telephone: string;
-  date_naissance: string;
+  avatar_url: string;
+  email: string;
+  phone: string;
+  birthday: string;
+  genre: string;
+  annotations?: string;
 };

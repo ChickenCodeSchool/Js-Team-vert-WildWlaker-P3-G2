@@ -51,7 +51,7 @@ function AdminFilterBar({
             <option value="">Tous les départements</option>
             {departments.map((dept) => (
               <option key={dept} value={dept}>
-                Département {dept}
+                {dept}
               </option>
             ))}
           </select>
@@ -67,7 +67,7 @@ function AdminFilterBar({
             <option value="">Tous les statuts</option>
             {status.map((stat) => (
               <option key={stat} value={stat}>
-                Statut : {stat}
+                {stat}
               </option>
             ))}
           </select>

@@ -8,6 +8,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from "react-router";
 // Import the main app component
 import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
+import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
@@ -17,7 +18,9 @@ import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
+import BarberStatistics from "./pages/barber/barberStatistics/BarberStatistics";
 import CustomerAvis from "./pages/customer/avis/CustomerAvis";
+import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
@@ -51,6 +54,7 @@ const router = createBrowserRouter([
           { path: "profile/:id", element: <UserProfile /> },
           { path: "avis", element: <CustomerAvis /> },
           { path: "give-avis", element: <GiveAvis /> },
+          { path: "avis-confirmation", element: <AvisConfirmation /> },
           { path: "login", element: <Login /> },
         ],
       },
@@ -61,6 +65,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
           { path: "users", element: <Users /> },
+          { path: "barbers", element: <Barbers /> },
         ],
       },
       {
@@ -73,6 +78,7 @@ const router = createBrowserRouter([
           { path: "dashboard", element: <BarberDashBoard /> },
           { path: "planning", element: <BarberPlanning /> },
           { path: "signalement", element: <BarberSignalement /> },
+          { path: "statistics", element: <BarberStatistics /> },
         ],
       },
     ],
