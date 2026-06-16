@@ -1,19 +1,9 @@
 import { useEffect, useState } from "react";
+import ModalReservation from "../../../components/barber/planning/modalReservation/ModalReservation";
 import PlanningCalendar from "../../../components/barber/planningCalendar/PlanningCalendar";
 import ReservationCardPlanning from "../../../components/barber/reservationCard/ReservationCardPlanning";
-
+import type { Appointment } from "../../../types/appointment";
 import "./BarberPlanning.css";
-
-type ApiReservation = {
-  id_appointment: number;
-  appointment_date: string;
-  status: "confirmed" | "pending" | "cancelled";
-  customer_firstname: string;
-  customer_lastname: string;
-  customer_avatar: string;
-  prestation_name: string;
-  duration_minutes: number;
-};
 
 function formatDateKey(date: Date) {
   const year = date.getFullYear();
@@ -27,7 +17,9 @@ function BarberPlanning() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [reservations, setReservations] = useState<ApiReservation[]>([]);
+  const [reservations, setReservations] = useState<Appointment[]>([]);
+  const [selectedReservation, setSelectedReservation] =
+    useState<Appointment | null>(null);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/appointments`)
@@ -61,41 +53,51 @@ function BarberPlanning() {
   });
 
   return (
-    <main className="barber-planning-page">
-      <PlanningCalendar
-        selectedDate={selectedDate}
-        onSelectDate={setSelectedDate}
-        reservations={reservations}
-      />
+    <>
+      <main className="barber-planning-page">
+        <PlanningCalendar
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+          reservations={reservations}
+        />
 
-      <section className="barber-planning-reservations">
-        <div className="planning-handle" />
+        <section className="barber-planning-reservations">
+          <div className="planning-handle" />
 
-        <h3>{titleDate}</h3>
+          <h3>{titleDate}</h3>
 
-        {reservationsOfSelectedDay.length > 0 ? (
-          reservationsOfSelectedDay.map((reservation) => (
-            <ReservationCardPlanning
-              key={reservation.id_appointment}
-              avatar={reservation.customer_avatar}
-              time={new Date(reservation.appointment_date).toLocaleTimeString(
-                "fr-FR",
-                {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                },
-              )}
-              customerName={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
-              service={reservation.prestation_name}
-              duration={reservation.duration_minutes}
-              status={reservation.status}
-            />
-          ))
-        ) : (
-          <p>Aucun rendez-vous ce jour</p>
-        )}
-      </section>
-    </main>
+          {reservationsOfSelectedDay.length > 0 ? (
+            reservationsOfSelectedDay.map((reservation) => (
+              <ReservationCardPlanning
+                key={reservation.id_appointment}
+                avatar={reservation.customer_avatar}
+                time={new Date(reservation.appointment_date).toLocaleTimeString(
+                  "fr-FR",
+                  {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  },
+                )}
+                customerName={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
+                service={reservation.prestation_name}
+                duration={reservation.duration_minutes}
+                status={reservation.status}
+                onShowDetails={() => setSelectedReservation(reservation)}
+              />
+            ))
+          ) : (
+            <p>Aucun rendez-vous ce jour</p>
+          )}
+        </section>
+      </main>
+
+      {selectedReservation !== null && (
+        <ModalReservation
+          reservation={selectedReservation}
+          onClose={() => setSelectedReservation(null)}
+        />
+      )}
+    </>
   );
 }
 

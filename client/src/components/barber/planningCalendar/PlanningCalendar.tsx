@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import "./PlanningCalendar.css";
+import type { Appointment } from "../../../types/appointment";
 
 type ViewMode = "day" | "week" | "month";
 
@@ -9,21 +10,10 @@ type CalendarDay = {
   isCurrentMonth: boolean;
 };
 
-type ApiReservation = {
-  id_appointment: number;
-  appointment_date: string;
-  status: string;
-  customer_firstname: string;
-  customer_lastname: string;
-  customer_avatar: string;
-  prestation_name: string;
-  duration_minutes: number;
-};
-
 type Props = {
   selectedDate: Date;
   onSelectDate: (date: Date) => void;
-  reservations: ApiReservation[];
+  reservations: Appointment[];
 };
 
 const weekDays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
