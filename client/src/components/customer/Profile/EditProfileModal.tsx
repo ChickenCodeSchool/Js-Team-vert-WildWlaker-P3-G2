@@ -1,5 +1,6 @@
 import "./EditProfileModal.css";
 import { useState } from "react";
+import { FiX } from "react-icons/fi";
 import type { Customer } from "./../../../types/Customer";
 
 type Props = {
@@ -10,6 +11,8 @@ type Props = {
     lastname: string;
     email: string;
     city: string;
+    postal_code: string;
+    adress: string;
   }) => void;
   loadData: () => void;
 };
@@ -23,6 +26,8 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
   const [lastname, setLastname] = useState(customer.lastname);
   const [email, setEmail] = useState(customer.email);
   const [city, setCity] = useState(customer.city);
+  const [postalCode, setPostalCode] = useState(customer.postal_code);
+  const [adress, setAdress] = useState(customer.adress);
   const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -35,6 +40,8 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       lastname: lastname,
       email: email,
       city: city,
+      postalCode: postalCode,
+      adress: adress,
       birthday: formatBirthday(customer.birthday),
     };
 
@@ -66,7 +73,9 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
     firstname !== customer.firstname ||
     lastname !== customer.lastname ||
     email !== customer.email ||
-    city !== customer.city;
+    city !== customer.city ||
+    postalCode !== customer.postal_code ||
+    adress !== customer.adress;
 
   return (
     <div className="modal">
@@ -77,35 +86,69 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
         aria-label="Fermer la modale"
       />
       <div className="modal__content">
+        <button type="button" className="modal__close-button" onClick={onClose}>
+          <FiX />
+        </button>
+
         <h2 className="modal-content__header">Modifier mon profil</h2>
 
-        <input
-          type="text"
-          value={firstname}
-          onChange={(e) => setFirstname(e.target.value)}
-          className="modal-content__item"
-        />
+        <label className="modal-content__label">
+          Prénom
+          <input
+            type="text"
+            value={firstname}
+            onChange={(e) => setFirstname(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
+        <label className="modal-content__label">
+          Nom
+          <input
+            type="text"
+            value={lastname}
+            onChange={(e) => setLastname(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
+        <label className="modal-content__label">
+          E-mail
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
 
-        <input
-          type="text"
-          value={lastname}
-          onChange={(e) => setLastname(e.target.value)}
-          className="modal-content__item"
-        />
+        <label className="modal-content__label">
+          Ville
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
 
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="modal-content__item"
-        />
+        <label className="modal-content__label">
+          Code postale
+          <input
+            type="text"
+            value={postalCode}
+            onChange={(e) => setPostalCode(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
 
-        <input
-          type="text"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-          className="modal-content__item"
-        />
+        <label className="modal-content__label">
+          Adresse
+          <input
+            type="text"
+            value={adress}
+            onChange={(e) => setAdress(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
 
         <div className="modal-actions">
           <button

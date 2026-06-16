@@ -40,6 +40,27 @@ class CustomerRepository {
     // Return the array of Customers
     return rows as Customer[];
   }
+  async read(id: number) {
+    // Execute the SQL SELECT query to retrieve all Customers from the "Customer" table
+    const query = `
+      SELECT 
+        c.*,
+        u.avatar_url AS avatar_url, 
+        u.create_time AS create_time,
+        u.email AS email,
+        u.phone AS phone,
+        u.birthday AS birthday,
+        u.genre AS genre, 
+        u.annotations AS annotations 
+      FROM customer c
+      JOIN users u ON c.id_user = u.id_user
+      WHERE c.id_user = ? 
+    `;
+    const [rows] = await databaseClient.query<Rows>(query, [id]);
+
+    // Return the array of Customers
+    return rows as Customer[];
+  }
 
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Customer

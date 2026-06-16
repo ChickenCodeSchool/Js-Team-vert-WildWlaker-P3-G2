@@ -21,6 +21,7 @@ router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/customers", customerActions.browse);
+router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
 router.get("/api/events", eventActions.browse);
 router.get("/api/prestations", prestationActions.browse);

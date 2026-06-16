@@ -13,6 +13,10 @@ function BookingSummary({ booking, onBack, onNext }: Props) {
       <h2 className="booking-summary__title">Récapitulatif</h2>
       <div className="booking-summary__card">
         <p className="booking-summary__item">
+          <strong>Barber</strong> :{booking.barber?.name}
+        </p>
+
+        <p className="booking-summary__item">
           <strong>Service</strong> :{booking.prestation?.name}
         </p>
 

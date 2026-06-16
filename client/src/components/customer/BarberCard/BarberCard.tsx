@@ -15,7 +15,15 @@ function BarberCard({ barber, onProfileClick }: BarberCardProps) {
       : fallbackImage;
 
   return (
-    <article className="barber-card">
+    <article
+      className="barber-card"
+      onClick={() => onProfileClick?.(barber)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          onProfileClick?.(barber);
+        }
+      }}
+    >
       <img
         src={image}
         alt={barber.name}
@@ -42,14 +50,7 @@ function BarberCard({ barber, onProfileClick }: BarberCardProps) {
           <span className="barber-card__distance">
             {barber.delivery_radius} km
           </span>
-          <button
-            type="button"
-            className="barber-card__profile-button"
-            onClick={() => onProfileClick?.(barber)}
-          >
-            <span>Voir le profil</span>
-            <FiChevronRight className="barber-card__arrow" />
-          </button>
+          <FiChevronRight className="barber-card__arrow" />
         </div>
       </div>
     </article>
