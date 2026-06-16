@@ -160,11 +160,10 @@ function EditUserModal<T extends Customer | Barber>({
                 <div className="form-group">
                   <label htmlFor="phone">Téléphone *</label>
                   <div className="phone-input-container">
-                    <span
-                      className="flag-icon"
-                      role="img"
-                      aria-label="Drapeau Français"
-                    ></span>
+                    <span>
+                      className="flag-icon" role="img" aria-label="Drapeau
+                      Français"
+                    </span>
                     <input
                       id="phone"
                       type="text"

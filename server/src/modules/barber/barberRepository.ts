@@ -38,7 +38,7 @@ class BarberRepository {
   `;
     const queryParams: string[] = [];
     if (filters?.startDate && filters?.endDate) {
-      query += ` WHERE u.create_time BETWEEN ? AND ?`;
+      query += " WHERE u.create_time BETWEEN ? AND ?";
       queryParams.push(
         `${filters.startDate} 00:00:00`,
         `${filters.endDate} 23:59:59`,
