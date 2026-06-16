@@ -1,23 +1,13 @@
 import { useEffect, useState } from "react";
+import ModalReservation from "../../../components/barber/planning/modalReservation/ModalReservation";
 import ReservationCardPlanning from "../../../components/barber/reservationCard/ReservationCardPlanning";
 import StatsGraphCardBarber from "../../../components/barber/statsGraphCardBarber/StatsGraphCardBarber";
-
+import type { Appointment } from "../../../types/appointment";
 import "./BarberDashBoard.css";
 
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { GoClock } from "react-icons/go";
 import { PiStarThin } from "react-icons/pi";
-
-type ApiReservation = {
-  id_appointment: number;
-  appointment_date: string;
-  status: "confirmed" | "pending" | "cancelled" | "completed";
-  customer_firstname: string;
-  customer_lastname: string;
-  customer_avatar: string;
-  prestation_name: string;
-  duration: number;
-};
 
 type Review = {
   id_review: number;
@@ -35,8 +25,11 @@ function formatDateKey(date: Date) {
 function BarberDashBoard() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  const [reservations, setReservations] = useState<ApiReservation[]>([]);
+  const [reservations, setReservations] = useState<Appointment[]>([]);
   const [reviews, setReviews] = useState<Review[]>([]);
+
+  const [selectedReservation, setSelectedReservation] =
+    useState<Appointment | null>(null);
 
   useEffect(() => {
     fetch(`${apiUrl}/api/appointments`)
@@ -65,7 +58,7 @@ function BarberDashBoard() {
 
     return (
       date >= new Date() &&
-      (reservation.status === "confirmed" || reservation.status === "pending")
+      (reservation.status === "confirmé" || reservation.status === "en attente")
     );
   });
 
@@ -89,21 +82,21 @@ function BarberDashBoard() {
         <StatsGraphCardBarber
           Icon={FaRegCalendarAlt}
           value={reservationsThisMonth.length}
-          title="RDV NOMBRE"
+          title="NOMBRE DE RDV "
           cycle="mois"
         />
 
         <StatsGraphCardBarber
           Icon={GoClock}
           value={upcomingReservations.length}
-          title="attente"
+          title="EN ATTENTES"
           cycle="avenir"
         />
 
         <StatsGraphCardBarber
           Icon={PiStarThin}
           value={reviews.length}
-          title="avis"
+          title="AVIS"
           cycle="total"
         />
       </div>
@@ -125,18 +118,21 @@ function BarberDashBoard() {
               )}
               customerName={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
               service={reservation.prestation_name}
-              status={
-                reservation.status === "completed"
-                  ? "confirmed"
-                  : reservation.status
-              }
-              duration={reservation.duration}
+              status={reservation.status}
+              duration={reservation.duration_minutes}
+              onShowDetails={() => setSelectedReservation(reservation)}
             />
           ))
         ) : (
           <p>Aucune réservation aujourd’hui</p>
         )}
       </section>
+      {selectedReservation && (
+        <ModalReservation
+          reservation={selectedReservation}
+          onClose={() => setSelectedReservation(null)}
+        />
+      )}
     </div>
   );
 }

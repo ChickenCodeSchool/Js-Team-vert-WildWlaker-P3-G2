@@ -131,7 +131,7 @@ function Users() {
     );
     const total = customerApps.length;
     const canceled = customerApps.filter(
-      (app) => app.status === "cancelled",
+      (app) => app.status === "annulé",
     ).length;
     const customerAppIds = customerApps.map((app) => app.id_appointment);
     const customerReviews = reviews.filter((rev) =>

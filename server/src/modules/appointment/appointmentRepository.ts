@@ -28,7 +28,10 @@ class AppointmentRepository {
         c.lastname AS customer_lastname,
         u.avatar_url AS customer_avatar, 
         p.name AS prestation_name,
-        p.duration_minutes AS duration_minutes
+        p.duration_minutes AS duration_minutes,
+        u.phone AS customer_phone,
+        c.city AS customer_city,
+        c.adress As customer_adress
       FROM appointment a
       JOIN barber b ON a.id_user_barber = b.id_user
       JOIN customer c ON a.id_user_customer = c.id_user

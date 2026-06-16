@@ -1,6 +1,6 @@
 import "./ReservationCardPlanning.css";
 
-type ReservationStatus = "confirmed" | "pending" | "cancelled";
+type ReservationStatus = "en attente" | "confirmé" | "terminé" | "annulé";
 
 type Props = {
   avatar: string;
@@ -9,6 +9,7 @@ type Props = {
   service: string;
   duration: number;
   status: ReservationStatus;
+  onShowDetails?: () => void;
 };
 
 function ReservationCardPlanning({
@@ -18,15 +19,14 @@ function ReservationCardPlanning({
   service,
   duration,
   status,
+  onShowDetails,
 }: Props) {
-  const statusLabel = {
-    confirmed: "Confirmé",
-    pending: "En attente",
-    cancelled: "Annulé",
-  };
-
   return (
-    <article className={`planning-reservation-card ${status}`}>
+    <button
+      type="button"
+      className={`planning-reservation-card ${status}`}
+      onClick={onShowDetails}
+    >
       <div className="planning-reservation-card-left">
         <img
           src={avatar}
@@ -36,6 +36,7 @@ function ReservationCardPlanning({
 
         <span className="planning-reservation-card-time">{time}</span>
       </div>
+
       <div className="planning-reservation-card-content">
         <h4>{customerName}</h4>
         <p>{service}</p>
@@ -43,14 +44,14 @@ function ReservationCardPlanning({
 
       <div className="planning-reservation-card-right">
         <span className={`planning-reservation-card-status ${status}`}>
-          {statusLabel[status]}
+          {status}
         </span>
 
         <span className="planning-reservation-card-duration">
-          {duration} min{" "}
+          {duration} min
         </span>
       </div>
-    </article>
+    </button>
   );
 }
 
