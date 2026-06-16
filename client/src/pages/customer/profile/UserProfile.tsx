@@ -68,5 +68,4 @@ function UserProfile() {
     </main>
   );
 }
-
 export default UserProfile;
