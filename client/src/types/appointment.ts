@@ -12,5 +12,6 @@ export type Appointment = {
   customer_lastname: string;
   customer_avatar: string;
   prestation_name: string;
+  customer_adress: string;
   duration_minutes: number;
 };
