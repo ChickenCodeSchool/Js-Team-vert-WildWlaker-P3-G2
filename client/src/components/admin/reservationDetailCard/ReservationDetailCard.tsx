@@ -1,4 +1,16 @@
-import { FiMail, FiPhone } from "react-icons/fi";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+
+import { AiFillEuroCircle } from "react-icons/ai";
+import {
+  FiCalendar,
+  FiClock,
+  FiFlag,
+  FiMail,
+  FiNavigation,
+  FiPhone,
+  FiScissors,
+} from "react-icons/fi";
 
 import type { Appointment } from "../../../types/appointment";
 import "./ReservationDetailCard.css";
@@ -12,11 +24,13 @@ function ReservationDetailCard({
 }: ReservationDetailCardProps) {
   return (
     <div className="reservationdetailcard-main">
-      <h2>Détail de la réservation</h2>
-      <div
-        className={`reservationdetailcard-status status-${selectedReservation.status?.toLowerCase()} `}
-      >
-        {selectedReservation.status}
+      <div className="reservationdetailcard-title">
+        <h2>Détail de la réservation</h2>
+        <div
+          className={`reservationdetailcard-status status-${selectedReservation.status?.toLowerCase()} `}
+        >
+          {selectedReservation.status}
+        </div>
       </div>
       <div className="reservationdetailcard-header">
         <h3>Information du coiffeur</h3>
@@ -26,9 +40,7 @@ function ReservationDetailCard({
             src={selectedReservation.barber_avatar}
             alt={selectedReservation.barber_name}
           />
-          {/* <p>{selectedReservation.barber_postal_code}</p>
-            <p>{selectedReservation.barber_city}</p>
-            <p>{selectedReservation.barber_adress}</p> */}
+
           <div className="reservationdetailcard-user-info-text">
             <p>{selectedReservation.barber_name}</p>
             <p>
@@ -63,16 +75,90 @@ function ReservationDetailCard({
             </p>
           </div>
         </div>
-        {/* <p>{selectedReservation.customer_postal_code}</p>
-        <p>{selectedReservation.customer_city}</p>
-        <p>{selectedReservation.customer_adress}</p> */}
       </div>
-      <div className="reservationdetailcard-prestation-info">
-        <p>{selectedReservation.location_type}</p>
-        <p>{selectedReservation.prestation_name}</p>
-        <p>{selectedReservation.appointment_date}</p>
-        <p>{selectedReservation.price} €</p>
-        <p>{selectedReservation.duration_minutes} minutes</p>
+      <div className="reservationdetailcard-prestation-contener">
+        <div className="reservationdetailcard-prestation-info">
+          <FiCalendar className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span className="reservationdetailcard-prestation-info-span">
+              Date
+            </span>
+            <p>
+              {format(
+                new Date(selectedReservation.appointment_date),
+                "dd MMM yy",
+                {
+                  locale: fr,
+                },
+              )}
+            </p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info">
+          <FiClock className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span className="reservationdetailcard-prestation-info-span">
+              Heure
+            </span>
+            <p>
+              {format(new Date(selectedReservation.appointment_date), "HH:mm", {
+                locale: fr,
+              })}
+            </p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info">
+          <AiFillEuroCircle className="reservationdetailcard-prestation-info-icon" />
+
+          <div className="reservationdetailcard-prestation-info-text">
+            <span>Prix</span>
+            <p>{selectedReservation.price} €</p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info">
+          <FiClock className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span>Durée</span>
+            <p>{selectedReservation.duration_minutes} minutes</p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info">
+          <FiScissors className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span>Service</span>
+            <p>{selectedReservation.prestation_name}</p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info">
+          <FiFlag className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span>Lieu</span>
+            <p>{selectedReservation.location_type}</p>
+          </div>
+        </div>
+        <div className="reservationdetailcard-prestation-info adress">
+          <FiNavigation className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span>Adresse</span>
+            {selectedReservation.location_type?.toLowerCase() ===
+              "a domicile" && (
+              <>
+                <p>{selectedReservation.customer_adress}</p>
+                <p>{selectedReservation.customer_city}</p>
+                <p>{selectedReservation.customer_postal_code}</p>
+              </>
+            )}
+
+            {selectedReservation.location_type?.toLowerCase() ===
+              "au salon" && (
+              <>
+                <p>{selectedReservation.barber_adress}</p>
+                <p>{selectedReservation.barber_city}</p>
+                <p>{selectedReservation.barber_postal_code}</p>
+              </>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
