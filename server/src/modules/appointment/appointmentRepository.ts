@@ -28,7 +28,10 @@ class AppointmentRepository {
         c.lastname AS customer_lastname,
         u.avatar_url AS customer_avatar, 
         p.name AS prestation_name,
-        p.duration_minutes AS duration_minutes
+        p.duration_minutes AS duration_minutes,
+        u.phone AS customer_phone,
+        c.city AS customer_city,
+        c.adress As customer_adress
       FROM appointment a
       JOIN barber b ON a.id_user_barber = b.id_user
       JOIN customer c ON a.id_user_customer = c.id_user
@@ -50,6 +53,40 @@ class AppointmentRepository {
     // Return the array of Appointments
     return rows as AppointmentWithDetails[];
   }
+  async readByBarber(barberId: number, status?: string) {
+    let query = `
+      SELECT
+        a.*,
+        c.firstname AS customer_firstname,
+        c.lastname AS customer_lastname,
+        u.avatar_url AS customer_avatar,
+        p.name AS prestation_name,
+        p.price AS prestation_price,
+        p.duration_minutes AS duration_minutes
+      FROM appointment a
+      JOIN customer c ON a.id_user_customer = c.id_user
+      JOIN users u ON c.id_user = u.id_user
+      JOIN prestation p ON a.id_prestation = p.id_prestation
+      WHERE a.id_user_barber = ?
+    `;
+    const params: (string | number)[] = [barberId];
+    if (status) {
+      query += " AND a.status = ?";
+      params.push(status);
+    }
+    query += " ORDER BY a.appointment_date DESC";
+    const [rows] = await databaseClient.query<Rows>(query, params);
+    return rows as AppointmentWithDetails[];
+  }
+
+  async updateStatus(id: number, status: string) {
+    await databaseClient.query(
+      "UPDATE appointment SET status = ? WHERE id_appointment = ?",
+      [status, id],
+    );
+    return true;
+  }
+
   async readwithuserid(id: number) {
     const query = `
       SELECT 
