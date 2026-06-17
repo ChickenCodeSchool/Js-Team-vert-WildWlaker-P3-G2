@@ -47,4 +47,36 @@ const readwithuserid: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, browseforadmin, readwithuserid };
+const readByBarber: RequestHandler = async (req, res, next) => {
+  try {
+    const barberId = Number(req.params.id);
+    const status =
+      typeof req.query.status === "string" ? req.query.status : undefined;
+    const appointments = await appointmentRepository.readByBarber(
+      barberId,
+      status,
+    );
+    res.json(appointments);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateStatus: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const { status } = req.body as { status: string };
+    await appointmentRepository.updateStatus(id, status);
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default {
+  browse,
+  browseforadmin,
+  readwithuserid,
+  readByBarber,
+  updateStatus,
+};
