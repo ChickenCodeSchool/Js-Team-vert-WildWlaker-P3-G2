@@ -19,7 +19,9 @@ import userActions from "./modules/user/userActions";
 
 router.get("/api/admin-dashboard", adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
+router.get("/api/appointments/barber/:id", appointmentActions.readByBarber);
 router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
+router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
