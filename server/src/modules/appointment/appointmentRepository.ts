@@ -24,6 +24,7 @@ class AppointmentRepository {
       SELECT 
         a.*,
         b.name AS barber_name,
+        ub.avatar_url AS barber_avatar, 
         c.firstname AS customer_firstname,
         c.lastname AS customer_lastname,
         u.avatar_url AS customer_avatar, 
@@ -33,6 +34,7 @@ class AppointmentRepository {
       JOIN barber b ON a.id_user_barber = b.id_user
       JOIN customer c ON a.id_user_customer = c.id_user
       JOIN users u ON c.id_user = u.id_user  
+      JOIN users ub ON b.id_user = ub.id_user  
       JOIN prestation p ON a.id_prestation = p.id_prestation
       `;
     const queryParams: string[] = [];

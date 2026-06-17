@@ -1,14 +1,14 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiCalendar, FiCheck, FiClock, FiEye, FiXCircle } from "react-icons/fi";
+import { FiCalendar, FiCheck, FiClock, FiXCircle } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
+// import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
-// import ReservationProfilCard from "../../../components/admin/reservationProfilCard/ReservationProfilCard";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
 import type { Appointment } from "../../../types/appointment";
@@ -35,7 +35,6 @@ function ReservationsDash() {
     (Appointment & { id: number; create_time: string }) | null
   >(null);
 
-  // Fetch des données
   const loadAppointmentsData = useCallback(() => {
     fetch(`${API_URL}/api/appointments`)
       .then((res) => res.json())
@@ -69,6 +68,8 @@ function ReservationsDash() {
     loadAppointmentsData();
   }, [loadAppointmentsData]);
 
+  // Ici on utilise le hook.
+  // Attention : Pour que le filtre de lieu fonctionne, le hook doit chercher dans la clé "location_type" au lieu de "postal_code" (voir note en bas si besoin)
   const {
     searchTerm,
     setSearchTerm,
@@ -77,8 +78,8 @@ function ReservationsDash() {
     dateSortOrder,
     setDateSortOrder,
     filteredData,
-    departmentFilter,
-    setDepartmentFilter,
+    locationFilter,
+    setLocationFilter,
   } = useAdminFilters<Appointment & { id: number; create_time: string }>(
     appointments,
     ["barber_name", "customer_firstname", "customer_lastname"],
@@ -91,6 +92,12 @@ function ReservationsDash() {
     return Array.from(new Set(statusList)).sort();
   }, [appointments]);
 
+  const locationOptions = useMemo(() => {
+    const place = appointments.map((p) =>
+      p.location_type ? p.location_type : "",
+    );
+    return Array.from(new Set(place)).sort();
+  }, [appointments]);
   const pendingCount = useMemo(
     () =>
       appointments.filter((a) => a.status?.toLowerCase() === "en attente")
@@ -115,8 +122,13 @@ function ReservationsDash() {
       key: "barber_name",
       header: "Coiffeur",
       render: (appointment) => (
-        <div className="user-grid-info">
-          <span className="user-grid-fullname">{appointment.barber_name}</span>
+        <div className="user-grid-user-cell">
+          <img
+            src={appointment.barber_avatar}
+            alt={appointment.barber_name}
+            className="user-grid-avatar"
+          />
+          <div className="user-grid-info">{appointment.barber_name}</div>
         </div>
       ),
     },
@@ -124,9 +136,9 @@ function ReservationsDash() {
       key: "customer",
       header: "Client",
       render: (appointment) => (
-        <div className="user-grid-client-cell">
+        <div className="user-grid-user-cell">
           <img
-            src={appointment.customer_avatar || "/default-avatar.png"}
+            src={appointment.customer_avatar}
             alt={appointment.customer_firstname}
             className="user-grid-avatar"
           />
@@ -144,7 +156,7 @@ function ReservationsDash() {
           {format(new Date(appointment.appointment_date), "HH:mm", {
             locale: fr,
           })}
-          <br />
+          <b />
           {format(new Date(appointment.appointment_date), "dd MMMM yyyy", {
             locale: fr,
           })}
@@ -170,21 +182,13 @@ function ReservationsDash() {
       ),
     },
     {
-      key: "actions",
-      header: "Actions",
+      key: "localisation",
+      header: "Lieu",
       render: (appointment) => (
-        <div className="user-grid-actions-cell">
-          <button
-            type="button"
-            className="user-grid-icon-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              setSelectedReservation(appointment);
-            }}
-            title="Voir"
-          >
-            <FiEye />
-          </button>
+        <div
+          className={`user-grid-info location-${appointment.location_type?.toLowerCase()}`}
+        >
+          {appointment.location_type}
         </div>
       ),
     },
@@ -248,9 +252,10 @@ function ReservationsDash() {
             dateSortOrder={dateSortOrder}
             setDateSortOrder={setDateSortOrder}
             status={uniqueStatus}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            departments={[]}
+            locationFilter={locationFilter}
+            setLocationFilter={setLocationFilter}
+            location={locationOptions}
+            locationPlaceholder="Tous les lieux"
           />
 
           <UserDataGrid
@@ -262,16 +267,15 @@ function ReservationsDash() {
           />
         </section>
 
-        {/* Décommente cette section dès que ton fichier de carte de profil est prêt */}
-        {/* <aside className="admin-barbers-main-aside">
-          {selectedReservation ? (
-            <ReservationProfilCard selectedReservation={selectedReservation} />
+        <aside className="admin-barbers-main-aside">
+          {/* {selectedReservation ? (
+            <ReservationDetailCard selectedReservation={selectedReservation} />
           ) : (
             <div className="no-user-selected">
               <p>Sélectionnez une réservation pour voir ses détails</p>
             </div>
-          )}
-        </aside> */}
+          )} */}
+        </aside>
       </main>
     </div>
   );

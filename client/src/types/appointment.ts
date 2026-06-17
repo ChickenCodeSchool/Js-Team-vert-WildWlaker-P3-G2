@@ -7,8 +7,10 @@ export type Appointment = {
   id_user_barber: number;
   id_user_customer: number;
   barber_name: string;
+  barber_avatar: string;
   customer_firstname: string;
   customer_lastname: string;
   customer_avatar: string;
   prestation_name: string;
+  duration_minutes: number;
 };
