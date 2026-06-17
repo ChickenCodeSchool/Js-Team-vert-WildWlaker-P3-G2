@@ -233,7 +233,7 @@ function ReservationsDash() {
           <StatsCard
             Icon={FiCalendar}
             iconColor="icon-info"
-            title="Nouveautés"
+            title="Réservations"
             value={monthlyNewAppointments.length}
             cycle="Les 30 derniers jours"
           />
