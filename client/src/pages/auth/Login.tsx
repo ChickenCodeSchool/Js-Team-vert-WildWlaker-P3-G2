@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  FiChevronDown,
   FiEye,
   FiEyeOff,
   FiLock,
@@ -12,24 +13,52 @@ import { useNavigate } from "react-router";
 import "./Login.css";
 
 type Tab = "connexion" | "inscription";
+type Role = "client" | "professionnel";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
   const [activeTab, setActiveTab] = useState<Tab>("connexion");
-  const [isPro, setIsPro] = useState(false);
+  const [role, setRole] = useState<Role>("client");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = () => {
-    if (isPro) {
-      navigate("/barber/dashboard");
-    } else {
-      navigate("/");
-    }
+    navigate("/");
   };
 
-  const handleRegister = () => {
-    navigate("/");
+  const handleRegister = async () => {
+    setError("");
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
+    try {
+      const res = await fetch(`${API_URL}/api/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstname, lastname, email, password, role }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.message ?? "Erreur lors de l'inscription");
+        return;
+      }
+      if (role === "professionnel") {
+        navigate("/barber/dashboard");
+      } else {
+        navigate("/");
+      }
+    } catch {
+      setError("Impossible de contacter le serveur");
+    }
   };
 
   return (
@@ -86,14 +115,6 @@ const Login = () => {
 
           <span className="login__forgot">Mot de passe oublié ?</span>
 
-          <button
-            type="button"
-            className={`login__pro-toggle${isPro ? " login__pro-toggle--active" : ""}`}
-            onClick={() => setIsPro(!isPro)}
-          >
-            {isPro ? "Espace professionnel" : "Vous êtes un professionnel ?"}
-          </button>
-
           <button className="login__btn" type="button" onClick={handleLogin}>
             Se connecter
           </button>
@@ -104,17 +125,35 @@ const Login = () => {
         <div className="login__form">
           <div className="login__input-wrapper">
             <FiUser className="login__input-icon" />
-            <input className="login__input" type="text" placeholder="Prénom" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Prénom"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+            />
           </div>
 
           <div className="login__input-wrapper">
             <FiUser className="login__input-icon" />
-            <input className="login__input" type="text" placeholder="Nom" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Nom"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+            />
           </div>
 
           <div className="login__input-wrapper">
             <FiMail className="login__input-icon" />
-            <input className="login__input" type="text" placeholder="Email" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className="login__input-wrapper">
@@ -123,6 +162,8 @@ const Login = () => {
               className="login__input"
               type={showPassword ? "text" : "password"}
               placeholder="Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <button
               type="button"
@@ -139,6 +180,8 @@ const Login = () => {
               className="login__input"
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirmer le mot de passe"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <button
               type="button"
@@ -148,6 +191,21 @@ const Login = () => {
               {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
             </button>
           </div>
+
+          <div className="login__input-wrapper">
+            <FiUser className="login__input-icon" />
+            <select
+              className="login__select"
+              value={role}
+              onChange={(e) => setRole(e.target.value as Role)}
+            >
+              <option value="client">Je suis un client</option>
+              <option value="professionnel">Je suis un professionnel</option>
+            </select>
+            <FiChevronDown className="login__select-arrow" />
+          </div>
+
+          {error && <span className="login__error">{error}</span>}
 
           <button className="login__btn" type="button" onClick={handleRegister}>
             S'inscrire
