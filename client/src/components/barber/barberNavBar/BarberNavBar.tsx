@@ -32,17 +32,20 @@ function BarberNavBar() {
           <MdPeopleAlt /> Mes services
         </NavLink>
         <NavLink to="/barber/planning" className="NavBarHair-menu">
-          <FiCalendar /> Planning reservations
+          <FiCalendar /> Planning
+        </NavLink>
+        <NavLink to="/barber/planning" className="NavBarHair-menu">
+          <FiCalendar /> Disponibilités
         </NavLink>
         <NavLink to="/barber/signalement" className="NavBarHair-menu">
           <FiAlertTriangle /> Signalements
         </NavLink>
         <h3>ANALYTICS</h3>
-        <NavLink to="/barber/reservation" className="NavBarHair-menu">
+        <NavLink to="/barber/statistics" className="NavBarHair-menu">
           <SiSimpleanalytics /> Statistiques
         </NavLink>
         <h3>CONFIGURATION</h3>
-        <NavLink to="/hairdresser/reporting" className="NavBarHair-menu">
+        <NavLink to="/barber/signalement" className="NavBarHair-menu">
           <GrDocumentConfig />
           Aide & Support
         </NavLink>
