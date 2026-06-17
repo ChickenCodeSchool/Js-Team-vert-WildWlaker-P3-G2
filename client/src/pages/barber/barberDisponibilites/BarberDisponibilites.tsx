@@ -1,66 +1,104 @@
 import { useState } from "react";
-import { FiCalendar, FiEdit2, FiInfo } from "react-icons/fi";
+import { FiInfo } from "react-icons/fi";
 import "./barberDisponibilites.css";
 
 type DaySchedule = {
   day: string;
   active: boolean;
-  start: string;
-  end: string;
+  morningStart: string;
+  morningEnd: string;
+  afternoonStart: string;
+  afternoonEnd: string;
 };
 
 const INITIAL_SCHEDULE: DaySchedule[] = [
-  { day: "Lundi", active: true, start: "09:00", end: "18:00" },
-  { day: "Mardi", active: true, start: "09:00", end: "18:00" },
-  { day: "Mercredi", active: false, start: "09:00", end: "18:00" },
-  { day: "Jeudi", active: true, start: "09:00", end: "18:00" },
-  { day: "Vendredi", active: true, start: "09:00", end: "18:00" },
-  { day: "Samedi", active: true, start: "10:00", end: "16:00" },
-  { day: "Dimanche", active: false, start: "09:00", end: "18:00" },
+  {
+    day: "Lundi",
+    active: true,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
+  {
+    day: "Mardi",
+    active: true,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
+  {
+    day: "Mercredi",
+    active: false,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
+  {
+    day: "Jeudi",
+    active: true,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
+  {
+    day: "Vendredi",
+    active: true,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
+  {
+    day: "Samedi",
+    active: true,
+    morningStart: "10:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "16:00",
+  },
+  {
+    day: "Dimanche",
+    active: false,
+    morningStart: "08:00",
+    morningEnd: "12:00",
+    afternoonStart: "14:00",
+    afternoonEnd: "18:00",
+  },
 ];
 
 function BarberDisponibilites() {
   const [schedule, setSchedule] = useState<DaySchedule[]>(INITIAL_SCHEDULE);
-  const [editingDay, setEditingDay] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState({
-    active: false,
-    start: "",
-    end: "",
-  });
+  const [saved, setSaved] = useState(false);
 
-  function openEdit(day: DaySchedule) {
-    setEditingDay(day.day);
-    setEditForm({ active: day.active, start: day.start, end: day.end });
+  function updateDay(
+    index: number,
+    field: keyof DaySchedule,
+    value: string | boolean,
+  ) {
+    setSchedule((prev) =>
+      prev.map((d, i) => (i === index ? { ...d, [field]: value } : d)),
+    );
+    setSaved(false);
   }
 
-  function saveEdit() {
-    setSchedule((prev) =>
-      prev.map((d) => (d.day === editingDay ? { ...d, ...editForm } : d)),
-    );
-    setEditingDay(null);
+  function handleSave() {
+    // TODO: appel API pour sauvegarder
+    setSaved(true);
   }
 
   return (
     <div className="barber-dispo">
-      {/* Header */}
       <div className="barber-dispo__header">
-        <div>
-          <h1 className="barber-dispo__title">Mes disponibilités</h1>
-          <p className="barber-dispo__subtitle">
-            Gérez vos horaires de travail et vos jours disponibles
-          </p>
-        </div>
-        <button
-          type="button"
-          className="barber-dispo__btn-modifier"
-          onClick={() => openEdit(schedule[0])}
-        >
-          <FiCalendar size={14} />
-          Modifier mes disponibilités
-        </button>
+        <h1 className="barber-dispo__title">Mes disponibilités</h1>
+        <p className="barber-dispo__subtitle">
+          Gérez vos horaires de travail et vos jours disponibles
+        </p>
       </div>
 
-      {/* Semaine type */}
       <div className="barber-dispo__section">
         <h2 className="barber-dispo__section-title">Semaine type</h2>
         <p className="barber-dispo__section-subtitle">
@@ -68,32 +106,84 @@ function BarberDisponibilites() {
         </p>
 
         <ul className="barber-dispo__list">
-          {schedule.map((day) => (
-            <li key={day.day} className="barber-dispo__row">
-              <span className="barber-dispo__day">{day.day}</span>
-              <span
-                className={`barber-dispo__status ${day.active ? "barber-dispo__status--active" : "barber-dispo__status--inactive"}`}
-              >
-                <span className="barber-dispo__dot" />
-                {day.active ? "Actif" : "Inactif"}
-              </span>
-              <span className="barber-dispo__hours">
-                {day.active ? `${day.start} - ${day.end}` : "Fermé"}
-              </span>
-              <button
-                type="button"
-                className="barber-dispo__edit-btn"
-                aria-label={`Modifier ${day.day}`}
-                onClick={() => openEdit(day)}
-              >
-                <FiEdit2 size={15} />
-              </button>
+          {schedule.map((day, i) => (
+            <li
+              key={day.day}
+              className={`barber-dispo__row ${!day.active ? "barber-dispo__row--inactive" : ""}`}
+            >
+              <div className="barber-dispo__row-header">
+                <span className="barber-dispo__day">{day.day}</span>
+                <label className="barber-dispo__toggle-label">
+                  <input
+                    type="checkbox"
+                    checked={day.active}
+                    onChange={(e) => updateDay(i, "active", e.target.checked)}
+                    className="barber-dispo__toggle-input"
+                  />
+                  <span
+                    className={`barber-dispo__toggle ${day.active ? "barber-dispo__toggle--on" : ""}`}
+                  >
+                    <span className="barber-dispo__toggle-thumb" />
+                  </span>
+                  <span
+                    className={`barber-dispo__status-text ${day.active ? "barber-dispo__status-text--active" : ""}`}
+                  >
+                    {day.active ? "Actif" : "Inactif"}
+                  </span>
+                </label>
+              </div>
+
+              {day.active ? (
+                <div className="barber-dispo__slots">
+                  <div className="barber-dispo__slot">
+                    <span className="barber-dispo__slot-label">Matin</span>
+                    <input
+                      type="time"
+                      value={day.morningStart}
+                      className="barber-dispo__time-input"
+                      onChange={(e) =>
+                        updateDay(i, "morningStart", e.target.value)
+                      }
+                    />
+                    <span className="barber-dispo__slot-sep">–</span>
+                    <input
+                      type="time"
+                      value={day.morningEnd}
+                      className="barber-dispo__time-input"
+                      onChange={(e) =>
+                        updateDay(i, "morningEnd", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="barber-dispo__slot">
+                    <span className="barber-dispo__slot-label">Après-midi</span>
+                    <input
+                      type="time"
+                      value={day.afternoonStart}
+                      className="barber-dispo__time-input"
+                      onChange={(e) =>
+                        updateDay(i, "afternoonStart", e.target.value)
+                      }
+                    />
+                    <span className="barber-dispo__slot-sep">–</span>
+                    <input
+                      type="time"
+                      value={day.afternoonEnd}
+                      className="barber-dispo__time-input"
+                      onChange={(e) =>
+                        updateDay(i, "afternoonEnd", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              ) : (
+                <p className="barber-dispo__closed">Fermé</p>
+              )}
             </li>
           ))}
         </ul>
       </div>
 
-      {/* Conseil */}
       <div className="barber-dispo__conseil">
         <FiInfo size={16} className="barber-dispo__conseil-icon" />
         <div>
@@ -105,71 +195,13 @@ function BarberDisponibilites() {
         </div>
       </div>
 
-      {/* Edit modal */}
-      {editingDay && (
-        <div className="barber-dispo__modal-overlay">
-          <div className="barber-dispo__modal">
-            <h3 className="barber-dispo__modal-title">
-              Modifier — {editingDay}
-            </h3>
-
-            <label className="barber-dispo__modal-label">
-              <input
-                type="checkbox"
-                checked={editForm.active}
-                onChange={(e) =>
-                  setEditForm((f) => ({ ...f, active: e.target.checked }))
-                }
-              />
-              Jour actif
-            </label>
-
-            {editForm.active && (
-              <div className="barber-dispo__modal-times">
-                <label className="barber-dispo__modal-label">
-                  Début
-                  <input
-                    type="time"
-                    value={editForm.start}
-                    className="barber-dispo__modal-input"
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, start: e.target.value }))
-                    }
-                  />
-                </label>
-                <label className="barber-dispo__modal-label">
-                  Fin
-                  <input
-                    type="time"
-                    value={editForm.end}
-                    className="barber-dispo__modal-input"
-                    onChange={(e) =>
-                      setEditForm((f) => ({ ...f, end: e.target.value }))
-                    }
-                  />
-                </label>
-              </div>
-            )}
-
-            <div className="barber-dispo__modal-actions">
-              <button
-                type="button"
-                className="barber-dispo__modal-cancel"
-                onClick={() => setEditingDay(null)}
-              >
-                Annuler
-              </button>
-              <button
-                type="button"
-                className="barber-dispo__modal-save"
-                onClick={saveEdit}
-              >
-                Enregistrer
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <button
+        type="button"
+        className={`barber-dispo__save-btn ${saved ? "barber-dispo__save-btn--saved" : ""}`}
+        onClick={handleSave}
+      >
+        {saved ? "✓ Enregistré" : "Enregistrer mes disponibilités"}
+      </button>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 .barber-dispo {
   background-color: var(--gray-50);
   min-height: 100vh;
-  padding: 1.25rem 1rem 2rem;
+  padding: 4rem 1rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -11,9 +11,8 @@
 
 .barber-dispo__header {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .barber-dispo__title {
@@ -27,25 +26,6 @@
   font-family: var(--font-body);
   font-size: 0.8125rem;
   color: var(--gray-500);
-  margin-top: 0.2rem;
-}
-
-.barber-dispo__btn-modifier {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.6rem 1rem;
-  background-color: var(--gold-dark);
-  color: var(--white);
-  border: none;
-  border-radius: var(--radius-md);
-  font-family: var(--font-title);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  flex-shrink: 0;
-  transition: var(--transition);
 }
 
 /* ── Section ── */
@@ -83,15 +63,27 @@
 }
 
 .barber-dispo__row {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
   padding: 0.875rem 0;
   border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
 }
 
 .barber-dispo__row:last-child {
   border-bottom: none;
+}
+
+.barber-dispo__row--inactive {
+  opacity: 0.6;
+}
+
+/* ── Row header ── */
+
+.barber-dispo__row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .barber-dispo__day {
@@ -99,65 +91,110 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--black);
-  width: 5.5rem;
+}
+
+/* ── Toggle ── */
+
+.barber-dispo__toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.barber-dispo__toggle-input {
+  display: none;
+}
+
+.barber-dispo__toggle {
+  width: 2.5rem;
+  height: 1.375rem;
+  border-radius: 999px;
+  background-color: var(--gray-200);
+  position: relative;
+  transition: background-color 0.2s;
   flex-shrink: 0;
 }
 
-.barber-dispo__status {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
+.barber-dispo__toggle--on {
+  background-color: var(--gold-dark);
+}
+
+.barber-dispo__toggle-thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--white);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.barber-dispo__toggle--on .barber-dispo__toggle-thumb {
+  transform: translateX(1.125rem);
+}
+
+.barber-dispo__status-text {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  font-weight: 500;
-  flex: 1;
-}
-
-.barber-dispo__status--active {
-  color: #2ecc71;
-}
-
-.barber-dispo__status--inactive {
   color: var(--gray-400);
 }
 
-.barber-dispo__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
+.barber-dispo__status-text--active {
+  color: #2ecc71;
+  font-weight: 500;
+}
+
+/* ── Slots ── */
+
+.barber-dispo__slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.barber-dispo__slot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.barber-dispo__slot-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  width: 5rem;
   flex-shrink: 0;
 }
 
-.barber-dispo__status--active .barber-dispo__dot {
-  background-color: #2ecc71;
-}
-
-.barber-dispo__status--inactive .barber-dispo__dot {
-  background-color: var(--gray-300);
-}
-
-.barber-dispo__hours {
+.barber-dispo__time-input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: 0.875rem;
   color: var(--black);
-  text-align: right;
-  flex: 1;
+  background-color: var(--white);
+  outline: none;
+  width: 6rem;
 }
 
-.barber-dispo__edit-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
+.barber-dispo__time-input:focus {
+  border-color: var(--gold-dark);
+}
+
+.barber-dispo__slot-sep {
   color: var(--gray-400);
-  display: flex;
-  align-items: center;
-  padding: 0.25rem;
-  transition: var(--transition);
-  flex-shrink: 0;
+  font-size: 0.875rem;
 }
 
-.barber-dispo__edit-btn:hover {
-  color: var(--gold-dark);
+.barber-dispo__closed {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  padding-left: 0.25rem;
 }
 
 /* ── Conseil ── */
@@ -193,101 +230,22 @@
   line-height: 1.5;
 }
 
-/* ── Modal ── */
+/* ── Save button ── */
 
-.barber-dispo__modal-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 1rem;
-}
-
-.barber-dispo__modal {
-  background-color: var(--white);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
+.barber-dispo__save-btn {
   width: 100%;
-  max-width: 22rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.barber-dispo__modal-title {
-  font-family: var(--font-title);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--black);
-}
-
-.barber-dispo__modal-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--black);
-  cursor: pointer;
-}
-
-.barber-dispo__modal-times {
-  display: flex;
-  gap: 1rem;
-}
-
-.barber-dispo__modal-times .barber-dispo__modal-label {
-  flex-direction: column;
-  align-items: flex-start;
-  flex: 1;
-}
-
-.barber-dispo__modal-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--black);
-  outline: none;
-}
-
-.barber-dispo__modal-input:focus {
-  border-color: var(--gold-dark);
-}
-
-.barber-dispo__modal-actions {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
-}
-
-.barber-dispo__modal-cancel {
-  flex: 1;
-  padding: 0.75rem;
-  background-color: var(--white);
-  color: var(--black);
-  border: 1px solid var(--gray-200);
-  border-radius: var(--radius-md);
-  font-family: var(--font-title);
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.barber-dispo__modal-save {
-  flex: 1;
-  padding: 0.75rem;
+  padding: 0.875rem;
   background-color: var(--gold-dark);
   color: var(--white);
   border: none;
   border-radius: var(--radius-md);
   font-family: var(--font-title);
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.barber-dispo__save-btn--saved {
+  background-color: #2ecc71;
 }
