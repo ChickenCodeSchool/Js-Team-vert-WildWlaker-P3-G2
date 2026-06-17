@@ -52,7 +52,7 @@ function BarberNavBar() {
           <FaCommentAlt /> Avis
         </NavLink>
         <h3>CONFIGURATION</h3>
-        <NavLink to="/barber/signalement" className="NavBarHair-menu">
+        <NavLink to="/barber/parametre" className="NavBarHair-menu">
           <GrDocumentConfig />
           Paramètre
         </NavLink>
