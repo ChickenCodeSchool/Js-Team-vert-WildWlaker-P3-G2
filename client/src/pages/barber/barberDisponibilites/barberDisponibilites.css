@@ -1,0 +1,251 @@
+.barber-dispo {
+  background-color: var(--gray-50);
+  min-height: 100vh;
+  padding: 4rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ── Header ── */
+
+.barber-dispo__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.barber-dispo__title {
+  font-family: var(--font-title);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+.barber-dispo__subtitle {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--gray-500);
+}
+
+/* ── Section ── */
+
+.barber-dispo__section {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.barber-dispo__section-title {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 0.2rem;
+}
+
+.barber-dispo__section-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--gray-500);
+  margin-bottom: 1rem;
+}
+
+/* ── List ── */
+
+.barber-dispo__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.barber-dispo__row {
+  padding: 0.875rem 0;
+  border-bottom: 1px solid var(--gray-100);
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.barber-dispo__row:last-child {
+  border-bottom: none;
+}
+
+.barber-dispo__row--inactive {
+  opacity: 0.6;
+}
+
+/* ── Row header ── */
+
+.barber-dispo__row-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.barber-dispo__day {
+  font-family: var(--font-title);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--black);
+}
+
+/* ── Toggle ── */
+
+.barber-dispo__toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.barber-dispo__toggle-input {
+  display: none;
+}
+
+.barber-dispo__toggle {
+  width: 2.5rem;
+  height: 1.375rem;
+  border-radius: 999px;
+  background-color: var(--gray-200);
+  position: relative;
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.barber-dispo__toggle--on {
+  background-color: var(--gold-dark);
+}
+
+.barber-dispo__toggle-thumb {
+  position: absolute;
+  top: 0.1875rem;
+  left: 0.1875rem;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--white);
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.barber-dispo__toggle--on .barber-dispo__toggle-thumb {
+  transform: translateX(1.125rem);
+}
+
+.barber-dispo__status-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--gray-400);
+}
+
+.barber-dispo__status-text--active {
+  color: #2ecc71;
+  font-weight: 500;
+}
+
+/* ── Slots ── */
+
+.barber-dispo__slots {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.barber-dispo__slot {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.barber-dispo__slot-label {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  width: 5rem;
+  flex-shrink: 0;
+}
+
+.barber-dispo__time-input {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--black);
+  background-color: var(--white);
+  outline: none;
+  width: 6rem;
+}
+
+.barber-dispo__time-input:focus {
+  border-color: var(--gold-dark);
+}
+
+.barber-dispo__slot-sep {
+  color: var(--gray-400);
+  font-size: 0.875rem;
+}
+
+.barber-dispo__closed {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--gray-400);
+  padding-left: 0.25rem;
+}
+
+/* ── Conseil ── */
+
+.barber-dispo__conseil {
+  background-color: var(--white);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.barber-dispo__conseil-icon {
+  color: var(--gold-dark);
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.barber-dispo__conseil-title {
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.2rem;
+}
+
+.barber-dispo__conseil-text {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* ── Save button ── */
+
+.barber-dispo__save-btn {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: var(--gold-dark);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.barber-dispo__save-btn--saved {
+  background-color: #2ecc71;
+}
