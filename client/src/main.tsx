@@ -14,6 +14,7 @@ import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
 import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
+import BarberDisponibilites from "./pages/barber/barberDisponibilites/BarberDisponibilites";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
@@ -81,6 +82,7 @@ const router = createBrowserRouter([
           { path: "signalement", element: <BarberSignalement /> },
           { path: "statistics", element: <BarberStatistics /> },
           { path: "annulations", element: <BarberAnnulations /> },
+          { path: "disponibilites", element: <BarberDisponibilites /> },
         ],
       },
     ],
