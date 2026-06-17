@@ -1,8 +1,9 @@
 import { FiAlertTriangle, FiCalendar, FiHome, FiUser } from "react-icons/fi";
 import "./BarberNavBar.css";
 import { useState } from "react";
+import { FaCommentAlt, FaCut } from "react-icons/fa";
 import { GrDocumentConfig } from "react-icons/gr";
-import { MdMenuOpen, MdPeopleAlt } from "react-icons/md";
+import { MdFreeCancellation, MdPeopleAlt } from "react-icons/md";
 import { SiSimpleanalytics } from "react-icons/si";
 import { NavLink } from "react-router";
 
@@ -15,7 +16,7 @@ function BarberNavBar() {
         className="button_Nav"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <MdMenuOpen />
+        <FaCut />
       </button>
 
       <nav className={`NavBarHair-main ${isOpen ? "open" : ""}`}>
@@ -34,20 +35,26 @@ function BarberNavBar() {
         <NavLink to="/barber/planning" className="NavBarHair-menu">
           <FiCalendar /> Planning
         </NavLink>
-        <NavLink to="/barber/planning" className="NavBarHair-menu">
+        <NavLink to="/barber/disponibilites" className="NavBarHair-menu">
           <FiCalendar /> Disponibilités
         </NavLink>
+        <NavLink to="/barber/annulations" className="NavBarHair-menu">
+          <MdFreeCancellation /> Gestion RDV
+        </NavLink>
+        <h3>ANALYTICS</h3>
         <NavLink to="/barber/signalement" className="NavBarHair-menu">
           <FiAlertTriangle /> Signalements
         </NavLink>
-        <h3>ANALYTICS</h3>
         <NavLink to="/barber/statistics" className="NavBarHair-menu">
-          <SiSimpleanalytics /> Statistiques
+          <SiSimpleanalytics /> Statistique
+        </NavLink>
+        <NavLink to="/barber/customer" className="NavBarHair-menu">
+          <FaCommentAlt /> Avis
         </NavLink>
         <h3>CONFIGURATION</h3>
         <NavLink to="/barber/signalement" className="NavBarHair-menu">
           <GrDocumentConfig />
-          Aide & Support
+          Paramètre
         </NavLink>
       </nav>
     </>

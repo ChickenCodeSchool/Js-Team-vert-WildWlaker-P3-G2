@@ -83,6 +83,7 @@ const router = createBrowserRouter([
           { path: "statistics", element: <BarberStatistics /> },
           { path: "annulations", element: <BarberAnnulations /> },
           { path: "disponibilites", element: <BarberDisponibilites /> },
+          { path: "customer", element: <CustomerAvis /> },
         ],
       },
     ],
