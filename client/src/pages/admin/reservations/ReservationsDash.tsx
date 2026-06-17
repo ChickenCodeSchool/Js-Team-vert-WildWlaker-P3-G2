@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiCalendar, FiCheck, FiClock, FiXCircle } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
-// import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
+import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
@@ -36,7 +36,7 @@ function ReservationsDash() {
   >(null);
 
   const loadAppointmentsData = useCallback(() => {
-    fetch(`${API_URL}/api/appointments`)
+    fetch(`${API_URL}/api/appointments/admin`)
       .then((res) => res.json())
       .then((data: Appointment[]) => {
         const formattedData = data.map((app) => ({
@@ -68,8 +68,6 @@ function ReservationsDash() {
     loadAppointmentsData();
   }, [loadAppointmentsData]);
 
-  // Ici on utilise le hook.
-  // Attention : Pour que le filtre de lieu fonctionne, le hook doit chercher dans la clé "location_type" au lieu de "postal_code" (voir note en bas si besoin)
   const {
     searchTerm,
     setSearchTerm,
@@ -268,13 +266,13 @@ function ReservationsDash() {
         </section>
 
         <aside className="admin-barbers-main-aside">
-          {/* {selectedReservation ? (
+          {selectedReservation ? (
             <ReservationDetailCard selectedReservation={selectedReservation} />
           ) : (
             <div className="no-user-selected">
               <p>Sélectionnez une réservation pour voir ses détails</p>
             </div>
-          )} */}
+          )}
         </aside>
       </main>
     </div>

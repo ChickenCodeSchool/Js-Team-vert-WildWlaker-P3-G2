@@ -37,10 +37,13 @@
   }
   .reservationsDash-main {
     display: flex;
+    justify-content: space-between;
+    max-width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+
     .reservationsDash-section {
       width: 75%;
-      margin-left: 20px;
-      margin-right: 20px;
       .user-grid-user-cell {
         display: flex;
         align-items: center;
@@ -131,6 +134,7 @@
     }
     .admin-barbers-main-aside {
       width: 22%;
+      padding-right: 20px;
     }
   }
 }
