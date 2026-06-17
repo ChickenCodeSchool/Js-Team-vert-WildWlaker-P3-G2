@@ -1,10 +1,36 @@
 import { useState } from "react";
-import { FiEye, FiEyeOff, FiLock, FiMail, FiScissors } from "react-icons/fi";
+import {
+  FiEye,
+  FiEyeOff,
+  FiLock,
+  FiMail,
+  FiScissors,
+  FiUser,
+} from "react-icons/fi";
+import { useNavigate } from "react-router";
 
 import "./Login.css";
 
+type Tab = "connexion" | "inscription";
+
 const Login = () => {
+  const [activeTab, setActiveTab] = useState<Tab>("connexion");
+  const [isPro, setIsPro] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    if (isPro) {
+      navigate("/barber/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleRegister = () => {
+    navigate("/");
+  };
 
   return (
     <div className="login">
@@ -14,39 +40,120 @@ const Login = () => {
         <span className="login__tagline">Votre coiffeur à domicile</span>
       </div>
 
-      <div className="login__form">
-        <h2 className="login__title">Connexion</h2>
-
-        <div className="login__input-wrapper">
-          <FiMail className="login__input-icon" />
-          <input
-            className="login__input"
-            type="text"
-            placeholder="Email ou téléphone"
-          />
-        </div>
-
-        <div className="login__input-wrapper">
-          <FiLock className="login__input-icon" />
-          <input
-            className="login__input"
-            type={showPassword ? "text" : "password"}
-            placeholder="Mot de passe"
-          />
-          <button
-            type="button"
-            className="login__eye-btn"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FiEye /> : <FiEyeOff />}
-          </button>
-        </div>
-
-        <span className="login__forgot">Mot de passe oublié ?</span>
-        <button className="login__btn" type="button">
-          Se connecter
+      <div className="login__tabs">
+        <button
+          type="button"
+          className={`login__tab${activeTab === "connexion" ? " login__tab--active" : ""}`}
+          onClick={() => setActiveTab("connexion")}
+        >
+          Connexion
+        </button>
+        <button
+          type="button"
+          className={`login__tab${activeTab === "inscription" ? " login__tab--active" : ""}`}
+          onClick={() => setActiveTab("inscription")}
+        >
+          Inscription
         </button>
       </div>
+
+      {activeTab === "connexion" && (
+        <div className="login__form">
+          <div className="login__input-wrapper">
+            <FiMail className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Email ou téléphone"
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiLock className="login__input-icon" />
+            <input
+              className="login__input"
+              type={showPassword ? "text" : "password"}
+              placeholder="Mot de passe"
+            />
+            <button
+              type="button"
+              className="login__eye-btn"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
+
+          <span className="login__forgot">Mot de passe oublié ?</span>
+
+          <button
+            type="button"
+            className={`login__pro-toggle${isPro ? " login__pro-toggle--active" : ""}`}
+            onClick={() => setIsPro(!isPro)}
+          >
+            {isPro ? "Espace professionnel" : "Vous êtes un professionnel ?"}
+          </button>
+
+          <button className="login__btn" type="button" onClick={handleLogin}>
+            Se connecter
+          </button>
+        </div>
+      )}
+
+      {activeTab === "inscription" && (
+        <div className="login__form">
+          <div className="login__input-wrapper">
+            <FiUser className="login__input-icon" />
+            <input className="login__input" type="text" placeholder="Prénom" />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiUser className="login__input-icon" />
+            <input className="login__input" type="text" placeholder="Nom" />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiMail className="login__input-icon" />
+            <input className="login__input" type="text" placeholder="Email" />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiLock className="login__input-icon" />
+            <input
+              className="login__input"
+              type={showPassword ? "text" : "password"}
+              placeholder="Mot de passe"
+            />
+            <button
+              type="button"
+              className="login__eye-btn"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiLock className="login__input-icon" />
+            <input
+              className="login__input"
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirmer le mot de passe"
+            />
+            <button
+              type="button"
+              className="login__eye-btn"
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <FiEye /> : <FiEyeOff />}
+            </button>
+          </div>
+
+          <button className="login__btn" type="button" onClick={handleRegister}>
+            S'inscrire
+          </button>
+        </div>
+      )}
 
       <div className="login__divider">
         <span className="login__divider-text">ou continuer avec</span>
@@ -80,13 +187,6 @@ const Login = () => {
           Google
         </button>
       </div>
-
-      <p className="login__register">
-        Pas encore de compte ?{" "}
-        <a className="login__register-link" href="/register">
-          S'inscrire
-        </a>
-      </p>
     </div>
   );
 };
