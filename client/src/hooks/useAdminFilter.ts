@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 export interface AdminFilterState {
   searchTerm: string;
-  departmentFilter: string;
+  locationFilter: string;
   statusFilter: string;
   dateSortOrder: "asc" | "desc";
 }
@@ -17,7 +17,7 @@ export function useAdminFilters<
   },
 >(initialData: T[], searchFields: (keyof T)[] = ["firstname", "lastname"]) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
 
@@ -34,10 +34,16 @@ export function useAdminFilters<
       );
     }
 
-    if (departmentFilter) {
+    if (locationFilter) {
       result = result.filter((item) => {
+        if ("location_type" in item) {
+          return (
+            (item as { location_type: string }).location_type === locationFilter
+          );
+        }
+
         const val = item.postal_code;
-        return val && String(val).startsWith(departmentFilter);
+        return val && String(val).startsWith(locationFilter);
       });
     }
 
@@ -55,7 +61,7 @@ export function useAdminFilters<
   }, [
     initialData,
     searchTerm,
-    departmentFilter,
+    locationFilter,
     statusFilter,
     dateSortOrder,
     searchFields,
@@ -64,8 +70,8 @@ export function useAdminFilters<
   return {
     searchTerm,
     setSearchTerm,
-    departmentFilter,
-    setDepartmentFilter,
+    locationFilter,
+    setLocationFilter,
     statusFilter,
     setStatusFilter,
     dateSortOrder,

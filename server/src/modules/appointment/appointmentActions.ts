@@ -20,6 +20,22 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseforadmin: RequestHandler = async (req, res, next) => {
+  try {
+    // Fetch all appointements
+    const { startDate, endDate } = req.query;
+    const appointments = await appointmentRepository.readAllForAdmin({
+      startDate: typeof startDate === "string" ? startDate : undefined,
+      endDate: typeof endDate === "string" ? endDate : undefined,
+    });
+
+    // Respond with the appointments in JSON format
+    res.json(appointments);
+  } catch (err) {
+    // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
 const readwithuserid: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -57,4 +73,10 @@ const updateStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, readwithuserid, readByBarber, updateStatus };
+export default {
+  browse,
+  browseforadmin,
+  readwithuserid,
+  readByBarber,
+  updateStatus,
+};

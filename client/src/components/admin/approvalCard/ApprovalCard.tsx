@@ -36,7 +36,7 @@ function ApprovalCard() {
     })}`;
   };
   const pendingBarbers = barbers
-    .filter((barber) => barber.status === "pending")
+    .filter((barber) => barber.status === "En attente")
     .slice(0, 3);
 
   return (

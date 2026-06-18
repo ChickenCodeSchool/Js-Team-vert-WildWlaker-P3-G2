@@ -89,7 +89,7 @@ const calculateEvolution = (current: number, previous: number): string => {
 };
 
 function Dashboard() {
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -123,7 +123,7 @@ function Dashboard() {
     const params = `?startDate=${currentPeriod.start}&endDate=${currentPeriod.end}`;
     const prevParams = `?startDate=${prevPeriod.start}&endDate=${prevPeriod.end}`;
 
-    fetch(`${apiUrl}/api/admin-dashboard${params}`)
+    fetch(`${API_URL}/api/admin-dashboard${params}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setBarbers(barbers);
@@ -131,7 +131,7 @@ function Dashboard() {
         setAppointments(appointments);
         setReviews(reviews);
       });
-    fetch(`${apiUrl}/api/admin-dashboard${prevParams}`)
+    fetch(`${API_URL}/api/admin-dashboard${prevParams}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setPrevBarbers(barbers);
