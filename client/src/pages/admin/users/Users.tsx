@@ -93,8 +93,8 @@ function Users() {
   const {
     searchTerm,
     setSearchTerm,
-    departmentFilter,
-    setDepartmentFilter,
+    locationFilter,
+    setLocationFilter,
     statusFilter,
     setStatusFilter,
     dateSortOrder,
@@ -306,13 +306,13 @@ function Users() {
           <AdminFilterBar
             searchTerm={searchTerm}
             setSearchTerm={setSearchTerm}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
+            locationFilter={locationFilter}
+            setLocationFilter={setLocationFilter}
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
             dateSortOrder={dateSortOrder}
             setDateSortOrder={setDateSortOrder}
-            departments={uniqueDepartments}
+            location={uniqueDepartments}
             status={uniqueStatus}
           />
           <div>

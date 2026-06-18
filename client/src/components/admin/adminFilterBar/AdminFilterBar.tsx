@@ -5,27 +5,29 @@ import "./AdminFilterBar.css";
 interface TableFiltersProps {
   searchTerm: string;
   setSearchTerm: (value: string) => void;
-  departmentFilter: string;
-  setDepartmentFilter: (value: string) => void;
+  locationFilter: string;
+  setLocationFilter: (value: string) => void;
   statusFilter: string;
   setStatusFilter: (value: string) => void;
   dateSortOrder: "asc" | "desc";
   setDateSortOrder: (value: "asc" | "desc") => void;
-  departments: string[];
+  location: string[];
   status: string[];
+  locationPlaceholder?: string;
 }
 
 function AdminFilterBar({
   searchTerm,
   setSearchTerm,
-  departmentFilter,
-  setDepartmentFilter,
+  locationFilter,
+  setLocationFilter,
   statusFilter,
   setStatusFilter,
   dateSortOrder,
   setDateSortOrder,
-  departments,
+  location,
   status,
+  locationPlaceholder = "Tous les départements",
 }: TableFiltersProps) {
   return (
     <div className="admin-users-filters-bar">
@@ -44,12 +46,12 @@ function AdminFilterBar({
         <div className="filter-select-wrapper">
           <FiFilter className="filter-icon" />
           <select
-            value={departmentFilter}
-            onChange={(e) => setDepartmentFilter(e.target.value)}
+            value={locationFilter}
+            onChange={(e) => setLocationFilter(e.target.value)}
             className="filter-select"
           >
-            <option value="">Tous les départements</option>
-            {departments.map((dept) => (
+            <option value="">{locationPlaceholder}</option>
+            {location.map((dept) => (
               <option key={dept} value={dept}>
                 {dept}
               </option>
