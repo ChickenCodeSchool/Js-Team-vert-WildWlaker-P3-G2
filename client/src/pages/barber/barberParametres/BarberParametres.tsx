@@ -1,6 +1,9 @@
-import "./BarberParametre.css";
+import { useState } from "react";
+import ModalParametres from "../../../components/barber/mondalParametres/MondalParametres";
+import "./BarberParametres.css";
 
-function BarberParametre() {
+function BarberParametres() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <main className="barberParametre">
       <div className="barberParametre__header">
@@ -45,12 +48,18 @@ function BarberParametre() {
           <li>Avis et commentaires</li>
         </ul>
 
-        <button type="button" className="barberParametre__deleteButton">
+        <button
+          type="button"
+          className="barberParametre__deleteButton"
+          onClick={() => setIsModalOpen(true)}
+        >
           Supprimer mon compte
         </button>
       </section>
+
+      {isModalOpen && <ModalParametres onClose={() => setIsModalOpen(false)} />}
     </main>
   );
 }
 
-export default BarberParametre;
+export default BarberParametres;
