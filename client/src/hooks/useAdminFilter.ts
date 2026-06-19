@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 
 export interface AdminFilterState {
   searchTerm: string;
-  departmentFilter: string;
+  locationFilter: string;
   statusFilter: string;
   dateSortOrder: "asc" | "desc";
 }
@@ -17,9 +17,10 @@ export function useAdminFilters<
   },
 >(initialData: T[], searchFields: (keyof T)[] = ["firstname", "lastname"]) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortField, setSortField] = useState<keyof T>("create_time");
 
   const filteredData = useMemo(() => {
     let result = [...initialData];
@@ -34,10 +35,15 @@ export function useAdminFilters<
       );
     }
 
-    if (departmentFilter) {
+    if (locationFilter) {
       result = result.filter((item) => {
+        if ("location_type" in item) {
+          return (
+            (item as { location_type: string }).location_type === locationFilter
+          );
+        }
         const val = item.postal_code;
-        return val && String(val).startsWith(departmentFilter);
+        return val && String(val).startsWith(locationFilter);
       });
     }
 
@@ -46,30 +52,37 @@ export function useAdminFilters<
     }
 
     result.sort((a, b) => {
-      const dateA = new Date(a.create_time).getTime();
-      const dateB = new Date(b.create_time).getTime();
-      return dateSortOrder === "desc" ? dateB - dateA : dateA - dateB;
+      const timeA = a[sortField]
+        ? new Date(a[sortField] as string).getTime()
+        : 0;
+      const timeB = b[sortField]
+        ? new Date(b[sortField] as string).getTime()
+        : 0;
+      return dateSortOrder === "desc" ? timeB - timeA : timeA - timeB;
     });
 
     return result;
   }, [
     initialData,
     searchTerm,
-    departmentFilter,
+    locationFilter,
     statusFilter,
     dateSortOrder,
+    sortField,
     searchFields,
   ]);
 
   return {
     searchTerm,
     setSearchTerm,
-    departmentFilter,
-    setDepartmentFilter,
+    locationFilter,
+    setLocationFilter,
     statusFilter,
     setStatusFilter,
     dateSortOrder,
     setDateSortOrder,
+    sortField,
+    setSortField,
     filteredData,
   };
 }

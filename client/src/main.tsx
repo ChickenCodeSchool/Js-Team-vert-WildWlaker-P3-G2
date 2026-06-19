@@ -10,12 +10,14 @@ import App from "./App";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
+import ReservationsDash from "./pages/admin/reservations/ReservationsDash";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
 import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberDisponibilites from "./pages/barber/barberDisponibilites/BarberDisponibilites";
 import BarberLayout from "./pages/barber/barberLayout/BarberLayout";
+import BarberParametres from "./pages/barber/barberParametres/BarberParametres";
 import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
@@ -68,6 +70,7 @@ const router = createBrowserRouter([
           { path: "dashboard", element: <Dashboard /> },
           { path: "users", element: <Users /> },
           { path: "barbers", element: <Barbers /> },
+          { path: "reservations", element: <ReservationsDash /> },
         ],
       },
       {
@@ -83,6 +86,8 @@ const router = createBrowserRouter([
           { path: "statistics", element: <BarberStatistics /> },
           { path: "annulations", element: <BarberAnnulations /> },
           { path: "disponibilites", element: <BarberDisponibilites /> },
+          { path: "customer", element: <CustomerAvis /> },
+          { path: "parametres", element: <BarberParametres /> },
         ],
       },
     ],

@@ -1,19 +1,38 @@
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
-type Appointment = {
+export type Appointment = {
   id_appointment: number;
   appointment_date: Date;
-  status: string;
+  status: "en attente" | "confirmé" | "terminé" | "annulé";
   location_type: string;
+  create_time: Date;
   id_prestation: number;
   id_user_barber: number;
   id_user_customer: number;
 };
+
 export type AppointmentWithDetails = Appointment & {
   barber_name: string;
+  barber_avatar: string;
+  barber_phone?: string;
+  barber_postal_code?: string;
+  barber_city?: string;
+  barber_adress?: string;
+  barber_email?: string;
+
   customer_firstname: string;
   customer_lastname: string;
+  customer_avatar?: string;
+  customer_phone?: string;
+  customer_postal_code?: string;
+  customer_city?: string;
+  customer_adress?: string;
+  customer_email?: string;
+
+  prestation_name: string;
+  duration_minutes?: number;
+  price?: number;
 };
 class AppointmentRepository {
   // The C of CRUD - Create operation
@@ -24,6 +43,7 @@ class AppointmentRepository {
       SELECT 
         a.*,
         b.name AS barber_name,
+        ub.avatar_url AS barber_avatar, 
         c.firstname AS customer_firstname,
         c.lastname AS customer_lastname,
         u.avatar_url AS customer_avatar, 
@@ -36,6 +56,52 @@ class AppointmentRepository {
       JOIN barber b ON a.id_user_barber = b.id_user
       JOIN customer c ON a.id_user_customer = c.id_user
       JOIN users u ON c.id_user = u.id_user  
+      JOIN users ub ON b.id_user = ub.id_user  
+      JOIN prestation p ON a.id_prestation = p.id_prestation
+      `;
+    const queryParams: string[] = [];
+
+    if (filters?.startDate && filters?.endDate) {
+      query += " WHERE a.appointment_date BETWEEN ? AND ?";
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
+
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
+
+    // Return the array of Appointments
+    return rows as AppointmentWithDetails[];
+  }
+  async readAllForAdmin(filters?: { startDate?: string; endDate?: string }) {
+    // Execute the SQL SELECT query to retrieve all Appointments from the "Appointment" table
+    let query = `
+      SELECT 
+        a.*,
+        b.name AS barber_name,
+        b.postal_code AS barber_postal_code,
+        b.city AS barber_city,
+        b.adress AS barber_adress,
+        c.firstname AS customer_firstname,
+        c.lastname AS customer_lastname,
+        c.postal_code AS customer_postal_code,
+        c.city AS customer_city,
+        c.adress As customer_adress,
+        u.avatar_url AS customer_avatar, 
+        u.phone AS customer_phone,
+        u.email AS customer_email,
+        ub.avatar_url AS barber_avatar, 
+        ub.phone AS barber_phone, 
+        ub.email AS barber_email, 
+        p.name AS prestation_name,
+        p.duration_minutes AS duration_minutes,
+        p.price AS price
+      FROM appointment a
+      JOIN barber b ON a.id_user_barber = b.id_user
+      JOIN customer c ON a.id_user_customer = c.id_user
+      JOIN users u ON c.id_user = u.id_user  
+      JOIN users ub ON b.id_user = ub.id_user  
       JOIN prestation p ON a.id_prestation = p.id_prestation
       `;
     const queryParams: string[] = [];

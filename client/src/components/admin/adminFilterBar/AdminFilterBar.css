@@ -46,7 +46,7 @@
     background-color: var(--white);
     transition: var(--transition, border-color 0.2s);
     outline: none;
-
+    text-transform: capitalize;
     &:focus {
       border-color: var(--gold, #f97316);
     }
