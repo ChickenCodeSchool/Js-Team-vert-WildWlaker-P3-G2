@@ -77,6 +77,23 @@ function ReservationDetailCard({
         </div>
       </div>
       <div className="reservationdetailcard-prestation-contener">
+        <div className="reservationdetailcard-prestation-info create_time">
+          <FiCalendar className="reservationdetailcard-prestation-info-icon" />
+          <div className="reservationdetailcard-prestation-info-text">
+            <span className="reservationdetailcard-prestation-info-span">
+              Date de création
+            </span>
+            <p>
+              {format(
+                new Date(selectedReservation.create_time),
+                "dd MMM yyyy HH:mm",
+                {
+                  locale: fr,
+                },
+              )}
+            </p>
+          </div>
+        </div>
         <div className="reservationdetailcard-prestation-info">
           <FiCalendar className="reservationdetailcard-prestation-info-icon" />
           <div className="reservationdetailcard-prestation-info-text">

@@ -39,19 +39,27 @@ function ReservationsDash() {
     fetch(`${API_URL}/api/appointments/admin`)
       .then((res) => res.json())
       .then((data: Appointment[]) => {
-        const formattedData = data.map((app) => ({
+        const formattedData = data.map((app: Appointment) => ({
           ...app,
           id: app.id_appointment,
-          create_time: app.appointment_date,
         }));
+        const sortedData = [...formattedData].sort(
+          (a, b) =>
+            new Date(b.create_time).getTime() -
+            new Date(a.create_time).getTime(),
+        );
         setAppointments(formattedData);
 
-        if (formattedData.length > 0) {
-          setSelectedReservation((prev) =>
-            prev
-              ? formattedData.find((a) => a.id === prev.id) || formattedData[0]
-              : formattedData[0],
-          );
+        if (sortedData.length > 0) {
+          setSelectedReservation((prev) => {
+            if (prev) {
+              const current = formattedData.find(
+                (a) => a.id_appointment === prev.id_appointment,
+              );
+              return current || sortedData[0];
+            }
+            return sortedData[0];
+          });
         }
       })
       .catch((err) =>
@@ -78,9 +86,17 @@ function ReservationsDash() {
     filteredData,
     locationFilter,
     setLocationFilter,
+    sortField,
+    setSortField,
   } = useAdminFilters<Appointment & { id: number; create_time: string }>(
     appointments,
-    ["barber_name", "customer_firstname", "customer_lastname"],
+    [
+      "barber_name",
+      "customer_firstname",
+      "customer_lastname",
+      "appointment_date",
+      "create_time",
+    ],
   );
 
   const uniqueStatus = useMemo(() => {
@@ -96,6 +112,7 @@ function ReservationsDash() {
     );
     return Array.from(new Set(place)).sort();
   }, [appointments]);
+
   const pendingCount = useMemo(
     () =>
       appointments.filter((a) => a.status?.toLowerCase() === "en attente")
@@ -166,6 +183,21 @@ function ReservationsDash() {
       header: "Service",
       render: (appointment) => (
         <div className="user-grid-info">{appointment.prestation_name}</div>
+      ),
+    },
+    {
+      key: "create_time",
+      header: "Date de création",
+      render: (appointment) => (
+        <div className="user-grid-info">
+          {format(new Date(appointment.create_time), "HH:mm", {
+            locale: fr,
+          })}
+          <b />
+          {format(new Date(appointment.create_time), "dd MMMM yyyy", {
+            locale: fr,
+          })}
+        </div>
       ),
     },
     {
@@ -254,6 +286,8 @@ function ReservationsDash() {
             setLocationFilter={setLocationFilter}
             location={locationOptions}
             locationPlaceholder="Tous les lieux"
+            sortField={sortField}
+            onSortFieldChange={setSortField}
           />
 
           <UserDataGrid
