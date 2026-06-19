@@ -9,7 +9,8 @@ export interface AdminFilterState {
 
 export function useAdminFilters<
   T extends {
-    create_time: string;
+    created_at?: string;
+    create_time?: string;
     status?: string;
     postal_code?: string;
     firstname?: string;

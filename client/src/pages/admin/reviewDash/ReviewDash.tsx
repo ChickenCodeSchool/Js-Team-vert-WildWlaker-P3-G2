@@ -1,18 +1,25 @@
 import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { FiCalendar, FiCheck, FiClock, FiXCircle } from "react-icons/fi";
+import { FiAlertTriangle, FiMessageSquare, FiStar } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
-import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
+// import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
-import type { Appointment } from "../../../types/appointment";
+import type { AdminReview } from "../../../types/review";
 import "./ReviewDash.css";
+
+type LocalAdminReview = AdminReview & {
+  id: number;
+  create_time: string;
+  status: string;
+  location_type: string;
+};
 
 function ReviewDash() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -25,36 +32,37 @@ function ReviewDash() {
   };
   const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
-  const [appointments, setAppointments] = useState<
-    (Appointment & { id: number; create_time: string })[]
-  >([]);
-  const [monthlyNewAppointments, setMonthlyNewAppointments] = useState<
-    Appointment[]
-  >([]);
-  const [selectedReservation, setSelectedReservation] = useState<
-    (Appointment & { id: number; create_time: string }) | null
-  >(null);
+  const [reviews, setReviews] = useState<LocalAdminReview[]>([]);
+  const [monthlyNewReviews, setMonthlyNewReviews] = useState<AdminReview[]>([]);
 
-  const loadAppointmentsData = useCallback(() => {
-    fetch(`${API_URL}/api/appointments/admin`)
+  const [selectedReview, setSelectedReview] = useState<LocalAdminReview | null>(
+    null,
+  );
+
+  const loadReviewsData = useCallback(() => {
+    fetch(`${API_URL}/api/reviews/admin`)
       .then((res) => res.json())
-      .then((data: Appointment[]) => {
-        const formattedData = data.map((app: Appointment) => ({
+      .then((data: AdminReview[]) => {
+        const formattedData = data.map((app: AdminReview) => ({
           ...app,
-          id: app.id_appointment,
-        }));
+          id: app.id_review,
+          create_time: app.created_at,
+          status: app.appointment_status,
+          location_type: app.appointment_location_type,
+        })) as LocalAdminReview[];
+
         const sortedData = [...formattedData].sort(
           (a, b) =>
-            new Date(b.create_time).getTime() -
-            new Date(a.create_time).getTime(),
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
         );
-        setAppointments(formattedData);
+
+        setReviews(formattedData);
 
         if (sortedData.length > 0) {
-          setSelectedReservation((prev) => {
+          setSelectedReview((prev) => {
             if (prev) {
               const current = formattedData.find(
-                (a) => a.id_appointment === prev.id_appointment,
+                (a) => a.id_review === prev.id_review,
               );
               return current || sortedData[0];
             }
@@ -63,18 +71,18 @@ function ReviewDash() {
         }
       })
       .catch((err) =>
-        console.error("Erreur lors du chargement des réservations :", err),
+        console.error("Erreur lors du chargement des avis :", err),
       );
 
-    fetch(`${API_URL}/api/appointments${params}`)
+    fetch(`${API_URL}/api/reviews${params}`)
       .then((res) => res.json())
-      .then((data: Appointment[]) => setMonthlyNewAppointments(data))
+      .then((data: AdminReview[]) => setMonthlyNewReviews(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel :", err));
   }, [params]);
 
   useEffect(() => {
-    loadAppointmentsData();
-  }, [loadAppointmentsData]);
+    loadReviewsData();
+  }, [loadReviewsData]);
 
   const {
     searchTerm,
@@ -88,91 +96,89 @@ function ReviewDash() {
     setLocationFilter,
     sortField,
     setSortField,
-  } = useAdminFilters<Appointment & { id: number; create_time: string }>(
-    appointments,
-    [
-      "barber_name",
-      "customer_firstname",
-      "customer_lastname",
-      "appointment_date",
-      "create_time",
-    ],
-  );
+  } = useAdminFilters<LocalAdminReview>(reviews, [
+    "barber_name",
+    "customer_firstname",
+    "customer_lastname",
+    "prestation_name",
+  ]);
 
   const uniqueStatus = useMemo(() => {
-    const statusList = appointments
-      .map((a) => a.status || "")
+    const statusList = reviews
+      .map((a) => a.appointment_status || "")
       .filter((s) => s.trim() !== "");
     return Array.from(new Set(statusList)).sort();
-  }, [appointments]);
+  }, [reviews]);
 
   const locationOptions = useMemo(() => {
-    const place = appointments.map((p) =>
-      p.location_type ? p.location_type : "",
+    const place = reviews.map((p) =>
+      p.appointment_location_type ? p.appointment_location_type : "",
     );
     return Array.from(new Set(place)).sort();
-  }, [appointments]);
+  }, [reviews]);
 
-  const pendingCount = useMemo(
-    () =>
-      appointments.filter((a) => a.status?.toLowerCase() === "en attente")
-        .length,
-    [appointments],
-  );
-  const cancelCount = useMemo(
-    () =>
-      appointments.filter((a) => a.status?.toLowerCase() === "annulé").length,
-    [appointments],
-  );
-  const confirmCount = useMemo(
-    () =>
-      appointments.filter((a) => a.status?.toLowerCase() === "confirmé").length,
-    [appointments],
+  const reportingCount = useMemo(
+    () => reviews.filter((r) => r.reporting === 1).length,
+    [reviews],
   );
 
-  const columns: DataGridColumn<
-    Appointment & { id: number; create_time: string }
-  >[] = [
+  const monthlyAverageRation = useMemo(() => {
+    if (!monthlyNewReviews || monthlyNewReviews.length === 0) return 0;
+    return (
+      monthlyNewReviews.reduce((sum, r) => sum + r.rating, 0) /
+      monthlyNewReviews.length
+    ).toFixed(1);
+  }, [monthlyNewReviews]);
+
+  const averageRate = useMemo(() => {
+    if (!reviews || reviews.length === 0) return 0;
+    return (
+      reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+    ).toFixed(1);
+  }, [reviews]);
+
+  const columns: DataGridColumn<LocalAdminReview>[] = [
     {
       key: "barber_name",
       header: "Coiffeur",
-      render: (appointment) => (
+      render: (review) => (
         <div className="user-grid-user-cell">
           <img
-            src={appointment.barber_avatar}
-            alt={appointment.barber_name}
+            src={review.barber_avatar_url}
+            alt={review.barber_name}
             className="user-grid-avatar"
           />
-          <div className="user-grid-info">{appointment.barber_name}</div>
+          <div className="user-grid-info">{review.barber_name}</div>
         </div>
       ),
     },
     {
       key: "customer",
       header: "Client",
-      render: (appointment) => (
+      render: (review) => (
         <div className="user-grid-user-cell">
           <img
-            src={appointment.customer_avatar}
-            alt={appointment.customer_firstname}
+            src={review.customer_avatar_url}
+            alt={review.customer_firstname}
             className="user-grid-avatar"
           />
           <div className="user-grid-info">
-            {appointment.customer_firstname} {appointment.customer_lastname}
+            {review.customer_firstname} {review.customer_lastname}
           </div>
         </div>
       ),
     },
     {
-      key: "date",
-      header: "Date & Heure",
-      render: (appointment) => (
+      key: "rating",
+      header: "Note",
+      render: (review) => <div className="user-grid-info">{review.rating}</div>,
+    },
+    {
+      key: "create_time",
+      header: "Date de l'avis",
+      render: (review) => (
         <div className="user-grid-info">
-          {format(new Date(appointment.appointment_date), "HH:mm", {
-            locale: fr,
-          })}
-          <b />
-          {format(new Date(appointment.appointment_date), "dd MMMM yyyy", {
+          {format(new Date(review.created_at), "dd MMMM yyyy", {
             locale: fr,
           })}
         </div>
@@ -181,44 +187,29 @@ function ReviewDash() {
     {
       key: "prestation",
       header: "Service",
-      render: (appointment) => (
-        <div className="user-grid-info">{appointment.prestation_name}</div>
-      ),
-    },
-    {
-      key: "create_time",
-      header: "Date de création",
-      render: (appointment) => (
-        <div className="user-grid-info">
-          {format(new Date(appointment.create_time), "HH:mm", {
-            locale: fr,
-          })}
-          <b />
-          {format(new Date(appointment.create_time), "dd MMMM yyyy", {
-            locale: fr,
-          })}
-        </div>
+      render: (review) => (
+        <div className="user-grid-info">{review.prestation_name}</div>
       ),
     },
     {
       key: "status",
-      header: "Statut",
-      render: (appointment) => (
+      header: "Statut rdv",
+      render: (review) => (
         <div
-          className={`user-grid-info status-${appointment.status?.toLowerCase()}`}
+          className={`user-grid-info status-${review.appointment_status?.toLowerCase()}`}
         >
-          {appointment.status}
+          {review.appointment_status}
         </div>
       ),
     },
     {
       key: "localisation",
       header: "Lieu",
-      render: (appointment) => (
+      render: (review) => (
         <div
-          className={`user-grid-info location-${appointment.location_type?.toLowerCase()}`}
+          className={`user-grid-info location-${review.appointment_location_type?.toLowerCase()}`}
         >
-          {appointment.location_type}
+          {review.appointment_location_type}
         </div>
       ),
     },
@@ -228,45 +219,45 @@ function ReviewDash() {
     <div className="reservationsDash-body">
       <header className="reservationsDash-header">
         <div className="reservationsDash-title">
-          <FiCalendar className="reservationsDash-title-icon" />
-          <h1>Gestion des réservations</h1>
+          <FiMessageSquare className="reservationsDash-title-icon" />
+          <h1>Gestion des Avis & Commentaires</h1>
         </div>
-        <p>Gerez et suivez les réservations de votre plateforme</p>
+        <p>Gérez et suivez les avis & commentaires de votre plateforme</p>
 
         <div className="reservationsDash-top-graphs">
           <StatsCard
-            Icon={FiCalendar}
+            Icon={FiMessageSquare}
             iconColor="icon-info"
-            title="Réservations"
-            value={appointments.length}
+            title="Avis"
+            value={reviews.length}
             cycle="Total"
           />
           <StatsCard
-            Icon={FiCheck}
+            Icon={FiStar}
             iconColor="icon-success"
-            title="Confirmées"
-            value={confirmCount}
+            title="Note moyenne"
+            value={averageRate}
             cycle="Total"
           />
           <StatsCard
-            Icon={FiClock}
-            iconColor="icon-warning"
-            title="En attente"
-            value={pendingCount}
-            cycle="Total"
-          />
-          <StatsCard
-            Icon={FiXCircle}
+            Icon={FiAlertTriangle}
             iconColor="icon-error"
-            title="Annulées"
-            value={cancelCount}
+            title="Signalements"
+            value={reportingCount}
             cycle="Total"
           />
           <StatsCard
-            Icon={FiCalendar}
+            Icon={FiStar}
+            iconColor="icon-success"
+            title="Note moyenne"
+            value={monthlyAverageRation}
+            cycle="Les 30 derniers jours"
+          />
+          <StatsCard
+            Icon={FiMessageSquare}
             iconColor="icon-info"
-            title="Réservations"
-            value={monthlyNewAppointments.length}
+            title="Avis"
+            value={monthlyNewReviews.length}
             cycle="Les 30 derniers jours"
           />
         </div>
@@ -293,21 +284,13 @@ function ReviewDash() {
           <UserDataGrid
             columns={columns}
             data={filteredData}
-            onRowClick={(appointment) => setSelectedReservation(appointment)}
+            onRowClick={(review) => setSelectedReview(review)}
             rowsPerPage={6}
-            selectedId={selectedReservation?.id}
+            selectedId={selectedReview?.id}
           />
         </section>
 
-        <aside className="admin-barbers-main-aside">
-          {selectedReservation ? (
-            <ReservationDetailCard selectedReservation={selectedReservation} />
-          ) : (
-            <div className="no-user-selected">
-              <p>Sélectionnez une réservation pour voir ses détails</p>
-            </div>
-          )}
-        </aside>
+        <aside className="admin-barbers-main-aside"></aside>
       </main>
     </div>
   );
