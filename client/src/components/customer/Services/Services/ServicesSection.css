@@ -1,6 +1,7 @@
 .services {
-  margin-top: auto;
-  margin-bottom: 120px;
+  padding: 1.5rem 1.25rem;
+  background: var(--white);
+  margin-top: 0.5rem;
 }
 
 .services__title {

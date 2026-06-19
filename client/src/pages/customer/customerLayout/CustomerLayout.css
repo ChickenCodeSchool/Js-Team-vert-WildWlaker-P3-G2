@@ -1,0 +1,6 @@
+.customerLayout-main {
+  min-height: 100vh;
+  background-color: var(--gray-50);
+  max-width: 480px;
+  margin: 0 auto;
+}

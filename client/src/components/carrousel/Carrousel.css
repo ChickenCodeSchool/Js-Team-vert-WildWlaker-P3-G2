@@ -1,12 +1,13 @@
 .carrousel {
   width: 100%;
-  margin-bottom: 2rem;
 }
 
 .carrousel__list {
   display: flex;
   gap: 0.75rem;
   overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
 }
 
 .carrousel__list::-webkit-scrollbar {
@@ -14,77 +15,72 @@
 }
 
 .carrousel__card {
-  flex: 1rem;
-  width: 1rem;
+  flex: 0 0 8.5rem;
+  width: 8.5rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--white);
+  border: 1px solid var(--gray-100);
   box-shadow: var(--shadow-sm);
   transition: var(--transition);
+  cursor: pointer;
 }
 
 .carrousel__card:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: var(--gold-dark);
 }
 
 .carrousel__image-wrapper {
   position: relative;
   width: 100%;
-  height: 95px;
+  height: 8.5rem;
   background: var(--gray-100);
+  overflow: hidden;
 }
 
 .carrousel__image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.carrousel__card:hover .carrousel__image {
+  transform: scale(1.06);
 }
 
 .carrousel__content {
-  padding: 0.65rem;
+  padding: 0.625rem 0.625rem 0.5rem;
   background: var(--white);
 }
 
 .carrousel__name {
-  margin: 0 0 6px;
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--gray-900);
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-family: var(--font-title);
+  color: var(--black);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.carrousel__rating {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 5px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--gray-900);
-}
-
-.star-icon {
-  width: 12px;
-  height: 12px;
-  object-fit: contain;
-  color: var(--gold-dark);
-}
-
 .carrousel__city {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--gray-900);
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--gray-600);
 }
 
 .location-icon {
-  width: 11px;
-  height: 11px;
-  object-fit: contain;
-  color: var(--error);
+  width: 0.6875rem;
+  height: 0.6875rem;
+  flex-shrink: 0;
+  color: var(--gold-dark);
 }

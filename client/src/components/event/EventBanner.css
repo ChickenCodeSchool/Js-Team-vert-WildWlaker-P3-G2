@@ -1,8 +1,8 @@
 .event_banner {
   position: relative;
   width: 100%;
-  aspect-ratio: 17 / 12;
-  margin: 1.5rem 0;
+  aspect-ratio: 16 / 9;
+  margin: 1rem 0 0.5rem;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--black);
@@ -18,38 +18,55 @@
   display: block;
 }
 
+/* Gradient overlay pour lisibilité */
+.event_banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+  border-radius: var(--radius-lg);
+}
+
 .event-banner_control {
   position: absolute;
   inset: 0;
-  padding: clamp(1rem, 4vw, 1.75rem);
+  padding: 1.25rem;
   display: flex;
   align-items: center;
+  z-index: 1;
 }
 
 .event_content {
-  width: 65%;
-  max-width: 15rem;
+  width: 70%;
+  max-width: 16rem;
   color: var(--white);
 }
 
 .event_label {
   display: inline-block;
-  margin-bottom: 1rem;
-  padding: 0.4rem 0.65rem;
-  border-radius: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
   background: var(--gold-dark);
   color: var(--white);
   font-family: var(--font-body);
-  font-weight: 800;
-  line-height: 1;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .event_title {
-  margin: 0 0 0.75rem;
-  font-family: var(--font-body);
-  font-size: clamp(1.25rem, 6vw, 1.85rem);
-  font-weight: 800;
-  line-height: 1.08;
+  margin: 0 0 0.375rem;
+  font-family: var(--font-title);
+  font-size: clamp(1rem, 5vw, 1.375rem);
+  font-weight: 700;
+  line-height: 1.15;
   color: var(--white);
 }
 
@@ -60,43 +77,50 @@
 
 .event_description {
   max-width: 13rem;
-  margin: 0 0 1rem;
+  margin: 0 0 0.75rem;
   font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .event-banner__infos {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
-  margin-bottom: 1rem;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
   font-family: var(--font-body);
-  font-weight: 800;
 }
 
 .event-banner__infos p {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
 }
 
 .event-banner__button {
-  min-height: 2.5rem;
-  padding: 0 1rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: 0 0.875rem;
   border: none;
   border-radius: var(--radius-md);
-  background: var(--white);
-  color: var(--black);
+  background: var(--gold-dark);
+  color: var(--white);
   font-family: var(--font-body);
-  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .event-banner__button:hover {
-  background: var(--gold-dark);
-  color: var(--white);
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
