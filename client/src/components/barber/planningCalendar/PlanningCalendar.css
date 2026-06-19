@@ -1,13 +1,13 @@
 .planning-calendar {
   max-width: 430px;
-  background: #ffffff;
+  background: var(--white);
   padding: 18px 15px;
   font-family: var(--font-title);
   min-height: auto;
 }
 
 .planning-topbar {
-  display: center;
+  display: grid;
   grid-template-columns: 44px 1fr 44px;
   align-items: center;
   margin-bottom: 42px;
@@ -51,10 +51,10 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  border: 1px solid #edf0f4;
+  border: 1px solid var(--gray-100);
   color: var(--black);
   font-size: 28px;
-  background: #ffffff;
+  background: var(--white);
 }
 
 .planning-month-label {
@@ -79,7 +79,7 @@
 .planning-tabs button {
   height: 48px;
   border: none;
-  background: #ffffff;
+  background: var(--white);
   font-size: 16px;
   font-weight: 800;
   color: var(--black);
@@ -88,7 +88,7 @@
 
 .planning-tabs .active {
   background: var(--gold-dark);
-  color: #ffffff;
+  color: var(--white);
 }
 
 .calendar-weekdays {
@@ -136,7 +136,7 @@
 }
 
 .calendar-day.selected span {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .day-week-selector {
@@ -169,18 +169,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #111827;
+  color: var(--black);
   font-size: 20px;
   font-weight: 800;
 }
 
 .day-week-item.selected span {
-  color: var(--warning);
+  color: var(--gold-dark);
 }
 
 .day-week-item.selected strong {
   background: var(--gold-dark);
-  color: #ffffff;
+  color: var(--white);
 }
 
 .week-placeholder {
@@ -210,9 +210,9 @@
 }
 
 .week-view-day {
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--gray-100);
   border-radius: 14px;
-  background: #ffffff;
+  background: var(--white);
   padding: 12px 0;
   cursor: pointer;
 }
@@ -228,7 +228,7 @@
   display: block;
   margin-top: 8px;
   font-size: 20px;
-  color: #111827;
+  color: var(--black);
 }
 
 .week-view-day.selected {
@@ -238,14 +238,14 @@
 
 .week-view-day.selected span,
 .week-view-day.selected strong {
-  color: #ffffff;
+  color: var(--white);
 }
 
 .week-planning {
   margin-top: 16px;
   overflow-x: auto;
   overflow-y: hidden;
-  border: 1px solid #eeeeee;
+  border: 1px solid var(--gray-100);
   border-radius: 14px;
 }
 
@@ -256,20 +256,20 @@
 }
 
 .week-planning-header {
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--gray-100);
 }
 
 .week-planning-day {
   border: none;
-  border-left: 1px solid #eeeeee;
-  background: #ffffff;
+  border-left: 1px solid var(--gray-100);
+  background: var(--white);
   padding: 14px 0;
   cursor: pointer;
   font-weight: 800;
 }
 
 .week-planning-day.selected {
-  background: #fff3dd;
+  background: var(--gold-soft);
   color: var(--gold-dark);
 }
 
@@ -280,7 +280,7 @@
 
 .week-planning-row {
   min-height: 118px;
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid var(--gray-100);
 }
 
 .week-planning-row:last-child {
@@ -292,13 +292,13 @@
   text-align: center;
   font-weight: 800;
   color: var(--black);
-  border-right: 1px solid #eeeeee;
+  border-right: 1px solid var(--gray-100);
 }
 
 .week-planning-cell {
   border: none;
-  border-left: 1px solid #eeeeee;
-  background: #ffffff;
+  border-left: 1px solid var(--gray-100);
+  background: var(--white);
   padding: 8px;
   min-height: 118px;
   cursor: pointer;
@@ -308,7 +308,7 @@
   min-height: 82px;
   padding: 12px;
   border-radius: 10px;
-  background: #fff3dd;
+  background: var(--gold-soft);
   border-left: 4px solid var(--gold-dark);
   text-align: left;
 }

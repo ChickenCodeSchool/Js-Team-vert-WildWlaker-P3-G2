@@ -1,6 +1,6 @@
 .barber-signalement {
   background-color: var(--gray-50);
-  padding: 1.25rem;
+  padding: 4.5rem 1.25rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -10,7 +10,7 @@
 .barber-signalement__subtitle {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   text-align: center;
   line-height: 1.6;
 }
@@ -43,7 +43,7 @@
   gap: 0.5rem;
   padding: 0.875rem;
   background-color: var(--white);
-  border: 1.5px solid var(--gray-200);
+  border: 1.5px solid var(--gray-300);
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
@@ -51,8 +51,15 @@
   transition: var(--transition);
 }
 
+.barber-signalement__target-card:hover {
+  border-color: var(--gold-dark);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
 .barber-signalement__target-card--selected {
   border-color: var(--gold-dark);
+  background-color: var(--gold-soft);
 }
 
 .barber-signalement__target-icon {
@@ -77,7 +84,7 @@
 .barber-signalement__target-desc {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   line-height: 1.4;
 }
 
@@ -96,7 +103,7 @@
   gap: 0.5rem;
   padding: 0.875rem;
   background-color: var(--white);
-  border: 1.5px solid var(--gray-200);
+  border: 1.5px solid var(--gray-300);
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
@@ -104,8 +111,14 @@
   transition: var(--transition);
 }
 
+.barber-signalement__type-card:hover {
+  border-color: var(--gold-dark);
+  box-shadow: var(--shadow-sm);
+}
+
 .barber-signalement__type-card--selected {
   border-color: var(--gold-dark);
+  background-color: var(--gold-soft);
 }
 
 .barber-signalement__type-icon {
@@ -114,7 +127,7 @@
   border-radius: 50%;
   background-color: var(--white);
   color: var(--gold-dark);
-  border: 1.5px solid var(--gray-200);
+  border: 1.5px solid var(--gray-300);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +149,7 @@
 .barber-signalement__type-desc {
   font-family: var(--font-body);
   font-size: 0.6875rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-top: 0.2rem;
   line-height: 1.3;
 }
@@ -178,7 +191,7 @@
   width: 100%;
   height: 7.5rem;
   padding: 0.875rem 1rem 2rem;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -191,6 +204,7 @@
 
 .barber-signalement__textarea:focus {
   border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
 }
 
 .barber-signalement__char-count {
@@ -199,7 +213,7 @@
   right: 0.875rem;
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 /* ── Preuves ── */
@@ -207,7 +221,7 @@
 .barber-signalement__proof-subtitle {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-top: -0.25rem;
 }
 
@@ -216,7 +230,7 @@
   align-items: center;
   gap: 0.875rem;
   padding: 1rem;
-  background-color: #fdf6e3;
+  background-color: var(--gold-soft);
   border: 1px solid var(--gold-dark);
   border-radius: var(--radius-md);
   cursor: pointer;
@@ -237,14 +251,14 @@
 .barber-signalement__file-desc {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-top: 0.125rem;
 }
 
 .barber-signalement__file-arrow {
   margin-left: auto;
   font-size: 1.25rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 /* ── Submit ── */
@@ -269,12 +283,14 @@
 
 .barber-signalement__submit-btn:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .barber-signalement__footer {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
   text-align: center;
   display: flex;
   align-items: center;

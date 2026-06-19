@@ -144,7 +144,7 @@
           transition: var(--transition);
 
           &:focus {
-            border-color: var(--gold);
+            border-color: var(--gold-dark);
             background-color: var(--white);
           }
 
@@ -171,7 +171,7 @@
           transition: var(--transition);
 
           &:focus-within {
-            border-color: var(--gold);
+            border-color: var(--gold-dark);
             background-color: var(--white);
           }
           .flag-icon {
@@ -241,7 +241,7 @@
 
           &:hover {
             background: var(--gold-soft);
-            border-color: var(--gold);
+            border-color: var(--gold-dark);
             color: var(--gold-dark);
 
             svg {
@@ -251,15 +251,15 @@
 
           &.suspend-btn {
             background: var(--white);
-            border-color: var(--warning);
-            color: var(--warning);
+            border-color: var(--gold-dark);
+            color: var(--gold-dark);
 
             svg {
-              color: var(--warning);
+              color: var(--gold-dark);
             }
 
             &:hover {
-              background: var(--warning);
+              background: var(--gold-dark);
               color: var(--white);
 
               svg {
@@ -333,7 +333,7 @@
 
       .save-btn {
         padding: 8px 16px;
-        background: var(--gold);
+        background: var(--gold-dark);
         color: var(--white);
         border: none;
         border-radius: var(--radius-sm);

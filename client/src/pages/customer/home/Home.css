@@ -2,36 +2,43 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  padding-inline: 20px;
-  padding-top: 20px;
+  padding: 1.25rem 1.25rem 7rem;
   background-color: var(--gray-50);
+  gap: 1.25rem;
 }
 
 .home__title {
-  margin-top: 0.1rem;
   font-family: var(--font-title);
-}
-
-.home_search {
-  margin-top: 1rem;
-}
-
-.home__banner {
-  margin: 1rem;
-}
-
-.FiScissors {
-  color: var(--gold-dark);
-  font-size: 25px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--black);
 }
 
 .home_span {
   color: var(--gold-dark);
+  font-weight: 700;
+}
+
+.home_search {
+  margin-top: 0.25rem;
+}
+
+.home__banner {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.FiScissors {
+  color: var(--gold-dark);
+  font-size: 1.5rem;
 }
 
 .Carrousel_title {
   font-family: var(--font-title);
-  font-size: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 0.75rem;
 }
 
 .Carrousel_control {
@@ -40,5 +47,5 @@
 }
 
 .element_import {
-  margin: 1rem;
+  margin: 0;
 }

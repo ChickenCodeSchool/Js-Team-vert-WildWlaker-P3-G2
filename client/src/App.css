@@ -24,7 +24,7 @@
   --warning: #f5a623;
   --info: #3b82f6;
 
-  --main-gradient: linear-gradient(90deg, var(--black) 0%, var(--gold) 100%);
+  --main-gradient: linear-gradient(90deg, var(--black) 0%, var(--gold-dark) 100%);
   --second-gradient: linear-gradient(90deg, var(--beige) 0%, var(--white) 100%);
   --font-title: "Poppins", sans-serif;
   --font-body: "Inter", sans-serif;

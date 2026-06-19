@@ -21,7 +21,7 @@
 .customer-avis__tabs {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -31,7 +31,7 @@
   font-family: var(--font-title);
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--gray-500);
+  color: var(--gray-600);
   background-color: var(--white);
   border: none;
   cursor: pointer;
@@ -64,7 +64,7 @@
 .customer-avis__average-label {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
 }
 
 .customer-avis__average-score {
@@ -78,7 +78,7 @@
 .customer-avis__average-total {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-top: 0.25rem;
 }
 
@@ -91,11 +91,11 @@
 }
 
 .customer-avis__star--full {
-  color: var(--warning);
+  color: var(--gold-dark);
 }
 
 .customer-avis__star--empty {
-  color: var(--gray-200);
+  color: var(--gray-300);
 }
 
 /* ── Distribution bars ── */
@@ -141,7 +141,7 @@
 .customer-avis__bar-count {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   min-width: 1.5rem;
   text-align: right;
 }
@@ -171,7 +171,7 @@
 .customer-avis__sort-label {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
 }
 
 .customer-avis__sort-btn {
@@ -179,18 +179,24 @@
   align-items: center;
   gap: 0.25rem;
   padding: 0.375rem 0.75rem;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
   background-color: var(--white);
   font-family: var(--font-body);
   font-size: 0.8125rem;
   color: var(--black);
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.customer-avis__sort-btn:hover {
+  border-color: var(--gold-dark);
+  color: var(--gold-dark);
 }
 
 .customer-avis__sort-arrow {
   font-size: 1rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .customer-avis__sort-dropdown {
@@ -198,9 +204,9 @@
   top: calc(100% + 0.5rem);
   right: 0;
   background-color: var(--white);
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--gray-100);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   list-style: none;
   padding: 0.375rem 0;
   z-index: 10;
@@ -295,7 +301,7 @@
 .customer-avis__prestation {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-top: 0.125rem;
 }
 
@@ -309,14 +315,14 @@
 .customer-avis__date {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .customer-avis__menu-btn {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--gray-400);
+  color: var(--gray-300);
   padding: 0;
   display: flex;
 }
@@ -324,6 +330,6 @@
 .customer-avis__comment {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--gray-700);
+  color: var(--gray-900);
   line-height: 1.5;
 }

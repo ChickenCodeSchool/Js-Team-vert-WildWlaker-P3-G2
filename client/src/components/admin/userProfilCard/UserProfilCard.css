@@ -44,7 +44,7 @@
       font-family: var(--font-body);
       font-size: 16px;
       .userProfilCard-info-icon {
-        color: var(--gold);
+        color: var(--gold-dark);
         padding: 10px;
         width: 20px;
         height: 20px;
@@ -110,7 +110,7 @@
 
       &:hover {
         background: var(--gold-soft);
-        border-color: var(--gold);
+        border-color: var(--gold-dark);
         color: var(--gold-dark);
 
         svg {
@@ -120,15 +120,15 @@
 
       &.suspend-btn {
         background: var(--white);
-        border-color: var(--warning);
-        color: var(--warning);
+        border-color: var(--gold-dark);
+        color: var(--gold-dark);
 
         svg {
-          color: var(--warning);
+          color: var(--gold-dark);
         }
 
         &:hover {
-          background: var(--warning);
+          background: var(--gold-dark);
           color: var(--white);
 
           svg {
