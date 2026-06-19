@@ -236,7 +236,7 @@ function ReviewDash() {
             Icon={FiStar}
             iconColor="icon-success"
             title="Note moyenne"
-            value={averageRate}
+            value={`${averageRate}/5`}
             cycle="Total"
           />
           <StatsCard
@@ -250,7 +250,7 @@ function ReviewDash() {
             Icon={FiStar}
             iconColor="icon-success"
             title="Note moyenne"
-            value={monthlyAverageRation}
+            value={`${monthlyAverageRation}/5`}
             cycle="Les 30 derniers jours"
           />
           <StatsCard
