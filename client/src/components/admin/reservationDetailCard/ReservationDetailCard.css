@@ -118,5 +118,9 @@
       justify-content: center;
       width: 90%;
     }
+    & .create_time {
+      justify-content: center;
+      width: 90%;
+    }
   }
 }

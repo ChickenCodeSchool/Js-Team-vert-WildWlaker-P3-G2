@@ -1,5 +1,4 @@
-import { FiCalendar, FiFilter, FiSearch } from "react-icons/fi";
-
+import { FiCalendar, FiFilter, FiSearch, FiSliders } from "react-icons/fi";
 import "./AdminFilterBar.css";
 
 interface TableFiltersProps {
@@ -14,6 +13,8 @@ interface TableFiltersProps {
   location: string[];
   status: string[];
   locationPlaceholder?: string;
+  sortField?: string;
+  onSortFieldChange?: (value: "create_time" | "appointment_date") => void;
 }
 
 function AdminFilterBar({
@@ -28,6 +29,8 @@ function AdminFilterBar({
   location,
   status,
   locationPlaceholder = "Tous les départements",
+  sortField,
+  onSortFieldChange,
 }: TableFiltersProps) {
   return (
     <div className="admin-users-filters-bar">
@@ -35,45 +38,62 @@ function AdminFilterBar({
         <FiSearch className="search-icon" />
         <input
           type="text"
-          placeholder="Rechercher un utilisateur..."
+          placeholder="Rechercher..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="filter-input search-input"
         />
       </div>
 
-      <div className="filters-controls-wrapper">
-        <div className="filter-select-wrapper">
-          <FiFilter className="filter-icon" />
-          <select
-            value={locationFilter}
-            onChange={(e) => setLocationFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">{locationPlaceholder}</option>
-            {location.map((dept) => (
-              <option key={dept} value={dept}>
-                {dept}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="filter-select-wrapper">
+        <FiFilter className="filter-icon" />
+        <select
+          value={locationFilter}
+          onChange={(e) => setLocationFilter(e.target.value)}
+          className="filter-select"
+        >
+          <option value="">{locationPlaceholder}</option>
+          {location.map((dept) => (
+            <option key={dept} value={dept}>
+              {dept}
+            </option>
+          ))}
+        </select>
+      </div>
 
-        <div className="filter-select-wrapper">
-          <FiFilter className="filter-icon" />
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">Tous les statuts</option>
-            {status.map((stat) => (
-              <option key={stat} value={stat}>
-                {stat}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="filter-select-wrapper">
+        <FiFilter className="filter-icon" />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="filter-select"
+        >
+          <option value="">Tous les statuts</option>
+          {status.map((stat) => (
+            <option key={stat} value={stat}>
+              {stat}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="filters-controls-wrapper">
+        {sortField !== undefined && onSortFieldChange && (
+          <div className="filter-select-wrapper">
+            <FiSliders className="filter-icon" />
+            <select
+              value={sortField}
+              onChange={(e) =>
+                onSortFieldChange(
+                  e.target.value as "create_time" | "appointment_date",
+                )
+              }
+              className="filter-select"
+            >
+              <option value="create_time">Trier par : Date de création</option>
+              <option value="appointment_date">Trier par : Date du RDV</option>
+            </select>
+          </div>
+        )}
 
         <div className="filter-select-wrapper">
           <FiCalendar className="filter-icon" />
