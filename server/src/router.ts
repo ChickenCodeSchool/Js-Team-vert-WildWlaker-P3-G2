@@ -35,6 +35,7 @@ router.post("/api/prestations", prestationActions.add);
 router.put("/api/prestations/:id", prestationActions.edit);
 router.delete("/api/prestations/:id", prestationActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
+router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
 
