@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import ReservationCard from "./ReservationCard";
 import "./MyReservations.css";
 import { useParams } from "react-router";
+import type { Review } from "../../../types/review";
 import type { Reservation } from "./ReservationType";
 
 function MyReservations() {
+  const [reviews, setReviews] = useState<Review[]>([]);
   const [activeTab, setActiveTab] = useState("upcoming");
   const [appointments, setAppointments] = useState<Reservation[]>([]);
   const API_URL = import.meta.env.VITE_API_URL;
@@ -20,6 +22,16 @@ function MyReservations() {
       .then((data) => setAppointments(data))
       .catch((err) => console.error("Erreur chargement réservations", err));
   }, [id]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/reviews`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Erreur ${res.status}`);
+        return res.json();
+      })
+      .then((data) => setReviews(data))
+      .catch((err) => console.error("Erreur chargement avis", err));
+  }, []);
 
   const now = new Date();
 
@@ -58,12 +70,19 @@ function MyReservations() {
         </button>
       </div>
       <div className="reservations__list">
-        {filteredAppointments.map((appointment) => (
-          <ReservationCard
-            key={appointment.id_appointment}
-            reservation={appointment}
-          />
-        ))}
+        {filteredAppointments.map((appointment) => {
+          const review = reviews.find(
+            (review) => review.id_appointment === appointment.id_appointment,
+          );
+
+          return (
+            <ReservationCard
+              key={appointment.id_appointment}
+              reservation={appointment}
+              review={review}
+            />
+          );
+        })}
       </div>
     </section>
   );

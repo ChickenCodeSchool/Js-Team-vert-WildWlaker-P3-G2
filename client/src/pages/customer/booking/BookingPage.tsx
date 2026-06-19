@@ -5,6 +5,7 @@ import BookingForm from "../../../components/customer/Booking/BookingForm";
 import BookingSummary from "../../../components/customer/Booking/BookingSummary";
 import type { Booking } from "../../../components/customer/Booking/BookingTypes";
 import Stepper from "../../../components/customer/Booking/Stepper";
+
 import "./BookingPage.css";
 
 function BookingPage() {

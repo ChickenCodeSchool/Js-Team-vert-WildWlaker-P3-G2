@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CiMapPin } from "react-icons/ci";
+import { FaMapPin } from "react-icons/fa";
 import { FiChevronLeft } from "react-icons/fi";
 import { useNavigate } from "react-router";
 import BarberCard from "../../../components/customer/BarberCard/BarberCard";
@@ -81,7 +81,7 @@ function SearchPage() {
         />
 
         <span className="search-near__slider" />
-        <CiMapPin className="search-near__icon" />
+        <FaMapPin className="search-near__icon" />
 
         <span className="search-near__text">Près de chez moi</span>
       </label>

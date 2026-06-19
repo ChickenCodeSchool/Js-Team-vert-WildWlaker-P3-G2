@@ -36,7 +36,7 @@ function UserProfile() {
 
   const handleDeleteAccount = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/customers/${customer?.id_user}`, {
+      const res = await fetch(`${API_URL}/api/users/${customer?.id_user}`, {
         method: "DELETE",
       });
 
