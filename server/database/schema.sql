@@ -108,6 +108,7 @@ CREATE TABLE appointment (
     appointment_date DATETIME NOT NULL,
     status VARCHAR(50) NOT NULL DEFAULT 'En attente',
     location_type VARCHAR(50) NOT NULL,
+    create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_prestation INT NOT NULL,
     id_user_barber INT NOT NULL,   -- Coiffeur ayant reçu le RDV
     id_user_customer INT NOT NULL, -- Client ayant pris le RDV
