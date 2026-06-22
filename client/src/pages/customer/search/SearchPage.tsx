@@ -62,7 +62,7 @@ function SearchPage() {
       .finally(() => {
         setIsLoading(false);
       });
-  }, [API_URL]);
+  }, []);
 
   const searchedBarbers = barbers.filter((barber) => {
     const search = searchValue.toLowerCase();
