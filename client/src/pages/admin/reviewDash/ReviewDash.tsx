@@ -179,7 +179,11 @@ function ReviewDash() {
     {
       key: "rating",
       header: "Note",
-      render: (review) => <div className="user-grid-info">{review.rating}</div>,
+      render: (review) => (
+        <div className="user-grid-info">
+          {review.rating} <FiStar />
+        </div>
+      ),
     },
     {
       key: "create_time",
