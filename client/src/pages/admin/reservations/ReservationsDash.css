@@ -38,9 +38,9 @@
   .reservationsDash-main {
     display: flex;
     justify-content: space-between;
-    max-width: 100%;
     margin-left: 20px;
     margin-right: 20px;
+    margin-bottom: 30px;
 
     .reservationsDash-section {
       width: 75%;
@@ -132,7 +132,7 @@
         color: var(--black);
       }
     }
-    .admin-barbers-main-aside {
+    .reservationsDash-aside {
       width: 22%;
       padding-right: 20px;
     }

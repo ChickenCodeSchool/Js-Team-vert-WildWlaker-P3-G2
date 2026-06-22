@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiAlertTriangle, FiMessageSquare, FiStar } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
-// import ReservationDetailCard from "../../../components/admin/reservationDetailCard/ReservationDetailCard";
+import ReviewDetailCard from "../../../components/admin/reviewDetailCard/ReviewDetailCard";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
@@ -20,7 +20,12 @@ type LocalAdminReview = AdminReview & {
   status: string;
   location_type: string;
 };
-
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return `${text.slice(0, maxLength)}...`;
+  }
+  return text;
+};
 function ReviewDash() {
   const API_URL = import.meta.env.VITE_API_URL;
   const today = new Date();
@@ -107,6 +112,9 @@ function ReviewDash() {
     const statusList = reviews
       .map((a) => a.appointment_status || "")
       .filter((s) => s.trim() !== "");
+    if (reviews.some((review) => review.reporting === 1)) {
+      statusList.push("signaler");
+    }
     return Array.from(new Set(statusList)).sort();
   }, [reviews]);
 
@@ -185,10 +193,21 @@ function ReviewDash() {
       ),
     },
     {
+      key: "reporting",
+      header: "Signalement",
+      render: (review) => (
+        <div className={`user-grid-info reporting-${review.reporting}`}>
+          {review.reporting === 1 ? "oui" : "non"}
+        </div>
+      ),
+    },
+    {
       key: "prestation",
       header: "Service",
       render: (review) => (
-        <div className="user-grid-info">{review.prestation_name}</div>
+        <div className="user-grid-info">
+          {truncateText(review.prestation_name, 20)}
+        </div>
       ),
     },
     {
@@ -216,7 +235,7 @@ function ReviewDash() {
   ];
 
   return (
-    <div className="reservationsDash-body">
+    <div className="reviewDash-body">
       <header className="reservationsDash-header">
         <div className="reservationsDash-title">
           <FiMessageSquare className="reservationsDash-title-icon" />
@@ -285,12 +304,20 @@ function ReviewDash() {
             columns={columns}
             data={filteredData}
             onRowClick={(review) => setSelectedReview(review)}
-            rowsPerPage={6}
+            rowsPerPage={9}
             selectedId={selectedReview?.id}
           />
         </section>
 
-        <aside className="admin-barbers-main-aside"></aside>
+        <aside className="reviewDash-aside">
+          {selectedReview ? (
+            <ReviewDetailCard selectedReview={selectedReview} />
+          ) : (
+            <div className="no-user-selected">
+              <p>Sélectionnez une réservation pour voir ses détails</p>
+            </div>
+          )}
+        </aside>
       </main>
     </div>
   );

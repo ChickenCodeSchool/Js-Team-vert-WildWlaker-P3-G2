@@ -6,8 +6,8 @@
   margin-bottom: 24px;
   background-color: var(--white);
   padding: 14px 20px;
-  border-radius: var(--radius-md, 8px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  border-radius: var(--radius-md,);
+  box-shadow: var(--shadow-sm);
 
   .search-input-wrapper,
   .filter-select-wrapper {
@@ -39,16 +39,16 @@
   .filter-select {
     width: 100%;
     padding: 10px 12px 10px 38px;
-    border: 1px solid var(--gray-200, #e2e8f0);
+    border: 1px solid var(--gray-300);
     border-radius: var(--radius-sm);
     font-size: 14px;
     color: var(--black);
     background-color: var(--white);
-    transition: var(--transition, border-color 0.2s);
+    transition: var(--transition);
     outline: none;
     text-transform: capitalize;
     &:focus {
-      border-color: var(--gold, #f97316);
+      border-color: var(--gold);
     }
   }
 }

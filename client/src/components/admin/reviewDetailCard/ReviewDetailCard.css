@@ -1,14 +1,14 @@
-.reservationdetailcard-main {
+.reviewdetailcard-main {
   width: 100%;
   background-color: var(--white);
   border-radius: var(--radius-lg);
-  padding: 20px 10px 20px 10px;
+  padding: 20px 10px 0px 10px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
   gap: 32px;
 
-  .reservationdetailcard-title {
+  .reviewdetailcard-title {
     display: flex;
     justify-content: space-around;
     h2 {
@@ -17,7 +17,7 @@
       color: var(--black);
       padding-left: 10px;
     }
-    .reservationdetailcard-status {
+    .reviewdetailcard-status {
       display: flex;
       margin-left: 20px;
       align-items: center;
@@ -45,7 +45,7 @@
       }
     }
   }
-  .reservationdetailcard-header {
+  .reviewdetailcard-header {
     display: flex;
     flex-direction: column;
     padding-left: 10px;
@@ -58,17 +58,17 @@
       font-size: 14px;
       color: var(--black);
     }
-    .reservationdetailcard-user-info {
+    .reviewdetailcard-user-info {
       display: flex;
       width: 100%;
       gap: 16px;
       align-items: center;
 
-      .reservationdetailcard-avatar {
+      .reviewdetailcard-avatar {
         width: 16%;
         border-radius: 50%;
       }
-      .reservationdetailcard-user-info-text {
+      .reviewdetailcard-user-info-text {
         display: flex;
         flex-direction: column;
         gap: 5px;
@@ -83,7 +83,7 @@
       }
     }
   }
-  .reservationdetailcard-prestation-contener {
+  .reviewdetailcard-prestation-contener {
     display: flex;
     font-family: var(--font-body);
     flex-wrap: wrap;
@@ -92,7 +92,7 @@
     gap: 16px;
     padding-left: 10px;
 
-    .reservationdetailcard-prestation-info {
+    .reviewdetailcard-prestation-info {
       display: flex;
       align-items: center;
       gap: 16px;
@@ -100,12 +100,12 @@
       padding: 10px 10px 10px 10px;
       border-radius: var(--radius-md);
       box-shadow: var(--shadow-sm);
-      .reservationdetailcard-prestation-info-icon {
+      .reviewdetailcard-prestation-info-icon {
         font-size: 24px;
         flex-shrink: 0;
         color: var(--gold);
       }
-      .reservationdetailcard-prestation-info-text {
+      .reviewdetailcard-prestation-info-text {
         display: flex;
         flex-direction: column;
         gap: 5px;
@@ -117,6 +117,58 @@
     & .full-width {
       justify-content: center;
       width: 90%;
+    }
+    & .reporting-0 {
+      display: none;
+    }
+    & .reporting-1 {
+      justify-content: center;
+      width: 60%;
+      background-color: #fef2f2;
+      .reviewdetailcard-prestation-info-icon {
+        color: var(--error);
+      }
+      .reviewdetailcard-prestation-info-text {
+        .reviewdetailcard-prestation-info-span {
+          color: var(--error);
+        }
+      }
+    }
+  }
+  .reviewdetailcard-action {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    h2 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      color: var(--black);
+    }
+    .reviewdetailcard-action-delete-btn {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 16px;
+      padding: 10px 10px 10px 10px;
+      gap: 15px;
+      border: 1px solid var(--error);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      color: var(--error);
+      transition: var(--transition);
+      svg {
+        color: var(--error);
+        transition: var(--transition);
+      }
+      &:hover {
+        background: var(--error);
+        color: var(--white);
+
+        svg {
+          color: var(--white);
+        }
+      }
     }
   }
 }
