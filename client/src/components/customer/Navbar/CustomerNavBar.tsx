@@ -50,7 +50,7 @@ function CustomerNavBar() {
         </NavLink>
 
         <NavLink
-          to="profile"
+          to="login"
           className={({ isActive }) =>
             isActive ? "navbar__item navbar__item--active" : "navbar__item"
           }

@@ -20,6 +20,50 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+const register: RequestHandler = async (req, res, next) => {
+  console.log("REGISTER ACTION");
+  console.log(req.body);
+
+  try {
+    const { email, password, role } = req.body;
+
+    await userRepository.create({
+      email,
+      password,
+      user_type: role,
+    });
+
+    res.status(201).json({
+      message: "Utilisateur créé",
+    });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const login: RequestHandler = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userRepository.readByEmail(email);
+
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+    if (user.password !== password) {
+      return res.status(401).json({ message: "Wrong password" });
+    }
+    res.json({
+      id: user.id_user,
+      email: user.email,
+      role: user.user_type,
+    });
+  } catch (err) {
+    next(err);
+  }
+  console.log("LOGIN HIT");
+};
 const deleteUser: RequestHandler = async (req, res, next) => {
   try {
     const id_user = Number(req.params.id);
@@ -37,4 +81,4 @@ const deleteUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, deleteUser };
+export default { browse, deleteUser, register, login };

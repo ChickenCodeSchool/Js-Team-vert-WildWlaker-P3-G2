@@ -30,6 +30,22 @@ class UserRepository {
     // Return the array of users
     return rows as user[];
   }
+  async create(user: { email: string; password: string; user_type: string }) {
+    const [result] = await databaseClient.query(
+      `INSERT INTO users (email, password, user_type)
+      VALUES (? , ? , ?)`,
+      [user.email, user.password, user.user_type],
+    );
+    return result;
+  }
+
+  async readByEmail(email: string) {
+    const [rows] = await databaseClient.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+    );
+    return (rows as user[])[0];
+  }
 
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing user
