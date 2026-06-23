@@ -226,9 +226,7 @@ function EditUserModal<T extends Customer | Barber>({
             <div className="modal-grid-middle">
               {"delivery_radius" in user ? (
                 <div className="form-group">
-                  <label htmlFor="delivery_radius">
-                    Rayon de livraison (km)
-                  </label>
+                  <label htmlFor="delivery_radius">Rayon d'action (km)</label>
                   <input
                     id="delivery_radius"
                     type="number"

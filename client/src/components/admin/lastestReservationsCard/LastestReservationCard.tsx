@@ -115,15 +115,6 @@ function LatestReservationsCard() {
                       {res.statut}
                     </span>
                   </td>
-                  <td>
-                    <button
-                      type="button"
-                      className="action-btn"
-                      title="Options"
-                    >
-                      &#8942;
-                    </button>
-                  </td>
                 </tr>
               );
             })}

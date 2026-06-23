@@ -1,76 +1,49 @@
 import { useCallback, useEffect, useState } from "react";
-import Swal from "sweetalert2";
+import { useEntityActions } from "../../../hooks/useEntityActions";
+import type { Barber } from "../../../types/barber";
+import EditUserModal from "../editUserModal/EditUserModal";
 import "./ApprovalCard.css";
-type BarberItems = {
-  id_user: number;
-  name: string;
-  avatar_url: string | null;
-  create_time: string;
-  status: string;
-};
 
 function ApprovalCard() {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [barbers, setBarbers] = useState<BarberItems[]>([]);
+  const [barbers, setBarbers] = useState<Barber[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
 
   const loadbarbersData = useCallback(() => {
     fetch(`${apiUrl}/api/barbers`)
       .then((res) => res.json())
       .then((data) => setBarbers(data));
   }, []);
+
   useEffect(() => {
     loadbarbersData();
   }, [loadbarbersData]);
-  const handleValidate = async (barber: BarberItems) => {
-    console.log(`Validation du coiffeur avec l'ID : ${barber.id_user}`);
 
-    const result = await Swal.fire({
-      title: "Approuver le profil ?",
-      text: "Êtes-vous sûr de vouloir approuver et activer ce coiffeur ?",
-      icon: "success",
-      showCancelButton: true,
-      confirmButtonColor: "#10ac84",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Oui, confirmer",
-      cancelButtonText: "Annuler",
-    });
+  const { handleSave, handleToggleSuspend, deleteUser } = useEntityActions<
+    Barber & { id: number }
+  >({
+    apiBase: apiUrl,
+    idField: "api/barbers",
+    onActionComplete: loadbarbersData,
+    onClose: () => setIsModalOpen(false),
+  });
 
-    if (!result.isConfirmed) return;
-
-    try {
-      const payload = {
-        ...barber,
-        status: "Actif",
-      };
-
-      const response = await fetch(`${apiUrl}/api/barbers/${barber.id_user}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error("Erreur lors de la mise à jour");
-
-      Swal.fire({
-        icon: "success",
-        title: "Succès !",
-        text: "Le compte est maintenant actif",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      loadbarbersData();
-    } catch (error) {
-      console.error("Erreur validation :", error);
-      Swal.fire(
-        "Erreur",
-        "Une erreur est survenue lors de la validation",
-        "error",
-      );
-    }
+  const handleValidate = async (barber: Barber) => {
+    const entityFormat = {
+      ...barber,
+      id: barber.id_user,
+      status: "En attente",
+    };
+    await handleToggleSuspend(entityFormat);
   };
-  const handleMoreOptions = (id: number) => {
-    console.log(`Plus d'options pour l'ID : ${id}`);
+
+  const handleMoreOptions = (barber: Barber) => {
+    setSelectedBarber(barber);
+    setIsModalOpen(true);
   };
+
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "Date inconnue";
     const dateObj = new Date(dateStr);
@@ -80,9 +53,14 @@ function ApprovalCard() {
       year: "numeric",
     })}`;
   };
+
   const pendingBarbers = barbers
     .filter((barber) => barber.status === "En attente")
     .slice(0, 3);
+
+  const modalUserData = selectedBarber
+    ? { ...selectedBarber, id: selectedBarber.id_user }
+    : null;
 
   return (
     <div className="approval-card-main">
@@ -121,15 +99,26 @@ function ApprovalCard() {
               <button
                 type="button"
                 className="options-btn"
-                onClick={() => handleMoreOptions(barber.id_user)}
+                onClick={() => handleMoreOptions(barber)}
                 aria-label="Plus d'options"
               >
-                ⋮
+                &#8942;
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      <EditUserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        user={modalUserData}
+        onSave={handleSave}
+        onToggleSuspend={handleToggleSuspend}
+        deleteUser={() => {
+          if (modalUserData) deleteUser(modalUserData);
+        }}
+      />
     </div>
   );
 }
