@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FiCamera,
   FiDownload,
@@ -39,21 +39,93 @@ function BarberProfil({
   phone = "06 12 34 56 78",
   birthday = "15 / 06 / 1990",
 }: BarberProfilProps) {
+  const API_URL = import.meta.env.VITE_API_URL;
+  const userId = 1;
+
   const [activeTab, setActiveTab] = useState("informations");
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [avatarPreview, setAvatarPreview] = useState(avatar_url ?? AfroImg);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/users`)
+      .then((res) => res.json())
+      .then((users) => {
+        const currentUser = users.find(
+          (user: { id_user: number }) => user.id_user === userId,
+        );
+
+        if (currentUser?.avatar_url) {
+          const avatarUrl = currentUser.avatar_url.startsWith("http")
+            ? currentUser.avatar_url
+            : `${API_URL}${currentUser.avatar_url}`;
+
+          setAvatarPreview(avatarUrl);
+        }
+      });
+  }, []);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+
     if (!files) return;
+
     const newPhotos: Photo[] = Array.from(files).map((file, i) => ({
       id: Date.now() + i,
       src: URL.createObjectURL(file),
     }));
+
     setPhotos((prev) => [...prev, ...newPhotos]);
     e.target.value = "";
+  };
+
+  const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setAvatarPreview(imageUrl);
+  };
+
+  const saveAvatar = async () => {
+    try {
+      const file = avatarInputRef.current?.files?.[0];
+
+      if (!file) {
+        alert("Veuillez choisir une image");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("avatar", file);
+
+      const response = await fetch(
+        `${API_URL}/api/users/${userId}/avatar-upload`,
+        {
+          method: "PUT",
+          body: formData,
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de l'upload");
+      }
+
+      const data = await response.json();
+
+      setAvatarPreview(`${API_URL}${data.avatar_url}`);
+
+      alert("Photo enregistrée avec succès");
+    } catch (error) {
+      console.error(error);
+      alert("Impossible d'enregistrer la photo");
+    }
   };
 
   const toggleSelect = (id: number) => {
@@ -78,7 +150,9 @@ function BarberProfil({
       <div className="barber-profil__tabs">
         <button
           type="button"
-          className={`barber-profil__tab ${activeTab === "informations" ? "barber-profil__tab--active" : ""}`}
+          className={`barber-profil__tab ${
+            activeTab === "informations" ? "barber-profil__tab--active" : ""
+          }`}
           onClick={() => setActiveTab("informations")}
         >
           <FiUser className="barber-profil__tab-icon" />
@@ -87,7 +161,9 @@ function BarberProfil({
 
         <button
           type="button"
-          className={`barber-profil__tab ${activeTab === "galerie" ? "barber-profil__tab--active" : ""}`}
+          className={`barber-profil__tab ${
+            activeTab === "galerie" ? "barber-profil__tab--active" : ""
+          }`}
           onClick={() => setActiveTab("galerie")}
         >
           <FiImage className="barber-profil__tab-icon" />
@@ -102,18 +178,32 @@ function BarberProfil({
           <div className="barber-profil__avatar-wrapper">
             <img
               className="barber-profil__avatar"
-              src={avatar_url ?? AfroImg}
+              src={avatarPreview}
               alt="Avatar du coiffeur"
             />
+
             <div className="barber-profil__avatar-overlay">
               <FiCamera className="barber-profil__camera-icon" />
             </div>
           </div>
 
-          <button type="button" className="barber-profil__change-photo">
+          <button
+            type="button"
+            className="barber-profil__change-photo"
+            onClick={() => avatarInputRef.current?.click()}
+          >
             <FiDownload className="barber-profil__download-icon" />
             Changer la photo
           </button>
+
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            hidden
+            onChange={handleAvatarChange}
+          />
+
           <span className="barber-profil__photo-hint">
             JPG, PNG ou WEBP. Max 5 Mo.
           </span>
@@ -127,14 +217,17 @@ function BarberProfil({
               <span className="barber-profil__info-label">Nom complet</span>
               <span className="barber-profil__info-value">{name}</span>
             </div>
+
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Téléphone</span>
               <span className="barber-profil__info-value">{phone}</span>
             </div>
+
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Email</span>
               <span className="barber-profil__info-value">{email}</span>
             </div>
+
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">
                 Date de naissance
@@ -143,7 +236,11 @@ function BarberProfil({
             </div>
           </div>
 
-          <button type="button" className="barber-profil__save-btn">
+          <button
+            type="button"
+            className="barber-profil__save-btn"
+            onClick={saveAvatar}
+          >
             Enregistrer les modifications
           </button>
         </div>
@@ -156,7 +253,11 @@ function BarberProfil({
               <button
                 key={photo.id}
                 type="button"
-                className={`barber-profil__grid-item-wrapper ${selectedIds.includes(photo.id) ? "barber-profil__grid-item-wrapper--selected" : ""}`}
+                className={`barber-profil__grid-item-wrapper ${
+                  selectedIds.includes(photo.id)
+                    ? "barber-profil__grid-item-wrapper--selected"
+                    : ""
+                }`}
                 onClick={() => deleteMode && toggleSelect(photo.id)}
               >
                 <img
@@ -176,6 +277,7 @@ function BarberProfil({
             >
               <FiPlus /> Ajouter une photo
             </button>
+
             <input
               ref={fileInputRef}
               type="file"
@@ -184,6 +286,7 @@ function BarberProfil({
               className="barber-profil__file-input"
               onChange={handleAddPhoto}
             />
+
             {deleteMode ? (
               <button
                 type="button"

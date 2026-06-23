@@ -1,5 +1,7 @@
 import express from "express";
 
+import multer from "multer";
+
 const router = express.Router();
 
 /* ************************************************************************* */
@@ -16,6 +18,19 @@ import eventActions from "./modules/event/eventActions";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
+
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => {
+    cb(null, "public/uploads");
+  },
+
+  filename: (_req, file, cb) => {
+    const uniqueName = `${Date.now()}-${file.originalname}`;
+    cb(null, uniqueName);
+  },
+});
+
+const upload = multer({ storage });
 
 router.get("/api/admin-dashboard", adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
@@ -37,6 +52,12 @@ router.delete("/api/prestations/:id", prestationActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
+router.put("/api/users/:id/avatar", userActions.updateAvatar);
+router.put(
+  "/api/users/:id/avatar-upload",
+  upload.single("avatar"),
+  userActions.uploadAvatar,
+);
 
 /* ************************************************************************* */
 

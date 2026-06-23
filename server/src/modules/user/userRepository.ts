@@ -31,6 +31,18 @@ class UserRepository {
     return rows as user[];
   }
 
+  async updateAvatar(id: number, avatar_url: string) {
+    const query = `
+    UPDATE users
+    SET avatar_url = ?
+    WHERE id_user = ?
+  `;
+
+    await databaseClient.query(query, [avatar_url, id]);
+
+    return true;
+  }
+
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing user
 

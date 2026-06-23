@@ -1,5 +1,8 @@
 // Load the express module to create a web application
 
+import fs from "node:fs";
+import path from "node:path";
+import cors from "cors";
 import express from "express";
 
 const app = express();
@@ -17,8 +20,6 @@ const app = express();
 
 // You should NOT do that: such code uses the `cors` module to allow all origins, which can pose security issues.
 // For this pedagogical template, the CORS code allows CLIENT_URL in development mode (when process.env.CLIENT_URL is defined).
-
-import cors from "cors";
 
 if (process.env.CLIENT_URL != null) {
   app.use(cors({ origin: [process.env.CLIENT_URL] }));
@@ -54,6 +55,11 @@ app.use(
 
 app.use(express.json());
 
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../../server/public/uploads")),
+);
+
 // app.use(express.urlencoded());
 // app.use(express.text());
 // app.use(express.raw());
@@ -75,9 +81,6 @@ app.use(router);
 // What it's for:
 // - Serving client static files from the server, which is useful when building a single-page application with React.
 // - Redirecting unhandled requests (e.g., all requests not matching a defined API route) to the client's index.html. This allows the client to handle client-side routing.
-
-import fs from "node:fs";
-import path from "node:path";
 
 // Serve server resources
 
