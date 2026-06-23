@@ -1,7 +1,7 @@
 .barber-dispo {
   background-color: var(--gray-50);
   min-height: 100vh;
-  padding: 4rem 1rem 2rem;
+  padding: 4.5rem 1rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -25,16 +25,17 @@
 .barber-dispo__subtitle {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
 }
 
 /* ── Section ── */
 
 .barber-dispo__section {
   background-color: var(--white);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-100);
+  border-radius: var(--radius-lg);
   padding: 1.25rem 1rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sm);
 }
 
 .barber-dispo__section-title {
@@ -48,7 +49,7 @@
 .barber-dispo__section-subtitle {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   margin-bottom: 1rem;
 }
 
@@ -110,7 +111,7 @@
   width: 2.5rem;
   height: 1.375rem;
   border-radius: 999px;
-  background-color: var(--gray-200);
+  background-color: var(--gray-300);
   position: relative;
   transition: background-color 0.2s;
   flex-shrink: 0;
@@ -138,11 +139,11 @@
 .barber-dispo__status-text {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
 }
 
 .barber-dispo__status-text--active {
-  color: #2ecc71;
+  color: var(--success);
   font-weight: 500;
 }
 
@@ -164,14 +165,14 @@
 .barber-dispo__slot-label {
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   width: 5rem;
   flex-shrink: 0;
 }
 
 .barber-dispo__time-input {
   padding: 0.35rem 0.5rem;
-  border: 1px solid var(--gray-200);
+  border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -183,30 +184,31 @@
 
 .barber-dispo__time-input:focus {
   border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
 }
 
 .barber-dispo__slot-sep {
-  color: var(--gray-400);
+  color: var(--gray-300);
   font-size: 0.875rem;
 }
 
 .barber-dispo__closed {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--gray-400);
+  color: var(--gray-300);
   padding-left: 0.25rem;
 }
 
 /* ── Conseil ── */
 
 .barber-dispo__conseil {
-  background-color: var(--white);
-  border-radius: var(--radius-md);
+  background-color: var(--gold-soft);
+  border: 1px solid var(--gold-dark);
+  border-radius: var(--radius-lg);
   padding: 1rem;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .barber-dispo__conseil-icon {
@@ -226,7 +228,7 @@
 .barber-dispo__conseil-text {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
   line-height: 1.5;
 }
 
@@ -246,6 +248,12 @@
   transition: var(--transition);
 }
 
+.barber-dispo__save-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
 .barber-dispo__save-btn--saved {
-  background-color: #2ecc71;
+  background-color: var(--success);
 }

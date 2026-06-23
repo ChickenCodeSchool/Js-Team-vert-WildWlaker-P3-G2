@@ -1,56 +1,51 @@
-.admin-barbers-body {
+.reviewDash-body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   background-color: var(--gray-50);
-
-  .admin-barbers-header {
+  .reservationsDash-header {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 1.25rem 0.5rem;
-    gap: 0.25rem;
-
-    .admin-barbers-title {
+    padding: 10px 20px;
+    gap: 20px;
+    .reservationsDash-title {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
-
-      .admin-barbers-title-icon {
-        color: var(--gold-dark);
-        font-size: 1.75rem;
+      gap: 10px;
+      .reservationsDash-title-icon {
+        color: var(--gold);
+        font-size: 32px;
       }
-
       h1 {
         font-family: var(--font-title);
-        font-size: 1.75rem;
-        font-weight: 700;
+        font-size: 28px;
         color: var(--black);
       }
     }
-
     p {
       font-family: var(--font-body);
-      font-size: 0.875rem;
+      font-size: 16px;
       color: var(--gray-600);
     }
+
+    .reservationsDash-top-graphs {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+    }
   }
-  .admin-barbers-main {
+  .reservationsDash-main {
     display: flex;
-    .admin-barbers-main-left {
+    justify-content: space-between;
+    max-width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
+
+    .reservationsDash-section {
       width: 75%;
-      margin-left: 20px;
-      margin-right: 20px;
-
-      .admin-barbers-body-stats {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 24px;
-      }
-
-      .user-grid-client-cell {
+      .user-grid-user-cell {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -66,28 +61,44 @@
 
       .user-grid-info {
         display: flex;
-        flex-direction: column;
-        gap: 2px;
         align-items: center;
+        justify-content: center;
+        gap: 5px;
+        min-width: 5rem;
         padding: 5px 0px 5px 0px;
         border-radius: var(--radius-md);
         text-transform: capitalize;
-        &.status-actif {
+        &.status-confirmé {
           color: var(--success);
           background-color: #e6f4ea;
         }
-        &.status-suspendu {
+        &.status-annulé {
           color: var(--error);
           background-color: #fef2f2;
         }
-        &.attente {
-          color: var(--gold-dark);
+        &.status-en {
+          color: var(--warning);
           background-color: #fffbeb;
         }
-
-        .user-grid-fullname {
-          font-weight: 600;
-          color: var(--black);
+        &.status-terminé {
+          color: var(--info);
+          background-color: #eff6ff;
+        }
+        &.location-a {
+          color: var(--gray-600);
+          background-color: var(--gold-soft);
+        }
+        &.location-au {
+          color: var(--gold-soft);
+          background-color: var(--gray-600);
+        }
+        &.reporting-0 {
+          color: var(--gold-dark);
+          background-color: var(--gray-100);
+        }
+        &.reporting-1 {
+          color: var(--error);
+          background-color: #fef2f2;
         }
       }
 
@@ -131,12 +142,9 @@
         color: var(--black);
       }
     }
-    .admin-barbers-main-aside {
+    .reviewDash-aside {
       width: 22%;
-      display: flex;
+      padding-right: 20px;
     }
   }
-}
-.swal2-container {
-  font-family: var(--font-body);
 }

@@ -5,7 +5,6 @@
   box-shadow: var(--shadow-md);
   font-family: var(--font-body);
   width: 40%;
-  max-width: 450px;
   display: flex;
   flex-direction: column;
   transition: var(--transition);

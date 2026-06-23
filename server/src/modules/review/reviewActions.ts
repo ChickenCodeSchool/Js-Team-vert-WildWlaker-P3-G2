@@ -20,5 +20,29 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseforadmin: RequestHandler = async (req, res, next) => {
+  try {
+    // Fetch all reviews
+    const { startDate, endDate } = req.query;
+    const reviews = await reviewRepository.readAllForAdmin({
+      startDate: typeof startDate === "string" ? startDate : undefined,
+      endDate: typeof endDate === "string" ? endDate : undefined,
+    });
 
-export default { browse };
+    // Respond with the reviews in JSON format
+    res.json(reviews);
+  } catch (err) {
+    // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await reviewRepository.delete(id);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+export default { browse, browseforadmin, destroy };

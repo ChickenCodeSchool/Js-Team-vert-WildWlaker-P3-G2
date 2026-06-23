@@ -77,7 +77,7 @@ function ReservationDetailCard({
         </div>
       </div>
       <div className="reservationdetailcard-prestation-contener">
-        <div className="reservationdetailcard-prestation-info create_time">
+        <div className="reservationdetailcard-prestation-info full-width">
           <FiCalendar className="reservationdetailcard-prestation-info-icon" />
           <div className="reservationdetailcard-prestation-info-text">
             <span className="reservationdetailcard-prestation-info-span">
@@ -153,7 +153,7 @@ function ReservationDetailCard({
             <p>{selectedReservation.location_type}</p>
           </div>
         </div>
-        <div className="reservationdetailcard-prestation-info adress">
+        <div className="reservationdetailcard-prestation-info full-width">
           <FiNavigation className="reservationdetailcard-prestation-info-icon" />
           <div className="reservationdetailcard-prestation-info-text">
             <span>Adresse</span>

@@ -25,16 +25,20 @@ function Home() {
   });
 
   return (
-    <div className="home_">
-      <div className="home__title">
-        <h1>
+    <div className="home">
+      <div className="home__hero">
+        <h1 className="home__brand">
           <FiScissors className="FiScissors" /> Secare
         </h1>
 
-        <h2 className="home__title">
+        <h2 className="home__subtitle">
           Trouve ton <span className="home_span">coiffeur</span> idéal
         </h2>
+        <div className="home_search">
+          <Search value={searchValue} onChange={setSearchValue} />
+        </div>
       </div>
+
       <section className="home__banner">
         {event && (
           <EventBanner
@@ -48,19 +52,12 @@ function Home() {
           />
         )}
       </section>
-      <div className="element_import">
-        <div className="Carrousel_title">
-          <h1>Coiffeurs populaires</h1>
-        </div>
-      </div>
 
-      <div className="home_search">
-        <Search value={searchValue} onChange={setSearchValue} />
-      </div>
-
-      <div className="Carrousel_control">
+      <div className="home__section">
+        <h2 className="home__section-title">Coiffeurs populaires</h2>
         <Carrousel barbers={filteredBarbers} />
       </div>
+
       <ServicesSection />
     </div>
   );
