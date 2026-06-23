@@ -2,6 +2,7 @@ import { format, subDays } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { FiAlertTriangle, FiMessageSquare, FiStar } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
 import ReviewDetailCard from "../../../components/admin/reviewDetailCard/ReviewDetailCard";
@@ -145,6 +146,17 @@ function ReviewDash() {
     ).toFixed(1);
   }, [reviews]);
   const handleDeleteReview = async () => {
+    const result = await Swal.fire({
+      title: "Supprimer définitivement ?",
+      text: "Cette action est irréversible et supprimera toutes les données liées.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, supprimer",
+      cancelButtonText: "Annuler",
+    });
+    if (!result.isConfirmed) return;
     try {
       const res = await fetch(
         `${API_URL}/api/reviews/${selectedReview?.id_review}`,
@@ -153,10 +165,22 @@ function ReviewDash() {
         },
       );
       if (!res.ok) throw new Error("Erreur lors de la suppression");
+      Swal.fire({
+        icon: "success",
+        title: "Supprimé !",
+        text: "L'élément a été supprimé avec succès.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      loadReviewsData();
     } catch (err) {
       console.error(err);
+      Swal.fire(
+        "Erreur",
+        "Une erreur est survenue lors de la suppression.",
+        "error",
+      );
     }
-    loadReviewsData();
   };
   const columns: DataGridColumn<LocalAdminReview>[] = [
     {
