@@ -10,10 +10,12 @@
 .home__title {
   margin-top: 0.1rem;
   font-family: var(--font-title);
+  margin-left: 1rem;
 }
 
 .home_search {
   margin-top: 1rem;
+  margin-left: 1rem;
 }
 
 .home__banner {
