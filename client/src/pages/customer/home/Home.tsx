@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./Home.css";
 import { FiScissors } from "react-icons/fi";
 import Carrousel from "../../../components/carrousel/Carrousel";
@@ -12,18 +13,27 @@ function Home() {
   const event = events[0];
   const barbers = useBarbers();
 
+  const [searchValue, setSearchValue] = useState("");
+
+  const filteredBarbers = barbers.filter((barber) => {
+    const search = searchValue.toLowerCase();
+
+    return (
+      barber.name.toLowerCase().includes(search) ||
+      barber.city.toLowerCase().includes(search)
+    );
+  });
+
   return (
     <div className="home_">
       <div className="home__title">
         <h1>
           <FiScissors className="FiScissors" /> Secare
         </h1>
+
         <h2 className="home__title">
           Trouve ton <span className="home_span">coiffeur</span> idéal
         </h2>
-      </div>
-      <div className="home_search">
-        <Search />
       </div>
       <section className="home__banner">
         {event && (
@@ -43,8 +53,13 @@ function Home() {
           <h1>Coiffeurs populaires</h1>
         </div>
       </div>
+
+      <div className="home_search">
+        <Search value={searchValue} onChange={setSearchValue} />
+      </div>
+
       <div className="Carrousel_control">
-        <Carrousel barbers={barbers} />
+        <Carrousel barbers={filteredBarbers} />
       </div>
       <ServicesSection />
     </div>

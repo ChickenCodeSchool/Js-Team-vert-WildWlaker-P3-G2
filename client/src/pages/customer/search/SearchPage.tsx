@@ -9,21 +9,24 @@ import "./SearchPage.css";
 
 function SearchPage() {
   const navigate = useNavigate();
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filteredBarbers, setFilteredBarbers] = useState<Barber[]>([]);
   const [isNearMeActive, setIsNearMeActive] = useState(false);
-  const API_URL = import.meta.env.VITE_API_URL;
+  const [searchValue, setSearchValue] = useState("");
+
   const handleNearMe = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
-        // succès
-
         const { latitude, longitude } = position.coords;
+
         const response = await fetch(
           `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
         );
+
         const data = await response.json();
         const city = data.address.city;
 
@@ -61,6 +64,17 @@ function SearchPage() {
       });
   }, []);
 
+  const searchedBarbers = barbers.filter((barber) => {
+    const search = searchValue.toLowerCase();
+
+    return (
+      barber.name.toLowerCase().includes(search) ||
+      barber.city.toLowerCase().includes(search)
+    );
+  });
+
+  const displayedBarbers = isNearMeActive ? filteredBarbers : searchedBarbers;
+
   return (
     <main className="search">
       <label className="search-near__toggle">
@@ -94,13 +108,14 @@ function SearchPage() {
         >
           <FiChevronLeft />
         </button>
+
         <h2 className="search-page__title">Rechercher</h2>
 
         <div className="search__spacer" />
       </div>
 
       <div className="search__bar">
-        <Search />
+        <Search value={searchValue} onChange={setSearchValue} />
       </div>
 
       {isNearMeActive && filteredBarbers.length === 0 && (
@@ -109,7 +124,7 @@ function SearchPage() {
 
       {!isLoading &&
         error == null &&
-        (isNearMeActive ? filteredBarbers : barbers).map((barber) => (
+        displayedBarbers.map((barber) => (
           <BarberCard
             key={barber.id_user}
             barber={barber}
