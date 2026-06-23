@@ -14,6 +14,7 @@ export function useAdminFilters<
     postal_code?: string;
     firstname?: string;
     lastname?: string;
+    reporting?: number;
   },
 >(initialData: T[], searchFields: (keyof T)[] = ["firstname", "lastname"]) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -48,7 +49,11 @@ export function useAdminFilters<
     }
 
     if (statusFilter) {
-      result = result.filter((item) => item.status === statusFilter);
+      if (statusFilter === "signaler") {
+        result = result.filter((item) => item.reporting === 1);
+      } else {
+        result = result.filter((item) => item.status === statusFilter);
+      }
     }
 
     result.sort((a, b) => {

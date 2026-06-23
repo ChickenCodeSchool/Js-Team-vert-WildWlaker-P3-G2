@@ -13,7 +13,12 @@ import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
 import type { Appointment } from "../../../types/appointment";
 import "./ReservationsDash.css";
-
+const truncateText = (text: string, maxLength: number) => {
+  if (text.length > maxLength) {
+    return `${text.slice(0, maxLength)}...`;
+  }
+  return text;
+};
 function ReservationsDash() {
   const API_URL = import.meta.env.VITE_API_URL;
   const today = new Date();
@@ -182,7 +187,9 @@ function ReservationsDash() {
       key: "prestation",
       header: "Service",
       render: (appointment) => (
-        <div className="user-grid-info">{appointment.prestation_name}</div>
+        <div className="user-grid-info">
+          {truncateText(appointment.prestation_name, 20)}
+        </div>
       ),
     },
     {
@@ -294,12 +301,12 @@ function ReservationsDash() {
             columns={columns}
             data={filteredData}
             onRowClick={(appointment) => setSelectedReservation(appointment)}
-            rowsPerPage={6}
+            rowsPerPage={7}
             selectedId={selectedReservation?.id}
           />
         </section>
 
-        <aside className="admin-barbers-main-aside">
+        <aside className="reservationsDash-aside">
           {selectedReservation ? (
             <ReservationDetailCard selectedReservation={selectedReservation} />
           ) : (
