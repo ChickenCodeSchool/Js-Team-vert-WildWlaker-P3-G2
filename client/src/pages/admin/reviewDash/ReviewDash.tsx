@@ -144,7 +144,20 @@ function ReviewDash() {
       reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     ).toFixed(1);
   }, [reviews]);
-
+  const handleDeleteReview = async () => {
+    try {
+      const res = await fetch(
+        `${API_URL}/api/reviews/${selectedReview?.id_review}`,
+        {
+          method: "DELETE",
+        },
+      );
+      if (!res.ok) throw new Error("Erreur lors de la suppression");
+    } catch (err) {
+      console.error(err);
+    }
+    loadReviewsData();
+  };
   const columns: DataGridColumn<LocalAdminReview>[] = [
     {
       key: "barber_name",
@@ -315,7 +328,10 @@ function ReviewDash() {
 
         <aside className="reviewDash-aside">
           {selectedReview ? (
-            <ReviewDetailCard selectedReview={selectedReview} />
+            <ReviewDetailCard
+              selectedReview={selectedReview}
+              handleDeleteReview={handleDeleteReview}
+            />
           ) : (
             <div className="no-user-selected">
               <p>Sélectionnez une réservation pour voir ses détails</p>

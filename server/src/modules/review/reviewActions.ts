@@ -36,5 +36,13 @@ const browseforadmin: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-
-export default { browse, browseforadmin };
+const destroy: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    await reviewRepository.delete(id);
+    res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+};
+export default { browse, browseforadmin, destroy };

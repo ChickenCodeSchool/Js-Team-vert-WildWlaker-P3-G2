@@ -1,4 +1,4 @@
-import type { Rows } from "../../../database/client";
+import type { Result, Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
 type Review = {
@@ -81,7 +81,12 @@ class ReviewRepository {
     // Return the array of reviews
     return rows as AdminReview[];
   }
-
+  async delete(id: number) {
+    await databaseClient.query<Result>(
+      "DELETE FROM review WHERE id_review = ?",
+      [id],
+    );
+  }
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Review
 

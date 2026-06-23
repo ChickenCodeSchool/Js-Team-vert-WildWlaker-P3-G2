@@ -18,9 +18,13 @@ import "./ReviewDetailCard.css";
 
 interface ReviewDetailCardProps {
   selectedReview: AdminReview;
+  handleDeleteReview: () => void;
 }
 
-function ReviewDetailCard({ selectedReview }: ReviewDetailCardProps) {
+function ReviewDetailCard({
+  selectedReview,
+  handleDeleteReview,
+}: ReviewDetailCardProps) {
   return (
     <div className="reviewdetailcard-main">
       <div className="reviewdetailcard-title">
@@ -170,7 +174,7 @@ function ReviewDetailCard({ selectedReview }: ReviewDetailCardProps) {
         <button
           className="reviewdetailcard-action-delete-btn"
           type="button"
-          // onClick=
+          onClick={handleDeleteReview}
         >
           <FiTrash2 /> Supprimer le commentaire
         </button>
