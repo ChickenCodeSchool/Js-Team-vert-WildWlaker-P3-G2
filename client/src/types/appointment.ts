@@ -3,6 +3,7 @@ export type Appointment = {
   appointment_date: string;
   status: "en attente" | "confirmé" | "terminé" | "annulé";
   location_type: string;
+  create_time: string;
   id_prestation: number;
   id_user_barber: number;
   id_user_customer: number;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./Home.css";
 import { FiScissors } from "react-icons/fi";
 import Carrousel from "../../../components/carrousel/Carrousel";
@@ -12,17 +13,29 @@ function Home() {
   const event = events[0];
   const barbers = useBarbers();
 
+  const [searchValue, setSearchValue] = useState("");
+
+  const filteredBarbers = barbers.filter((barber) => {
+    const search = searchValue.toLowerCase();
+
+    return (
+      barber.name.toLowerCase().includes(search) ||
+      barber.city.toLowerCase().includes(search)
+    );
+  });
+
   return (
     <div className="home">
       <div className="home__hero">
         <h1 className="home__brand">
           <FiScissors className="FiScissors" /> Secare
         </h1>
+
         <h2 className="home__subtitle">
           Trouve ton <span className="home_span">coiffeur</span> idéal
         </h2>
         <div className="home_search">
-          <Search />
+          <Search value={searchValue} onChange={setSearchValue} />
         </div>
       </div>
 
@@ -42,7 +55,7 @@ function Home() {
 
       <div className="home__section">
         <h2 className="home__section-title">Coiffeurs populaires</h2>
-        <Carrousel barbers={barbers} />
+        <Carrousel barbers={filteredBarbers} />
       </div>
 
       <ServicesSection />

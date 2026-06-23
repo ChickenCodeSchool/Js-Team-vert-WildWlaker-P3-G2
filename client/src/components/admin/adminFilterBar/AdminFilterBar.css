@@ -46,7 +46,7 @@
     background-color: var(--white);
     transition: var(--transition);
     outline: none;
-
+    text-transform: capitalize;
     &:focus {
       border-color: var(--gold-dark);
       box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
