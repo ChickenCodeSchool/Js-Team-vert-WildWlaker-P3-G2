@@ -240,6 +240,23 @@ INSERT INTO review (id_review, rating, comment, created_at, id_appointment) VALU
 (2, 3, 'Coupe correcte, mais un peu de retard sur l''horaire prévu à mon domicile.', '2026-05-22 16:00:00', 3);
 
 -- =============================================================================
+-- 9. NOTIFICATIONS
+-- =============================================================================
+
+CREATE TABLE notification (
+    id_notification INT AUTO_INCREMENT,
+    message VARCHAR(500) NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    type VARCHAR(50) DEFAULT 'info',
+    id_user INT NOT NULL,
+    id_appointment INT DEFAULT NULL,
+    CONSTRAINT pk_notification PRIMARY KEY (id_notification),
+    CONSTRAINT fk_notification_user FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,
+    CONSTRAINT fk_notification_appointment FOREIGN KEY (id_appointment) REFERENCES appointment(id_appointment) ON DELETE CASCADE
+);
+
+-- =============================================================================
 -- 8. PORTFOLIO DES COIFFEURS (Photos de réalisations)
 -- =============================================================================
 INSERT INTO barber_portfolio (id_picture, image_url, title, id_user) VALUES

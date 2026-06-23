@@ -140,3 +140,75 @@
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
+
+.modal-reservation-cancel-zone {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+.modal-reservation-cancel-btn {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1.5px solid var(--error);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--error);
+  font-family: var(--font-title);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-reservation-cancel-btn:hover {
+  background: #fef2f2;
+}
+
+.modal-reservation-cancel-confirm-text {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin-bottom: 0.75rem;
+  text-align: center;
+}
+
+.modal-reservation-cancel-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.modal-reservation-cancel-back {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  background: var(--white);
+  color: var(--gray-600);
+  font-family: var(--font-title);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-reservation-cancel-back:hover {
+  background: var(--gray-50);
+}
+
+.modal-reservation-cancel-confirm {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--error);
+  color: var(--white);
+  font-family: var(--font-title);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-reservation-cancel-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

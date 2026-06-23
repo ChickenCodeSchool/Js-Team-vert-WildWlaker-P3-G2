@@ -95,6 +95,14 @@ function BarberPlanning() {
         <ModalReservation
           reservation={selectedReservation}
           onClose={() => setSelectedReservation(null)}
+          onCancelled={(id) => {
+            setReservations((prev) =>
+              prev.map((r) =>
+                r.id_appointment === id ? { ...r, status: "annulé" } : r,
+              ),
+            );
+            setSelectedReservation(null);
+          }}
         />
       )}
     </>

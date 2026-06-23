@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./ModalReservation.css";
 
 type ReservationStatus = "en attente" | "confirmé" | "terminé" | "annulé";
@@ -20,9 +21,15 @@ type Reservation = {
 type Props = {
   reservation: Reservation;
   onClose: () => void;
+  onCancelled?: (id: number) => void;
 };
 
-function ModalReservation({ reservation, onClose }: Props) {
+const API_URL = import.meta.env.VITE_API_URL;
+
+function ModalReservation({ reservation, onClose, onCancelled }: Props) {
+  const [cancelling, setCancelling] = useState(false);
+  const [confirmCancel, setConfirmCancel] = useState(false);
+
   const date = new Date(reservation.appointment_date);
 
   const formattedDate = date.toLocaleDateString("fr-FR", {
@@ -36,10 +43,37 @@ function ModalReservation({ reservation, onClose }: Props) {
     minute: "2-digit",
   });
 
+  const handleCancel = async () => {
+    setCancelling(true);
+    try {
+      const res = await fetch(
+        `${API_URL}/api/appointments/${reservation.id_appointment}/status`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: "annulé" }),
+        },
+      );
+      if (!res.ok) throw new Error("Erreur serveur");
+      onCancelled?.(reservation.id_appointment);
+      onClose();
+    } catch {
+      setCancelling(false);
+    }
+  };
+
+  const canCancel =
+    reservation.status === "en attente" || reservation.status === "confirmé";
+
   return (
     <div className="modal-reservation-overlay">
-      <section className="modal-reservation" role="dialog" aria-modal="true">
-        <h2>Détail du rendez-vous</h2>
+      <dialog
+        className="modal-reservation"
+        aria-modal="true"
+        aria-labelledby="modal-reservation-title"
+        open
+      >
+        <h2 id="modal-reservation-title">Détail du rendez-vous</h2>
 
         <div className="modal-reservation-user">
           <img
@@ -93,6 +127,43 @@ function ModalReservation({ reservation, onClose }: Props) {
           </div>
         </div>
 
+        {canCancel && (
+          <div className="modal-reservation-cancel-zone">
+            {confirmCancel ? (
+              <>
+                <p className="modal-reservation-cancel-confirm-text">
+                  Confirmer l'annulation ? Le client sera notifié.
+                </p>
+                <div className="modal-reservation-cancel-actions">
+                  <button
+                    type="button"
+                    className="modal-reservation-cancel-back"
+                    onClick={() => setConfirmCancel(false)}
+                  >
+                    Retour
+                  </button>
+                  <button
+                    type="button"
+                    className="modal-reservation-cancel-confirm"
+                    onClick={handleCancel}
+                    disabled={cancelling}
+                  >
+                    {cancelling ? "Annulation…" : "Confirmer l'annulation"}
+                  </button>
+                </div>
+              </>
+            ) : (
+              <button
+                type="button"
+                className="modal-reservation-cancel-btn"
+                onClick={() => setConfirmCancel(true)}
+              >
+                Annuler ce rendez-vous
+              </button>
+            )}
+          </div>
+        )}
+
         <button
           type="button"
           className="modal-reservation-button"
@@ -100,7 +171,7 @@ function ModalReservation({ reservation, onClose }: Props) {
         >
           Fermer
         </button>
-      </section>
+      </dialog>
     </div>
   );
 }

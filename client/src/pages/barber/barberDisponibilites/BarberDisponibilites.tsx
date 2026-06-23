@@ -70,9 +70,13 @@ const INITIAL_SCHEDULE: DaySchedule[] = [
   },
 ];
 
+const API_URL = import.meta.env.VITE_API_URL;
+const BARBER_ID = Number(localStorage.getItem("barber_id") ?? "4");
+
 function BarberDisponibilites() {
   const [schedule, setSchedule] = useState<DaySchedule[]>(INITIAL_SCHEDULE);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   function updateDay(
     index: number,
@@ -85,9 +89,24 @@ function BarberDisponibilites() {
     setSaved(false);
   }
 
-  function handleSave() {
-    // TODO: appel API pour sauvegarder
-    setSaved(true);
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const res = await fetch(
+        `${API_URL}/api/barbers/${BARBER_ID}/availability`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ schedule }),
+        },
+      );
+      if (!res.ok) throw new Error("Erreur serveur");
+      setSaved(true);
+    } catch {
+      setSaved(false);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -199,8 +218,13 @@ function BarberDisponibilites() {
         type="button"
         className={`barber-dispo__save-btn ${saved ? "barber-dispo__save-btn--saved" : ""}`}
         onClick={handleSave}
+        disabled={saving}
       >
-        {saved ? "✓ Enregistré" : "Enregistrer mes disponibilités"}
+        {saving
+          ? "Enregistrement…"
+          : saved
+            ? "✓ Enregistré"
+            : "Enregistrer mes disponibilités"}
       </button>
     </div>
   );
