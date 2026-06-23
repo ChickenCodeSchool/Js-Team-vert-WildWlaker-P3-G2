@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { FiEye } from "react-icons/fi";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 import type { Barber } from "../../../types/barber";
 import EditUserModal from "../editUserModal/EditUserModal";
@@ -102,7 +103,7 @@ function ApprovalCard() {
                 onClick={() => handleMoreOptions(barber)}
                 aria-label="Plus d'options"
               >
-                &#8942;
+                <FiEye />
               </button>
             </div>
           </div>

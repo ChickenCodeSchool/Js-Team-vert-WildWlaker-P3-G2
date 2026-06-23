@@ -79,7 +79,7 @@
       .hairdresser-actions {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 12px;
 
         .validate-btn {
           font-family: var(--font-body);
@@ -100,6 +100,8 @@
         }
 
         .options-btn {
+          display: flex;
+
           background: none;
           border: none;
           color: var(--gray-300);
@@ -110,7 +112,7 @@
           transition: var(--transition);
 
           &:hover {
-            background-color: var(--gray-100);
+            background-color: var(--gold-soft);
             color: var(--gray-900);
           }
         }
