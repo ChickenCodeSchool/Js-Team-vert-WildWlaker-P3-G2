@@ -35,7 +35,7 @@
         background-color: #fef2f2;
       }
       &.status-en {
-        color: var(--warning);
+        color: var(--gold-dark);
         background-color: #fffbeb;
       }
       &.status-terminé {
@@ -102,7 +102,7 @@
       .reservationdetailcard-prestation-info-icon {
         font-size: 24px;
         flex-shrink: 0;
-        color: var(--gold);
+        color: var(--gold-dark);
       }
       .reservationdetailcard-prestation-info-text {
         display: flex;
