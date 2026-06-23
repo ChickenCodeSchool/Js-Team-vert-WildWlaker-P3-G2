@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import "./ApprovalCard.css";
-
 type BarberItems = {
   id_user: number;
   name: string;
@@ -12,17 +12,62 @@ type BarberItems = {
 function ApprovalCard() {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [barbers, setBarbers] = useState<BarberItems[]>([]);
-  useEffect(() => {
+
+  const loadbarbersData = useCallback(() => {
     fetch(`${apiUrl}/api/barbers`)
       .then((res) => res.json())
       .then((data) => setBarbers(data));
   }, []);
+  useEffect(() => {
+    loadbarbersData();
+  }, [loadbarbersData]);
+  const handleValidate = async (barber: BarberItems) => {
+    console.log(`Validation du coiffeur avec l'ID : ${barber.id_user}`);
 
-  const handleValidate = (id: number) => {
-    console.log(`Validation du coiffeur avec l'ID : ${id}`);
-    // Ajoute ici ta logique d'API (fetch/axios) plus tard
+    const result = await Swal.fire({
+      title: "Approuver le profil ?",
+      text: "Êtes-vous sûr de vouloir approuver et activer ce coiffeur ?",
+      icon: "success",
+      showCancelButton: true,
+      confirmButtonColor: "#10ac84",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Oui, confirmer",
+      cancelButtonText: "Annuler",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const payload = {
+        ...barber,
+        status: "Actif",
+      };
+
+      const response = await fetch(`${apiUrl}/api/barbers/${barber.id_user}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) throw new Error("Erreur lors de la mise à jour");
+
+      Swal.fire({
+        icon: "success",
+        title: "Succès !",
+        text: "Le compte est maintenant actif",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      loadbarbersData();
+    } catch (error) {
+      console.error("Erreur validation :", error);
+      Swal.fire(
+        "Erreur",
+        "Une erreur est survenue lors de la validation",
+        "error",
+      );
+    }
   };
-
   const handleMoreOptions = (id: number) => {
     console.log(`Plus d'options pour l'ID : ${id}`);
   };
@@ -69,7 +114,7 @@ function ApprovalCard() {
               <button
                 type="button"
                 className="validate-btn"
-                onClick={() => handleValidate(barber.id_user)}
+                onClick={() => handleValidate(barber)}
               >
                 Valider
               </button>
