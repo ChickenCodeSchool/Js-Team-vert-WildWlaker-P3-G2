@@ -19,14 +19,13 @@ import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => {
+const storage: multer.StorageEngine = multer.diskStorage({
+  destination(_req, _file, cb) {
     cb(null, "public/uploads");
   },
 
-  filename: (_req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`;
-    cb(null, uniqueName);
+  filename(_req, _file, cb) {
+    cb(null, `${Date.now()}-${_file.originalname}`);
   },
 });
 
