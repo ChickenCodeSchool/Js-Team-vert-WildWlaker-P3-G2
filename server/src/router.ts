@@ -2,13 +2,9 @@ import express from "express";
 
 const router = express.Router();
 
-/* ************************************************************************* */
-// Define Your API Routes Here
-/* ************************************************************************* */
-
-// Define item-related routes
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
+import availabilityActions from "./modules/availability/availabilityActions";
 import barberActions from "./modules/barber/barberActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
@@ -26,6 +22,8 @@ router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
+router.get("/api/barbers/:id/availability", availabilityActions.getByDate);
+router.post("/api/barbers/:id/availability", availabilityActions.saveSchedule);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
@@ -39,7 +37,5 @@ router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
-
-/* ************************************************************************* */
 
 export default router;
