@@ -102,6 +102,7 @@
 
 .login__input:focus {
   border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
 }
 
 .login__eye-btn {
@@ -141,6 +142,7 @@
 
 .login__select:focus {
   border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
 }
 
 .login__select-arrow {
@@ -154,7 +156,7 @@
 .login__error {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: #e53e3e;
+  color: var(--error);
   text-align: center;
 }
 
@@ -175,6 +177,8 @@
 
 .login__btn:hover {
   opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .login__divider {
@@ -227,6 +231,13 @@
 
 .login__social-btn:hover {
   border-color: var(--gray-600);
+  background-color: var(--gray-50);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.login__tab:hover {
+  color: var(--black);
 }
 
 .login__google-icon {

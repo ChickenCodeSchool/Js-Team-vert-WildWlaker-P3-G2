@@ -19,7 +19,7 @@
   width: 90%;
   max-width: 28rem;
   background: var(--gray-50);
-  border-radius: 1.5rem;
+  border-radius: var(--radius-lg);
   padding: 2rem;
   box-shadow: var(--shadow-lg);
   z-index: 1001;
@@ -34,6 +34,11 @@
   font-size: 1.25rem;
   cursor: pointer;
   color: var(--gray-600);
+  transition: var(--transition);
+}
+
+.modalParametre__close:hover {
+  color: var(--black);
 }
 
 .modalParametre__icon {
@@ -91,13 +96,18 @@
 }
 
 .modalParametre__cancel {
-  border: 1px solid var(--gold);
+  border: 1px solid var(--gold-dark);
   background: var(--white);
   color: var(--gold-dark);
   padding: 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   font-weight: 700;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.modalParametre__cancel:hover {
+  background: var(--gold-soft);
 }
 
 .modalParametre__delete {
@@ -105,7 +115,14 @@
   background: var(--error);
   color: var(--white);
   padding: 0.9rem;
-  border-radius: 999px;
+  border-radius: var(--radius-md);
   font-weight: 700;
   cursor: pointer;
+  transition: var(--transition);
+}
+
+.modalParametre__delete:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }

@@ -7,11 +7,11 @@
   box-sizing: border-box;
 
   .activity-card-header {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
 
     h3 {
       font-family: var(--font-title);
-      font-size: 18px;
+      font-size: 1.125rem;
       font-weight: 600;
       color: var(--gray-900);
       margin: 0;
@@ -21,22 +21,22 @@
   .activity-card-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 1rem;
 
     .activity-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-family: var(--font-body);
-      gap: 12px;
+      gap: 0.75rem;
 
       .activity-left {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: 0.625rem;
 
         .activity-icon {
-          font-size: 16px;
+          font-size: 1rem;
           flex-shrink: 0;
 
           &.icon-success {
@@ -49,7 +49,7 @@
             color: var(--error);
           }
           &.icon-warning {
-            color: var(--gold);
+            color: var(--gold-dark);
           }
           &.icon-gray {
             color: var(--gray-300);

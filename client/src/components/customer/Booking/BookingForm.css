@@ -16,8 +16,12 @@
   gap: 0.75rem;
 }
 .booking-form__section-title {
-  font-family: var(--font-title);
-  font-size: 1.1rem;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 .booking-form__services {
   display: flex;
@@ -79,7 +83,7 @@
   transform: translateY(-2px);
 }
 .booking-form__service--selected {
-  border: 2px solid var(--gold);
+  border: 2px solid var(--gold-dark);
   background-color: var(--gold-soft);
 }
 
@@ -114,7 +118,7 @@
 .booking-form__date {
   min-width: 60px;
   height: 80px;
-  border: 1px solid var(--gray-100);
+  border: 1.5px solid var(--gray-100);
   background: var(--white);
   border-radius: var(--radius-lg);
   display: flex;
@@ -126,6 +130,12 @@
   transition: var(--transition);
 }
 
+.booking-form__date:hover {
+  border-color: var(--gold-dark);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-1px);
+}
+
 .booking-form__date--selected {
   background: var(--gold-dark);
   color: var(--white);
@@ -133,7 +143,7 @@
 .booking-form__date span {
   font-family: var(--font-body);
   font-size: 0.65rem;
-  color: var(--gray-500);
+  color: var(--gray-600);
 }
 
 .booking-form__date strong {
@@ -153,17 +163,22 @@
 .booking-form__slot {
   height: 40px;
   padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  font-size: 0.9rem;
-  border: 1px solid var(--gray-100);
+  font-size: 0.8125rem;
+  border: 1.5px solid var(--gray-100);
   border-radius: var(--radius-md);
   background: var(--white);
   transition: var(--transition);
   font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.booking-form__slot:hover {
+  border-color: var(--gold-dark);
+  color: var(--gold-dark);
+  background: var(--gold-soft);
 }
 .booking-form__slot--selected {
   background: var(--gold-dark);
@@ -172,7 +187,7 @@
 
 .booking-form__input:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: var(--gold-dark);
 }
 
 .booking-form__button {
