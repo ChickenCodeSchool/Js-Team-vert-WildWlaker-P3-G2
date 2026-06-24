@@ -49,7 +49,7 @@
 }
 
 .avis-confirmation__dot--green {
-  background-color: var(--success);
+  background-color: #2ecc71;
   top: 12%;
   left: 50%;
   width: 0.5rem;
@@ -67,7 +67,7 @@
 /* ── Icon ── */
 
 .avis-confirmation__icon {
-  color: var(--success);
+  color: #2ecc71;
   font-size: 5rem;
   flex-shrink: 0;
 }
@@ -86,7 +86,7 @@
 .avis-confirmation__subtitle {
   font-family: var(--font-body);
   font-size: 0.9375rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
   text-align: center;
   line-height: 1.6;
   max-width: 20rem;
@@ -121,18 +121,8 @@
   color: var(--white);
 }
 
-.avis-confirmation__btn--primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
-}
-
 .avis-confirmation__btn--secondary {
   background-color: var(--white);
-  color: var(--gold-dark);
-  border: 1.5px solid var(--gold-dark);
-}
-
-.avis-confirmation__btn--secondary:hover {
-  background-color: var(--gold-soft);
+  color: var(--black);
+  border: 1px solid var(--gray-200);
 }

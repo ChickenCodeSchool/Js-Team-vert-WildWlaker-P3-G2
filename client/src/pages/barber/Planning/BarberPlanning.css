@@ -1,13 +1,12 @@
 .barber-planning-page {
   min-height: 100vh;
-  background: var(--white);
+  background: #ffffff;
 }
 
 .barber-planning-reservations {
-  padding: 1rem;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-  background: var(--white);
-  box-shadow: var(--shadow-sm);
+  padding: 16px;
+  border-radius: 28px 28px 0 0;
+  background: #ffffff;
 }
 
 .planning-handle {
@@ -17,8 +16,8 @@
 }
 
 .barber-planning-reservations h3 {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 800;
   color: var(--black);
-  font-family: var(--font-title);
+  font-family: var(--font-body);
 }

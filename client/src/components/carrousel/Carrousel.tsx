@@ -13,10 +13,6 @@ function Carrousel({ barbers }: { barbers: Barber[] }) {
                 className="carrousel__image"
                 src={barber.avatar_url}
                 alt={barber.name}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://i.pravatar.cc/150?img=1";
-                }}
               />
             </div>
 

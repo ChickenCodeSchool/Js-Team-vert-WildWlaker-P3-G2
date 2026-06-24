@@ -21,14 +21,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.profile-page__edit-button:hover {
-  border-color: var(--gold-dark);
-  background: var(--gold-soft);
-  color: var(--gold-dark);
 }
 .profile-header__back-button {
   position: absolute;
@@ -50,7 +42,6 @@
   height: 96px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: var(--shadow-sm);
 }
 .profile-header__title {
   font-family: var(--font-title);

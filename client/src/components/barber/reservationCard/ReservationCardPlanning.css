@@ -56,7 +56,7 @@
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--black);
-  font-family: var(--font-title);
+  font-family: var(--font-tittle);
 }
 
 .planning-reservation-card-content p {
@@ -81,17 +81,17 @@
 }
 
 .planning-reservation-card-status.confirmed {
-  background: var(--gold-soft);
+  background: #f7f0df;
   color: var(--gold-dark);
 }
 
 .planning-reservation-card-status.pending {
-  background: var(--gold-soft);
+  background: #fff0d9;
   color: var(--gold-dark);
 }
 
 .planning-reservation-card-status.cancelled {
-  background: var(--gray-100);
+  background: #efefef;
   color: var(--gray-600);
 }
 

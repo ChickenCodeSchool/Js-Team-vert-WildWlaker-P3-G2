@@ -30,7 +30,7 @@
 }
 .stepper__step--active {
   background: var(--gold-dark);
-  border-color: var(--gold-dark);
+  border-color: var(--gold);
   color: var(--white);
 }
 .stepper__label {
@@ -53,5 +53,5 @@
 }
 
 .stepper__line--active {
-  background-color: var(--gold-dark);
+  background-color: var(--gold);
 }

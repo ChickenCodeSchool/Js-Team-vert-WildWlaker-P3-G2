@@ -12,10 +12,10 @@
 }
 
 .booking-summary__card {
-  background-color: var(--white);
+  background-color: var(--gray-50);
   border: 1px solid var(--gray-100);
   border-radius: var(--radius-lg);
-  padding: 1.25rem;
+  padding: 1rem;
   box-shadow: var(--shadow-sm);
 }
 .booking-summary__item {
@@ -45,23 +45,18 @@
   transition: var(--transition);
 }
 .booking-summary__button--back {
-  background-color: var(--white);
+  background-color: var(--gray-100);
   color: var(--black);
-  border: 1.5px solid var(--gray-300);
 }
-
 .booking-summary__button--back:hover {
-  border-color: var(--gray-600);
-  background-color: var(--gray-50);
+  background-color: var(--gray-300);
 }
 
 .booking-summary__button--confirm {
   background: var(--gold-dark);
-  color: var(--white);
 }
-
 .booking-summary__button--confirm:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-4px);
+  background: var(--gold);
+  color: var(--white);
 }

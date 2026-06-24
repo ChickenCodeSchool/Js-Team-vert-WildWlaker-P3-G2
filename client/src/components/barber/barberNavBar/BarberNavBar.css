@@ -39,11 +39,10 @@
     align-items: center;
     gap: 10px;
     &.active {
-      color: var(--white);
-      border: none;
-      background-color: var(--gold-dark);
-      border-radius: var(--radius-md);
-      padding: 0.5rem 0.75rem;
+      color: var(--black);
+      border: 8px solid var(--warning);
+      background-color: var(--warning);
+      border-radius: 5px;
     }
   }
 }
@@ -61,7 +60,7 @@
   border: none;
   cursor: pointer;
   font-size: 2rem;
-  color: var(--gold-dark);
+  color: var(--warning);
   justify-content: center;
   padding: 5px;
   display: flex;

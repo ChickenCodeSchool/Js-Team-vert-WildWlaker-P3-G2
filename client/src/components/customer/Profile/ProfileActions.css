@@ -1,76 +1,65 @@
 .profile-actions {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.7rem;
   margin: 1rem;
   margin-bottom: 7rem;
-}
-
-.profile-actions__button {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1.5px solid var(--gray-100);
-  border-radius: var(--radius-md);
-  background: var(--white);
-  font-weight: 600;
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--gray-900);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.profile-actions__button:hover {
-  border-color: var(--gold-dark);
-  background: var(--gold-soft);
-  color: var(--gold-dark);
 }
 
 .profile-actions__button-delete {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem 1rem;
+  max-width: 100%;
+  padding: 0.7rem 1rem;
   border-radius: var(--radius-md);
   background: transparent;
-  border: 1.5px solid var(--error);
+  border-color: var(--error);
   color: var(--error);
-  font-weight: 600;
+  font-weight: 700;
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: var(--transition);
 }
-
 .profile-actions__button-delete:hover {
-  background: var(--error);
-  color: var(--white);
+  background: #fef2f2;
+  transform: translateY(-2px);
+  color: var(--black);
+  border: 1px solid var(--error);
 }
-
 .profile-actions__button-suspend {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 1.5px solid var(--gold-dark);
+  max-width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--gold-dark);
   border-radius: var(--radius-md);
   background: var(--gold-soft);
   color: var(--gold-dark);
+  font-weight: 700;
+  font-family: var(--font-body);
+}
+.profile-actions__button-suspend:hover {
+  background: var(--gold-soft);
+  color: var(--black);
+  border: 1px solid var(--error);
+  transform: translateY(-2px);
+}
+.profile-actions__button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  padding: 0.7rem 1rem;
+  border: none;
+  border-radius: var(--radius-md);
   font-weight: 600;
   font-family: var(--font-body);
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: var(--transition);
+  color: var(--gray-900);
 }
-
-.profile-actions__button-suspend:hover {
-  background: var(--gold-dark);
-  color: var(--white);
+.profile-actions__button:hover {
+  border: 1px solid var(--gray-600);
+  background: var(--gold-soft);
+  color: var(--black);
 }
 
 .profile-actions__button,
@@ -78,7 +67,6 @@
 .profile-actions__button-suspend {
   justify-content: flex-start;
 }
-
 .profile-actions__button span,
 .profile-actions__button-delete span,
 .profile-actions__button-suspend span {
@@ -91,10 +79,8 @@
   height: 1rem;
   flex-shrink: 0;
 }
-
 .modal-content__message {
   font-family: var(--font-body);
-  color: var(--gray-600);
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  color: var(--black);
+  font-size: 1.2rem;
 }

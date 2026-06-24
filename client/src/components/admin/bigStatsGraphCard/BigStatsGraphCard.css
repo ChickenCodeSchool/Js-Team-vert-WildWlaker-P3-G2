@@ -10,10 +10,9 @@
   .BigStatsGraphCard-upper {
     h2 {
       font-family: var(--font-title);
-      font-size: 1.125rem;
-      font-weight: 700;
+      font-size: 18px;
       color: var(--black);
-      margin-left: 1.25rem;
+      margin-left: 20px;
     }
   }
 
@@ -27,8 +26,8 @@
     background-color: var(--white);
     border: 1px solid var(--gray-100);
     padding: 8px 12px;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-md);
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     text-align: center;
 
     .BigStatsGraphCard-tooltip-date {

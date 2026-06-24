@@ -1,6 +1,6 @@
 .barberParametre {
   min-height: 100vh;
-  padding: 4.5rem 1.25rem 2rem;
+  padding: 1.25rem;
   background: var(--gray-50);
   font-family: var(--font-body);
 }
@@ -11,7 +11,7 @@
 
 .barberParametre__header h1 {
   font-family: var(--font-title);
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--black);
   margin-bottom: 0.35rem;
@@ -30,7 +30,7 @@
   position: relative;
   overflow: hidden;
   background: var(--white);
-  border-radius: var(--radius-lg);
+  border-radius: 1.25rem;
   padding: 1.35rem;
   box-shadow: var(--shadow-sm);
   margin-bottom: 1.2rem;
@@ -45,7 +45,7 @@
   position: absolute;
   inset: 0 auto 0 0;
   width: 0.35rem;
-  background: var(--gold-dark);
+  background: var(--gold);
 }
 
 .barberParametre__supportContent h2,
@@ -73,19 +73,12 @@
   font-weight: 800;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: var(--transition);
 }
 
 .barberParametre__supportButton {
-  background: var(--gold-dark);
+  background: var(--gold);
   color: var(--white);
-  box-shadow: var(--shadow-sm);
-}
-
-.barberParametre__supportButton:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0.5rem 1.2rem rgba(200, 164, 107, 0.25);
 }
 
 .barberParametre__danger {
@@ -131,12 +124,6 @@
 .barberParametre__deleteButton {
   background: var(--error);
   color: var(--white);
-}
-
-.barberParametre__deleteButton:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 
 @media (min-width: 768px) {

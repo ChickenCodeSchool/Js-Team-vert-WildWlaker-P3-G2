@@ -21,12 +21,11 @@
 }
 .reservations__tab--active {
   color: var(--gold-dark);
-  border-bottom: 2px solid var(--gold-dark);
+  border-bottom: 2px solid var(--gray-300);
 }
 
 .reservation-card {
   background: var(--white);
-  border: 1px solid var(--gray-100);
   border-radius: var(--radius-lg);
   padding: 1rem;
   box-shadow: var(--shadow-sm);
@@ -34,12 +33,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: var(--transition);
-}
-
-.reservation-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 .reservation-card__header {
   display: flex;
@@ -48,7 +41,7 @@
 .reservation-card__avatar {
   width: 90px;
   height: 90px;
-  border-radius: var(--radius-lg);
+  border-radius: 1rem;
 }
 .reservation-card__title {
   font-family: var(--font-title);
@@ -59,7 +52,7 @@
   width: 64px;
   height: 64px;
   object-fit: cover;
-  border-radius: var(--radius-md);
+  border-radius: 12px;
 }
 .reservation-card__infos {
   display: flex;
@@ -104,7 +97,7 @@
 /* En attente */
 .reservation-card__status--pending {
   background-color: #fffbeb;
-  color: var(--gold-dark);
+  color: var(--warning);
 }
 /* Terminé */
 .reservation-card__status--completed {

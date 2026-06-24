@@ -10,11 +10,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 20px;
 
     h3 {
       font-family: var(--font-title);
-      font-size: 1.125rem;
+      font-size: 18px;
       font-weight: 600;
       color: var(--gray-900);
       margin: 0;
@@ -23,7 +23,7 @@
     .see-all-link {
       font-family: var(--font-body);
       font-size: 13px;
-      color: var(--gold-dark);
+      color: var(--gold);
       text-decoration: none;
       font-weight: 500;
       transition: var(--transition);
@@ -79,7 +79,7 @@
 
       .event-status-badge {
         font-family: var(--font-body);
-        font-size: 0.75rem;
+        font-size: 12px;
         font-weight: 500;
         padding: 4px 10px;
         border-radius: var(--radius-sm);
@@ -98,7 +98,7 @@
 
         &.plannifié {
           background-color: var(--gold-soft);
-          color: var(--gold-dark);
+          color: var(--warning);
         }
       }
     }

@@ -25,7 +25,7 @@
 .give-avis__subtitle {
   font-family: var(--font-body);
   font-size: 0.875rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
   line-height: 1.5;
   margin-top: -0.75rem;
 }
@@ -75,7 +75,7 @@
   gap: 0.3rem;
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
 }
 
 /* ── Star rating ── */
@@ -109,11 +109,11 @@
 }
 
 .give-avis__star--active {
-  color: var(--gold-dark);
+  color: var(--warning);
 }
 
 .give-avis__star--empty {
-  color: var(--gray-300);
+  color: var(--gray-200);
 }
 
 .give-avis__rating-value {
@@ -143,7 +143,7 @@
   width: 100%;
   height: 7rem;
   padding: 0.75rem;
-  border: 1px solid var(--gray-300);
+  border: 1px solid var(--gray-200);
   border-radius: var(--radius-md);
   font-family: var(--font-body);
   font-size: 0.875rem;
@@ -156,14 +156,13 @@
 
 .give-avis__textarea:focus {
   border-color: var(--gold-dark);
-  box-shadow: 0 0 0 3px rgba(168, 124, 53, 0.12);
 }
 
 .give-avis__counter {
   align-self: flex-end;
   font-family: var(--font-body);
   font-size: 0.75rem;
-  color: var(--gray-300);
+  color: var(--gray-400);
 }
 
 /* ── Photos ── */
@@ -224,18 +223,11 @@
   cursor: pointer;
   font-family: var(--font-body);
   font-size: 0.6875rem;
-  color: var(--gray-600);
-  transition: var(--transition);
-}
-
-.give-avis__photo-add:hover {
-  border-color: var(--gold-dark);
-  color: var(--gold-dark);
-  background-color: var(--gold-soft);
+  color: var(--gray-500);
 }
 
 .give-avis__photo-add-icon {
-  color: var(--gray-300);
+  color: var(--gray-400);
 }
 
 /* ── Toggle ── */
@@ -264,14 +256,14 @@
 .give-avis__toggle-name {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
 }
 
 .give-avis__toggle {
   width: 2.75rem;
   height: 1.5rem;
   border-radius: 999px;
-  background-color: var(--gray-300);
+  background-color: var(--gray-200);
   border: none;
   cursor: pointer;
   position: relative;
@@ -303,7 +295,7 @@
 .give-avis__info {
   font-family: var(--font-body);
   font-size: 0.8125rem;
-  color: var(--gray-300);
+  color: var(--gray-400);
   text-align: center;
 }
 
@@ -321,12 +313,6 @@
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
-}
-
-.give-avis__submit:not(:disabled):hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
 }
 
 .give-avis__submit:disabled {

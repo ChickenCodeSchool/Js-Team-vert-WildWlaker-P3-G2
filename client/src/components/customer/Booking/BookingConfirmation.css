@@ -51,18 +51,12 @@
   width: 100%;
   margin-top: 1rem;
   padding: 1rem;
-  border: 1.5px solid var(--gray-300);
+  border: none;
   border-radius: var(--radius-md);
-  background: var(--white);
+  background: var(--gray-100);
   font-weight: 600;
   font-family: var(--font-body);
-  cursor: pointer;
   transition: var(--transition);
-}
-
-.booking-confirmation-home__button:hover {
-  border-color: var(--gray-600);
-  background: var(--gray-50);
 }
 .booking-confirmation__button:hover {
   transform: translateY(-2px);

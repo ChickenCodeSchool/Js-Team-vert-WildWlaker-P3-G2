@@ -29,12 +29,7 @@ function EventBanner(props: EventBannerProps) {
           <div className="event-banner__infos">
             <p>
               {" "}
-              <FaRegCalendarAlt />{" "}
-              {new Date(props.date).toLocaleDateString("fr-FR", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
+              <FaRegCalendarAlt /> {props.date}
             </p>
             <p>
               {" "}

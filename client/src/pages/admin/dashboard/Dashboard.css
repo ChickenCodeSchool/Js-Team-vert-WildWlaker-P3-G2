@@ -2,53 +2,43 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   background-color: var(--gray-50);
-  padding: 1.5rem;
-  min-height: 100vh;
 }
 
 .dashboard-header {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  padding: 10px 20px;
+  gap: 20px;
 }
 
 .dashboard-header h1 {
   font-family: var(--font-title);
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 28px;
   color: var(--black);
-  margin: 0;
 }
 
 .dashboard-header p {
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 16px;
   color: var(--gray-600);
-  margin: 0;
 }
 
 .week-selector-container {
   background-color: var(--white);
   border: 1px solid var(--gray-100);
-  border-radius: var(--radius-md);
-  gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  gap: 8px;
+  padding: 8px 12px;
   display: flex;
   align-items: center;
   width: fit-content;
   margin-left: auto;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-}
-
-.week-selector-container:hover {
-  border-color: var(--gray-300);
 }
 
 .week-selector-container .icon {
-  font-size: 1rem;
+  font-size: 16px;
   color: var(--gray-600);
 }
 
@@ -56,7 +46,7 @@
   border: none;
   background: transparent;
   font-family: var(--font-body);
-  font-size: 0.875rem;
+  font-size: 14px;
   color: var(--gray-900);
   cursor: pointer;
   outline: none;
@@ -66,26 +56,25 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
-  gap: 1.25rem;
 }
 
 .dashboard-body {
   display: flex;
   flex-direction: row;
-  gap: 1.25rem;
 }
 
 .dashboard-content-big-graphs {
   width: 70%;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 20px;
+  padding: 10px;
 }
 
 .dashboard-content-big-graphs-upper {
   display: flex;
   justify-content: space-between;
-  gap: 1.25rem;
+  gap: 20px;
   width: 100%;
 }
 
@@ -93,5 +82,6 @@
   width: 30%;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  padding: 10px;
+  gap: 20px;
 }

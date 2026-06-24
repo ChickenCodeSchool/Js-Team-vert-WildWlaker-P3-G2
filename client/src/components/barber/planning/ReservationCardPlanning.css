@@ -6,7 +6,7 @@
   padding: 14px 18px;
   margin-bottom: 12px;
   border-radius: 14px;
-  background: var(--gray-50);
+  background: var(grey);
   position: relative;
 }
 
@@ -73,17 +73,17 @@
 }
 
 .reservation-card-status.confirmed {
-  background: var(--gold-soft);
+  background: #f7f0df;
   color: var(--gold-dark);
 }
 
 .reservation-card-status.pending {
-  background: var(--gold-soft);
+  background: #fff0d9;
   color: var(--gold-dark);
 }
 
 .reservation-card-status.cancelled {
-  background: var(--gray-100);
+  background: #efefef;
   color: var(--gray-600);
 }
 

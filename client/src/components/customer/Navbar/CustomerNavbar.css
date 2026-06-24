@@ -39,10 +39,6 @@
   transition: var(--transition);
 }
 
-.navbar__item:hover {
-  color: var(--gold-dark);
-}
-
 .navbar__item--active {
   color: var(--gold-dark);
 }
@@ -86,12 +82,4 @@
   justify-content: center;
 
   box-shadow: var(--shadow-md);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.navbar__center-button:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
 }

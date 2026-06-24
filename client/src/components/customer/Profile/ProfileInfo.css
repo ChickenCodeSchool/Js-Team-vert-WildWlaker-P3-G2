@@ -4,10 +4,9 @@
 }
 .profile-info__card {
   background: var(--white);
-  border: 1px solid var(--gray-100);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
   padding: 1rem;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   margin-bottom: 1rem;
 }
 .profile-info__item {
@@ -27,6 +26,6 @@
 
 .profile-info__label {
   font-size: 1rem;
-  color: var(--gray-600);
+  color: var(--gray-500);
   font-family: var(--font-body);
 }

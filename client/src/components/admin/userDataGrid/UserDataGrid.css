@@ -42,7 +42,7 @@
           &.selected-row {
             background-color: var(--gold-soft);
             box-shadow: var(--shadow-md);
-            border: 1px solid var(--gold-dark);
+            border: 1px solid var(--gold);
           }
           td {
             padding: 16px;
@@ -107,7 +107,7 @@
         transition: var(--transition);
 
         &:hover:not(:disabled) {
-          border-color: var(--gold-dark);
+          border-color: var(--gold);
           color: var(--gold-dark);
         }
 
@@ -117,8 +117,8 @@
         }
 
         &.active {
-          background-color: var(--gold-dark);
-          border-color: var(--gold-dark);
+          background-color: var(--gold);
+          border-color: var(--gold);
           color: var(--white);
           font-weight: 600;
         }
