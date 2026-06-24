@@ -145,6 +145,21 @@ class AppointmentRepository {
     return rows as AppointmentWithDetails[];
   }
 
+  async readById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT a.*, b.name AS barber_name, p.name AS prestation_name
+       FROM appointment a
+       JOIN barber b ON a.id_user_barber = b.id_user
+       JOIN prestation p ON a.id_prestation = p.id_prestation
+       WHERE a.id_appointment = ?`,
+      [id],
+    );
+    const result = rows as Appointment[];
+    return result[0] as
+      | (Appointment & { barber_name: string; prestation_name: string })
+      | undefined;
+  }
+
   async updateStatus(id: number, status: string) {
     await databaseClient.query(
       "UPDATE appointment SET status = ? WHERE id_appointment = ?",

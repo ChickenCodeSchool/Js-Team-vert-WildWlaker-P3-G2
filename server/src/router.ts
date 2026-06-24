@@ -2,17 +2,13 @@ import express from "express";
 
 const router = express.Router();
 
-/* ************************************************************************* */
-// Define Your API Routes Here
-/* ************************************************************************* */
-
-// Define item-related routes
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
+import notificationActions from "./modules/notification/notificationActions";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
@@ -39,7 +35,8 @@ router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
-
-/* ************************************************************************* */
+router.get("/api/notifications/:userId", notificationActions.readByUser);
+router.put("/api/notifications/:id/read", notificationActions.markRead);
+router.put("/api/notifications/user/:userId/read-all", notificationActions.markAllRead);
 
 export default router;
