@@ -51,8 +51,13 @@ const Login = () => {
         return;
       }
       const user = await res.json();
+      console.log("USER FROM API:", user);
 
       localStorage.setItem("user", JSON.stringify(user));
+      console.log(
+        "LOCAL STORAGE:",
+        JSON.parse(localStorage.getItem("user") || "null"),
+      );
       navigate("/");
     } catch {
       setError("Impossible de se connecter");

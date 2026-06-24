@@ -3,6 +3,8 @@ import { FiCalendar, FiHome, FiPlus, FiSearch, FiUser } from "react-icons/fi";
 import { NavLink } from "react-router";
 
 function CustomerNavBar() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  console.log("USER STORAGE", user);
   return (
     <nav className="navbar">
       <div className="navbar__container">
@@ -50,7 +52,7 @@ function CustomerNavBar() {
         </NavLink>
 
         <NavLink
-          to="login"
+          to={user ? `/profile/${user.id}` : "/login"}
           className={({ isActive }) =>
             isActive ? "navbar__item navbar__item--active" : "navbar__item"
           }

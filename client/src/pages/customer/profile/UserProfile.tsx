@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import EditProfileModal from "../../../components/customer/Profile/EditProfileModal";
 import ProfileActions from "../../../components/customer/Profile/ProfileActions";
 import ProfileHeader from "../../../components/customer/Profile/ProfileHeader";
 import ProfileInfo from "../../../components/customer/Profile/ProfileInfo";
 import type { Customer } from "./../../../types/Customer";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function UserProfile() {
   const [customer, setCustomer] = useState<Customer | null>(null);
   const navigate = useNavigate();
-  const API_URL = import.meta.env.VITE_API_URL;
   const [isEditing, setIsEditing] = useState(false);
-  const { id } = useParams<{ id: string }>();
   const handleSaveCustomer = (updatedCustomer: {
     firstname: string;
     lastname: string;
@@ -21,19 +21,40 @@ function UserProfile() {
     setCustomer((prev) => (prev ? { ...prev, ...updatedCustomer } : prev));
   };
 
-  const loadData = useCallback(() => {
-    const userId = Number(id);
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const userId = user?.id;
+
+  useEffect(() => {
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
     fetch(`${API_URL}/api/customers/${userId}`)
       .then((res) => res.json())
       .then((data) => {
-        const found = data.find((c: Customer) => c.id_user);
-        setCustomer(found);
-      });
-  }, [id]);
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+        if (!data) {
+          localStorage.removeItem("user");
+          navigate("/login");
+          return;
+        }
 
+        setCustomer(data);
+      })
+      .catch((err) => {
+        console.error(err);
+        navigate("/login");
+      });
+  }, [userId, navigate]);
+
+  const loadData = async () => {
+    if (!userId) return;
+
+    const res = await fetch(`${API_URL}/api/customers/${userId}`);
+    const data = await res.json();
+
+    setCustomer(data);
+  };
   const handleDeleteAccount = async () => {
     try {
       const res = await fetch(`${API_URL}/api/users/${customer?.id_user}`, {

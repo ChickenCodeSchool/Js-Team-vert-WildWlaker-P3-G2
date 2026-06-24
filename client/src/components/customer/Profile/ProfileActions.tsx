@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router";
 import "./ProfileActions.css";
 import { useState } from "react";
+import { CiLogout } from "react-icons/ci";
 import { FiCalendar, FiTrash2 } from "react-icons/fi";
 
 type Props = {
@@ -10,6 +11,10 @@ type Props = {
 function ProfileActions({ onDeleteConfirm }: Props) {
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
   return (
     <section className="profile-actions">
       <button
@@ -28,6 +33,15 @@ function ProfileActions({ onDeleteConfirm }: Props) {
       >
         <FiTrash2 className="profile-actions__icon" />
         <span>Supprimer le compte </span>
+      </button>
+
+      <button
+        type="button"
+        className="profile-actions__button"
+        onClick={handleLogout}
+      >
+        <CiLogout className="profile-actions__icon" />
+        <span>Déconnexion</span>
       </button>
 
       {showConfirm && (

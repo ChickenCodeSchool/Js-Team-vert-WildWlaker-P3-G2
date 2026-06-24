@@ -1,4 +1,5 @@
 import type { RequestHandler } from "express";
+import customerRepository from "../customer/customerRepository";
 
 // Import access to data
 import userRepository from "./userRepository";
@@ -22,21 +23,39 @@ const browse: RequestHandler = async (req, res, next) => {
 };
 
 const register: RequestHandler = async (req, res, next) => {
-  console.log("REGISTER ACTION");
-  console.log(req.body);
-
   try {
-    const { email, password, role } = req.body;
+    const {
+      email,
+      password,
+      role,
+      firstname,
+      lastname,
+      postalCode,
+      city,
+      address,
+    } = req.body;
 
-    await userRepository.create({
+    // 1. INSERT USER
+    const result = await userRepository.create({
       email,
       password,
       user_type: role,
     });
 
-    res.status(201).json({
-      message: "Utilisateur créé",
+    // biome-ignore lint/suspicious/noExplicitAny: <login>
+    const userId = (result as any).insertId;
+
+    // 2. INSERT CUSTOMER
+    await customerRepository.create({
+      id_user: userId,
+      firstname,
+      lastname,
+      postal_code: postalCode,
+      city,
+      adress: address,
     });
+
+    res.status(201).json({ message: "Utilisateur créé" });
   } catch (err) {
     console.error(err);
     next(err);
@@ -62,7 +81,6 @@ const login: RequestHandler = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-  console.log("LOGIN HIT");
 };
 const deleteUser: RequestHandler = async (req, res, next) => {
   try {
