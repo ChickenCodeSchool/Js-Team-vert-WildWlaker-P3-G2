@@ -36,7 +36,7 @@ function BarberProfil({
   name = "Thomas Laurent",
   email = "thomas.laurent@gmail.com",
   avatar_url,
-  phone = "06 12 34 56 78",
+  phone = "0 12 34 56 78",
   birthday = "15 / 06 / 1990",
 }: BarberProfilProps) {
   const API_URL = import.meta.env.VITE_API_URL;
