@@ -79,6 +79,12 @@ app.use(router);
 import fs from "node:fs";
 import path from "node:path";
 
+// Serve uploaded files
+const uploadsFolderPath = path.join(__dirname, "../../server/public/uploads");
+if (fs.existsSync(uploadsFolderPath)) {
+  app.use("/uploads", express.static(uploadsFolderPath));
+}
+
 // Serve server resources
 
 const publicFolderPath = path.join(__dirname, "../../server/public");

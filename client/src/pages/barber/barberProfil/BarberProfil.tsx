@@ -32,6 +32,9 @@ const INITIAL_PHOTOS: Photo[] = [
   { id: 12, src: AfroImg },
 ];
 
+const API_URL = import.meta.env.VITE_API_URL;
+const BARBER_ID = Number(localStorage.getItem("barber_id") ?? "4");
+
 function BarberProfil({
   name = "Thomas Laurent",
   email = "thomas.laurent@gmail.com",
@@ -43,7 +46,38 @@ function BarberProfil({
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [currentAvatar, setCurrentAvatar] = useState(avatar_url ?? AfroImg);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    setUploading(true);
+    setUploadError("");
+
+    try {
+      const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/avatar`, {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) throw new Error("Échec de l'upload");
+      const data = (await res.json()) as { avatar_url: string };
+      setCurrentAvatar(`${API_URL}${data.avatar_url}`);
+    } catch {
+      setUploadError("Erreur lors de l'upload de la photo.");
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
+  };
 
   const handleAddPhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -102,18 +136,39 @@ function BarberProfil({
           <div className="barber-profil__avatar-wrapper">
             <img
               className="barber-profil__avatar"
-              src={avatar_url ?? AfroImg}
+              src={currentAvatar}
               alt="Avatar du coiffeur"
             />
-            <div className="barber-profil__avatar-overlay">
+            <button
+              type="button"
+              className="barber-profil__avatar-overlay"
+              onClick={() => avatarInputRef.current?.click()}
+              aria-label="Changer la photo de profil"
+            >
               <FiCamera className="barber-profil__camera-icon" />
-            </div>
+            </button>
           </div>
 
-          <button type="button" className="barber-profil__change-photo">
+          <input
+            ref={avatarInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="barber-profil__file-input"
+            onChange={handleAvatarUpload}
+          />
+
+          <button
+            type="button"
+            className="barber-profil__change-photo"
+            onClick={() => avatarInputRef.current?.click()}
+            disabled={uploading}
+          >
             <FiDownload className="barber-profil__download-icon" />
-            Changer la photo
+            {uploading ? "Envoi en cours…" : "Changer la photo"}
           </button>
+          {uploadError && (
+            <span className="barber-profil__upload-error">{uploadError}</span>
+          )}
           <span className="barber-profil__photo-hint">
             JPG, PNG ou WEBP. Max 5 Mo.
           </span>
