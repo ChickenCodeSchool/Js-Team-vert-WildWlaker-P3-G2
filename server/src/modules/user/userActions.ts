@@ -2,7 +2,6 @@ import bcrypt from "bcryptjs";
 import type { RequestHandler } from "express";
 import customerRepository from "../customer/customerRepository";
 
-// Import access to data
 import userRepository from "./userRepository";
 
 // The B of BREAD - Browse (Read All) operation
