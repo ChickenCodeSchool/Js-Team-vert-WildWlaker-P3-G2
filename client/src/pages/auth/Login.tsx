@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { CiMobile2 } from "react-icons/ci";
 import { FaBirthdayCake, FaCity, FaHome } from "react-icons/fa";
 import {
   FiChevronDown,
@@ -28,6 +29,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
   const [birthday, setBirthday] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
@@ -82,6 +84,7 @@ const Login = () => {
           email,
           password,
           role,
+          phone,
           postalCode,
           city,
           address,
@@ -246,6 +249,18 @@ const Login = () => {
               placeholder="Adresse"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <CiMobile2 className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              maxLength={10}
+              placeholder="Portable"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
 

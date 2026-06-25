@@ -34,6 +34,8 @@ const register: RequestHandler = async (req, res, next) => {
       postalCode,
       city,
       address,
+      birthday,
+      phone,
     } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,6 +44,8 @@ const register: RequestHandler = async (req, res, next) => {
       email,
       password: hashedPassword,
       user_type: role,
+      phone,
+      birthday,
     });
 
     const userId = result.insertId;

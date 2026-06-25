@@ -12,6 +12,7 @@ type Props = {
     email: string;
     city: string;
     postal_code: string;
+    birthday?: string | null;
     adress: string;
     phone?: string;
   }) => void;
@@ -30,6 +31,9 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
   const [postalCode, setPostalCode] = useState(customer.postal_code);
   const [adress, setAdress] = useState(customer.adress);
   const [phone, setPhone] = useState(customer.phone);
+  const [birthday, setBirthday] = useState(
+    formatBirthday(customer.birthday) || "",
+  );
   const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -45,10 +49,11 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       postalCode: postalCode,
       adress: adress,
       phone: phone,
-      birthday: formatBirthday(customer.birthday),
+      birthday: formatBirthday(birthday),
     };
 
     try {
+      console.log(updatedCustomer);
       const res = await fetch(`${API_URL}/api/customers/${customer.id_user}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -79,7 +84,8 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
     city !== customer.city ||
     postalCode !== customer.postal_code ||
     adress !== customer.adress ||
-    phone !== customer.phone;
+    phone !== customer.phone ||
+    birthday !== formatBirthday(customer.birthday);
 
   return (
     <div className="modal">
@@ -160,6 +166,16 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
+
+        <label className="modal-content__label">
+          Date de naissance
+          <input
+            type="date"
+            value={birthday}
+            onChange={(e) => setBirthday(e.target.value)}
             className="modal-content__item"
           />
         </label>
