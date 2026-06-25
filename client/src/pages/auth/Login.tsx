@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { CiMobile2 } from "react-icons/ci";
+import { FaBirthdayCake, FaCity, FaHome } from "react-icons/fa";
 import {
   FiChevronDown,
   FiEye,
@@ -25,13 +27,45 @@ const Login = () => {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [phone, setPhone] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    navigate("/");
+  const handleLogin = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: loginEmail,
+          password: loginPassword,
+        }),
+      });
+      if (!res.ok) {
+        console.log("ERREUR LOGIN");
+        setError("Email ou mot de passe incorrect");
+        return;
+      }
+      const user = await res.json();
+      console.log("USER FROM API:", user);
+
+      localStorage.setItem("user", JSON.stringify(user));
+      console.log(
+        "LOCAL STORAGE:",
+        JSON.parse(localStorage.getItem("user") || "null"),
+      );
+      navigate("/");
+    } catch {
+      setError("Impossible de se connecter");
+    }
   };
 
   const handleRegister = async () => {
@@ -44,7 +78,18 @@ const Login = () => {
       const res = await fetch(`${API_URL}/api/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ firstname, lastname, email, password, role }),
+        body: JSON.stringify({
+          firstname,
+          lastname,
+          email,
+          password,
+          role,
+          phone,
+          postalCode,
+          city,
+          address,
+          birthday,
+        }),
       });
       if (!res.ok) {
         const data = await res.json();
@@ -93,7 +138,9 @@ const Login = () => {
             <input
               className="login__input"
               type="text"
-              placeholder="Email ou téléphone"
+              placeholder="Email"
+              value={loginEmail}
+              onChange={(e) => setLoginEmail(e.target.value)}
             />
           </div>
 
@@ -102,7 +149,8 @@ const Login = () => {
             <input
               className="login__input"
               type={showPassword ? "text" : "password"}
-              placeholder="Mot de passe"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
             />
             <button
               type="button"
@@ -114,6 +162,8 @@ const Login = () => {
           </div>
 
           <span className="login__forgot">Mot de passe oublié ?</span>
+
+          {error && <span className="login__error">{error}</span>}
 
           <button className="login__btn" type="button" onClick={handleLogin}>
             Se connecter
@@ -153,6 +203,64 @@ const Login = () => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FiMail className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              maxLength={5}
+              placeholder="Code postal"
+              value={postalCode}
+              onChange={(e) => setPostalCode(e.target.value)}
+            />
+          </div>
+          <div className="login__input-wrapper">
+            <FaCity className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Ville"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FaBirthdayCake className="login__input-icon" />
+
+            <input
+              id="birthday"
+              className="login__input"
+              type="date"
+              placeholder="Date de naissance"
+              value={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FaHome className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              placeholder="Adresse"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <CiMobile2 className="login__input-icon" />
+            <input
+              className="login__input"
+              type="text"
+              maxLength={10}
+              placeholder="Portable"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
 

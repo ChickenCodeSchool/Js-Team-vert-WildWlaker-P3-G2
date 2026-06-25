@@ -36,5 +36,7 @@ router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
+router.post("/api/register", userActions.register);
+router.post("/api/login", userActions.login);
 
 export default router;

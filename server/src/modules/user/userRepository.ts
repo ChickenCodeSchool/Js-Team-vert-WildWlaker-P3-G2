@@ -1,3 +1,4 @@
+import type { ResultSetHeader } from "mysql2";
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
@@ -29,6 +30,28 @@ class UserRepository {
 
     // Return the array of users
     return rows as user[];
+  }
+  async create(user: {
+    email: string;
+    password: string;
+    user_type: string;
+    phone?: string;
+    birthday: string;
+  }) {
+    const [result] = await databaseClient.query<ResultSetHeader>(
+      `INSERT INTO users (email, password, user_type, phone, birthday)
+      VALUES (? , ? , ?, ?, ?)`,
+      [user.email, user.password, user.user_type, user.phone, user.birthday],
+    );
+    return result;
+  }
+
+  async readByEmail(email: string) {
+    const [rows] = await databaseClient.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email],
+    );
+    return (rows as user[])[0];
   }
 
   // The U of CRUD - Update operation

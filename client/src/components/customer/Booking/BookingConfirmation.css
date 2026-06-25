@@ -61,3 +61,17 @@
 .booking-confirmation__button:hover {
   transform: translateY(-2px);
 }
+.booking-confirmation__rating {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--gold-dark);
+  color: var(--white);
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+.booking-confirmation__rating:hover {
+  transform: translateY(-2px);
+}

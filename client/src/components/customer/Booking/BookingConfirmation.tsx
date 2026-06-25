@@ -51,6 +51,7 @@ function BookingConfirmation({ booking }: Props) {
       >
         Voir mes réservations
       </button>
+
       <button
         type="button"
         className="booking-confirmation-home__button"

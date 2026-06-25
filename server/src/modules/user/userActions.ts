@@ -1,6 +1,7 @@
+import bcrypt from "bcryptjs";
 import type { RequestHandler } from "express";
+import customerRepository from "../customer/customerRepository";
 
-// Import access to data
 import userRepository from "./userRepository";
 
 // The B of BREAD - Browse (Read All) operation
@@ -17,6 +18,72 @@ const browse: RequestHandler = async (req, res, next) => {
     res.json(users);
   } catch (err) {
     // Pass any errors to the error-handling middleware
+    next(err);
+  }
+};
+
+const register: RequestHandler = async (req, res, next) => {
+  try {
+    const {
+      email,
+      password,
+      role,
+      firstname,
+      lastname,
+      postalCode,
+      city,
+      address,
+      birthday,
+      phone,
+    } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await userRepository.create({
+      email,
+      password: hashedPassword,
+      user_type: role,
+      phone,
+      birthday,
+    });
+
+    const userId = result.insertId;
+
+    await customerRepository.create({
+      id_user: userId,
+      firstname,
+      lastname,
+      postal_code: postalCode,
+      city,
+      adress: address,
+    });
+
+    res.status(201).json({ message: "Utilisateur créé" });
+  } catch (err) {
+    console.error(err);
+    next(err);
+  }
+};
+
+const login: RequestHandler = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const user = await userRepository.readByEmail(email);
+
+    if (!user) {
+      return res.status(401).json({ message: "Utilisateur introuvable" });
+    }
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({ message: "Mot de passe incorrect" });
+    }
+    res.json({
+      id: user.id_user,
+      email: user.email,
+      role: user.user_type,
+    });
+  } catch (err) {
     next(err);
   }
 };
@@ -37,4 +104,4 @@ const deleteUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, deleteUser };
+export default { browse, deleteUser, register, login };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { FiCalendar, FiPlus, FiX } from "react-icons/fi";
+import { useParams } from "react-router";
 import "./giveAvis.css";
 
 const RATING_LABELS: Record<number, string> = {
@@ -12,6 +13,7 @@ const RATING_LABELS: Record<number, string> = {
 };
 
 function GiveAvis() {
+  const { appointmentId } = useParams();
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [comment, setComment] = useState("");
@@ -46,12 +48,12 @@ function GiveAvis() {
       {/* Barber card */}
       <div className="give-avis__barber-card">
         <img
-          src="https://i.pravatar.cc/150?img=60"
-          alt="L'Atelier Barber"
+          src="/default-avatar.png"
+          alt="Barbier"
           className="give-avis__barber-avatar"
         />
         <div className="give-avis__barber-info">
-          <p className="give-avis__barber-name">L'Atelier Barber</p>
+          <p className="give-avis__barber-name">Rendez-vous #{appointmentId}</p>
           <p className="give-avis__barber-prestation">Coupe homme</p>
           <p className="give-avis__barber-date">
             <FiCalendar size={13} />
