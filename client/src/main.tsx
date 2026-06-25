@@ -11,6 +11,7 @@ import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import ReservationsDash from "./pages/admin/reservations/ReservationsDash";
+import ReviewDash from "./pages/admin/reviewDash/ReviewDash";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
 import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
@@ -71,6 +72,7 @@ const router = createBrowserRouter([
           { path: "users", element: <Users /> },
           { path: "barbers", element: <Barbers /> },
           { path: "reservations", element: <ReservationsDash /> },
+          { path: "reviews", element: <ReviewDash /> },
         ],
       },
       {

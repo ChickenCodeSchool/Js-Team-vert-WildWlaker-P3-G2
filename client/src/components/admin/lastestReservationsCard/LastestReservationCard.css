@@ -131,22 +131,22 @@
       text-align: center;
       min-width: 90px;
 
-      &.status-confirmed {
+      &.status-confirmé {
         background-color: rgba(40, 167, 69, 0.1);
         color: var(--success);
       }
 
-      &.status-pending {
+      &.status-en {
         background-color: rgba(245, 166, 35, 0.1);
         color: var(--warning);
       }
 
-      &.status-completed {
+      &.status-terminé {
         background-color: rgba(59, 130, 246, 0.1);
         color: var(--info);
       }
 
-      &.status-cancelled {
+      &.status-annulé {
         background-color: rgba(229, 57, 53, 0.1);
         color: var(--error);
       }

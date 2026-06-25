@@ -2,14 +2,10 @@ import express from "express";
 
 const router = express.Router();
 
-/* ************************************************************************* */
-// Define Your API Routes Here
-/* ************************************************************************* */
-
-// Define item-related routes
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
+import { upload, uploadAvatar } from "./modules/barber/barberAvatarActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
@@ -26,6 +22,7 @@ router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
+router.post("/api/barbers/:id/avatar", upload.single("avatar"), uploadAvatar);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
@@ -34,12 +31,12 @@ router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", prestationActions.add);
 router.put("/api/prestations/:id", prestationActions.edit);
 router.delete("/api/prestations/:id", prestationActions.destroy);
+router.delete("/api/reviews/:id", reviewActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
+router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
 router.post("/api/register", userActions.register);
 router.post("/api/login", userActions.login);
-
-/* ************************************************************************* */
 
 export default router;

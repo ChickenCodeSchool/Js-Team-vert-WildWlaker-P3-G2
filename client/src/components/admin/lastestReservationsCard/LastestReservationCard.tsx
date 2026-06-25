@@ -12,7 +12,7 @@ interface Reservation {
   coiffeur: string;
   service: string;
   formattedDate: string;
-  statut: "Confirmée" | "En attente" | "Terminée" | "Annulée";
+  statut: "confirmé" | "en attente" | "terminé" | "annulé";
 }
 
 type RawAppointment = {
@@ -24,16 +24,6 @@ type RawAppointment = {
   customer_lastname: string;
   prestation_name: string;
   customer_avatar?: string;
-};
-
-const STATUS_CONFIG: Record<
-  string,
-  { label: Reservation["statut"]; className: string }
-> = {
-  confirmed: { label: "Confirmée", className: "status-confirmed" },
-  pending: { label: "En attente", className: "status-pending" },
-  completed: { label: "Terminée", className: "status-completed" },
-  cancelled: { label: "Annulée", className: "status-cancelled" },
 };
 
 function LatestReservationsCard() {
@@ -51,11 +41,11 @@ function LatestReservationsCard() {
           .slice(0, 5)
           .map((app) => {
             const dateObj = new Date(app.appointment_date);
-            const statusInfo = STATUS_CONFIG[app.status] || {
-              label: "En attente",
-              className: "status-pending",
+            const statusInfo = {
+              label: app.status.charAt(0).toUpperCase() + app.status.slice(1),
+              className: `status-${app.status.toLowerCase()}`,
             };
-
+            console.log(statusInfo);
             return {
               id: (app.id_appointement ?? Math.random()).toString(),
               client: {
@@ -69,10 +59,9 @@ function LatestReservationsCard() {
               formattedDate: format(dateObj, "dd MMM yyyy, HH:mm", {
                 locale: fr,
               }),
-              statut: statusInfo.label,
+              statut: statusInfo.label as Reservation["statut"],
             };
           });
-
         setAppointments(formatted);
       })
       .catch((err) => console.error("Erreur chargement réservations :", err));
@@ -86,7 +75,6 @@ function LatestReservationsCard() {
           Voir tout
         </NavLink>
       </div>
-
       <div className="table-responsive">
         <table className="reservations-table">
           <thead>
@@ -101,10 +89,10 @@ function LatestReservationsCard() {
           </thead>
           <tbody>
             {appointments.map((res) => {
-              const config = Object.values(STATUS_CONFIG).find(
-                (c) => c.label === res.statut,
-              );
-
+              const config = {
+                label: res.statut,
+                className: `status-${res.statut.toLowerCase()}`,
+              };
               return (
                 <tr key={res.id}>
                   <td>
@@ -123,27 +111,15 @@ function LatestReservationsCard() {
                     <span className="res-date">{res.formattedDate}</span>
                   </td>
                   <td>
-                    <span
-                      className={`status-badge ${config?.className || "status-pending"}`}
-                    >
+                    <span className={`status-badge ${config.className}`}>
                       {res.statut}
                     </span>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      className="action-btn"
-                      title="Options"
-                    >
-                      &#8942;
-                    </button>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
-
         {appointments.length === 0 && (
           <p
             style={{

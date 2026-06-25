@@ -1,31 +1,50 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { FiEye } from "react-icons/fi";
+import { useEntityActions } from "../../../hooks/useEntityActions";
+import type { Barber } from "../../../types/barber";
+import EditUserModal from "../editUserModal/EditUserModal";
 import "./ApprovalCard.css";
-
-type BarberItems = {
-  id_user: number;
-  name: string;
-  avatar_url: string | null;
-  create_time: string;
-  status: string;
-};
 
 function ApprovalCard() {
   const apiUrl = import.meta.env.VITE_API_URL;
-  const [barbers, setBarbers] = useState<BarberItems[]>([]);
-  useEffect(() => {
+  const [barbers, setBarbers] = useState<Barber[]>([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
+
+  const loadbarbersData = useCallback(() => {
     fetch(`${apiUrl}/api/barbers`)
       .then((res) => res.json())
       .then((data) => setBarbers(data));
   }, []);
 
-  const handleValidate = (id: number) => {
-    console.log(`Validation du coiffeur avec l'ID : ${id}`);
-    // Ajoute ici ta logique d'API (fetch/axios) plus tard
+  useEffect(() => {
+    loadbarbersData();
+  }, [loadbarbersData]);
+
+  const { handleSave, handleToggleSuspend, deleteUser } = useEntityActions<
+    Barber & { id: number }
+  >({
+    apiBase: apiUrl,
+    idField: "api/barbers",
+    onActionComplete: loadbarbersData,
+    onClose: () => setIsModalOpen(false),
+  });
+
+  const handleValidate = async (barber: Barber) => {
+    const entityFormat = {
+      ...barber,
+      id: barber.id_user,
+      status: "En attente",
+    };
+    await handleToggleSuspend(entityFormat);
   };
 
-  const handleMoreOptions = (id: number) => {
-    console.log(`Plus d'options pour l'ID : ${id}`);
+  const handleMoreOptions = (barber: Barber) => {
+    setSelectedBarber(barber);
+    setIsModalOpen(true);
   };
+
   const formatDate = (dateStr: string) => {
     if (!dateStr) return "Date inconnue";
     const dateObj = new Date(dateStr);
@@ -35,9 +54,14 @@ function ApprovalCard() {
       year: "numeric",
     })}`;
   };
+
   const pendingBarbers = barbers
     .filter((barber) => barber.status === "En attente")
     .slice(0, 3);
+
+  const modalUserData = selectedBarber
+    ? { ...selectedBarber, id: selectedBarber.id_user }
+    : null;
 
   return (
     <div className="approval-card-main">
@@ -69,22 +93,33 @@ function ApprovalCard() {
               <button
                 type="button"
                 className="validate-btn"
-                onClick={() => handleValidate(barber.id_user)}
+                onClick={() => handleValidate(barber)}
               >
                 Valider
               </button>
               <button
                 type="button"
                 className="options-btn"
-                onClick={() => handleMoreOptions(barber.id_user)}
+                onClick={() => handleMoreOptions(barber)}
                 aria-label="Plus d'options"
               >
-                ⋮
+                <FiEye />
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      <EditUserModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        user={modalUserData}
+        onSave={handleSave}
+        onToggleSuspend={handleToggleSuspend}
+        deleteUser={() => {
+          if (modalUserData) deleteUser(modalUserData);
+        }}
+      />
     </div>
   );
 }
