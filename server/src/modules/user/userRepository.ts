@@ -1,3 +1,4 @@
+import type { ResultSetHeader } from "mysql2";
 import type { Rows } from "../../../database/client";
 import databaseClient from "../../../database/client";
 
@@ -31,7 +32,7 @@ class UserRepository {
     return rows as user[];
   }
   async create(user: { email: string; password: string; user_type: string }) {
-    const [result] = await databaseClient.query(
+    const [result] = await databaseClient.query<ResultSetHeader>(
       `INSERT INTO users (email, password, user_type)
       VALUES (? , ? , ?)`,
       [user.email, user.password, user.user_type],

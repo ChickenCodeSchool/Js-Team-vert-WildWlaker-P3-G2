@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import type { RequestHandler } from "express";
 import customerRepository from "../customer/customerRepository";
 
@@ -35,17 +36,16 @@ const register: RequestHandler = async (req, res, next) => {
       address,
     } = req.body;
 
-    // 1. INSERT USER
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const result = await userRepository.create({
       email,
-      password,
+      password: hashedPassword,
       user_type: role,
     });
 
-    // biome-ignore lint/suspicious/noExplicitAny: <login>
-    const userId = (result as any).insertId;
+    const userId = result.insertId;
 
-    // 2. INSERT CUSTOMER
     await customerRepository.create({
       id_user: userId,
       firstname,
@@ -68,10 +68,12 @@ const login: RequestHandler = async (req, res, next) => {
     const user = await userRepository.readByEmail(email);
 
     if (!user) {
-      return res.status(401).json({ message: "User not found" });
+      return res.status(401).json({ message: "Utilisateur introuvable" });
     }
-    if (user.password !== password) {
-      return res.status(401).json({ message: "Wrong password" });
+    const isValidPassword = await bcrypt.compare(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({ message: "Mot de passe incorrect" });
     }
     res.json({
       id: user.id_user,

@@ -47,6 +47,7 @@ const Login = () => {
         }),
       });
       if (!res.ok) {
+        console.log("ERREUR LOGIN");
         setError("Email ou mot de passe incorrect");
         return;
       }
