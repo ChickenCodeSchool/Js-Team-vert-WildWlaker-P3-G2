@@ -13,6 +13,7 @@ type Props = {
     city: string;
     postal_code: string;
     adress: string;
+    phone?: string;
   }) => void;
   loadData: () => void;
 };
@@ -28,6 +29,7 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
   const [city, setCity] = useState(customer.city);
   const [postalCode, setPostalCode] = useState(customer.postal_code);
   const [adress, setAdress] = useState(customer.adress);
+  const [phone, setPhone] = useState(customer.phone);
   const [isLoading, setIsLoading] = useState(false);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -42,6 +44,7 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       city: city,
       postalCode: postalCode,
       adress: adress,
+      phone: phone,
       birthday: formatBirthday(customer.birthday),
     };
 
@@ -75,7 +78,8 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
     email !== customer.email ||
     city !== customer.city ||
     postalCode !== customer.postal_code ||
-    adress !== customer.adress;
+    adress !== customer.adress ||
+    phone !== customer.phone;
 
   return (
     <div className="modal">
@@ -146,6 +150,16 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
             type="text"
             value={adress}
             onChange={(e) => setAdress(e.target.value)}
+            className="modal-content__item"
+          />
+        </label>
+
+        <label className="modal-content__label">
+          Numero
+          <input
+            type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
             className="modal-content__item"
           />
         </label>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaCity, FaHome } from "react-icons/fa";
+import { FaBirthdayCake, FaCity, FaHome } from "react-icons/fa";
 import {
   FiChevronDown,
   FiEye,
@@ -28,6 +28,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [address, setAddress] = useState("");
   const [password, setPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
@@ -84,6 +85,7 @@ const Login = () => {
           postalCode,
           city,
           address,
+          birthday,
         }),
       });
       if (!res.ok) {
@@ -158,6 +160,8 @@ const Login = () => {
 
           <span className="login__forgot">Mot de passe oublié ?</span>
 
+          {error && <span className="login__error">{error}</span>}
+
           <button className="login__btn" type="button" onClick={handleLogin}>
             Se connecter
           </button>
@@ -204,6 +208,7 @@ const Login = () => {
             <input
               className="login__input"
               type="text"
+              maxLength={5}
               placeholder="Code postal"
               value={postalCode}
               onChange={(e) => setPostalCode(e.target.value)}
@@ -217,6 +222,19 @@ const Login = () => {
               placeholder="Ville"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+            />
+          </div>
+
+          <div className="login__input-wrapper">
+            <FaBirthdayCake className="login__input-icon" />
+
+            <input
+              id="birthday"
+              className="login__input"
+              type="date"
+              placeholder="Date de naissance"
+              value={birthday}
+              onChange={(e) => setBirthday(e.target.value)}
             />
           </div>
 

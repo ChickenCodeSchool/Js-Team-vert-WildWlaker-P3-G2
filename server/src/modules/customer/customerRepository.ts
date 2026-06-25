@@ -42,7 +42,15 @@ class CustomerRepository {
   }
   async read(id: number) {
     const query = `
-    SELECT c.*, u.email, u.avatar_url
+    SELECT
+      c.*,
+      u.avatar_url,
+      u.create_time,
+      u.email,
+      u.phone,
+      u.birthday,
+      u.genre,
+      u.annotations
     FROM customer c
     JOIN users u ON c.id_user = u.id_user
     WHERE c.id_user = ?
