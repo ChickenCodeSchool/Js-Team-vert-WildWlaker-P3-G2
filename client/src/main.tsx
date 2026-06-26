@@ -58,7 +58,7 @@ const router = createBrowserRouter([
           { path: "reservations/:id", element: <Reservations /> },
           { path: "profile/:id", element: <UserProfile /> },
           { path: "avis", element: <CustomerAvis /> },
-          { path: "give-avis", element: <GiveAvis /> },
+          { path: "give-avis/:appointmentId", element: <GiveAvis /> },
           { path: "avis-confirmation", element: <AvisConfirmation /> },
           { path: "login", element: <Login /> },
         ],

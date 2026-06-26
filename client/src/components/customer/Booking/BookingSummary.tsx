@@ -40,18 +40,18 @@ function BookingSummary({ booking, onBack, onNext }: Props) {
       <div className="booking-summary__actions">
         <button
           type="button"
-          className="booking-summary__button booking-summary__button--back"
-          onClick={onBack}
-        >
-          Retour
-        </button>
-
-        <button
-          type="button"
           className="booking-summary__button booking-summary__button--confirm"
           onClick={onNext}
         >
           Confirmer
+        </button>
+
+        <button
+          type="button"
+          className="booking-summary__button booking-summary__button--back"
+          onClick={onBack}
+        >
+          Retour
         </button>
       </div>
     </div>

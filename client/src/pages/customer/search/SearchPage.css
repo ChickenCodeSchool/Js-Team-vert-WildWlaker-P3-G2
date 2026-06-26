@@ -85,5 +85,6 @@
 .search-near__icon {
   width: 28px;
   height: 28px;
-  color: var(--gray-600);
+  color: var(--gold-dark);
+  border: none;
 }

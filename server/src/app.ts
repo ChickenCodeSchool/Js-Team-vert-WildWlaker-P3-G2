@@ -1,5 +1,4 @@
 // Load the express module to create a web application
-
 import express from "express";
 
 const app = express();
@@ -78,6 +77,12 @@ app.use(router);
 
 import fs from "node:fs";
 import path from "node:path";
+
+// Serve uploaded files
+const uploadsFolderPath = path.join(__dirname, "../../server/public/uploads");
+if (fs.existsSync(uploadsFolderPath)) {
+  app.use("/uploads", express.static(uploadsFolderPath));
+}
 
 // Serve server resources
 
