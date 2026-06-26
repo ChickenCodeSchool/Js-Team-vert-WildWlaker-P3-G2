@@ -38,5 +38,6 @@ router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
 router.post("/api/register", userActions.register);
 router.post("/api/login", userActions.login);
+router.post("/api/forgot-password", userActions.forgotPassword);
 
 export default router;

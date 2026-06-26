@@ -1,7 +1,7 @@
 // Import necessary modules from React and React Router
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
+import { Navigate, RouterProvider, createBrowserRouter } from "react-router";
 
 /* ********************************************************************** */
 
@@ -14,6 +14,7 @@ import ReservationsDash from "./pages/admin/reservations/ReservationsDash";
 import ReviewDash from "./pages/admin/reviewDash/ReviewDash";
 import Users from "./pages/admin/users/Users";
 import Login from "./pages/auth/Login";
+import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
 import BarberDisponibilites from "./pages/barber/barberDisponibilites/BarberDisponibilites";
@@ -23,11 +24,11 @@ import BarberPrestation from "./pages/barber/barberPrestations/barbePrestation";
 import BarberProfil from "./pages/barber/barberProfil/BarberProfil";
 import BarberSignalement from "./pages/barber/barberSignalement/BarberSignalement";
 import BarberStatistics from "./pages/barber/barberStatistics/BarberStatistics";
-import BarberPlanning from "./pages/barber/Planning/BarberPlanning";
 import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
+import ForgotPassword from "./pages/customer/forgotPassword/ForgotPassword";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
 import Home from "./pages/customer/home/Home";
 import UserProfile from "./pages/customer/profile/UserProfile";
@@ -61,6 +62,7 @@ const router = createBrowserRouter([
           { path: "give-avis/:appointmentId", element: <GiveAvis /> },
           { path: "avis-confirmation", element: <AvisConfirmation /> },
           { path: "login", element: <Login /> },
+          { path: "forgot-password", element: <ForgotPassword /> },
         ],
       },
       {

@@ -116,12 +116,13 @@
   align-items: center;
 }
 
-.login__forgot {
+.login__forgot-password {
   font-family: var(--font-body);
   font-size: 0.8125rem;
   color: var(--gold-dark);
   text-align: right;
   cursor: pointer;
+  border: none;
 }
 
 .login__select {
