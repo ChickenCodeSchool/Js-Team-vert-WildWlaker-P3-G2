@@ -28,7 +28,7 @@ import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
-import ForgotPassword from "./pages/customer/forgotPassword/ForgotPassword";
+import ForgotPassword from "./pages/customer/forgetPassword/ForgotPassword";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
 import Home from "./pages/customer/home/Home";
 import UserProfile from "./pages/customer/profile/UserProfile";

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router";
 import { useNavigate } from "react-router";
 import EditProfileModal from "../../../components/customer/Profile/EditProfileModal";
 import ProfileActions from "../../../components/customer/Profile/ProfileActions";
@@ -7,6 +8,11 @@ import ProfileInfo from "../../../components/customer/Profile/ProfileInfo";
 import type { Customer } from "./../../../types/Customer";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const location = useLocation();
+const params = useParams();
+
+console.log("LOCATION =", location.pathname);
+console.log("PARAMS =", params);
 
 function UserProfile() {
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -23,29 +29,26 @@ function UserProfile() {
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-
+  console.log("USER:", user);
+  console.log("USER ID:", userId);
   useEffect(() => {
-    if (!userId) {
-      navigate("/login");
-      return;
-    }
-
+    console.log("useEffect UserProfile");
     fetch(`${API_URL}/api/customers/${userId}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (!data) {
-          localStorage.removeItem("user");
-          navigate("/login");
-          return;
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error("Utilisateur introuvable");
         }
 
+        return res.json();
+      })
+      .then((data) => {
         setCustomer(data);
       })
       .catch((err) => {
         console.error(err);
         navigate("/login");
       });
-  }, [userId, navigate]);
+  });
 
   const loadData = async () => {
     if (!userId) return;
