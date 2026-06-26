@@ -20,6 +20,28 @@ const browse: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+
+// Le R de BREAD - Read (Read One) operation
+const read: RequestHandler = async (req, res, next) => {
+  try {
+    // 1. On récupère l'id depuis les paramètres de la route (ex: /api/barbers/4)
+    const id = Number(req.params.id);
+
+    // 2. On appelle notre méthode du repository
+    const barber = await barberRepository.read(id);
+
+    // 3. Si on ne trouve pas le barbier, on renvoie une erreur 404
+    if (barber == null) {
+      res.sendStatus(404);
+    } else {
+      // Sinon, on répond avec le barbier au format JSON
+      res.json(barber);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const edit: RequestHandler = async (req, res, next) => {
   try {
     const id_user = Number(req.params.id);
@@ -28,7 +50,7 @@ const edit: RequestHandler = async (req, res, next) => {
     // Appel au repository pour sauvegarder en BDD
     await barberRepository.update(updatedCustomerData);
 
-    // On renvoie un statut 204 (No Content) ou 200 avec les données
+    // On renvoie un statut 200 avec les données
     res.status(200).json({
       message: "Client mis à jour avec succès",
       data: updatedCustomerData,
@@ -38,4 +60,5 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, edit };
+// On n'oublie pas d'exposer "read" ici pour le routeur !
+export default { browse, read, edit };

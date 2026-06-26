@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   FiCamera,
   FiDownload,
@@ -10,10 +10,7 @@ import {
 } from "react-icons/fi";
 import AfroImg from "../../../assets/images/Afro.jpg";
 import type { Barber } from "../../../types/barber";
-import type { User } from "../../../types/user";
 import "./BarberProfil.css";
-
-type BarberProfilProps = Partial<Barber & Pick<User, "email" | "avatar_url">>;
 
 type Photo = { id: number; src: string };
 
@@ -33,25 +30,50 @@ const INITIAL_PHOTOS: Photo[] = [
 ];
 
 const API_URL = import.meta.env.VITE_API_URL;
-const BARBER_ID = Number(localStorage.getItem("barber_id") ?? "4");
 
-function BarberProfil({
-  name = "Thomas Laurent",
-  email = "thomas.laurent@gmail.com",
-  avatar_url,
-  phone = "06 12 34 56 78",
-  birthday = "15 / 06 / 1990",
-}: BarberProfilProps) {
+// On récupère et décode proprement le "user" de Giogi tout en haut
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const BARBER_ID = loggedUser && loggedUser.id ? Number(loggedUser.id) : 4;
+
+function BarberProfil() {
   const [activeTab, setActiveTab] = useState("informations");
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [currentAvatar, setCurrentAvatar] = useState(avatar_url ?? AfroImg);
+
+  // États pour stocker le barbier dynamique et gérer le chargement
+  const [barberData, setBarberData] = useState<Barber | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const [currentAvatar, setCurrentAvatar] = useState(AfroImg);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // Fetch automatique au montage avec le bon BARBER_ID
+  useEffect(() => {
+    const fetchBarberProfile = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}`);
+        if (!res.ok) throw new Error("Impossible de charger le profil");
+        const data = (await res.json()) as Barber;
+        setBarberData(data);
+
+        if (data.avatar_url) {
+          setCurrentAvatar(`${API_URL}${data.avatar_url}`);
+        }
+      } catch (err) {
+        console.error("Erreur lors de la récupération des données :", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBarberProfile();
+  }, []);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -101,6 +123,10 @@ function BarberProfil({
     setSelectedIds([]);
     setDeleteMode(false);
   };
+
+  if (loading) {
+    return <div className="barber-profil__loading">Chargement du profil…</div>;
+  }
 
   return (
     <div className="barber-profil">
@@ -180,21 +206,31 @@ function BarberProfil({
           <div className="barber-profil__infos">
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Nom complet</span>
-              <span className="barber-profil__info-value">{name}</span>
+              <span className="barber-profil__info-value">
+                {barberData?.name || "Non renseigné"}
+              </span>
             </div>
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Téléphone</span>
-              <span className="barber-profil__info-value">{phone}</span>
+              <span className="barber-profil__info-value">
+                {barberData?.phone || "Non renseigné"}
+              </span>
             </div>
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">Email</span>
-              <span className="barber-profil__info-value">{email}</span>
+              <span className="barber-profil__info-value">
+                {barberData?.email || "Non renseigné"}
+              </span>
             </div>
             <div className="barber-profil__info-row">
               <span className="barber-profil__info-label">
                 Date de naissance
               </span>
-              <span className="barber-profil__info-value">{birthday}</span>
+              <span className="barber-profil__info-value">
+                {barberData?.birthday
+                  ? new Date(barberData.birthday).toLocaleDateString("fr-FR")
+                  : "Non renseignée"}
+              </span>
             </div>
           </div>
 

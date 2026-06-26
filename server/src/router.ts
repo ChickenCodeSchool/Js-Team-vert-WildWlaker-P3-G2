@@ -19,10 +19,15 @@ router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get("/api/appointments/barber/:id", appointmentActions.readByBarber);
 router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
 router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
+
+// --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);
+router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
 router.post("/api/barbers/:id/avatar", upload.single("avatar"), uploadAvatar);
+// --------------------------
+
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
