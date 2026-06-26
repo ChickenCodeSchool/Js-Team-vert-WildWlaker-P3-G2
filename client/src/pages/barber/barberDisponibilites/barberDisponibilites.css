@@ -249,3 +249,53 @@
 .barber-dispo__save-btn--saved {
   background-color: #2ecc71;
 }
+
+/* Responsive */
+@media (min-width: 480px) {
+  .barber-dispo {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .barber-dispo {
+    max-width: 720px;
+    margin-inline: auto;
+    padding: 4rem 2rem 2rem;
+  }
+
+  .barber-dispo__section,
+  .barber-dispo__conseil,
+  .barber-dispo__save-btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .barber-dispo {
+    max-width: 900px;
+    padding: 5rem 2rem 3rem;
+  }
+
+  .barber-dispo__section {
+    padding: 2rem;
+  }
+
+  .barber-dispo__row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .barber-dispo__row-header {
+    width: 220px;
+    flex-shrink: 0;
+  }
+
+  .barber-dispo__slots {
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-left: 0;
+  }
+}
