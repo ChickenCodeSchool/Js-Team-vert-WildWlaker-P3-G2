@@ -1,0 +1,156 @@
+.event-detail-card-main {
+  background: white;
+  border-radius: 8px;
+  padding: 20px 10px 20px 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #eef0f2;
+}
+
+.event-detail-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.event-detail-card-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.event-detail-card-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+}
+
+.event-detail-card-preview {
+  margin-bottom: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 200px;
+}
+
+.event-detail-card-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.event-detail-card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.event-detail-section {
+  margin-bottom: 16px;
+}
+
+.event-detail-section-title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 4px;
+}
+
+.event-detail-info-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.event-detail-info-item {
+  margin-bottom: 8px;
+}
+
+.event-detail-info-label {
+  display: block;
+  font-size: 0.75rem;
+  color: #999;
+  margin-bottom: 4px;
+}
+
+.event-detail-info-item p {
+  margin: 0;
+  font-weight: 500;
+  color: #333;
+}
+
+.event-detail-card-actions {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.btn-primary,
+.btn-success,
+.btn-danger {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #007bff;
+  color: white;
+}
+.btn-success {
+  background: #28a745;
+  color: white;
+}
+.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.event-detail-card-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  text-align: center;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  background: #eee;
+}
+
+.status-confirmé {
+  background: #d4edda;
+  color: #155724;
+}
+.status-en-cours {
+  background: #fff3cd;
+  color: #856404;
+}
+.status-terminé {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+.status-annulé {
+  background: #f8d7da;
+  color: #721c24;
+}
