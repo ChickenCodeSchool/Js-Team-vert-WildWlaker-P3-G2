@@ -34,7 +34,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 // On récupère et décode proprement le "user" de Giogi tout en haut
 const userString = localStorage.getItem("user");
 const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser && loggedUser.id ? Number(loggedUser.id) : 4;
+const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
 
 function BarberProfil() {
   const [activeTab, setActiveTab] = useState("informations");
