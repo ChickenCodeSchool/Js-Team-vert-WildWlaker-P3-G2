@@ -20,8 +20,7 @@ type Barber = {
 };
 
 class BarberRepository {
-  // The C of CRUD - Create operation
-
+  // The R of CRUD - Read All operation
   async readAll(filters?: { startDate?: string; endDate?: string }) {
     let query = `
     SELECT 
@@ -45,13 +44,32 @@ class BarberRepository {
       );
     }
     const [rows] = await databaseClient.query<Rows>(query, queryParams);
-    // Return the array of Barbers
     return rows as Barber[];
   }
 
-  // The U of CRUD - Update operation
-  // TODO: Implement the update operation to modify an existing Barber
+  // The R of CRUD - Read One operation (C'est celle-ci qu'on ajoute !)
+  async read(id: number) {
+    const query = `
+    SELECT 
+      b.*,
+      u.avatar_url AS avatar_url, 
+      u.create_time AS create_time,
+      u.email AS email,
+      u.phone AS phone,
+      u.birthday AS birthday,
+      u.genre AS genre, 
+      u.annotations AS annotations 
+    FROM barber b
+    JOIN users u ON b.id_user = u.id_user
+    WHERE b.id_user = ?
+  `;
 
+    const [rows] = await databaseClient.query<Rows>(query, [id]);
+    // On retourne le premier élément du tableau (le barbier trouvé) ou null s'il n'existe pas
+    return rows[0] as Barber | undefined;
+  }
+
+  // The U of CRUD - Update operation
   async update(barber: Barber) {
     const barberQuery = `
     UPDATE barber 
@@ -84,13 +102,6 @@ class BarberRepository {
 
     return true;
   }
-
-  // The D of CRUD - Delete operation
-  // TODO: Implement the delete operation to remove an Barber by its ID
-
-  // async delete(id: number) {
-  //   ...
-  // }
 }
 
 export default new BarberRepository();
