@@ -41,7 +41,11 @@ function ProfileInfo({ customer }: Props) {
         </div>
         <div className="profile-info__item">
           <FiCalendar className="profile-info__icon" />
-          <span className="profile-info__label">{customer.create_time}</span>
+          <span className="profile-info__label">
+            {format(new Date(customer.create_time), "dd MMMM yyyy", {
+              locale: fr,
+            })}
+          </span>
         </div>
 
         <div className="profile-info__item">

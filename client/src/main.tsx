@@ -7,6 +7,7 @@ import { Navigate, RouterProvider, createBrowserRouter } from "react-router";
 
 // Import the main app component
 import App from "./App";
+import { AuthProvider } from "./context/AuthContext";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
@@ -34,7 +35,6 @@ import Home from "./pages/customer/home/Home";
 import UserProfile from "./pages/customer/profile/UserProfile";
 import Reservations from "./pages/customer/reservations/Reservations";
 import SearchPage from "./pages/customer/search/SearchPage";
-
 // Import additional components for new routes
 // Try creating these components in the "pages" folder
 // import About from "./pages/About";
@@ -109,7 +109,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );
 

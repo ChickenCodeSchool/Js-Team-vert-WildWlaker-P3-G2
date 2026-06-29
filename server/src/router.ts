@@ -5,7 +5,15 @@ const router = express.Router();
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
-import { upload, uploadAvatar } from "./modules/barber/barberAvatarActions";
+import {
+  upload as barberUpload,
+  uploadAvatar,
+} from "./modules/barber/barberAvatarActions";
+import {
+  upload as customerUpload,
+  uploadCustomerAvatar,
+} from "./modules/customer/customerAvatarActions";
+
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
@@ -22,7 +30,16 @@ router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
-router.post("/api/barbers/:id/avatar", upload.single("avatar"), uploadAvatar);
+router.post(
+  "/api/barbers/:id/avatar",
+  barberUpload.single("avatar"),
+  uploadAvatar,
+);
+router.post(
+  "/api/users/:id/avatar",
+  customerUpload.single("avatar"),
+  uploadCustomerAvatar,
+);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);

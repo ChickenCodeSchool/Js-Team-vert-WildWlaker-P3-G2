@@ -1,13 +1,14 @@
 .profile-info {
   display: flex;
   flex-direction: column;
+  max-width: 850px;
+  width: 100%;
 }
 .profile-info__card {
   background: var(--white);
-  border-radius: var(--radius-sm);
-  padding: 1rem;
-  box-shadow: var(--shadow-md);
-  margin-bottom: 1rem;
+  border-radius: 20px;
+  padding: 1.8rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 .profile-info__item {
   display: flex;
@@ -28,4 +29,18 @@
   font-size: 1rem;
   color: var(--gray-500);
   font-family: var(--font-body);
+}
+
+@media (min-width: 1024px) {
+  .profile-info__item {
+    padding: 1.2rem 0;
+  }
+
+  .profile-info__icon {
+    font-size: 1.7rem;
+  }
+
+  .profile-info__label {
+    font-size: 1.05rem;
+  }
 }

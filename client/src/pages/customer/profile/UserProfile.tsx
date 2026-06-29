@@ -5,6 +5,7 @@ import EditProfileModal from "../../../components/customer/Profile/EditProfileMo
 import ProfileActions from "../../../components/customer/Profile/ProfileActions";
 import ProfileHeader from "../../../components/customer/Profile/ProfileHeader";
 import ProfileInfo from "../../../components/customer/Profile/ProfileInfo";
+import "./UserProfile.css";
 import type { Customer } from "./../../../types/Customer";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -47,7 +48,7 @@ function UserProfile() {
         console.error(err);
         navigate("/login");
       });
-  });
+  }, [userId, navigate]);
 
   const loadData = async () => {
     if (!userId) return;
@@ -57,6 +58,7 @@ function UserProfile() {
 
     setCustomer(data);
   };
+
   const handleDeleteAccount = async () => {
     try {
       const res = await fetch(`${API_URL}/api/users/${customer?.id_user}`, {
@@ -75,7 +77,11 @@ function UserProfile() {
 
   return (
     <main className="profile-page">
-      <ProfileHeader customer={customer} onEdit={() => setIsEditing(true)} />
+      <ProfileHeader
+        customer={customer}
+        onEdit={() => setIsEditing(true)}
+        onAvatarUpdated={loadData}
+      />
       <ProfileInfo customer={customer} />
       <ProfileActions onDeleteConfirm={handleDeleteAccount} />
 

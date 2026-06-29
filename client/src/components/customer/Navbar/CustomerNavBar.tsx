@@ -1,10 +1,11 @@
 import "./CustomerNavbar.css";
 import { FiCalendar, FiHome, FiPlus, FiSearch, FiUser } from "react-icons/fi";
 import { NavLink } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 
 function CustomerNavBar() {
-  const user = JSON.parse(localStorage.getItem("user") || "null");
-  console.log("USER STORAGE", user);
+  const { user } = useAuth();
+
   return (
     <nav className="navbar">
       <div className="navbar__container">

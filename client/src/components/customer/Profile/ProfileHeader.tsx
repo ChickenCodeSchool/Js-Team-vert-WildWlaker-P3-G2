@@ -1,13 +1,42 @@
 import { FiChevronLeft, FiEdit2 } from "react-icons/fi";
 import type { Customer } from "./../../../types/Customer";
 import "./ProfileHeader.css";
+import { useRef } from "react";
+import { LuUpload } from "react-icons/lu";
 
 type Props = {
   customer: Customer;
   onEdit: () => void;
+  onAvatarUpdated: () => void;
 };
 
-function ProfileHeader({ customer, onEdit }: Props) {
+const API_URL = import.meta.env.VITE_API_URL;
+
+function ProfileHeader({ customer, onEdit, onAvatarUpdated }: Props) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const handleChoosePhoto = () => {
+    inputRef.current?.click();
+  };
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("avatar", file);
+    const res = await fetch(`${API_URL}/api/users/${customer.id_user}/avatar`, {
+      method: "POST",
+      body: formData,
+    });
+
+    console.log("STATUS", res.status);
+
+    const data = await res.json();
+    console.log("DATA", data);
+
+    if (res.ok) {
+      onAvatarUpdated();
+    }
+  };
+
   return (
     <section className="profile-header">
       <button
@@ -25,10 +54,30 @@ function ProfileHeader({ customer, onEdit }: Props) {
         <FiEdit2 />
       </button>
       <h1 className="profile-header__title">Profil d'utilisateur</h1>
-      <img
-        src={customer.avatar_url}
-        alt={`Avatar de ${customer.email}`}
-        className="profile-header__avatar"
+
+      <div className="profile-page__avatar-wrapper">
+        <img
+          src={`${API_URL}${customer.avatar_url}`}
+          alt={`Avatar de ${customer.email}`}
+          className="profile-header__avatar"
+        />
+        <button
+          type="button"
+          className="profile-page__photo"
+          onClick={handleChoosePhoto}
+          aria-label="Changer la photo de profil"
+        >
+          <LuUpload className="profile-page__icon" />
+          Modifier la photo
+        </button>
+      </div>
+
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFile}
+        hidden
+        ref={inputRef}
       />
 
       <h1 className="profile-header__title">
