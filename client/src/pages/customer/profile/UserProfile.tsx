@@ -8,13 +8,12 @@ import ProfileInfo from "../../../components/customer/Profile/ProfileInfo";
 import type { Customer } from "./../../../types/Customer";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const location = useLocation();
-const params = useParams();
-
-console.log("LOCATION =", location.pathname);
-console.log("PARAMS =", params);
 
 function UserProfile() {
+  const location = useLocation();
+  const params = useParams();
+  console.log("LOCATION =", location.pathname);
+  console.log("PARAMS =", params);
   const [customer, setCustomer] = useState<Customer | null>(null);
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
