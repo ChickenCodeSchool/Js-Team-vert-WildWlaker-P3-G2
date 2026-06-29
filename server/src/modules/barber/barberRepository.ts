@@ -23,17 +23,24 @@ class BarberRepository {
   // The R of CRUD - Read All operation
   async readAll(filters?: { startDate?: string; endDate?: string }) {
     let query = `
-    SELECT 
+    SELECT
       b.*,
-      u.avatar_url AS avatar_url, 
+      u.avatar_url AS avatar_url,
       u.create_time AS create_time,
       u.email AS email,
       u.phone AS phone,
       u.birthday AS birthday,
-      u.genre AS genre, 
-      u.annotations AS annotations 
+      u.genre AS genre,
+      u.annotations AS annotations,
+      ROUND(AVG(r.rating), 1) AS avg_rating,
+      COUNT(r.id_review) AS review_count,
+      MIN(p.price) AS min_price
     FROM barber b
     JOIN users u ON b.id_user = u.id_user
+    LEFT JOIN appointment a ON a.id_user_barber = b.id_user
+    LEFT JOIN review r ON r.id_appointment = a.id_appointment
+    LEFT JOIN propose pr ON pr.id_user = b.id_user
+    LEFT JOIN prestation p ON p.id_prestation = pr.id_prestation
   `;
     const queryParams: string[] = [];
     if (filters?.startDate && filters?.endDate) {
@@ -43,6 +50,7 @@ class BarberRepository {
         `${filters.endDate} 23:59:59`,
       );
     }
+    query += " GROUP BY b.id_user";
     const [rows] = await databaseClient.query<Rows>(query, queryParams);
     return rows as Barber[];
   }
