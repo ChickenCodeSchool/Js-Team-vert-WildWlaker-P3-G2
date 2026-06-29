@@ -2,12 +2,31 @@ import "./Carrousel.css";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import type { Barber } from "../../types/barber";
 
-function Carrousel({ barbers }: { barbers: Barber[] }) {
+type CarrouselProps = {
+  barbers: Barber[];
+  selectedBarber?: Barber;
+  onSelectBarber?: (barber: Barber) => void;
+};
+
+function Carrousel({
+  barbers,
+  selectedBarber,
+  onSelectBarber,
+}: CarrouselProps) {
   return (
     <section className="carrousel">
       <div className="carrousel__list">
-        {barbers.slice(0, 4).map((barber) => (
-          <article className="carrousel__card" key={barber.id_user}>
+        {barbers.slice(3, 14).map((barber) => (
+          <button
+            type="button"
+            key={barber.id_user}
+            className={`carrousel__card ${
+              selectedBarber?.id_user === barber.id_user
+                ? "carrousel__card--selected"
+                : ""
+            }`}
+            onClick={() => onSelectBarber?.(barber)}
+          >
             <div className="carrousel__image-wrapper">
               <img
                 className="carrousel__image"
@@ -24,7 +43,7 @@ function Carrousel({ barbers }: { barbers: Barber[] }) {
                 {barber.city}
               </p>
             </div>
-          </article>
+          </button>
         ))}
       </div>
     </section>
