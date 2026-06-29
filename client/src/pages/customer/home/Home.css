@@ -44,3 +44,46 @@
 .element_import {
   margin: 1rem;
 }
+
+@media (min-width: 800px) {
+  .home {
+    align-items: center;
+  }
+
+  .home__title,
+  .element_import,
+  .home_search,
+  .Carrousel_control {
+    width: 70%;
+  }
+
+  .home__banner {
+    width: 40%;
+    margin-inline: auto;
+  }
+
+  .Carrousel_control {
+    display: flex;
+    justify-content: center;
+  }
+
+  .Carrousel_control .carrousel__list {
+    justify-content: center;
+    overflow-x: visible;
+    gap: 1.5rem;
+  }
+
+  .Carrousel_control .carrousel__card {
+    flex: 0 0 220px;
+  }
+
+  .Carrousel_control .carrousel__image-wrapper {
+    height: 180px;
+  }
+
+  .home__banner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 2rem auto;
+  }
+}

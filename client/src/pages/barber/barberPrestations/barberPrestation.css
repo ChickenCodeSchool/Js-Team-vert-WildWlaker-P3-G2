@@ -155,3 +155,10 @@
 .barber-prestation__submit-btn:hover {
   opacity: 0.9;
 }
+
+@media (min-width: 700px) {
+  .barber-prestation {
+    margin: 10rem;
+    background-color: var(--gray-50);
+  }
+}

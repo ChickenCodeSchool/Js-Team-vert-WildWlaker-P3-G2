@@ -82,3 +82,10 @@
   object-fit: contain;
   color: var(--error);
 }
+
+.carrousel__image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 135px;
+  background: var(--gray-100);
+}
