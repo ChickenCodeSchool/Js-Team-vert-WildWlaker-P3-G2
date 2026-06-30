@@ -29,6 +29,8 @@
   text-align: center;
 }
 .search__bar {
+  display: flex;
+  justify-content: center;
   margin-bottom: 24px;
 }
 
@@ -87,4 +89,48 @@
   height: 28px;
   color: var(--gold-dark);
   border: none;
+}
+.search__results {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.barber-card {
+  overflow: hidden;
+}
+
+.barber-card__image {
+  transition: 0.35s;
+}
+
+.barber-card:hover .barber-card__image {
+  transform: scale(1.06);
+}
+
+@media (min-width: 1024px) {
+  .search {
+    max-width: 1024px;
+    margin: auto;
+    padding: 3rem, 2rem, 6rem;
+  }
+  .search-header {
+    margin-bottom: 2.5rem;
+  }
+  .search-page__title {
+    font-size: 2rem;
+  }
+  .search__bar {
+    max-width: 650px;
+    margin: 0 auto 2rem;
+  }
+  .search-near__toggle {
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .search__results {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
 }

@@ -50,7 +50,6 @@ function CustomerNavBar() {
             >
               Coiffeurs
             </NavLink>
-            <span className="navbar-desktop__link">Services</span>
             <NavLink
               to={user ? `/reservations/${user.id}` : "/login"}
               className={({ isActive }) =>
@@ -68,7 +67,14 @@ function CustomerNavBar() {
               Réserver
             </Link>
             {userInitials ? (
-              <div className="navbar-desktop__avatar">{userInitials}</div>
+              <Link
+                to={`/profile/${user.id}`}
+                className="navbar-desktop__avatar"
+              >
+                <div className="navbar-desktop__avatar">
+                  {userInitials}
+                </div>{" "}
+              </Link>
             ) : (
               <Link to="/login" className="navbar-desktop__login">
                 Connexion
