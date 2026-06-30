@@ -61,7 +61,6 @@
   .profile-info__item:nth-last-child(-n + 2) {
     border-bottom: 0;
   }
-
 }
 
 @media (min-width: 1024px) {
