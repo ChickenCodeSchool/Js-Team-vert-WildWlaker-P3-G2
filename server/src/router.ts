@@ -33,7 +33,6 @@ router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
-<<<<<<< HEAD
 router.post(
   "/api/barbers/:id/avatar",
   barberUpload.single("avatar"),
@@ -44,11 +43,6 @@ router.post(
   customerUpload.single("avatar"),
   uploadCustomerAvatar,
 );
-=======
-router.post("/api/barbers/:id/avatar", upload.single("avatar"), uploadAvatar);
-// --------------------------
-
->>>>>>> dev
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
