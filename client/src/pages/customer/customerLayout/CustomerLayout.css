@@ -1,9 +1,5 @@
-.customerLayout-main {
-  min-height: 100vh;
-}
-
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .customerLayout-main {
-    padding-top: 5.25rem;
+    padding-top: 4rem;
   }
 }

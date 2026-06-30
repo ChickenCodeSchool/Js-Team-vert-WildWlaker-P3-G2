@@ -14,4 +14,7 @@ export type Barber = {
   birthday: string;
   genre: string;
   annotations?: string;
+  avg_rating?: number | null;
+  review_count?: number;
+  min_price?: number | null;
 };

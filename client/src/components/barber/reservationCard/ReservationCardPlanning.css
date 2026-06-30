@@ -1,16 +1,18 @@
 .planning-reservation-card {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  gap: 16px;
-  padding: 14px 18px;
-  margin-bottom: 12px;
-  border-radius: 14px;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 760px;
+  padding: 18px 24px;
+  margin-bottom: 16px;
+  border-radius: 18px;
   background: var(--gray-50);
   position: relative;
   border: none;
+  cursor: pointer;
+  transition: var(--transition);
 }
-
 .planning-reservation-card::before {
   content: "";
   position: absolute;

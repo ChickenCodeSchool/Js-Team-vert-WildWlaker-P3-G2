@@ -20,10 +20,44 @@ type Barber = {
 };
 
 class BarberRepository {
-  // The C of CRUD - Create operation
-
+  // The R of CRUD - Read All operation
   async readAll(filters?: { startDate?: string; endDate?: string }) {
     let query = `
+    SELECT
+      b.*,
+      u.avatar_url AS avatar_url,
+      u.create_time AS create_time,
+      u.email AS email,
+      u.phone AS phone,
+      u.birthday AS birthday,
+      u.genre AS genre,
+      u.annotations AS annotations,
+      ROUND(AVG(r.rating), 1) AS avg_rating,
+      COUNT(r.id_review) AS review_count,
+      MIN(p.price) AS min_price
+    FROM barber b
+    JOIN users u ON b.id_user = u.id_user
+    LEFT JOIN appointment a ON a.id_user_barber = b.id_user
+    LEFT JOIN review r ON r.id_appointment = a.id_appointment
+    LEFT JOIN propose pr ON pr.id_user = b.id_user
+    LEFT JOIN prestation p ON p.id_prestation = pr.id_prestation
+  `;
+    const queryParams: string[] = [];
+    if (filters?.startDate && filters?.endDate) {
+      query += " WHERE u.create_time BETWEEN ? AND ?";
+      queryParams.push(
+        `${filters.startDate} 00:00:00`,
+        `${filters.endDate} 23:59:59`,
+      );
+    }
+    query += " GROUP BY b.id_user";
+    const [rows] = await databaseClient.query<Rows>(query, queryParams);
+    return rows as Barber[];
+  }
+
+  // The R of CRUD - Read One operation (C'est celle-ci qu'on ajoute !)
+  async read(id: number) {
+    const query = `
     SELECT 
       b.*,
       u.avatar_url AS avatar_url, 
@@ -35,23 +69,15 @@ class BarberRepository {
       u.annotations AS annotations 
     FROM barber b
     JOIN users u ON b.id_user = u.id_user
+    WHERE b.id_user = ?
   `;
-    const queryParams: string[] = [];
-    if (filters?.startDate && filters?.endDate) {
-      query += " WHERE u.create_time BETWEEN ? AND ?";
-      queryParams.push(
-        `${filters.startDate} 00:00:00`,
-        `${filters.endDate} 23:59:59`,
-      );
-    }
-    const [rows] = await databaseClient.query<Rows>(query, queryParams);
-    // Return the array of Barbers
-    return rows as Barber[];
+
+    const [rows] = await databaseClient.query<Rows>(query, [id]);
+    // On retourne le premier élément du tableau (le barbier trouvé) ou null s'il n'existe pas
+    return rows[0] as Barber | undefined;
   }
 
   // The U of CRUD - Update operation
-  // TODO: Implement the update operation to modify an existing Barber
-
   async update(barber: Barber) {
     const barberQuery = `
     UPDATE barber 
@@ -84,13 +110,6 @@ class BarberRepository {
 
     return true;
   }
-
-  // The D of CRUD - Delete operation
-  // TODO: Implement the delete operation to remove an Barber by its ID
-
-  // async delete(id: number) {
-  //   ...
-  // }
 }
 
 export default new BarberRepository();

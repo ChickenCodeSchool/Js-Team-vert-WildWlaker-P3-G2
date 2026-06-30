@@ -66,3 +66,17 @@
   display: flex;
   border-radius: 50%;
 }
+
+.NavBarHair-main {
+  transform: translateX(-100%);
+}
+
+.NavBarHair-main.open {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .NavBarHair-main {
+    width: 280px;
+  }
+}

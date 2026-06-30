@@ -12,6 +12,20 @@ type EventBannerProps = {
   image: string;
 };
 
+function formatDate(raw: string): string {
+  const d = new Date(raw);
+  const date = d.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  const time = d.toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return `${date} · ${time}`;
+}
+
 function EventBanner(props: EventBannerProps) {
   return (
     <section className="event_banner">
@@ -19,29 +33,29 @@ function EventBanner(props: EventBannerProps) {
 
       <div className="event-banner_control">
         <div className="event_content">
-          <span className="event_label">{props.label}</span>
-
           <h2 className="event_title">
             {props.title}
-            <span> {props.subtitle}</span>
+            {props.subtitle && <span> {props.subtitle}</span>}
           </h2>
+
           <p className="event_description">{props.description}</p>
+
           <div className="event-banner__infos">
             <p>
-              {" "}
-              <FaRegCalendarAlt /> {props.date}
+              <FaRegCalendarAlt /> {formatDate(props.date)}
             </p>
             <p>
-              {" "}
               <FaMapLocation /> {props.location}
             </p>
           </div>
+
           <button type="button" className="event-banner__button">
-            Voir l'événement
+            J'y participe →
           </button>
         </div>
       </div>
     </section>
   );
 }
+
 export default EventBanner;
