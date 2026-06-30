@@ -9,13 +9,12 @@ import {
   upload as barberUpload,
   uploadAvatar,
 } from "./modules/barber/barberAvatarActions";
+import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
+import customerActions from "./modules/customer/customerActions";
 import {
   upload as customerUpload,
   uploadCustomerAvatar,
 } from "./modules/customer/customerAvatarActions";
-
-import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
-import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";

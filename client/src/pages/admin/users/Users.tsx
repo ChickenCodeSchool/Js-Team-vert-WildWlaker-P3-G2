@@ -12,7 +12,6 @@ import UserDataGrid, {
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
-
 import type { Appointment } from "../../../types/appointment";
 import type { Customer } from "../../../types/Customer";
 import type { Review } from "../../../types/review";
