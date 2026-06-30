@@ -1,13 +1,13 @@
-import "./CustomerNavbar.css";
 import { FiCalendar, FiHome, FiPlus, FiSearch, FiUser } from "react-icons/fi";
 import { NavLink } from "react-router";
 import { useAuth } from "../../../context/AuthContext";
+import "./CustomerNavbar.css";
 
 function CustomerNavBar() {
   const { user } = useAuth();
 
   return (
-    <nav className="navbar">
+    <nav className="navbar" aria-label="Navigation client">
       <div className="navbar__container">
         <NavLink
           to="/"
@@ -38,7 +38,6 @@ function CustomerNavBar() {
           <div className="navbar__center-button">
             <FiPlus />
           </div>
-
           <span className="navbar__center-label">Réserver</span>
         </NavLink>
 
@@ -49,7 +48,7 @@ function CustomerNavBar() {
           }
         >
           <FiCalendar className="navbar__icon" />
-          <span>Reservations</span>
+          <span>Réservations</span>
         </NavLink>
 
         <NavLink

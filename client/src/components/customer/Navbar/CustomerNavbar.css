@@ -1,85 +1,157 @@
 .navbar {
   position: fixed;
-  overflow: visible;
+  right: 0;
   bottom: 0;
   left: 0;
-
-  width: 100%;
-  display: flex;
-
-  background: var(--white);
-  box-shadow: var(--shadow-md);
-
+  z-index: 20;
+  border-top: 1px solid var(--gray-100);
   border-top-left-radius: var(--radius-lg);
   border-top-right-radius: var(--radius-lg);
-
-  border-top: 1px solid var(--gray-300);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -4px 18px rgba(15, 15, 17, 0.1);
 }
 
 .navbar__container {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: end;
   width: 100%;
-  padding-bottom: 10px;
-  padding-top: 2px;
+  max-width: 38rem;
+  margin: 0 auto;
+  padding: 0.35rem 0.45rem 0.6rem;
 }
 
-.navbar__item {
+.navbar__item,
+.navbar__center {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  text-decoration: none;
-
+  justify-content: flex-end;
+  gap: 0.25rem;
+  min-width: 0;
+  min-height: 3.6rem;
+  border-radius: var(--radius-md);
   color: var(--gray-600);
-
-  font-size: 12px;
-
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-decoration: none;
   transition: var(--transition);
+}
+
+.navbar__item span,
+.navbar__center-label {
+  max-width: 100%;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.navbar__icon {
+  width: 1.55rem;
+  height: 1.55rem;
+  flex-shrink: 0;
+}
+
+.navbar__center-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin-top: -1.15rem;
+  border-radius: 50%;
+  background: var(--gold-dark);
+  color: var(--white);
+  box-shadow: var(--shadow-md);
+  font-size: 1.35rem;
 }
 
 .navbar__item--active {
   color: var(--gold-dark);
 }
 
-.navbar__item span {
-  font-family: var(--font-body);
-  color: var(--black);
+.navbar__item--active .navbar__center-button {
+  background: var(--black);
 }
 
-.navbar__icon {
-  font-size: 30px;
+.navbar__item:hover,
+.navbar__center:hover {
+  color: var(--gold-dark);
 }
 
-.navbar__center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  text-decoration: none;
-}
+@media (min-width: 1024px) {
+  .navbar {
+    top: 1rem;
+    bottom: auto;
+    width: min(calc(100% - 3rem), 980px);
+    margin: 0 auto;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(12px);
+  }
 
-.navbar__center-label {
-  font-size: 12px;
-  color: var(--black);
-  font-family: var(--font-body);
-}
+  .navbar__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    max-width: none;
+    padding: 0.55rem;
+  }
 
-.navbar__center-button {
-  width: 50px;
-  height: 50px;
+  .navbar__item,
+  .navbar__center {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.55rem;
+    min-height: 2.75rem;
+    padding: 0 1rem;
+    font-size: 0.94rem;
+  }
 
-  border-radius: 50%;
+  .navbar__icon {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
 
-  border: none;
+  .navbar__center {
+    order: 5;
+    margin-left: auto;
+    padding: 0 1.15rem;
+    background: var(--gold-dark);
+    color: var(--white);
+  }
 
-  background: var(--gold-dark);
-  color: var(--white);
+  .navbar__center-button {
+    width: auto;
+    height: auto;
+    margin-top: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: 1.1rem;
+  }
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  .navbar__item--active:not(.navbar__center) {
+    background: var(--gold-soft);
+    color: var(--gold-dark);
+  }
 
-  box-shadow: var(--shadow-md);
+  .navbar__center.navbar__item--active {
+    background: var(--black);
+    color: var(--white);
+  }
+
+  .navbar__item:hover {
+    background: var(--gray-50);
+  }
+
+  .navbar__center:hover {
+    background: var(--black);
+    color: var(--white);
+  }
 }

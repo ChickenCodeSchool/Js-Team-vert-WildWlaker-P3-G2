@@ -53,23 +53,31 @@ function ProfileHeader({ customer, onEdit, onAvatarUpdated }: Props) {
       >
         <FiEdit2 />
       </button>
-      <h1 className="profile-header__title">Profil d'utilisateur</h1>
+      <div className="profile-header__content">
+        <div className="profile-page__avatar-wrapper">
+          <img
+            src={`${API_URL}${customer.avatar_url}`}
+            alt={`Avatar de ${customer.email}`}
+            className="profile-header__avatar"
+          />
+          <button
+            type="button"
+            className="profile-page__photo"
+            onClick={handleChoosePhoto}
+            aria-label="Changer la photo de profil"
+          >
+            <LuUpload className="profile-page__icon" />
+            Modifier la photo
+          </button>
+        </div>
 
-      <div className="profile-page__avatar-wrapper">
-        <img
-          src={`${API_URL}${customer.avatar_url}`}
-          alt={`Avatar de ${customer.email}`}
-          className="profile-header__avatar"
-        />
-        <button
-          type="button"
-          className="profile-page__photo"
-          onClick={handleChoosePhoto}
-          aria-label="Changer la photo de profil"
-        >
-          <LuUpload className="profile-page__icon" />
-          Modifier la photo
-        </button>
+        <div className="profile-header__identity">
+          <p className="profile-header__eyebrow">Profil utilisateur</p>
+          <h1 className="profile-header__name">
+            {customer.firstname} {customer.lastname}
+          </h1>
+          <p className="profile-header__email">{customer.email}</p>
+        </div>
       </div>
 
       <input
@@ -79,10 +87,6 @@ function ProfileHeader({ customer, onEdit, onAvatarUpdated }: Props) {
         hidden
         ref={inputRef}
       />
-
-      <h1 className="profile-header__title">
-        {customer.firstname} {customer.lastname}
-      </h1>
     </section>
   );
 }
