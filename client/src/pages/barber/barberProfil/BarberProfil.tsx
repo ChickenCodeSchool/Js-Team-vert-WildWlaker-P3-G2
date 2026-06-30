@@ -1,10 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
-import { FiCalendar, FiImage, FiLogOut, FiMail, FiMapPin, FiPhone, FiPlus, FiTrash2 } from "react-icons/fi";
-import { LuUpload } from "react-icons/lu";
-import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { useEffect, useRef, useState } from "react";
+import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
+import {
+  FiCalendar,
+  FiImage,
+  FiLogOut,
+  FiMail,
+  FiMapPin,
+  FiPhone,
+  FiPlus,
+  FiTrash2,
+} from "react-icons/fi";
+import { LuUpload } from "react-icons/lu";
+import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
 import AfroImg from "../../../assets/images/Afro.jpg";
 import type { Barber } from "../../../types/barber";
@@ -179,9 +188,13 @@ function BarberProfil() {
                     <FiCalendar className="profile-header__member-icon" />
                     <span>
                       Membre depuis{" "}
-                      {format(new Date(barberData.create_time), "dd MMMM yyyy", {
-                        locale: fr,
-                      })}
+                      {format(
+                        new Date(barberData.create_time),
+                        "dd MMMM yyyy",
+                        {
+                          locale: fr,
+                        },
+                      )}
                     </span>
                   </p>
                 )}
