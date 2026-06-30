@@ -116,12 +116,12 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
 
         <div className="booking-form__dates">
           {dates.map((date) => {
-            const dateStr = date.toISOString().split("T")[0]; // "2025-06-04"
+            const dateStr = date.toISOString().split("T")[0];
             const dayNum = date.getDate();
-            const month = date.toLocaleDateString("fr-FR", { month: "short" }); // "juin"
+            const month = date.toLocaleDateString("fr-FR", { month: "short" });
             const weekday = date.toLocaleDateString("fr-FR", {
               weekday: "short",
-            }); // "mer."
+            });
 
             return (
               <button
