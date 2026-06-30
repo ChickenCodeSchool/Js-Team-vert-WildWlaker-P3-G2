@@ -130,6 +130,31 @@
   overflow-wrap: anywhere;
 }
 
+.profile-header__member-since {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  max-width: 100%;
+  margin-top: 0.9rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid rgba(168, 124, 53, 0.24);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--gray-700);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.profile-header__member-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--gold-dark);
+}
+
 @media (min-width: 768px) {
   .profile-header__content {
     flex-direction: row;
@@ -145,6 +170,10 @@
 
   .profile-header__identity {
     padding-right: 3rem;
+  }
+
+  .profile-header__member-since {
+    justify-content: flex-start;
   }
 }
 

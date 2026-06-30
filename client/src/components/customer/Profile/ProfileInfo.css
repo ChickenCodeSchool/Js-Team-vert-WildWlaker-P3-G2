@@ -62,10 +62,6 @@
     border-bottom: 0;
   }
 
-  .profile-info__item:nth-child(5) {
-    grid-column: 1 / -1;
-    border-right: 0;
-  }
 }
 
 @media (min-width: 1024px) {

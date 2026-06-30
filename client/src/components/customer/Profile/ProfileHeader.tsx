@@ -1,4 +1,6 @@
-import { FiChevronLeft, FiEdit2 } from "react-icons/fi";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import { FiCalendar, FiChevronLeft, FiEdit2 } from "react-icons/fi";
 import type { Customer } from "./../../../types/Customer";
 import "./ProfileHeader.css";
 import { useRef } from "react";
@@ -77,6 +79,15 @@ function ProfileHeader({ customer, onEdit, onAvatarUpdated }: Props) {
             {customer.firstname} {customer.lastname}
           </h1>
           <p className="profile-header__email">{customer.email}</p>
+          <p className="profile-header__member-since">
+            <FiCalendar className="profile-header__member-icon" />
+            <span>
+              Membre depuis{" "}
+              {format(new Date(customer.create_time), "dd MMMM yyyy", {
+                locale: fr,
+              })}
+            </span>
+          </p>
         </div>
       </div>
 

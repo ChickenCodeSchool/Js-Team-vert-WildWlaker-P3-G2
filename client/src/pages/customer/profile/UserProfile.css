@@ -8,6 +8,7 @@
   margin: 0 auto;
   padding: 1.25rem 1rem 5rem;
   background: var(--gray-50);
+  border-radius: var(--radius-md);
 }
 
 @media (min-width: 768px) {

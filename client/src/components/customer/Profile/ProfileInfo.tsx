@@ -1,5 +1,5 @@
 import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
-import { FiCalendar, FiMail, FiMapPin, FiPhone } from "react-icons/fi";
+import { FiMail, FiMapPin, FiPhone } from "react-icons/fi";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import type { Customer } from "../../../types/Customer";
 import "./ProfileInfo.css";
@@ -38,14 +38,6 @@ function ProfileInfo({ customer }: Props) {
         <div className="profile-info__item">
           <FaHouseUser className="profile-info__icon" />
           <span className="profile-info__label">{customer.adress}</span>
-        </div>
-        <div className="profile-info__item">
-          <FiCalendar className="profile-info__icon" />
-          <span className="profile-info__label">
-            {format(new Date(customer.create_time), "dd MMMM yyyy", {
-              locale: fr,
-            })}
-          </span>
         </div>
 
         <div className="profile-info__item">
