@@ -78,20 +78,15 @@
   width: 100%;
   height: 140px;
   background: var(--gray-100);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carrousel__image {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  overflow: hidden;
 }
 
 .carrousel__initials {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-title);
   font-size: 2rem;
   font-weight: 700;
@@ -100,6 +95,15 @@
   letter-spacing: 0.05em;
   pointer-events: none;
   z-index: 0;
+}
+
+.carrousel__image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── Contenu ── */
