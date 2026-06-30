@@ -20,10 +20,11 @@ function Carrousel({
           <button
             type="button"
             key={barber.id_user}
-            className={`carrousel__card ${selectedBarber?.id_user === barber.id_user
+            className={`carrousel__card ${
+              selectedBarber?.id_user === barber.id_user
                 ? "carrousel__card--selected"
                 : ""
-              }`}
+            }`}
             onClick={() => onSelectBarber?.(barber)}
           >
             <div className="carrousel__image-wrapper">
