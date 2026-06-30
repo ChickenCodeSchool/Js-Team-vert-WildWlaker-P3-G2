@@ -1,14 +1,13 @@
-import "./CustomerNavbar.css";
 import {
   FiCalendar,
   FiHome,
   FiPlus,
+  FiScissors,
   FiSearch,
   FiUser,
-  FiScissors,
 } from "react-icons/fi";
-// FiSearch gardé pour la navbar mobile
-import { NavLink, Link } from "react-router";
+import { Link, NavLink } from "react-router";
+import "./CustomerNavbar.css";
 
 function CustomerNavBar() {
   const user = JSON.parse(localStorage.getItem("user") || "null");

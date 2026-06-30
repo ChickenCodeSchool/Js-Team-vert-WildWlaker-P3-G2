@@ -1,5 +1,5 @@
-import { Link } from "react-router";
 import { FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import { Link } from "react-router";
 import type { Barber } from "../../types/barber";
 import "./Carrousel.css";
 

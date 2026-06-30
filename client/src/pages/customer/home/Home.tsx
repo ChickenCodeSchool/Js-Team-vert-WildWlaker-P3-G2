@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./Home.css";
-import { FiScissors, FiMapPin } from "react-icons/fi"; // FiScissors utilisé dans le logo mobile
+import { FiMapPin, FiScissors } from "react-icons/fi";
 import { Link } from "react-router";
 import Carrousel from "../../../components/carrousel/Carrousel";
 import ServicesSection from "../../../components/customer/Services/Services/ServicesSection";
