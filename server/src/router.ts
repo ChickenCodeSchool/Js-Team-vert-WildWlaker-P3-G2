@@ -5,9 +5,16 @@ const router = express.Router();
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
-import { upload, uploadAvatar } from "./modules/barber/barberAvatarActions";
+import {
+  upload as barberUpload,
+  uploadAvatar,
+} from "./modules/barber/barberAvatarActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
+import {
+  upload as customerUpload,
+  uploadCustomerAvatar,
+} from "./modules/customer/customerAvatarActions";
 import eventActions from "./modules/event/eventActions";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
@@ -25,9 +32,16 @@ router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
-router.post("/api/barbers/:id/avatar", upload.single("avatar"), uploadAvatar);
-// --------------------------
-
+router.post(
+  "/api/barbers/:id/avatar",
+  barberUpload.single("avatar"),
+  uploadAvatar,
+);
+router.post(
+  "/api/users/:id/avatar",
+  customerUpload.single("avatar"),
+  uploadCustomerAvatar,
+);
 router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
@@ -43,5 +57,6 @@ router.get("/api/users", userActions.browse);
 router.delete("/api/users/:id", userActions.deleteUser);
 router.post("/api/register", userActions.register);
 router.post("/api/login", userActions.login);
+router.post("/api/forgot-password", userActions.forgotPassword);
 
 export default router;
