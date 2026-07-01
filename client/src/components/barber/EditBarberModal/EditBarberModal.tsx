@@ -9,10 +9,6 @@ type Props = {
   onSave: () => void;
 };
 
-const formatDate = (val: string | null | undefined): string => {
-  if (!val) return "";
-  return String(val).substring(0, 10);
-};
 
 function EditBarberModal({ barber, onClose, onSave }: Props) {
   const [name, setName] = useState(barber.name);
