@@ -1,4 +1,4 @@
-import bcrypt from "bcryptjs";
+import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import customerRepository from "../customer/customerRepository";
 
@@ -37,8 +37,12 @@ const register: RequestHandler = async (req, res, next) => {
       phone,
     } = req.body;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    const hashedPassword = await argon2.hash(password);
+    if (!password) {
+      return res.status(400).json({
+        message: "Mot de passe requis",
+      });
+    }
     const result = await userRepository.create({
       email,
       password: hashedPassword,
@@ -70,10 +74,12 @@ const login: RequestHandler = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await userRepository.readByEmail(email);
 
-    if (!user) {
-      return res.status(401).json({ message: "Utilisateur introuvable" });
+    if (!user || !(await argon2.verify(user.password, password))) {
+      return res.status(401).json({
+        message: "Email ou mot de passe incorrect",
+      });
     }
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await argon2.verify(user.password, password);
 
     if (!isValidPassword) {
       return res.status(401).json({ message: "Mot de passe incorrect" });
@@ -117,7 +123,7 @@ const forgotPassword: RequestHandler = async (req, res, next) => {
       });
     }
     res.json({
-      message: "Un lien de réinitialisation vous a été envoyé.",
+      message: "Si un compte existe, un lien de réinitialisation a été envoyé.",
     });
   } catch (err) {
     next(err);
