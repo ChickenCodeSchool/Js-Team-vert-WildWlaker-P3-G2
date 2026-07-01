@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { FiCalendar, FiEdit2, FiMapPin } from "react-icons/fi";
+import { FiCalendar, FiEdit2, FiMapPin, FiTrash2 } from "react-icons/fi";
 import type { Event } from "../../../types/event";
 import "./EventDetailCard.css";
 
@@ -9,6 +9,7 @@ type DashboardEvent = Event & { id: number };
 interface EventDetailCardProps {
   selectedEvent: DashboardEvent | null;
   onEdit: (event: DashboardEvent) => void;
+  onDelete: (event: DashboardEvent) => void;
 }
 const getEventImageUrl = (imageUrl: string | undefined) => {
   if (!imageUrl) return "/placeholder-image.png";
@@ -19,7 +20,11 @@ const getEventImageUrl = (imageUrl: string | undefined) => {
 
   return `${import.meta.env.VITE_API_URL}${imageUrl}`;
 };
-function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
+function EventDetailCard({
+  selectedEvent,
+  onEdit,
+  onDelete,
+}: EventDetailCardProps) {
   if (!selectedEvent) {
     return (
       <div className="event-detail-card-empty">
@@ -76,7 +81,7 @@ function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
                 <p>
                   {format(
                     new Date(selectedEvent.start_date),
-                    "dd MMMM yyyy HH:mm",
+                    "dd MMMM yyyy à HH:mm",
                     { locale: fr },
                   )}
                 </p>
@@ -91,7 +96,7 @@ function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
                 <p>
                   {format(
                     new Date(selectedEvent.end_date),
-                    "dd MMMM yyyy HH:mm",
+                    "dd MMMM yyyy à HH:mm",
                     { locale: fr },
                   )}
                 </p>
@@ -121,6 +126,13 @@ function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
           onClick={() => onEdit(selectedEvent)}
         >
           <FiEdit2 /> Modifier l'événement
+        </button>
+        <button
+          className="btn-modify btn-delete"
+          type="button"
+          onClick={() => onDelete(selectedEvent)}
+        >
+          <FiTrash2 /> Supprimer l'événement
         </button>
       </div>
     </div>

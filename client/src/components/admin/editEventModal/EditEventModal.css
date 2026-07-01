@@ -219,15 +219,16 @@
       padding: 16px 24px;
       background: var(--gray-50);
       border-top: 1px solid var(--gray-100);
-
-      .cancel-btn {
+      .action-bouton {
         padding: 8px 16px;
-        background: var(--white);
-        border: 1px solid var(--gray-300);
         border-radius: var(--radius-sm);
         cursor: pointer;
         font-size: 0.875rem;
         transition: var(--transition);
+      }
+      .cancel-btn {
+        background: var(--white);
+        border: 1px solid var(--gray-300);
 
         &:hover {
           background: var(--gray-100);
@@ -236,19 +237,26 @@
       }
 
       .save-btn {
-        padding: 8px 16px;
         background: var(--gold);
         color: var(--white);
         border: none;
-        border-radius: var(--radius-sm);
-        cursor: pointer;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: var(--transition);
 
         &:hover {
           background: var(--gold-dark);
           box-shadow: var(--shadow-sm);
+        }
+      }
+      .delete-btn {
+        background: var(--white);
+        border: 1px solid var(--error);
+        color: var(--error);
+        outline: none;
+        box-shadow: none;
+
+        &:hover {
+          background: var(--error);
+          color: var(--white);
+          border-color: var(--error);
         }
       }
     }

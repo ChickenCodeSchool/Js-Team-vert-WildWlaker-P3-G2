@@ -23,6 +23,7 @@ import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import type { Event } from "../../../types/event";
 
 import "./EventDash.css";
+import Swal from "sweetalert2";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -93,14 +94,75 @@ function EventDash() {
         throw new Error("Erreur lors de la sauvegarde de l'événement");
       }
 
+      Swal.fire({
+        icon: "success",
+        title: "Succès !",
+        text: isEditing
+          ? "L'événement a été mis à jour."
+          : "L'événement a été créé.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
       handleCloseModal();
       fetchEvents();
       setSelectedEvent(null);
     } catch (error) {
       console.error("Erreur backend:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Oups...",
+        text: "Une erreur est survenue lors de la sauvegarde.",
+      });
     }
   };
 
+  const handleDeleteEvent = async (event: DashboardEvent) => {
+    const result = await Swal.fire({
+      title: "Supprimer définitivement ?",
+      text: `Cette action est irréversible et supprimera l'événement "${event.title}".`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Oui, supprimer",
+      cancelButtonText: "Annuler",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const url = `${API_URL}/api/events/${event.id_event}`;
+
+      const response = await fetch(url, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la suppression de l'événement");
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Supprimé !",
+        text: "L'événement a été supprimé avec succès.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      fetchEvents();
+      setSelectedEvent(null);
+    } catch (error) {
+      console.error("Erreur backend lors de la suppression :", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Erreur",
+        text: "Une erreur est survenue lors de la suppression.",
+      });
+    }
+  };
   const {
     searchTerm,
     setSearchTerm,
@@ -294,6 +356,7 @@ function EventDash() {
           <EventDetailCard
             selectedEvent={selectedEvent}
             onEdit={handleOpenEditModal}
+            onDelete={handleDeleteEvent}
           />
         </aside>
       </main>
@@ -303,6 +366,7 @@ function EventDash() {
         onClose={handleCloseModal}
         event={eventToEdit}
         onSave={handleSaveEvent}
+        onDelete={handleDeleteEvent}
       />
     </div>
   );

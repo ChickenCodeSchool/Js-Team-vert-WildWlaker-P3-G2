@@ -6,15 +6,25 @@ import "./EditEventModal.css";
 interface EditEventModalProps {
   isOpen: boolean;
   onClose: () => void;
-  event: Event | null;
+  event: (Event & { id: number }) | null;
   onSave: (formData: FormData) => void;
+  onDelete: (event: Event & { id: number }) => Promise<void>;
 }
+const getEventImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function EditEventModal({
   isOpen,
   onClose,
   event,
   onSave,
+  onDelete,
 }: EditEventModalProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -40,7 +50,7 @@ function EditEventModal({
         end_date: event.end_date ? event.end_date.substring(0, 16) : "",
         location: event.location || "",
       });
-      setImagePreview(event.image_url || "");
+      setImagePreview(getEventImageUrl(event.image_url));
       setSelectedFile(null);
     } else {
       setFormData({
@@ -51,7 +61,7 @@ function EditEventModal({
         end_date: "",
         location: "",
       });
-      setImagePreview("");
+      setImagePreview(getEventImageUrl(undefined));
       setSelectedFile(null);
     }
   }, [event]);
@@ -260,12 +270,28 @@ function EditEventModal({
           </div>
 
           <div className="modal-footer">
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button
+              type="button"
+              className="action-bouton cancel-btn"
+              onClick={onClose}
+            >
               Annuler
             </button>
-            <button type="submit" className="save-btn">
+            <button type="submit" className="action-bouton save-btn">
               {event ? "Enregistrer les modifications" : "Créer l'événement"}
             </button>
+            {event && (
+              <button
+                type="button"
+                className="action-bouton delete-btn"
+                onClick={async () => {
+                  await onDelete(event);
+                  onClose();
+                }}
+              >
+                Supprimer
+              </button>
+            )}
           </div>
         </form>
       </div>
