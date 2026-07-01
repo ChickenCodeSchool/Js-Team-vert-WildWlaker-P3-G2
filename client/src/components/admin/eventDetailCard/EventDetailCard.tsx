@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { FiCalendar, FiMapPin } from "react-icons/fi";
 import type { Event } from "../../../types/event";
 import "./EventDetailCard.css";
@@ -61,18 +63,28 @@ function EventDetailCard({ selectedEvent }: EventDetailCardProps) {
             <div className="event-detail-info-item">
               <span className="event-detail-info-label">Date de début</span>
               <div className="event-detail-info-text">
-                <FiCalendar className="event-detail-info-icon" />
                 <p>
-                  {new Date(selectedEvent.start_date).toLocaleString("fr-FR")}
+                  <FiCalendar className="event-detail-info-icon" />
+                  {"  "}
+                  {format(
+                    new Date(selectedEvent.start_date),
+                    "dd MMMM yyyy HH:mm",
+                    { locale: fr },
+                  )}
                 </p>
               </div>
             </div>
             <div className="event-detail-info-item">
-              <span className="event-detail-info-label">Date de fin</span>
               <div className="event-detail-info-text">
-                <FiCalendar className="event-detail-info-icon" />
+                <span className="event-detail-info-label">Date de fin</span>
                 <p>
-                  {new Date(selectedEvent.end_date).toLocaleString("fr-FR")}
+                  <FiCalendar className="event-detail-info-icon" />
+                  {"  "}
+                  {format(
+                    new Date(selectedEvent.end_date),
+                    "dd MMMM yyyy HH:mm",
+                    { locale: fr },
+                  )}
                 </p>
               </div>
             </div>
@@ -84,8 +96,11 @@ function EventDetailCard({ selectedEvent }: EventDetailCardProps) {
           <div className="event-detail-info-item">
             <span className="event-detail-info-label">Lieu</span>
             <div className="event-detail-info-text">
-              <FiMapPin className="event-detail-info-icon" />
-              <p>{selectedEvent.location}</p>
+              <p>
+                <FiMapPin className="event-detail-info-icon" />
+                {"  "}
+                {selectedEvent.location}
+              </p>
             </div>
           </div>
         </div>
