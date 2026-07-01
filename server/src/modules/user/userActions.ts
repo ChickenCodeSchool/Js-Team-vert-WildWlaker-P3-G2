@@ -104,4 +104,24 @@ const deleteUser: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, deleteUser, register, login };
+const forgotPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    console.log("Email reçu:", email);
+
+    const user = await userRepository.readByEmail(email);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Utilisateur introuvable",
+      });
+    }
+    res.json({
+      message: "Un lien de réinitialisation vous a été envoyé.",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, deleteUser, register, login, forgotPassword };

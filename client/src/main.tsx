@@ -7,6 +7,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from "react-router";
 
 // Import the main app component
 import App from "./App";
+import { AuthProvider } from "./context/AuthContext";
 import AdminLayout from "./pages/admin/adminLayout/AdminLayout";
 import Barbers from "./pages/admin/barbers/Barbers";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
@@ -28,6 +29,7 @@ import CustomerAvis from "./pages/customer/avis/CustomerAvis";
 import AvisConfirmation from "./pages/customer/avisConfirmation/AvisConfirmation";
 import BookingPage from "./pages/customer/booking/BookingPage";
 import CustomerLayout from "./pages/customer/customerLayout/CustomerLayout";
+import ForgotPassword from "./pages/customer/forgetPassword/ForgotPassword";
 import GiveAvis from "./pages/customer/giveAvis/GiveAvis";
 import Home from "./pages/customer/home/Home";
 import UserProfile from "./pages/customer/profile/UserProfile";
@@ -61,6 +63,7 @@ const router = createBrowserRouter([
           { path: "give-avis/:appointmentId", element: <GiveAvis /> },
           { path: "avis-confirmation", element: <AvisConfirmation /> },
           { path: "login", element: <Login /> },
+          { path: "forgot-password", element: <ForgotPassword /> },
         ],
       },
       {
@@ -107,7 +110,9 @@ if (rootElement == null) {
 // Render the app inside the root element
 createRoot(rootElement).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );
 

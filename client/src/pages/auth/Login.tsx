@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router";
 
 import "./Login.css";
+import { useAuth } from "../../context/AuthContext";
 
 type Tab = "connexion" | "inscription";
 type Role = "client" | "professionnel";
@@ -20,6 +21,7 @@ type Role = "client" | "professionnel";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
+  const { login } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("connexion");
   const [role, setRole] = useState<Role>("client");
   const [showPassword, setShowPassword] = useState(false);
@@ -55,13 +57,7 @@ const Login = () => {
         return;
       }
       const user = await res.json();
-      console.log("USER FROM API:", user);
-
-      localStorage.setItem("user", JSON.stringify(user));
-      console.log(
-        "LOCAL STORAGE:",
-        JSON.parse(localStorage.getItem("user") || "null"),
-      );
+      login(user);
       navigate("/");
     } catch {
       setError("Impossible de se connecter");
@@ -161,7 +157,13 @@ const Login = () => {
             </button>
           </div>
 
-          <span className="login__forgot">Mot de passe oublié ?</span>
+          <button
+            type="button"
+            className="login__forgot-password"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Mot de passe oublié?
+          </button>
 
           {error && <span className="login__error">{error}</span>}
 

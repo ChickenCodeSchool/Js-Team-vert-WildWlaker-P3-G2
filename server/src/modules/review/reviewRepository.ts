@@ -32,9 +32,9 @@ class ReviewRepository {
 
   async readAll(filters?: { startDate?: string; endDate?: string }) {
     const queryParams: string[] = [];
-    let query = `SELECT * FROM review`;
+    let query = "SELECT * FROM review";
     if (filters?.startDate && filters?.endDate) {
-      query += ` WHERE created_at BETWEEN ? AND ?`;
+      query += " WHERE created_at BETWEEN ? AND ?";
       queryParams.push(
         `${filters.startDate} 00:00:00`,
         `${filters.endDate} 23:59:59`,
@@ -71,7 +71,7 @@ class ReviewRepository {
     JOIN users uc ON a.id_user_customer = uc.id_user
      `;
     if (filters?.startDate && filters?.endDate) {
-      query += ` WHERE r.created_at BETWEEN ? AND ?`;
+      query += " WHERE r.created_at BETWEEN ? AND ?";
       queryParams.push(
         `${filters.startDate} 00:00:00`,
         `${filters.endDate} 23:59:59`,
