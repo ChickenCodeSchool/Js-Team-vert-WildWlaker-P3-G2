@@ -9,7 +9,6 @@ type Props = {
   onSave: () => void;
 };
 
-
 function EditBarberModal({ barber, onClose, onSave }: Props) {
   const [name, setName] = useState(barber.name);
   const [email, setEmail] = useState(barber.email);
