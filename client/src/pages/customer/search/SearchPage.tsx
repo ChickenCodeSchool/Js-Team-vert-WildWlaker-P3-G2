@@ -121,22 +121,23 @@ function SearchPage() {
       {isNearMeActive && filteredBarbers.length === 0 && (
         <p className="search__empty">Aucun barber trouvé dans votre ville.</p>
       )}
-
-      {!isLoading &&
-        error == null &&
-        displayedBarbers.map((barber) => (
-          <BarberCard
-            key={barber.id_user}
-            barber={barber}
-            onProfileClick={(selectedBarber) =>
-              navigate("/booking", {
-                state: {
-                  barber: selectedBarber,
-                },
-              })
-            }
-          />
-        ))}
+      <div className="search__results">
+        {!isLoading &&
+          error == null &&
+          displayedBarbers.map((barber) => (
+            <BarberCard
+              key={barber.id_user}
+              barber={barber}
+              onProfileClick={(selectedBarber) =>
+                navigate("/booking", {
+                  state: {
+                    barber: selectedBarber,
+                  },
+                })
+              }
+            />
+          ))}
+      </div>
     </main>
   );
 }
