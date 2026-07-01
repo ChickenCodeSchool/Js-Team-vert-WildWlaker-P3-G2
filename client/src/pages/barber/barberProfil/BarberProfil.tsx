@@ -1,90 +1,76 @@
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
 import { useEffect, useRef, useState } from "react";
+import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
 import {
-  FiCamera,
-  FiDownload,
+  FiCalendar,
   FiImage,
-  FiMenu,
+  FiLogOut,
+  FiMail,
+  FiMapPin,
+  FiPhone,
   FiPlus,
   FiTrash2,
-  FiUser,
 } from "react-icons/fi";
+import { LuUpload } from "react-icons/lu";
+import { MdOutlineLocalPostOffice } from "react-icons/md";
+import { useNavigate } from "react-router";
 import AfroImg from "../../../assets/images/Afro.jpg";
 import type { Barber } from "../../../types/barber";
+import "../../../components/customer/Profile/ProfileHeader.css";
+import "../../../components/customer/Profile/ProfileInfo.css";
+import "../../../components/customer/Profile/ProfileActions.css";
 import "./BarberProfil.css";
 
 type Photo = { id: number; src: string };
 
-const INITIAL_PHOTOS: Photo[] = [
-  { id: 1, src: AfroImg },
-  { id: 2, src: AfroImg },
-  { id: 3, src: AfroImg },
-  { id: 4, src: AfroImg },
-  { id: 5, src: AfroImg },
-  { id: 6, src: AfroImg },
-  { id: 7, src: AfroImg },
-  { id: 8, src: AfroImg },
-  { id: 9, src: AfroImg },
-  { id: 10, src: AfroImg },
-  { id: 11, src: AfroImg },
-  { id: 12, src: AfroImg },
-];
+const INITIAL_PHOTOS: Photo[] = Array.from({ length: 12 }, (_, i) => ({
+  id: i + 1,
+  src: AfroImg,
+}));
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// On récupère et décode proprement le "user" de Giogi tout en haut
 const userString = localStorage.getItem("user");
 const loggedUser = userString ? JSON.parse(userString) : null;
 const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
 
 function BarberProfil() {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("informations");
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
-  // États pour stocker le barbier dynamique et gérer le chargement
   const [barberData, setBarberData] = useState<Barber | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const [currentAvatar, setCurrentAvatar] = useState(AfroImg);
+  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [uploadError, setUploadError] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
-  // Fetch automatique au montage avec le bon BARBER_ID
   useEffect(() => {
-    const fetchBarberProfile = async () => {
-      try {
-        const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}`);
+    fetch(`${API_URL}/api/barbers/${BARBER_ID}`)
+      .then((res) => {
         if (!res.ok) throw new Error("Impossible de charger le profil");
-        const data = (await res.json()) as Barber;
+        return res.json();
+      })
+      .then((data: Barber) => {
         setBarberData(data);
-
         if (data.avatar_url) {
-          setCurrentAvatar(`${API_URL}${data.avatar_url}`);
+          setAvatarSrc(`${API_URL}${data.avatar_url}`);
         }
-      } catch (err) {
-        console.error("Erreur lors de la récupération des données :", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBarberProfile();
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("avatar", file);
-
     setUploading(true);
-    setUploadError("");
-
     try {
       const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/avatar`, {
         method: "POST",
@@ -92,9 +78,9 @@ function BarberProfil() {
       });
       if (!res.ok) throw new Error("Échec de l'upload");
       const data = (await res.json()) as { avatar_url: string };
-      setCurrentAvatar(`${API_URL}${data.avatar_url}`);
-    } catch {
-      setUploadError("Erreur lors de l'upload de la photo.");
+      setAvatarSrc(`${API_URL}${data.avatar_url}`);
+    } catch (err) {
+      console.error(err);
     } finally {
       setUploading(false);
       e.target.value = "";
@@ -124,27 +110,26 @@ function BarberProfil() {
     setDeleteMode(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   if (loading) {
     return <div className="barber-profil__loading">Chargement du profil…</div>;
   }
 
   return (
-    <div className="barber-profil">
-      <div className="barber-profil__header">
-        <FiMenu className="barber-profil__menu-icon" />
-        <h2 className="barber-profil__title">Mon profil</h2>
-      </div>
-
+    <div className="barber-profil-page">
+      {/* ── Tabs ── */}
       <div className="barber-profil__tabs">
         <button
           type="button"
           className={`barber-profil__tab ${activeTab === "informations" ? "barber-profil__tab--active" : ""}`}
           onClick={() => setActiveTab("informations")}
         >
-          <FiUser className="barber-profil__tab-icon" />
           Informations
         </button>
-
         <button
           type="button"
           className={`barber-profil__tab ${activeTab === "galerie" ? "barber-profil__tab--active" : ""}`}
@@ -156,88 +141,133 @@ function BarberProfil() {
       </div>
 
       {activeTab === "informations" && (
-        <div className="barber-profil__content">
-          <p className="barber-profil__photo-label">Photo de profil</p>
+        <>
+          {/* ── Header ── */}
+          <section className="profile-header">
+            <div className="profile-header__content">
+              <div className="profile-page__avatar-wrapper">
+                {avatarSrc ? (
+                  <img
+                    src={avatarSrc}
+                    alt={`Avatar de ${barberData?.name}`}
+                    className="profile-header__avatar"
+                  />
+                ) : (
+                  <div className="barber-profil__avatar-placeholder">
+                    {barberData?.name?.slice(0, 2).toUpperCase()}
+                  </div>
+                )}
+                <button
+                  type="button"
+                  className="profile-page__photo"
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={uploading}
+                >
+                  <LuUpload className="profile-page__icon" />
+                  {uploading ? "Envoi…" : "Modifier la photo"}
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  hidden
+                  onChange={handleAvatarUpload}
+                />
+              </div>
 
-          <div className="barber-profil__avatar-wrapper">
-            <img
-              className="barber-profil__avatar"
-              src={currentAvatar}
-              alt="Avatar du coiffeur"
-            />
+              <div className="profile-header__identity">
+                <p className="profile-header__eyebrow">Profil coiffeur</p>
+                <h1 className="profile-header__name">
+                  {barberData?.name || "Non renseigné"}
+                </h1>
+                <p className="profile-header__email">
+                  {barberData?.email || ""}
+                </p>
+                {barberData?.create_time && (
+                  <p className="profile-header__member-since">
+                    <FiCalendar className="profile-header__member-icon" />
+                    <span>
+                      Membre depuis{" "}
+                      {format(
+                        new Date(barberData.create_time),
+                        "dd MMMM yyyy",
+                        {
+                          locale: fr,
+                        },
+                      )}
+                    </span>
+                  </p>
+                )}
+              </div>
+            </div>
+          </section>
+
+          {/* ── Infos ── */}
+          <section className="profile-info">
+            <div className="profile-info__card">
+              <div className="profile-info__item">
+                <FiMail className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.email || "Non renseigné"}
+                </span>
+              </div>
+              <div className="profile-info__item">
+                <FiPhone className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.phone || "Non renseigné"}
+                </span>
+              </div>
+              <div className="profile-info__item">
+                <FiMapPin className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.city || "Non renseigné"}
+                </span>
+              </div>
+              <div className="profile-info__item">
+                <MdOutlineLocalPostOffice className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.postal_code || "Non renseigné"}
+                </span>
+              </div>
+              <div className="profile-info__item">
+                <FaHouseUser className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.adress || "Non renseigné"}
+                </span>
+              </div>
+              <div className="profile-info__item">
+                <FaBirthdayCake className="profile-info__icon" />
+                <span className="profile-info__label">
+                  {barberData?.birthday
+                    ? format(new Date(barberData.birthday), "dd MMMM yyyy", {
+                        locale: fr,
+                      })
+                    : "Non renseigné"}
+                </span>
+              </div>
+            </div>
+          </section>
+
+          {/* ── Actions ── */}
+          <section className="profile-actions">
             <button
               type="button"
-              className="barber-profil__avatar-overlay"
-              onClick={() => avatarInputRef.current?.click()}
-              aria-label="Changer la photo de profil"
+              className="profile-actions__button"
+              onClick={() => navigate("/barber/planning")}
             >
-              <FiCamera className="barber-profil__camera-icon" />
+              <FiCalendar className="profile-actions__icon" />
+              <span>Voir mon planning</span>
             </button>
-          </div>
-
-          <input
-            ref={avatarInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="barber-profil__file-input"
-            onChange={handleAvatarUpload}
-          />
-
-          <button
-            type="button"
-            className="barber-profil__change-photo"
-            onClick={() => avatarInputRef.current?.click()}
-            disabled={uploading}
-          >
-            <FiDownload className="barber-profil__download-icon" />
-            {uploading ? "Envoi en cours…" : "Changer la photo"}
-          </button>
-          {uploadError && (
-            <span className="barber-profil__upload-error">{uploadError}</span>
-          )}
-          <span className="barber-profil__photo-hint">
-            JPG, PNG ou WEBP. Max 5 Mo.
-          </span>
-
-          <h3 className="barber-profil__section-title">
-            Informations personnelles
-          </h3>
-
-          <div className="barber-profil__infos">
-            <div className="barber-profil__info-row">
-              <span className="barber-profil__info-label">Nom complet</span>
-              <span className="barber-profil__info-value">
-                {barberData?.name || "Non renseigné"}
-              </span>
-            </div>
-            <div className="barber-profil__info-row">
-              <span className="barber-profil__info-label">Téléphone</span>
-              <span className="barber-profil__info-value">
-                {barberData?.phone || "Non renseigné"}
-              </span>
-            </div>
-            <div className="barber-profil__info-row">
-              <span className="barber-profil__info-label">Email</span>
-              <span className="barber-profil__info-value">
-                {barberData?.email || "Non renseigné"}
-              </span>
-            </div>
-            <div className="barber-profil__info-row">
-              <span className="barber-profil__info-label">
-                Date de naissance
-              </span>
-              <span className="barber-profil__info-value">
-                {barberData?.birthday
-                  ? new Date(barberData.birthday).toLocaleDateString("fr-FR")
-                  : "Non renseignée"}
-              </span>
-            </div>
-          </div>
-
-          <button type="button" className="barber-profil__save-btn">
-            Enregistrer les modifications
-          </button>
-        </div>
+            <button
+              type="button"
+              className="profile-actions__button"
+              onClick={handleLogout}
+            >
+              <FiLogOut className="profile-actions__icon" />
+              <span>Déconnexion</span>
+            </button>
+          </section>
+        </>
       )}
 
       {activeTab === "galerie" && (
@@ -272,7 +302,7 @@ function BarberProfil() {
               type="file"
               accept="image/jpeg,image/png,image/webp"
               multiple
-              className="barber-profil__file-input"
+              hidden
               onChange={handleAddPhoto}
             />
             {deleteMode ? (
