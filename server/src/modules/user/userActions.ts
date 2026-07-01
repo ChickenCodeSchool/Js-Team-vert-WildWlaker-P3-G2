@@ -17,7 +17,6 @@ const browse: RequestHandler = async (req, res, next) => {
     // Respond with the users in JSON format
     res.json(users);
   } catch (err) {
-    // Pass any errors to the error-handling middleware
     next(err);
   }
 };
