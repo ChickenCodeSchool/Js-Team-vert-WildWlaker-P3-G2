@@ -10,7 +10,15 @@ interface EventDetailCardProps {
   selectedEvent: DashboardEvent | null;
   onEdit: (event: DashboardEvent) => void;
 }
+const getEventImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
   if (!selectedEvent) {
     return (
@@ -27,7 +35,10 @@ function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
       </div>
 
       <div className="event-detail-card-preview">
-        <img src={selectedEvent.image_url} alt={selectedEvent.title} />
+        <img
+          src={getEventImageUrl(selectedEvent.image_url)}
+          alt={selectedEvent.title}
+        />
       </div>
 
       <div className="event-detail-card-body">

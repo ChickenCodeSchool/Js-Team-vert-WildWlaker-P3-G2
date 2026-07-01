@@ -177,7 +177,9 @@ function EventDash() {
     {
       key: "location",
       header: "Lieu",
-      render: (event) => <div className="user-grid-info">{event.location}</div>,
+      render: (event) => (
+        <div className="user-grid-info">{truncateText(event.location, 35)}</div>
+      ),
     },
     {
       key: "actions",

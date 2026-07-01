@@ -9,6 +9,7 @@ import { upload, uploadAvatar } from "./modules/barber/barberAvatarActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import eventActions from "./modules/event/eventActions";
+import { uploadEventImage } from "./modules/event/eventUpload";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
@@ -27,6 +28,13 @@ router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", customerActions.read);
 router.put("/api/customers/:id", customerActions.edit);
 router.get("/api/events", eventActions.browse);
+router.post("/api/events", uploadEventImage.single("image"), eventActions.add);
+router.put(
+  "/api/events/:id",
+  uploadEventImage.single("image"),
+  eventActions.edit,
+);
+router.delete("/api/events/:id", eventActions.destroy);
 router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", prestationActions.add);
 router.put("/api/prestations/:id", prestationActions.edit);
