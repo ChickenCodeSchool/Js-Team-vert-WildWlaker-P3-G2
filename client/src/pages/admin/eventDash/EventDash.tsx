@@ -1,16 +1,18 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   FiCalendar,
   FiCheck,
   FiClock,
   FiEdit2,
+  FiEye,
   FiStar,
   FiXCircle,
 } from "react-icons/fi";
 
 import AdminFilterBar from "../../../components/admin/adminFilterBar/AdminFilterBar";
+import EditEventModal from "../../../components/admin/editEventModal/EditEventModal";
 import EventDetailCard from "../../../components/admin/eventDetailCard/EventDetailCard";
 import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
@@ -38,8 +40,10 @@ function EventDash() {
   const [selectedEvent, setSelectedEvent] = useState<DashboardEvent | null>(
     null,
   );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [eventToEdit, setEventToEdit] = useState<DashboardEvent | null>(null);
 
-  useEffect(() => {
+  const fetchEvents = useCallback(() => {
     fetch(`${API_URL}/api/events`)
       .then((res) => res.json())
       .then((data: Event[]) => {
@@ -48,8 +52,54 @@ function EventDash() {
           id: item.id_event,
         }));
         setEvents(formattedData);
-      });
+      })
+      .catch((err) => console.error("Erreur fetch:", err));
   }, []);
+
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
+
+  const handleOpenCreateModal = () => {
+    setEventToEdit(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (event: DashboardEvent) => {
+    setEventToEdit(event);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEventToEdit(null);
+  };
+
+  const handleSaveEvent = async (formData: FormData) => {
+    try {
+      const isEditing = eventToEdit !== null;
+      const url = isEditing
+        ? `${API_URL}/api/events/${eventToEdit.id_event}`
+        : `${API_URL}/api/events`;
+
+      const method = isEditing ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la sauvegarde de l'événement");
+      }
+
+      handleCloseModal();
+      fetchEvents();
+      setSelectedEvent(null);
+    } catch (error) {
+      console.error("Erreur backend:", error);
+    }
+  };
 
   const {
     searchTerm,
@@ -129,6 +179,25 @@ function EventDash() {
       header: "Lieu",
       render: (event) => <div className="user-grid-info">{event.location}</div>,
     },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (event) => (
+        <div className="user-grid-actions-cell">
+          <button
+            type="button"
+            className="user-grid-icon-btn"
+            onClick={() => {
+              setEventToEdit(event);
+              setIsModalOpen(true);
+            }}
+            title="Voir"
+          >
+            <FiEye />
+          </button>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -177,7 +246,11 @@ function EventDash() {
             cycle="Total"
           />
         </div>
-        <button className="btn-add-event" type="button">
+        <button
+          className="btn-add-event"
+          type="button"
+          onClick={handleOpenCreateModal}
+        >
           <FiEdit2 /> Créer un événement
         </button>
       </header>
@@ -208,9 +281,19 @@ function EventDash() {
         </section>
 
         <aside className="eventDash-aside">
-          <EventDetailCard selectedEvent={selectedEvent} />
+          <EventDetailCard
+            selectedEvent={selectedEvent}
+            onEdit={handleOpenEditModal}
+          />
         </aside>
       </main>
+
+      <EditEventModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        event={eventToEdit}
+        onSave={handleSaveEvent}
+      />
     </div>
   );
 }

@@ -4,11 +4,14 @@ import { FiCalendar, FiEdit2, FiMapPin } from "react-icons/fi";
 import type { Event } from "../../../types/event";
 import "./EventDetailCard.css";
 
+type DashboardEvent = Event & { id: number };
+
 interface EventDetailCardProps {
-  selectedEvent: Event | null;
+  selectedEvent: DashboardEvent | null;
+  onEdit: (event: DashboardEvent) => void;
 }
 
-function EventDetailCard({ selectedEvent }: EventDetailCardProps) {
+function EventDetailCard({ selectedEvent, onEdit }: EventDetailCardProps) {
   if (!selectedEvent) {
     return (
       <div className="event-detail-card-empty">
@@ -101,7 +104,11 @@ function EventDetailCard({ selectedEvent }: EventDetailCardProps) {
 
       <div className="event-detail-card-actions">
         <h2>Actions rapides</h2>
-        <button className="btn-modify" type="button">
+        <button
+          className="btn-modify"
+          type="button"
+          onClick={() => onEdit(selectedEvent)}
+        >
           <FiEdit2 /> Modifier l'événement
         </button>
       </div>
