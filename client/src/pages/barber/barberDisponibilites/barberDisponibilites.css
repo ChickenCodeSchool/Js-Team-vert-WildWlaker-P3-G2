@@ -238,10 +238,6 @@
   pointer-events: none;
 }
 
-.barber-dispo__toggle-input:focus-visible + .barber-dispo__toggle {
-  box-shadow: 0 0 0 3px var(--gold-soft);
-}
-
 .barber-dispo__toggle {
   width: 2.6rem;
   height: 1.5rem;
@@ -250,6 +246,10 @@
   position: relative;
   transition: var(--transition);
   flex-shrink: 0;
+}
+
+.barber-dispo__toggle-input:focus-visible + .barber-dispo__toggle {
+  box-shadow: 0 0 0 3px var(--gold-soft);
 }
 
 .barber-dispo__toggle--on {
