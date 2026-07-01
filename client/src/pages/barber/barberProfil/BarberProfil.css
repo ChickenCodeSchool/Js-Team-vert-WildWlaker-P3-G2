@@ -1,42 +1,20 @@
-.barber-profil {
-  min-height: 100vh;
-  background-color: var(--gray-50);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1.25rem;
-}
-
-.barber-profil__header {
-  display: flex;
-  align-items: center;
+.barber-profil-page {
+  display: grid;
+  gap: 1.25rem;
   width: 100%;
-  max-width: 22.5rem;
-  margin-bottom: 1.25rem;
-  position: relative;
-}
-
-.barber-profil__menu-icon {
-  font-size: 1.25rem;
-  color: var(--black);
-  position: absolute;
-  left: 0;
-}
-
-.barber-profil__title {
-  font-family: var(--font-title);
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--black);
+  max-width: 1180px;
+  min-width: 0;
+  min-height: 100vh;
   margin: 0 auto;
+  padding: 1.25rem 1rem 5rem;
+  background: var(--gray-50);
 }
+
+/* ── Tabs ── */
 
 .barber-profil__tabs {
   display: flex;
-  width: 100%;
-  max-width: 22.5rem;
   border-bottom: 1px solid var(--gray-300);
-  margin-bottom: 1.5rem;
 }
 
 .barber-profil__tab {
@@ -68,185 +46,30 @@
   font-weight: 600;
 }
 
-.barber-profil__content {
-  width: 100%;
-  max-width: 22.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
+/* ── Avatar placeholder (pas de photo) ── */
 
-.barber-profil__photo-label {
-  font-family: var(--font-title);
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--black);
-  align-self: flex-start;
-  margin-bottom: 1rem;
-}
-
-.barber-profil__avatar-wrapper {
-  position: relative;
-  margin-bottom: 1rem;
-}
-
-.barber-profil__avatar {
-  width: 6rem;
-  height: 6rem;
+.barber-profil__avatar-placeholder {
+  width: clamp(8rem, 28vw, 10.5rem);
+  height: clamp(8rem, 28vw, 10.5rem);
   border-radius: 50%;
-  object-fit: cover;
-}
-
-.barber-profil__avatar-overlay {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color: var(--white);
-  border-radius: 50%;
-  width: 1.75rem;
-  height: 1.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: var(--shadow-sm);
-}
-
-.barber-profil__camera-icon {
-  font-size: 0.875rem;
+  background: var(--gold-soft);
   color: var(--gold-dark);
-}
-
-.barber-profil__change-photo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  background-color: var(--white);
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  cursor: pointer;
-  margin-bottom: 0.5rem;
-  transition: var(--transition);
-  width: 100%;
-  justify-content: center;
-}
-
-.barber-profil__change-photo:hover {
-  border-color: var(--gold-dark);
-}
-
-.barber-profil__download-icon {
-  font-size: 1rem;
-}
-
-.barber-profil__photo-hint {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  color: var(--gray-600);
-  margin-bottom: 1.5rem;
-}
-
-.barber-profil__section-title {
   font-family: var(--font-title);
-  font-size: 1rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: var(--black);
-  align-self: flex-start;
-  margin-bottom: 0.75rem;
-}
-
-.barber-profil__infos {
-  width: 100%;
-  border: 1px solid var(--gray-300);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background-color: var(--white);
-  margin-bottom: 1.5rem;
-}
-
-.barber-profil__info-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.875rem 1rem;
-  border-bottom: 1px solid var(--gray-100);
+  justify-content: center;
+  border: 5px solid var(--white);
+  box-shadow: 0 14px 32px rgba(15, 15, 17, 0.18);
 }
 
-.barber-profil__info-row:last-child {
-  border-bottom: none;
-}
-
-.barber-profil__info-label {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--black);
-  font-weight: 500;
-}
-
-.barber-profil__info-value {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: var(--gray-600);
-}
-
-.barber-profil__save-btn {
-  width: 100%;
-  padding: 1rem;
-  background-color: var(--gold-dark);
-  color: var(--white);
-  font-family: var(--font-title);
-  font-size: 1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.barber-profil__save-btn:hover {
-  opacity: 0.9;
-}
+/* ── Galerie ── */
 
 .barber-profil__galerie {
-  width: 100%;
-  max-width: 22.5rem;
   display: flex;
   flex-direction: column;
   padding-bottom: 4rem;
-}
-
-.barber-profil__filters {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
-  scrollbar-width: none;
-}
-
-.barber-profil__filters::-webkit-scrollbar {
-  display: none;
-}
-
-.barber-profil__filter-btn {
-  white-space: nowrap;
-  padding: 0.4rem 1rem;
-  border: 1px solid var(--gray-300);
-  border-radius: 2rem;
-  background-color: var(--white);
-  font-family: var(--font-body);
-  font-size: 0.8125rem;
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.barber-profil__filter-btn--active {
-  background-color: var(--gold-dark);
-  color: var(--white);
-  border-color: var(--gold-dark);
-  font-weight: 600;
 }
 
 .barber-profil__grid {
@@ -279,10 +102,6 @@
   aspect-ratio: 1;
   object-fit: cover;
   display: block;
-}
-
-.barber-profil__file-input {
-  display: none;
 }
 
 .barber-profil__galerie-actions {
@@ -323,8 +142,51 @@
   border-radius: var(--radius-md);
 }
 
-@media (min-width: 700px) {
-  .barber-profil {
-    margin: 10rem;
+.barber-profil__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--gray-600);
+}
+
+/* ── Desktop ── */
+
+@media (min-width: 768px) {
+  .barber-profil-page {
+    gap: 1.5rem;
+    padding: 2rem 1.5rem 5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .barber-profil-page {
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 19rem);
+    grid-template-areas:
+      "tabs tabs"
+      "header header"
+      "info actions";
+    align-items: start;
+    align-content: start;
+    gap: 1.75rem;
+    padding: 3rem 2rem 6rem;
+  }
+
+  .barber-profil__tabs {
+    grid-area: tabs;
+  }
+
+  .profile-header {
+    grid-area: header;
+  }
+
+  .profile-info {
+    grid-area: info;
+  }
+
+  .profile-actions {
+    grid-area: actions;
+    justify-self: stretch;
   }
 }
