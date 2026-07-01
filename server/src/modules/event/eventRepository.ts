@@ -6,7 +6,7 @@ type Event = {
   title: string;
   image_url: string;
   description: string;
-  tatus: "brouillon" | "publié" | "plannifié" | "terminé";
+  tatus: "brouillon" | "publié" | "annulé" | "terminé";
   start_date: string;
   end_date: string;
   location: string;

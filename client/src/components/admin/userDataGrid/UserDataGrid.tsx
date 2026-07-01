@@ -97,8 +97,7 @@ function UserDataGrid<T extends { id: string | number }>({
       {totalRows > 0 && (
         <div className="grid-pagination-container">
           <span className="pagination-info">
-            Affichage de {startIndex + 1} à {endIndex} sur {totalRows}{" "}
-            utilisateurs
+            Affichage de {startIndex + 1} à {endIndex} sur {totalRows}
           </span>
 
           <div className="pagination-buttons">

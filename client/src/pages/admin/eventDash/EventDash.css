@@ -37,6 +37,22 @@
       justify-content: space-around;
       gap: 1rem;
     }
+    .btn-add-event {
+      background-color: var(--gold);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 19%;
+
+      &:hover {
+        background-color: var(--gold-dark);
+      }
+    }
   }
   .eventDash-main {
     display: flex;
@@ -71,7 +87,7 @@
         padding: 5px 0px 5px 0px;
         border-radius: var(--radius-md);
         text-transform: capitalize;
-        &.status-confirmé {
+        &.status-publié {
           color: var(--success);
           background-color: #e6f4ea;
         }
@@ -79,21 +95,17 @@
           color: var(--error);
           background-color: #fef2f2;
         }
-        &.status-en {
+        &.status-brouillon {
+          color: var(--warning);
+          background-color: #fffbeb;
+        }
+        &.status-plannifié {
           color: var(--warning);
           background-color: #fffbeb;
         }
         &.status-terminé {
           color: var(--info);
           background-color: #eff6ff;
-        }
-        &.location-a {
-          color: var(--gray-600);
-          background-color: var(--gold-soft);
-        }
-        &.location-au {
-          color: var(--gold-soft);
-          background-color: var(--gray-600);
         }
       }
 
@@ -138,8 +150,11 @@
       }
     }
     .eventDash-aside {
-      width: 22%;
-      padding-right: 20px;
+      width: 23%;
+
+      .no-event-selected {
+        font-family: var(--font-body);
+      }
     }
   }
 }

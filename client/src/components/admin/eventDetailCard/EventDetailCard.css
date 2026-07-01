@@ -1,12 +1,24 @@
+.event-detail-card-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--gray-600);
+  text-align: center;
+  font-family: var(--font-body);
+}
+
 .event-detail-card-main {
+  box-sizing: border-box;
   background: var(--white);
   border-radius: var(--radius-md);
-  padding: 20px 10px 20px 10px;
+  padding: 20px;
   box-shadow: var(--shadow-md);
   width: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--gray-100);
+
   .event-detail-card-header {
     display: flex;
     justify-content: space-between;
@@ -14,19 +26,12 @@
     margin-bottom: 24px;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--gray-100);
+
     .event-detail-card-title {
       margin: 0;
       font-size: 1.25rem;
       font-family: var(--font-title);
       color: var(--black);
-    }
-
-    .event-detail-card-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--gray-600);
     }
   }
 
@@ -49,13 +54,15 @@
     flex-direction: column;
     gap: 24px;
     font-family: var(--font-body);
+
     .event-detail-section {
       margin-bottom: 16px;
+
       .event-detail-section-title {
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: var(--gray-600);
+        color: var(--gray-900);
         margin-bottom: 12px;
         border-bottom: 1px solid var(--gray-100);
         padding-bottom: 4px;
@@ -69,63 +76,59 @@
 
       .event-detail-info-item {
         margin-bottom: 16px;
+
         .event-detail-info-label {
-          display: block;
+          display: flex;
+          align-items: center;
           font-size: 14px;
           color: var(--gray-600);
           margin-bottom: 10px;
+          svg {
+            color: var(--gold);
+            margin-right: 4px;
+            font-size: 16px;
+          }
         }
 
         p {
           margin: 0;
           font-size: 14px;
-          color: var(--gray-900);
-          .event-detail-info-icon {
-            color: var(--gold);
-          }
+          color: var(--black);
         }
       }
     }
   }
 
   .event-detail-card-actions {
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 1px solid var(--gray-100);
     display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    & .btn-primary,
-    & .btn-success,
-    & .btn-danger {
-      padding: 8px 16px;
-      border-radius: var(--radius-sm);
-      border: none;
-      font-weight: var(--font-weight-semibold);
+    flex-direction: column;
+    gap: 10px;
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: 18px;
+      color: var(--black);
+    }
+    .btn-modify {
+      display: flex;
+      align-items: center;
       cursor: pointer;
-    }
+      font-family: var(--font-body);
+      font-size: 16px;
+      padding: 10px 10px 10px 10px;
+      gap: 15px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      color: var(--gray-900);
+      background-color: var(--white);
+      transition: var(--transition);
 
-    & .btn-primary {
-      background: var(--info);
-      color: var(--white);
+      &:hover {
+        background: var(--gold-soft);
+        border-color: var(--gold);
+        color: var(--gold-dark);
+      }
     }
-    & .btn-success {
-      background: var(--success);
-      color: var(--white);
-    }
-    & .btn-danger {
-      background: var(--error);
-      color: var(--white);
-    }
-  }
-
-  .event-detail-card-empty {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    color: var(--gray-600);
-    text-align: center;
   }
 
   .status-badge {
@@ -133,22 +136,26 @@
     border-radius: var(--radius-sm);
     font-size: 0.8rem;
     background: var(--gray-100);
-  }
 
-  & .status-confirmé {
-    background: #d4edda;
-    color: var(--success);
-  }
-  & .status-en-cours {
-    background: var(--warning);
-    color: var(--warning);
-  }
-  & .status-terminé {
-    background: #d1ecf1;
-    color: var(--info);
-  }
-  & .status-annulé {
-    background: #f8d7da;
-    color: var(--error);
+    &.status-publié {
+      color: var(--success);
+      background-color: #e6f4ea;
+    }
+    &.status-annulé {
+      color: var(--error);
+      background-color: #fef2f2;
+    }
+    &.status-brouillon {
+      color: var(--warning);
+      background-color: #fffbeb;
+    }
+    &.status-plannifié {
+      color: var(--warning);
+      background-color: #fffbeb;
+    }
+    &.status-terminé {
+      color: var(--info);
+      background-color: #eff6ff;
+    }
   }
 }

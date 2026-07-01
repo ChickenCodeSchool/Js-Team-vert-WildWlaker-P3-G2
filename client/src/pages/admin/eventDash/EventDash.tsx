@@ -5,6 +5,7 @@ import {
   FiCalendar,
   FiCheck,
   FiClock,
+  FiEdit2,
   FiStar,
   FiXCircle,
 } from "react-icons/fi";
@@ -80,7 +81,7 @@ function EventDash() {
 
   const totalCount = events.length;
   const publishedCount = events.filter((e) => e.status === "publié").length;
-  const plannedCount = events.filter((e) => e.status === "plannifié").length;
+  const plannedCount = events.filter((e) => e.status === "annulé").length;
   const draftCount = events.filter((e) => e.status === "brouillon").length;
   const finishedCount = events.filter((e) => e.status === "terminé").length;
 
@@ -106,9 +107,20 @@ function EventDash() {
       header: "Date de début",
       render: (event) => (
         <div className="user-grid-info">
-          {format(new Date(event.start_date), "dd MMM yyyy", {
-            locale: fr,
-          })}
+          {format(new Date(event.start_date), "dd MMM yyyy", { locale: fr })}
+          <b />
+          {format(new Date(event.start_date), "HH:mm", { locale: fr })}
+        </div>
+      ),
+    },
+    {
+      key: "end_date",
+      header: "Date de fin",
+      render: (event) => (
+        <div className="user-grid-info">
+          {format(new Date(event.end_date), "dd MMM yyyy", { locale: fr })}
+          <b />
+          {format(new Date(event.end_date), "HH:mm", { locale: fr })}
         </div>
       ),
     },
@@ -132,9 +144,9 @@ function EventDash() {
           <StatsCard
             Icon={FiCalendar}
             iconColor="icon-info"
-            title="Total"
+            title="Événements"
             value={totalCount}
-            cycle="Événements"
+            cycle="Total"
           />
           <StatsCard
             Icon={FiClock}
@@ -142,13 +154,6 @@ function EventDash() {
             title="Brouillons"
             value={draftCount}
             cycle="Total"
-          />
-          <StatsCard
-            Icon={FiCalendar}
-            iconColor="icon-warning"
-            title="Plannifié"
-            value={plannedCount}
-            cycle="Événements"
           />
           <StatsCard
             Icon={FiCheck}
@@ -159,12 +164,22 @@ function EventDash() {
           />
           <StatsCard
             Icon={FiXCircle}
+            iconColor="icon-error"
+            title="Annulés"
+            value={plannedCount}
+            cycle="Total"
+          />
+          <StatsCard
+            Icon={FiXCircle}
             iconColor="icon-info"
             title="Terminés"
             value={finishedCount}
             cycle="Total"
           />
         </div>
+        <button className="btn-add-event" type="button">
+          <FiEdit2 /> Créer un événement
+        </button>
       </header>
 
       <main className="eventDash-main">
@@ -193,13 +208,7 @@ function EventDash() {
         </section>
 
         <aside className="eventDash-aside">
-          {selectedEvent ? (
-            <EventDetailCard selectedEvent={selectedEvent} />
-          ) : (
-            <div className="no-user-selected">
-              <p>Sélectionnez un événement pour voir ses détails</p>
-            </div>
-          )}
+          <EventDetailCard selectedEvent={selectedEvent} />
         </aside>
       </main>
     </div>
