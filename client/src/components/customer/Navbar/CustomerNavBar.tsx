@@ -8,9 +8,10 @@ import {
 } from "react-icons/fi";
 import { Link, NavLink } from "react-router";
 import "./CustomerNavbar.css";
+import { useAuth } from "../../../context/AuthContext";
 
 function CustomerNavBar() {
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const { user } = useAuth();
 
   const userInitials = user?.email
     ? user.email.slice(0, 2).toUpperCase()
@@ -50,7 +51,6 @@ function CustomerNavBar() {
             >
               Coiffeurs
             </NavLink>
-            <span className="navbar-desktop__link">Services</span>
             <NavLink
               to={user ? `/reservations/${user.id}` : "/login"}
               className={({ isActive }) =>
@@ -68,7 +68,14 @@ function CustomerNavBar() {
               Réserver
             </Link>
             {userInitials ? (
-              <div className="navbar-desktop__avatar">{userInitials}</div>
+              <Link
+                to={user ? `/profile/${user.id}` : "/login"}
+                className="navbar-desktop__avatar"
+              >
+                <div className="navbar-desktop__avatar">
+                  {userInitials}
+                </div>{" "}
+              </Link>
             ) : (
               <Link to="/login" className="navbar-desktop__login">
                 Connexion
@@ -93,7 +100,7 @@ function CustomerNavBar() {
           </NavLink>
 
           <NavLink
-            to="search"
+            to="/search"
             className={({ isActive }) =>
               isActive ? "navbar__item navbar__item--active" : "navbar__item"
             }
@@ -103,7 +110,7 @@ function CustomerNavBar() {
           </NavLink>
 
           <NavLink
-            to="booking"
+            to="/booking"
             className={({ isActive }) =>
               isActive
                 ? "navbar__center navbar__item--active"
@@ -117,7 +124,7 @@ function CustomerNavBar() {
           </NavLink>
 
           <NavLink
-            to="reservations"
+            to={user ? `/reservations/${user.id}` : "/login"}
             className={({ isActive }) =>
               isActive ? "navbar__item navbar__item--active" : "navbar__item"
             }
