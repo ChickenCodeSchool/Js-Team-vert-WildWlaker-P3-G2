@@ -97,11 +97,8 @@ function EditEventModal({
     dataToSend.append("title", formData.title);
     dataToSend.append("description", formData.description);
     dataToSend.append("status", formData.status);
-    dataToSend.append(
-      "start_date",
-      new Date(formData.start_date).toISOString(),
-    );
-    dataToSend.append("end_date", new Date(formData.end_date).toISOString());
+    dataToSend.append("start_date", formData.start_date);
+    dataToSend.append("end_date", formData.end_date);
     dataToSend.append("location", formData.location);
 
     if (selectedFile) {

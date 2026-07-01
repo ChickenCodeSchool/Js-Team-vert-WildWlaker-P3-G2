@@ -157,9 +157,13 @@ function EventDash() {
       header: "Date de début",
       render: (event) => (
         <div className="user-grid-info">
-          {format(new Date(event.start_date), "dd MMM yyyy", { locale: fr })}
+          {format(new Date(event.start_date), "dd MMM yyyy", {
+            locale: fr,
+          })}
           <b />
-          {format(new Date(event.start_date), "HH:mm", { locale: fr })}
+          {format(new Date(event.start_date), "HH:mm", {
+            locale: fr,
+          })}
         </div>
       ),
     },
@@ -168,9 +172,13 @@ function EventDash() {
       header: "Date de fin",
       render: (event) => (
         <div className="user-grid-info">
-          {format(new Date(event.end_date), "dd MMM yyyy", { locale: fr })}
+          {format(new Date(event.end_date), "dd MMM yyyy", {
+            locale: fr,
+          })}
           <b />
-          {format(new Date(event.end_date), "HH:mm", { locale: fr })}
+          {format(new Date(event.end_date), "HH:mm", {
+            locale: fr,
+          })}
         </div>
       ),
     },

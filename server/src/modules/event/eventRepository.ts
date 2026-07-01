@@ -35,7 +35,11 @@ class eventRepository {
 
   async readAll() {
     // Execute the SQL SELECT query to retrieve all Events from the "Event" table
-    const [rows] = await databaseClient.query<Rows>("select * from event");
+    const [rows] =
+      await databaseClient.query<Rows>(`SELECT id_event, title, image_url, description, status, location,
+            DATE_FORMAT(start_date, '%Y-%m-%dT%H:%i:%s') AS start_date,
+            DATE_FORMAT(end_date, '%Y-%m-%dT%H:%i:%s') AS end_date 
+     FROM event`);
 
     // Return the array of Events
     return rows as Event[];

@@ -3,9 +3,9 @@ import type { RequestHandler } from "express";
 // Import access to data
 import eventRepository from "./eventRepository";
 
-const formatToMySQLDateTime = (isoString: string): string => {
-  const date = new Date(isoString);
-  return date.toISOString().slice(0, 19).replace("T", " ");
+const formatToMySQLDateTime = (localDateTimeString: string): string => {
+  if (!localDateTimeString) return "";
+  return `${localDateTimeString.replace("T", " ")}:00`;
 };
 
 // The B of BREAD - Browse (Read All) operation
