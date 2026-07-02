@@ -6,6 +6,7 @@ import { verifyToken } from "./middleware/verifyToken";
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
+import barberAvailabilityActions from "./modules/barber/barberAvailabilityActions";
 import {
   upload as barberUpload,
   uploadAvatar,
@@ -44,6 +45,8 @@ router.put(
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
+router.get("/api/barbers/:id/availability", barberAvailabilityActions.browse);
+router.put("/api/barbers/:id/schedule", barberAvailabilityActions.generate);
 router.get("/api/barbers/:id/prestations", prestationActions.browseByBarber);
 router.put("/api/barbers/:id", barberActions.edit);
 router.post(

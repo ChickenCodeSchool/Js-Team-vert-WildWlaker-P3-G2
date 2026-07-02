@@ -1,8 +1,11 @@
 import "./BookingForm.css";
+import { useEffect, useState } from "react";
 import { FiCheckCircle, FiScissors } from "react-icons/fi";
 import type { Prestation } from "../../../types/prestation";
 import BarberCard from "../BarberCard/BarberCard";
 import type { Booking } from "./BookingTypes";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 type PrestationWithBothIds = Prestation & {
   id_prestation?: number;
@@ -20,33 +23,40 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
     return prestation.Id_prestation ?? prestation.id_prestation;
   };
 
-  const dates = Array.from({ length: 7 }, (_, i) => {
+  const [slots, setSlots] = useState<string[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+
+  const dates = Array.from({ length: 14 }, (_, i) => {
     const date = new Date();
     date.setDate(date.getDate() + i);
     return date;
   });
 
-  const slots = [
-    "09:00",
-    "09:30",
-    "10:00",
-    "10:30",
-    "11:00",
-    "11:30",
-    "13:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15h30",
-    "16h00",
-    "16h30",
-    "17h00",
-    "17h30",
-    "18h00",
-    "18h30",
-    "19h00",
-  ];
+  useEffect(() => {
+    if (!booking.barber?.id_user || !booking.appointmentDate) {
+      setSlots([]);
+      return;
+    }
+    setLoadingSlots(true);
+    fetch(
+      `${API_URL}/api/barbers/${booking.barber.id_user}/availability?date=${booking.appointmentDate}`,
+    )
+      .then((res) => (res.ok ? res.json() : []))
+      .then(
+        (
+          data: {
+            id_availability: number;
+            start_time: string;
+            end_time: string;
+          }[],
+        ) => {
+          const times = data.map((slot) => slot.start_time.slice(11, 16));
+          setSlots(times);
+        },
+      )
+      .catch(() => setSlots([]))
+      .finally(() => setLoadingSlots(false));
+  }, [booking.barber?.id_user, booking.appointmentDate]);
 
   return (
     <div className="booking-form">
@@ -156,24 +166,34 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
       <section className="booking-form__section">
         <h3 className="booking-form__section-title">3. Choisir une heure</h3>
 
-        <div className="booking-form__slots">
-          {slots.map((slot) => (
-            <button
-              type="button"
-              key={slot}
-              className={`booking-form__slot ${
-                booking.appointmentTime === slot
-                  ? "booking-form__slot--selected"
-                  : ""
-              }`}
-              onClick={() => {
-                setBooking({ ...booking, appointmentTime: slot });
-              }}
-            >
-              {slot}
-            </button>
-          ))}
-        </div>
+        {!booking.appointmentDate ? (
+          <p className="booking-form__empty">Sélectionnez d'abord une date.</p>
+        ) : loadingSlots ? (
+          <p className="booking-form__empty">Chargement des créneaux…</p>
+        ) : slots.length === 0 ? (
+          <p className="booking-form__empty">
+            Aucun créneau disponible pour cette date.
+          </p>
+        ) : (
+          <div className="booking-form__slots">
+            {slots.map((slot) => (
+              <button
+                type="button"
+                key={slot}
+                className={`booking-form__slot ${
+                  booking.appointmentTime === slot
+                    ? "booking-form__slot--selected"
+                    : ""
+                }`}
+                onClick={() => {
+                  setBooking({ ...booking, appointmentTime: slot });
+                }}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+        )}
       </section>
 
       <button
