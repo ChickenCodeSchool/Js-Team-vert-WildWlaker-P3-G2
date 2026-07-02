@@ -31,6 +31,7 @@ router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
+router.get("/api/barbers/:id/prestations", prestationActions.browseByBarber);
 router.put("/api/barbers/:id", barberActions.edit);
 router.post(
   "/api/barbers/:id/avatar",

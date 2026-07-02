@@ -3,14 +3,15 @@ import type { Prestation } from "../types/prestation";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function usePrestations() {
+function usePrestations(barberId?: number) {
   const [prestations, setPrestations] = useState<Prestation[]>([]);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/prestations`)
+    if (!barberId) return;
+    fetch(`${API_URL}/api/barbers/${barberId}/prestations`)
       .then((res) => res.json())
       .then((data) => setPrestations(data));
-  }, []);
+  }, [barberId]);
 
   return prestations;
 }
