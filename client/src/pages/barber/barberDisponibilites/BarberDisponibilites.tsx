@@ -86,7 +86,6 @@ function BarberDisponibilites() {
   }
 
   function handleSave() {
-    // TODO: appel API pour sauvegarder
     setSaved(true);
   }
 
@@ -100,19 +99,22 @@ function BarberDisponibilites() {
       </div>
 
       <div className="barber-dispo__section">
-        <h2 className="barber-dispo__section-title">Semaine type</h2>
-        <p className="barber-dispo__section-subtitle">
-          Définissez vos horaires par jour de la semaine
-        </p>
+        <div className="barber-dispo__section-head">
+          <h2 className="barber-dispo__section-title">Semaine type</h2>
+          <p className="barber-dispo__section-subtitle">
+            Définissez vos horaires par jour de la semaine
+          </p>
+        </div>
 
         <ul className="barber-dispo__list">
           {schedule.map((day, i) => (
-            <li
-              key={day.day}
-              className={`barber-dispo__row ${!day.active ? "barber-dispo__row--inactive" : ""}`}
-            >
+            <li key={day.day} className="barber-dispo__row">
               <div className="barber-dispo__row-header">
-                <span className="barber-dispo__day">{day.day}</span>
+                <span
+                  className={`barber-dispo__day ${!day.active ? "barber-dispo__day--inactive" : ""}`}
+                >
+                  {day.day}
+                </span>
                 <label className="barber-dispo__toggle-label">
                   <input
                     type="checkbox"
@@ -137,47 +139,51 @@ function BarberDisponibilites() {
                 <div className="barber-dispo__slots">
                   <div className="barber-dispo__slot">
                     <span className="barber-dispo__slot-label">Matin</span>
-                    <input
-                      type="time"
-                      value={day.morningStart}
-                      className="barber-dispo__time-input"
-                      onChange={(e) =>
-                        updateDay(i, "morningStart", e.target.value)
-                      }
-                    />
-                    <span className="barber-dispo__slot-sep">–</span>
-                    <input
-                      type="time"
-                      value={day.morningEnd}
-                      className="barber-dispo__time-input"
-                      onChange={(e) =>
-                        updateDay(i, "morningEnd", e.target.value)
-                      }
-                    />
+                    <div className="barber-dispo__time-range">
+                      <input
+                        type="time"
+                        value={day.morningStart}
+                        className="barber-dispo__time-input"
+                        onChange={(e) =>
+                          updateDay(i, "morningStart", e.target.value)
+                        }
+                      />
+                      <span className="barber-dispo__slot-sep">–</span>
+                      <input
+                        type="time"
+                        value={day.morningEnd}
+                        className="barber-dispo__time-input"
+                        onChange={(e) =>
+                          updateDay(i, "morningEnd", e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
                   <div className="barber-dispo__slot">
                     <span className="barber-dispo__slot-label">Après-midi</span>
-                    <input
-                      type="time"
-                      value={day.afternoonStart}
-                      className="barber-dispo__time-input"
-                      onChange={(e) =>
-                        updateDay(i, "afternoonStart", e.target.value)
-                      }
-                    />
-                    <span className="barber-dispo__slot-sep">–</span>
-                    <input
-                      type="time"
-                      value={day.afternoonEnd}
-                      className="barber-dispo__time-input"
-                      onChange={(e) =>
-                        updateDay(i, "afternoonEnd", e.target.value)
-                      }
-                    />
+                    <div className="barber-dispo__time-range">
+                      <input
+                        type="time"
+                        value={day.afternoonStart}
+                        className="barber-dispo__time-input"
+                        onChange={(e) =>
+                          updateDay(i, "afternoonStart", e.target.value)
+                        }
+                      />
+                      <span className="barber-dispo__slot-sep">–</span>
+                      <input
+                        type="time"
+                        value={day.afternoonEnd}
+                        className="barber-dispo__time-input"
+                        onChange={(e) =>
+                          updateDay(i, "afternoonEnd", e.target.value)
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
               ) : (
-                <p className="barber-dispo__closed">Fermé</p>
+                <span className="barber-dispo__closed">Fermé</span>
               )}
             </li>
           ))}
