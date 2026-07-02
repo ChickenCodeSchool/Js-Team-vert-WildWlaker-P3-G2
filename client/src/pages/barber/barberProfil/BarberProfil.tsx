@@ -1,9 +1,10 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
 import {
   FiCalendar,
+  FiEdit,
   FiImage,
   FiLogOut,
   FiMail,
@@ -16,6 +17,7 @@ import { LuUpload } from "react-icons/lu";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
 import AfroImg from "../../../assets/images/Afro.jpg";
+import EditBarberModal from "../../../components/barber/EditBarberModal/EditBarberModal";
 import type { Barber } from "../../../types/barber";
 import "../../../components/customer/Profile/ProfileHeader.css";
 import "../../../components/customer/Profile/ProfileInfo.css";
@@ -45,11 +47,12 @@ function BarberProfil() {
   const [loading, setLoading] = useState(true);
   const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  const loadData = useCallback(() => {
     fetch(`${API_URL}/api/barbers/${BARBER_ID}`)
       .then((res) => {
         if (!res.ok) throw new Error("Impossible de charger le profil");
@@ -64,6 +67,10 @@ function BarberProfil() {
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -261,6 +268,14 @@ function BarberProfil() {
             <button
               type="button"
               className="profile-actions__button"
+              onClick={() => setShowEditModal(true)}
+            >
+              <FiEdit className="profile-actions__icon" />
+              <span>Modifier mon profil</span>
+            </button>
+            <button
+              type="button"
+              className="profile-actions__button"
               onClick={handleLogout}
             >
               <FiLogOut className="profile-actions__icon" />
@@ -324,6 +339,14 @@ function BarberProfil() {
             )}
           </div>
         </div>
+      )}
+
+      {showEditModal && barberData && (
+        <EditBarberModal
+          barber={barberData}
+          onClose={() => setShowEditModal(false)}
+          onSave={loadData}
+        />
       )}
     </div>
   );

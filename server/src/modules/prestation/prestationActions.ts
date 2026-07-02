@@ -54,4 +54,16 @@ const destroy: RequestHandler = async (req, res, next) => {
   }
 };
 
-export default { browse, add, edit, destroy };
+const browseByBarber: RequestHandler = async (req, res, next) => {
+  try {
+    const barberId = Number(req.params.id);
+
+    const prestations = await PrestationRepository.readByBarber(barberId);
+
+    res.json(prestations);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, browseByBarber, add, edit, destroy };

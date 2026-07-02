@@ -8,6 +8,7 @@ import BookingSummary from "../../../components/customer/Booking/BookingSummary"
 import type { Booking } from "../../../components/customer/Booking/BookingTypes";
 import Stepper from "../../../components/customer/Booking/Stepper";
 import useBarbers from "../../../hooks/useBarbers";
+import usePrestations from "../../../hooks/usePrestations";
 
 import "./BookingPage.css";
 
@@ -19,6 +20,7 @@ function BookingPage() {
   const [booking, setBooking] = useState<Booking>({
     barber: location.state?.barber,
   });
+  const prestations = usePrestations(booking.barber?.id_user);
 
   return (
     <main className="reservation-page">
@@ -44,6 +46,7 @@ function BookingPage() {
                 <BookingForm
                   booking={booking}
                   setBooking={setBooking}
+                  prestations={prestations}
                   onNext={() => setStep(2)}
                 />
               </div>
