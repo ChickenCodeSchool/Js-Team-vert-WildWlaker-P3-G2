@@ -1,8 +1,8 @@
 import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
+import { emailRegex, passwordRegex } from "../../utils/validation";
 import customerRepository from "../customer/customerRepository";
-
 import userRepository from "./userRepository";
 
 // The B of BREAD - Browse (Read All) operation
@@ -42,6 +42,23 @@ const register: RequestHandler = async (req, res, next) => {
         message: "Mot de passe requis",
       });
     }
+    if (!email) {
+      return res.status(400).json({
+        message: "Adresse email requise",
+      });
+    }
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Adresse email invalide",
+      });
+    }
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message:
+          "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      });
+    }
+
     const hashedPassword = await argon2.hash(password);
     const result = await userRepository.create({
       email,

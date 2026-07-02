@@ -3,6 +3,7 @@ import { CiLogout } from "react-icons/ci";
 import { FiCalendar, FiTrash2 } from "react-icons/fi";
 import { useNavigate } from "react-router";
 import "./ProfileActions.css";
+import { useAuth } from "../../../context/AuthContext";
 
 type Props = {
   onDeleteConfirm: () => void;
@@ -11,9 +12,12 @@ type Props = {
 function ProfileActions({ onDeleteConfirm }: Props) {
   const navigate = useNavigate();
   const [showConfirm, setShowConfirm] = useState(false);
+  const { user } = useAuth();
+
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    logout();
     navigate("/login");
   };
 
@@ -22,7 +26,11 @@ function ProfileActions({ onDeleteConfirm }: Props) {
       <button
         type="button"
         className="profile-actions__button"
-        onClick={() => navigate("/reservations/21/")}
+        onClick={() => {
+          if (user) {
+            navigate(`/reservations/${user.id}`);
+          }
+        }}
       >
         <FiCalendar className="profile-actions__icon" />
         <span>Voir mes réservations</span>
