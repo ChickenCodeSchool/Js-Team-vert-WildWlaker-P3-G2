@@ -38,6 +38,9 @@ const browseforadmin: RequestHandler = async (req, res, next) => {
 };
 const readwithuserid: RequestHandler = async (req, res, next) => {
   try {
+    if (req.user?.id !== Number(req.params.id)) {
+      return res.sendStatus(403);
+    }
     const id = Number(req.params.id);
     const appointment = await appointmentRepository.readwithuserid(id);
     res.json(appointment);

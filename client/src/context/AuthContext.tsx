@@ -8,7 +8,7 @@ type User = {
 
 type AuthContextType = {
   user: User | null;
-  login: (userData: User) => void;
+  login: (userData: User, token: string) => void;
   logout: () => void;
 };
 
@@ -19,13 +19,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     JSON.parse(localStorage.getItem("user") || "null"),
   );
 
-  const login = (userData: User) => {
+  const login = (userData: User, token: string) => {
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+
     setUser(userData);
   };
 
   const logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
   };
 

@@ -1,7 +1,8 @@
 import argon2 from "argon2";
 import type { RequestHandler } from "express";
+import jwt from "jsonwebtoken";
+import { emailRegex, passwordRegex } from "../../utils/validation";
 import customerRepository from "../customer/customerRepository";
-
 import userRepository from "./userRepository";
 
 // The B of BREAD - Browse (Read All) operation
@@ -36,12 +37,29 @@ const register: RequestHandler = async (req, res, next) => {
       phone,
     } = req.body;
 
-    const hashedPassword = await argon2.hash(password);
     if (!password) {
       return res.status(400).json({
         message: "Mot de passe requis",
       });
     }
+    if (!email) {
+      return res.status(400).json({
+        message: "Adresse email requise",
+      });
+    }
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        message: "Adresse email invalide",
+      });
+    }
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({
+        message:
+          "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      });
+    }
+
+    const hashedPassword = await argon2.hash(password);
     const result = await userRepository.create({
       email,
       password: hashedPassword,
@@ -73,7 +91,7 @@ const login: RequestHandler = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await userRepository.readByEmail(email);
 
-    if (!user || !(await argon2.verify(user.password, password))) {
+    if (!user) {
       return res.status(401).json({
         message: "Email ou mot de passe incorrect",
       });
@@ -81,19 +99,37 @@ const login: RequestHandler = async (req, res, next) => {
     const isValidPassword = await argon2.verify(user.password, password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Mot de passe incorrect" });
+      return res
+        .status(401)
+        .json({ message: "Email ou mot de passe incorrect" });
     }
+    const token = jwt.sign(
+      {
+        id: user.id_user,
+        role: user.user_type,
+      },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "7d" },
+    );
+
     res.json({
-      id: user.id_user,
-      email: user.email,
-      role: user.user_type,
+      token,
+      user: {
+        id: user.id_user,
+        email: user.email,
+        role: user.user_type,
+      },
     });
   } catch (err) {
     next(err);
   }
 };
+
 const deleteUser: RequestHandler = async (req, res, next) => {
   try {
+    if (req.user?.id !== Number(req.params.id)) {
+      return res.sendStatus(403);
+    }
     const id_user = Number(req.params.id);
 
     // Appel au repository pour sauvegarder en BDD

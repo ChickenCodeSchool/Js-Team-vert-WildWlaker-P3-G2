@@ -11,6 +11,7 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { useNavigate } from "react-router";
+import { emailRegex, passwordRegex } from "../../utils/validation";
 
 import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
@@ -43,6 +44,10 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      if (!emailRegex.test(loginEmail)) {
+        setError("Veuillez saisir une adresse email valide.");
+        return;
+      }
       const res = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -56,8 +61,8 @@ const Login = () => {
         setError("Email ou mot de passe incorrect");
         return;
       }
-      const user = await res.json();
-      login(user);
+      const data = await res.json();
+      login(data.user, data.token);
       navigate("/");
     } catch {
       setError("Impossible de se connecter");
@@ -66,10 +71,23 @@ const Login = () => {
 
   const handleRegister = async () => {
     setError("");
+
+    if (!emailRegex.test(email.trim())) {
+      setError("Veuillez saisir une adresse email valide.");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      );
+      return;
+    }
     if (password !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas");
       return;
     }
+
     try {
       const res = await fetch(`${API_URL}/api/register`, {
         method: "POST",
