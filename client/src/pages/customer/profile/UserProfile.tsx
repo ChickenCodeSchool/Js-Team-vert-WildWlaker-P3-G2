@@ -32,7 +32,12 @@ function UserProfile() {
   console.log("USER ID:", userId);
   useEffect(() => {
     console.log("useEffect UserProfile");
-    fetch(`${API_URL}/api/customers/${userId}`)
+    const token = localStorage.getItem("token");
+    fetch(`${API_URL}/api/customers/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
       .then(async (res) => {
         if (!res.ok) {
           throw new Error("Utilisateur introuvable");
@@ -51,8 +56,13 @@ function UserProfile() {
 
   const loadData = async () => {
     if (!userId) return;
+    const token = localStorage.getItem("token");
 
-    const res = await fetch(`${API_URL}/api/customers/${userId}`);
+    const res = await fetch(`${API_URL}/api/customers/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await res.json();
 
     setCustomer(data);

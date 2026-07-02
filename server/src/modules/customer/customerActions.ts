@@ -4,23 +4,27 @@ import type { RequestHandler } from "express";
 import customerRepository from "./customerRepository";
 
 // The B of BREAD - Browse (Read All) operation
-const browse: RequestHandler = async (_req, res, next) => {
+const browse: RequestHandler = async (req, res, next) => {
   try {
-    // Fetch all customers
+    if (req.user?.role !== "admin") {
+      return res.sendStatus(403);
+    }
+
     const customers = await customerRepository.readAll();
 
-    // Respond with the customers in JSON format
     res.json(customers);
   } catch (err) {
-    // Pass any errors to the error-handling middleware
     next(err);
   }
 };
+
 const read: RequestHandler = async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
+    if (req.user?.id !== Number(req.params.id)) {
+      return res.sendStatus(403);
+    }
     // Fetch all customers
-    const customer = await customerRepository.read(id);
+    const customer = await customerRepository.read(Number(req.params.id));
 
     // Respond with the customers in JSON format
     res.json(customer);
@@ -31,13 +35,15 @@ const read: RequestHandler = async (req, res, next) => {
 };
 const edit: RequestHandler = async (req, res, next) => {
   try {
+    if (req.user?.id !== Number(req.params.id)) {
+      return res.sendStatus(403);
+    }
+
     const id_user = Number(req.params.id);
     const updatedCustomerData = { ...req.body, id_user };
 
-    // Appel au repository pour sauvegarder en BDD
     await customerRepository.update(updatedCustomerData);
 
-    // On renvoie un statut 204 (No Content) ou 200 avec les données
     res.status(200).json({
       message: "Client mis à jour avec succès",
       data: updatedCustomerData,

@@ -56,7 +56,9 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       console.log(updatedCustomer);
       const res = await fetch(`${API_URL}/api/customers/${customer.id_user}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(updatedCustomer),
       });
 

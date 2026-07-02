@@ -14,7 +14,16 @@ function MyReservations() {
 
   useEffect(() => {
     const userId = Number(id);
-    fetch(`${API_URL}/api/appointments/user/${userId}`)
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("Aucun token trouvé");
+      return;
+    }
+    fetch(`${API_URL}/api/appointments/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur ${res.status}`);
         return res.json();

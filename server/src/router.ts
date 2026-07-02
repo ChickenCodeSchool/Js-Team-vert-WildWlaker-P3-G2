@@ -2,6 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
+import { verifyToken } from "./middleware/verifyToken";
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
@@ -20,12 +21,24 @@ import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-router.get("/api/admin-dashboard", adminDashboardAction.browse);
+router.get("/api/admin-dashboard", verifyToken, adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
-router.get("/api/appointments/barber/:id", appointmentActions.readByBarber);
-router.get("/api/appointments/user/:id", appointmentActions.readwithuserid);
-router.put("/api/appointments/:id/status", appointmentActions.updateStatus);
+router.get(
+  "/api/appointments/barber/:id",
+  verifyToken,
+  appointmentActions.readByBarber,
+);
+router.get(
+  "/api/appointments/user/:id",
+  verifyToken,
+  appointmentActions.readwithuserid,
+);
+router.put(
+  "/api/appointments/:id/status",
+  verifyToken,
+  appointmentActions.updateStatus,
+);
 
 // --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);
@@ -34,27 +47,29 @@ router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.put("/api/barbers/:id", barberActions.edit);
 router.post(
   "/api/barbers/:id/avatar",
+  verifyToken,
   barberUpload.single("avatar"),
   uploadAvatar,
 );
 router.post(
   "/api/users/:id/avatar",
+  verifyToken,
   customerUpload.single("avatar"),
   uploadCustomerAvatar,
 );
-router.get("/api/customers", customerActions.browse);
-router.get("/api/customers/:id", customerActions.read);
-router.put("/api/customers/:id", customerActions.edit);
+router.get("/api/customers", verifyToken, customerActions.browse);
+router.get("/api/customers/:id", verifyToken, customerActions.read);
+router.put("/api/customers/:id", verifyToken, customerActions.edit);
 router.get("/api/events", eventActions.browse);
 router.get("/api/prestations", prestationActions.browse);
-router.post("/api/prestations", prestationActions.add);
-router.put("/api/prestations/:id", prestationActions.edit);
-router.delete("/api/prestations/:id", prestationActions.destroy);
-router.delete("/api/reviews/:id", reviewActions.destroy);
+router.post("/api/prestations", verifyToken, prestationActions.add);
+router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
+router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
+router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
-router.get("/api/users", userActions.browse);
-router.delete("/api/users/:id", userActions.deleteUser);
+router.get("/api/users", verifyToken, userActions.browse);
+router.delete("/api/users/:id", verifyToken, userActions.deleteUser);
 router.post("/api/register", userActions.register);
 router.post("/api/login", userActions.login);
 router.post("/api/forgot-password", userActions.forgotPassword);

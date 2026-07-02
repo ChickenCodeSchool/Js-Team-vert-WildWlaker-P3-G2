@@ -56,8 +56,8 @@ const Login = () => {
         setError("Email ou mot de passe incorrect");
         return;
       }
-      const user = await res.json();
-      login(user);
+      const data = await res.json();
+      login(data.user, data.token);
       navigate("/");
     } catch {
       setError("Impossible de se connecter");

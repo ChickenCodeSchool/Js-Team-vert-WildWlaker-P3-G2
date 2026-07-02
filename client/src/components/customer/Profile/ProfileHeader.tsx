@@ -26,6 +26,9 @@ function ProfileHeader({ customer, onEdit, onAvatarUpdated }: Props) {
     formData.append("avatar", file);
     const res = await fetch(`${API_URL}/api/users/${customer.id_user}/avatar`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: formData,
     });
 
