@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   FiCalendar,
   FiHome,
@@ -10,12 +11,35 @@ import { Link, NavLink } from "react-router";
 import "./CustomerNavbar.css";
 import { useAuth } from "../../../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function CustomerNavBar() {
   const { user } = useAuth();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   const userInitials = user?.email
     ? user.email.slice(0, 2).toUpperCase()
     : null;
+
+  useEffect(() => {
+    if (!user?.id) return;
+    const endpoint =
+      user.role === "barber"
+        ? `${API_URL}/api/barbers/${user.id}`
+        : `${API_URL}/api/customers/${user.id}`;
+    fetch(endpoint)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.avatar_url) {
+          setAvatarUrl(
+            data.avatar_url.startsWith("/")
+              ? `${API_URL}${data.avatar_url}`
+              : data.avatar_url,
+          );
+        }
+      })
+      .catch(() => {});
+  }, [user?.id, user?.role]);
 
   return (
     <>
@@ -72,9 +96,15 @@ function CustomerNavBar() {
                 to={user ? `/profile/${user.id}` : "/login"}
                 className="navbar-desktop__avatar"
               >
-                <div className="navbar-desktop__avatar">
-                  {userInitials}
-                </div>{" "}
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="avatar"
+                    className="navbar-desktop__avatar-img"
+                  />
+                ) : (
+                  userInitials
+                )}
               </Link>
             ) : (
               <Link to="/login" className="navbar-desktop__login">

@@ -75,6 +75,66 @@
   transform: translateX(0);
 }
 
+.NavBarHair-brand {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.NavBarHair-brand__logo {
+  font-family: var(--font-title);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+
+.NavBarHair-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 0 1.25rem;
+  margin-top: 2.5rem;
+  border-bottom: 1px solid var(--gray-700, rgba(255, 255, 255, 0.1));
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.NavBarHair-profile__avatar {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background: var(--gold-soft);
+  border: 2px solid var(--warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.NavBarHair-profile__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.NavBarHair-profile__avatar span {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gold-dark);
+}
+
+.NavBarHair-profile__name {
+  font-family: var(--font-title);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--white);
+  text-align: center;
+}
+
 @media (min-width: 1024px) {
   .NavBarHair-main {
     width: 280px;
