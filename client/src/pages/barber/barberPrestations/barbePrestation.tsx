@@ -7,7 +7,10 @@ const API_URL = import.meta.env.VITE_API_URL;
 const emptyForm = { name: "", duration: "", price: "" };
 
 function BarberPrestation() {
-  const initialPrestations = usePrestations();
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const barberId = user.id;
+
+  const initialPrestations = usePrestations(barberId);
   const [prestations, setPrestations] = useState<Prestation[]>([]);
 
   useEffect(() => {
@@ -45,6 +48,7 @@ function BarberPrestation() {
       name: form.name,
       price: Number(form.price),
       duration_minutes: Number(form.duration),
+      barberId,
     };
 
     if (editingId !== null) {

@@ -43,6 +43,13 @@ class PrestationRepository {
     );
   }
 
+  async linkToBarber(barberId: number, prestationId: number) {
+    await databaseClient.query<Result>(
+      "INSERT INTO propose (id_user, id_prestation) VALUES (?, ?)",
+      [barberId, prestationId],
+    );
+  }
+
   async delete(id: number) {
     await databaseClient.query<Result>(
       "DELETE FROM prestation WHERE id_prestation = ?",

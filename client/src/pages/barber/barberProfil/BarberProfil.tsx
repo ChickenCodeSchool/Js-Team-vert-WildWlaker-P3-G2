@@ -81,6 +81,7 @@ function BarberProfil() {
     try {
       const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/avatar`, {
         method: "POST",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: formData,
       });
       if (!res.ok) throw new Error("Échec de l'upload");
