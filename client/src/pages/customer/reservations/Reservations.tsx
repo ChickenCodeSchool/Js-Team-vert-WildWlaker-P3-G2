@@ -1,4 +1,5 @@
 import MyReservations from "../../../components/customer/MyReservations/MyReservations";
+import "./Reservations.css";
 
 function Reservations() {
   return (

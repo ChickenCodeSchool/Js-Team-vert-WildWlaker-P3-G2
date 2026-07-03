@@ -185,6 +185,7 @@
   .home {
     max-width: 1200px;
     padding-bottom: 4rem;
+    background: none;
   }
 
   /* Hero deux colonnes */
