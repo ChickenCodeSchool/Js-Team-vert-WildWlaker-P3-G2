@@ -22,7 +22,7 @@ import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-router.get("/api/admin-dashboard", verifyToken, adminDashboardAction.browse);
+router.get("/api/admin-dashboard", adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(
@@ -59,7 +59,7 @@ router.post(
   customerUpload.single("avatar"),
   uploadCustomerAvatar,
 );
-router.get("/api/customers", verifyToken, customerActions.browse);
+router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", verifyToken, customerActions.read);
 router.put("/api/customers/:id", verifyToken, customerActions.edit);
 router.get("/api/events", eventActions.browse);
