@@ -17,7 +17,10 @@ class BarberAvailabilityRepository {
     const endOfDay = `${date} 23:59:59`;
 
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT id_availability, start_time, end_time, is_booked
+      `SELECT id_availability,
+              DATE_FORMAT(start_time, '%Y-%m-%d %H:%i:%s') as start_time,
+              DATE_FORMAT(end_time,   '%Y-%m-%d %H:%i:%s') as end_time,
+              is_booked
        FROM barber_availability
        WHERE id_user = ?
          AND start_time >= ?
@@ -90,7 +93,7 @@ class BarberAvailabilityRepository {
 
     const values = slots.map((s) => [s.start, s.end, false, barberId]);
     await databaseClient.query(
-      `INSERT INTO barber_availability (start_time, end_time, is_booked, id_user) VALUES ?`,
+      "INSERT INTO barber_availability (start_time, end_time, is_booked, id_user) VALUES ?",
       [values],
     );
 
@@ -120,7 +123,12 @@ function generateSlots(
 }
 
 function formatDatetime(date: Date): string {
-  return date.toISOString().slice(0, 19).replace("T", " ");
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  const h = String(date.getHours()).padStart(2, "0");
+  const min = String(date.getMinutes()).padStart(2, "0");
+  return `${y}-${m}-${d} ${h}:${min}:00`;
 }
 
 export default new BarberAvailabilityRepository();
