@@ -10,7 +10,6 @@ import {
   FiTrash2,
   FiX,
 } from "react-icons/fi";
-
 import type { Barber } from "../../../types/barber";
 import type { Customer } from "../../../types/Customer";
 

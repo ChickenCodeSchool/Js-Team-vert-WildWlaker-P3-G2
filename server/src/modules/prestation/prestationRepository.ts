@@ -19,6 +19,15 @@ class PrestationRepository {
     return rows as Prestation[];
   }
 
+  async readByBarber(barberId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT p.* FROM prestation p INNER JOIN propose pr ON pr.id_prestation = p.id_prestation WHERE pr.id_user = ?",
+      [barberId],
+    );
+
+    return rows as Prestation[];
+  }
+
   async create(prestation: Omit<Prestation, "id_prestation">) {
     const [result] = await databaseClient.query<Result>(
       "INSERT INTO prestation (name, price, duration_minutes) VALUES (?, ?, ?)",

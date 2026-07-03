@@ -1,11 +1,5 @@
 import type { Barber } from "../../../types/barber";
-
-export type Prestation = {
-  id_prestation: number;
-  name: string;
-  price: number;
-  duration_minutes: number;
-};
+import type { Prestation } from "../../../types/prestation";
 
 export type Booking = {
   barber?: Barber;

@@ -11,8 +11,10 @@ import {
   FiUser,
 } from "react-icons/fi";
 import { useNavigate } from "react-router";
+import { emailRegex, passwordRegex } from "../../utils/validation";
 
 import "./Login.css";
+import { useAuth } from "../../context/AuthContext";
 
 type Tab = "connexion" | "inscription";
 type Role = "client" | "professionnel";
@@ -20,6 +22,7 @@ type Role = "client" | "professionnel";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
+  const { login } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("connexion");
   const [role, setRole] = useState<Role>("client");
   const [showPassword, setShowPassword] = useState(false);
@@ -41,6 +44,10 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
+      if (!emailRegex.test(loginEmail)) {
+        setError("Veuillez saisir une adresse email valide.");
+        return;
+      }
       const res = await fetch(`${API_URL}/api/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -54,14 +61,8 @@ const Login = () => {
         setError("Email ou mot de passe incorrect");
         return;
       }
-      const user = await res.json();
-      console.log("USER FROM API:", user);
-
-      localStorage.setItem("user", JSON.stringify(user));
-      console.log(
-        "LOCAL STORAGE:",
-        JSON.parse(localStorage.getItem("user") || "null"),
-      );
+      const data = await res.json();
+      login(data.user, data.token);
       navigate("/");
     } catch {
       setError("Impossible de se connecter");
@@ -70,10 +71,23 @@ const Login = () => {
 
   const handleRegister = async () => {
     setError("");
+
+    if (!emailRegex.test(email.trim())) {
+      setError("Veuillez saisir une adresse email valide.");
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.",
+      );
+      return;
+    }
     if (password !== confirmPassword) {
       setError("Les mots de passe ne correspondent pas");
       return;
     }
+
     try {
       const res = await fetch(`${API_URL}/api/register`, {
         method: "POST",
@@ -161,7 +175,13 @@ const Login = () => {
             </button>
           </div>
 
-          <span className="login__forgot">Mot de passe oublié ?</span>
+          <button
+            type="button"
+            className="login__forgot-password"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Mot de passe oublié?
+          </button>
 
           {error && <span className="login__error">{error}</span>}
 

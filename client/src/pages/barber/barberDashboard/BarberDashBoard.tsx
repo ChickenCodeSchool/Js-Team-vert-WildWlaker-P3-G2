@@ -77,7 +77,7 @@ function BarberDashBoard() {
     );
 
   return (
-    <div>
+    <div className="dashboard">
       <div className="stats-cards-container">
         <StatsGraphCardBarber
           Icon={FaRegCalendarAlt}

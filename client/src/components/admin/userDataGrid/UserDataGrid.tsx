@@ -75,6 +75,15 @@ function UserDataGrid<T extends { id: string | number }>({
               <tr
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
+                onKeyDown={(event) => {
+                  if (!onRowClick) return;
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    onRowClick(item);
+                  }
+                }}
+                role={onRowClick ? "button" : undefined}
+                tabIndex={onRowClick ? 0 : undefined}
                 className={`${onRowClick ? "clickable-row" : ""} ${
                   selectedId === item.id ? "selected-row" : ""
                 }`}
@@ -113,7 +122,7 @@ function UserDataGrid<T extends { id: string | number }>({
             {visiblePages.map((page) => {
               if (page === "...") {
                 return (
-                  <span key={`ellipsis`} className="pagination-ellipsis">
+                  <span key="ellipsis" className="pagination-ellipsis">
                     ...
                   </span>
                 );

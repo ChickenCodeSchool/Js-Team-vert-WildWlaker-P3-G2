@@ -3,14 +3,17 @@ import { FiChevronRight, FiMapPin } from "react-icons/fi";
 import fallbackImage from "../../../assets/images/Afro.jpg";
 import type { Barber } from "../../../types/barber";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type BarberCardProps = {
   barber: Barber;
   onProfileClick?: (barber: Barber) => void;
 };
 
 function BarberCard({ barber, onProfileClick }: BarberCardProps) {
-  const image =
-    barber.avatar_url?.startsWith("http") || barber.avatar_url?.startsWith("/")
+  const image = barber.avatar_url?.startsWith("/")
+    ? `${API_URL}${barber.avatar_url}`
+    : barber.avatar_url?.startsWith("http")
       ? barber.avatar_url
       : fallbackImage;
 
@@ -48,7 +51,7 @@ function BarberCard({ barber, onProfileClick }: BarberCardProps) {
         </div>
         <div className="barber-card__right">
           <span className="barber-card__distance">
-            {barber.delivery_radius} km
+            📍 À {barber.delivery_radius} km
           </span>
           <FiChevronRight className="barber-card__arrow" />
         </div>

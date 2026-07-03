@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
 import "./BookingForm.css";
 import { FiCheckCircle, FiScissors } from "react-icons/fi";
+import type { Prestation } from "../../../types/prestation";
 import BarberCard from "../BarberCard/BarberCard";
-import type { Booking, Prestation } from "./BookingTypes";
+import type { Booking } from "./BookingTypes";
+
+type PrestationWithBothIds = Prestation & {
+  id_prestation?: number;
+};
 
 type Props = {
   booking: Booking;
   setBooking: React.Dispatch<React.SetStateAction<Booking>>;
+  prestations: PrestationWithBothIds[];
   onNext: () => void;
 };
 
-const API_URL = import.meta.env.VITE_API_URL;
-
-function BookingForm({ booking, setBooking, onNext }: Props) {
-  const [prestations, setPrestations] = useState<Prestation[]>([]);
+function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
+  const getPrestationId = (prestation: PrestationWithBothIds) => {
+    return prestation.Id_prestation ?? prestation.id_prestation;
+  };
 
   const dates = Array.from({ length: 7 }, (_, i) => {
     const date = new Date();
@@ -43,16 +48,6 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
     "19h00",
   ];
 
-  useEffect(() => {
-    fetch(`${API_URL}/api/prestations`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log("DATA PRESTATIONS :", data);
-        setPrestations(data);
-      })
-      .catch((err) => console.error("Erreur chargement prestations", err));
-  }, []);
-
   return (
     <div className="booking-form">
       <h2 className="booking-form__title">Réserver </h2>
@@ -62,52 +57,65 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
         <h3 className="booking-form__section-title">1. Choisir un service</h3>
 
         <div className="booking-form__services">
-          {prestations.map((prestation) => (
-            <button
-              type="button"
-              key={prestation.id_prestation}
-              className={`booking-form__service ${
-                booking.prestation?.id_prestation === prestation.id_prestation
-                  ? "booking-form__service--selected"
-                  : ""
-              }`}
-              onClick={() =>
-                setBooking({
-                  ...booking,
-                  prestation,
-                })
-              }
-            >
-              <div className="booking-form__service-left">
-                <div className="booking-form__service-icon">
-                  <FiScissors />
-                </div>
+          {prestations.length === 0 ? (
+            <p className="booking-form__empty">
+              Aucune prestation disponible pour ce barbier.
+            </p>
+          ) : (
+            prestations.map((prestation) => {
+              const prestationId = getPrestationId(prestation);
+              const selectedId = booking.prestation
+                ? getPrestationId(booking.prestation as PrestationWithBothIds)
+                : undefined;
 
-                <div>
-                  <h4 className="booking-form__service-title">
-                    {prestation.name}
-                  </h4>
+              const isSelected =
+                selectedId !== undefined && selectedId === prestationId;
 
-                  <p className="booking-form__service-duration">
-                    {prestation.duration_minutes} min
-                  </p>
-                </div>
-              </div>
+              return (
+                <button
+                  type="button"
+                  key={prestationId}
+                  className={`booking-form__service ${
+                    isSelected ? "booking-form__service--selected" : ""
+                  }`}
+                  onClick={() =>
+                    setBooking({
+                      ...booking,
+                      prestation,
+                    })
+                  }
+                >
+                  <div className="booking-form__service-left">
+                    <div className="booking-form__service-icon">
+                      <FiScissors />
+                    </div>
 
-              <div className="booking-form__service-right">
-                <span className="booking-form__service-price">
-                  {prestation.price} €
-                </span>
+                    <div>
+                      <h4 className="booking-form__service-title">
+                        {prestation.name}
+                      </h4>
 
-                {booking.prestation?.id_prestation ===
-                prestation.id_prestation ? (
-                  <FiCheckCircle />
-                ) : (
-                  <span className="booking-form__service-radio" />
-                )}
-              </div>
-            </button>
-          ))}
+                      <p className="booking-form__service-duration">
+                        {prestation.duration_minutes} min
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="booking-form__service-right">
+                    <span className="booking-form__service-price">
+                      {prestation.price} €
+                    </span>
+
+                    {isSelected ? (
+                      <FiCheckCircle />
+                    ) : (
+                      <span className="booking-form__service-radio" />
+                    )}
+                  </div>
+                </button>
+              );
+            })
+          )}
         </div>
       </section>
 
@@ -116,12 +124,12 @@ function BookingForm({ booking, setBooking, onNext }: Props) {
 
         <div className="booking-form__dates">
           {dates.map((date) => {
-            const dateStr = date.toISOString().split("T")[0]; // "2025-06-04"
+            const dateStr = date.toISOString().split("T")[0];
             const dayNum = date.getDate();
-            const month = date.toLocaleDateString("fr-FR", { month: "short" }); // "juin"
+            const month = date.toLocaleDateString("fr-FR", { month: "short" });
             const weekday = date.toLocaleDateString("fr-FR", {
               weekday: "short",
-            }); // "mer."
+            });
 
             return (
               <button
