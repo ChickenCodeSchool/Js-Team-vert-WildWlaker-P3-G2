@@ -63,7 +63,11 @@ const Login = () => {
       }
       const data = await res.json();
       login(data.user, data.token);
-      navigate("/");
+      if (data.user.role === "barber") {
+        navigate("/barber/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch {
       setError("Impossible de se connecter");
     }
