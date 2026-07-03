@@ -1,11 +1,9 @@
 import { FiCalendar, FiInfo } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 import useBarberAppointments from "../../../hooks/useBarberAppointments";
 import "./barberAnnulations.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-// Hardcodé en attendant l'authentification
-const BARBER_ID = 1;
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("fr-FR", {
@@ -18,6 +16,8 @@ function formatDate(dateStr: string) {
 }
 
 function BarberAnnulations() {
+  const { user } = useAuth();
+  const BARBER_ID = user?.id ?? null;
   const { appointments, setAppointments } = useBarberAppointments(
     BARBER_ID,
     "Annulé",
@@ -26,7 +26,10 @@ function BarberAnnulations() {
   function handleRelancer(id: number) {
     fetch(`${API_URL}/api/appointments/${id}/status`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify({ status: "En attente" }),
     }).then(() => {
       setAppointments((prev) => prev.filter((a) => a.id_appointment !== id));
@@ -38,7 +41,10 @@ function BarberAnnulations() {
       appointments.map((a) =>
         fetch(`${API_URL}/api/appointments/${a.id_appointment}/status`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           body: JSON.stringify({ status: "En attente" }),
         }),
       ),

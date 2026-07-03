@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { FaCommentAlt, FaCut } from "react-icons/fa";
-import { FiCalendar, FiHome, FiUser } from "react-icons/fi";
+import { FiCalendar, FiHome, FiLogOut, FiUser } from "react-icons/fi";
 import { GrDocumentConfig } from "react-icons/gr";
 import { MdFreeCancellation, MdPeopleAlt } from "react-icons/md";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 import "./BarberNavBar.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -16,6 +17,13 @@ type BarberProfile = {
 function BarberNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [barber, setBarber] = useState<BarberProfile | null>(null);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   useEffect(() => {
     if (window.innerWidth >= 1024) {
@@ -24,17 +32,14 @@ function BarberNavBar() {
   }, []);
 
   useEffect(() => {
-    const userString = localStorage.getItem("user");
-    const loggedUser = userString ? JSON.parse(userString) : null;
-    const id = loggedUser?.id;
-    if (!id) return;
-    fetch(`${API_URL}/api/barbers/${id}`)
+    if (!user?.id) return;
+    fetch(`${API_URL}/api/barbers/${user.id}`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data) setBarber(data);
       })
       .catch(() => {});
-  }, []);
+  }, [user?.id]);
 
   const avatarUrl = barber?.avatar_url?.startsWith("/")
     ? `${API_URL}${barber.avatar_url}`
@@ -66,6 +71,10 @@ function BarberNavBar() {
           )}
         </div>
 
+        <NavLink to="/" className="NavBarHair-menu">
+          <FiHome /> Accueil
+        </NavLink>
+
         <NavLink to="/barber/dashBoard" className="NavBarHair-menu">
           <FiHome /> Tableau de Bord
         </NavLink>
@@ -94,14 +103,6 @@ function BarberNavBar() {
 
         <h3>ANALYTICS</h3>
 
-        {/* <NavLink to="/barber/signalement" className="NavBarHair-menu">
-          <FiAlertTriangle /> Signalements
-        </NavLink>
-
-        <NavLink to="/barber/statistics" className="NavBarHair-menu">
-          <SiSimpleanalytics /> Statistique
-        </NavLink> */}
-
         <NavLink to="/barber/customer" className="NavBarHair-menu">
           <FaCommentAlt /> Avis
         </NavLink>
@@ -112,6 +113,14 @@ function BarberNavBar() {
           <GrDocumentConfig />
           Paramètres
         </NavLink>
+
+        <button
+          type="button"
+          className="NavBarHair-menu NavBarHair-menu--logout"
+          onClick={handleLogout}
+        >
+          <FiLogOut /> Déconnexion
+        </button>
       </nav>
     </>
   );
