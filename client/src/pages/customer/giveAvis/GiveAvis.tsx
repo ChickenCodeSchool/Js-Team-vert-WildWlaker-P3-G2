@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { FiCalendar, FiPlus, FiX } from "react-icons/fi";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import "./giveAvis.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const RATING_LABELS: Record<number, string> = {
   1: "Mauvais",
@@ -14,11 +16,29 @@ const RATING_LABELS: Record<number, string> = {
 
 function GiveAvis() {
   const { appointmentId } = useParams();
+  const navigate = useNavigate();
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [comment, setComment] = useState("");
   const [photos, setPhotos] = useState<string[]>([]);
   const [publishWithName, setPublishWithName] = useState(true);
+
+  async function handleSubmit() {
+    if (!rating || !appointmentId) return;
+    await fetch(`${API_URL}/api/reviews`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        rating,
+        comment,
+        id_appointment: Number(appointmentId),
+      }),
+    });
+    navigate(-1);
+  }
 
   const activeRating = hovered || rating;
 
@@ -173,6 +193,7 @@ function GiveAvis() {
         type="button"
         className="give-avis__submit"
         disabled={rating === 0}
+        onClick={handleSubmit}
       >
         Publier mon avis
       </button>

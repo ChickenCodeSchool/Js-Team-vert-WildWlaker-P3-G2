@@ -55,4 +55,22 @@ const destroy: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-export default { browse, browseforadmin, browseByBarber, destroy };
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const { rating, comment, id_appointment } = req.body;
+    if (!rating || !id_appointment) {
+      res.status(400).json({ message: "Note et rendez-vous requis" });
+      return;
+    }
+    const result = await reviewRepository.create({
+      rating: Number(rating),
+      comment: comment ?? "",
+      id_appointment: Number(id_appointment),
+    });
+    res.status(201).json({ message: "Avis publié", id: (result as { insertId: number }).insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export default { browse, browseforadmin, browseByBarber, destroy, add };
