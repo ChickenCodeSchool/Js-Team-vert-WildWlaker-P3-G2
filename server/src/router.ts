@@ -80,6 +80,7 @@ router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
 router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
+router.get("/api/reviews/barber/:id", reviewActions.browseByBarber);
 router.get("/api/users", verifyToken, userActions.browse);
 router.delete("/api/users/:id", verifyToken, userActions.deleteUser);
 router.post("/api/register", userActions.register);

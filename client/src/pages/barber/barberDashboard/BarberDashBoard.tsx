@@ -45,7 +45,7 @@ function BarberDashBoard() {
       .then((res) => res.json())
       .then((data) => setReservations(data));
 
-    fetch(`${apiUrl}/api/reviews`)
+    fetch(`${apiUrl}/api/reviews/barber/${BARBER_ID}`)
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);

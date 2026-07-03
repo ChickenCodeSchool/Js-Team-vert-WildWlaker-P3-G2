@@ -36,6 +36,16 @@ const browseforadmin: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
+const browseByBarber: RequestHandler = async (req, res, next) => {
+  try {
+    const barberId = Number(req.params.id);
+    const reviews = await reviewRepository.readByBarber(barberId);
+    res.json(reviews);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const destroy: RequestHandler = async (req, res, next) => {
   try {
     const id = Number(req.params.id);
@@ -45,4 +55,4 @@ const destroy: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-export default { browse, browseforadmin, destroy };
+export default { browse, browseforadmin, browseByBarber, destroy };
