@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useAuth } from "../../../context/AuthContext";
 import useBarberStatistics from "../../../hooks/useBarberStatistics";
 import "./barberStatistics.css";
 
@@ -27,11 +28,9 @@ function calcTrend(current: number, last: number) {
   return Math.round(((current - last) / last) * 100);
 }
 
-// Hardcodé à 1 en attendant l'authentification
-const BARBER_ID = 1;
-
 function BarberStatistics() {
-  const stats = useBarberStatistics(BARBER_ID);
+  const { user } = useAuth();
+  const stats = useBarberStatistics(user?.id ?? null);
 
   const totalReservations = stats?.reservations.current_week ?? 0;
   const totalCustomers = stats?.customers.current_week ?? 0;

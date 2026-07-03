@@ -14,10 +14,11 @@ export type BarberAppointment = {
   duration_minutes: number;
 };
 
-function useBarberAppointments(barberId: number, status?: string) {
+function useBarberAppointments(barberId: number | null, status?: string) {
   const [appointments, setAppointments] = useState<BarberAppointment[]>([]);
 
   useEffect(() => {
+    if (!barberId) return;
     const url = status
       ? `${API_URL}/api/appointments/barber/${barberId}?status=${encodeURIComponent(status)}`
       : `${API_URL}/api/appointments/barber/${barberId}`;

@@ -31,10 +31,11 @@ export type BarberStats = {
   statusDistribution: StatusItem[];
 };
 
-function useBarberStatistics(barberId: number) {
+function useBarberStatistics(barberId: number | null) {
   const [stats, setStats] = useState<BarberStats | null>(null);
 
   useEffect(() => {
+    if (!barberId) return;
     fetch(`${API_URL}/api/barbers/${barberId}/statistics`)
       .then((res) => res.json())
       .then((data) => setStats(data));

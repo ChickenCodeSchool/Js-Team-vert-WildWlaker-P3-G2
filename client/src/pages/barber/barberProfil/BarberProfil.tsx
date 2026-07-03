@@ -16,6 +16,7 @@ import {
 import { LuUpload } from "react-icons/lu";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 import AfroImg from "../../../assets/images/Afro.jpg";
 import EditBarberModal from "../../../components/barber/EditBarberModal/EditBarberModal";
 import type { Barber } from "../../../types/barber";
@@ -33,11 +34,9 @@ const INITIAL_PHOTOS: Photo[] = Array.from({ length: 12 }, (_, i) => ({
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
-
 function BarberProfil() {
+  const { user } = useAuth();
+  const BARBER_ID = user?.id ?? null;
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("informations");
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
@@ -53,6 +52,7 @@ function BarberProfil() {
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const loadData = useCallback(() => {
+    if (!BARBER_ID) return;
     fetch(`${API_URL}/api/barbers/${BARBER_ID}`)
       .then((res) => {
         if (!res.ok) throw new Error("Impossible de charger le profil");
@@ -66,7 +66,7 @@ function BarberProfil() {
       })
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [BARBER_ID]);
 
   useEffect(() => {
     loadData();

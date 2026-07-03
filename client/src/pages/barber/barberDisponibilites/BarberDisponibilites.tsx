@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { FiInfo } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 import "./barberDisponibilites.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
 
 type DaySchedule = {
   day: string;
@@ -76,6 +74,8 @@ const INITIAL_SCHEDULE: DaySchedule[] = [
 ];
 
 function BarberDisponibilites() {
+  const { user } = useAuth();
+  const BARBER_ID = user?.id ?? null;
   const [schedule, setSchedule] = useState<DaySchedule[]>(INITIAL_SCHEDULE);
   const [saved, setSaved] = useState(false);
 
@@ -91,6 +91,7 @@ function BarberDisponibilites() {
   }
 
   async function handleSave() {
+    if (!BARBER_ID) return;
     try {
       const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/schedule`, {
         method: "PUT",
