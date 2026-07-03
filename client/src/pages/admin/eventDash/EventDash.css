@@ -1,55 +1,70 @@
-.admin-users-body {
+.eventDash-body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   background-color: var(--gray-50);
 
-  .admin-users-header {
+  .eventDash-header {
     display: flex;
     flex-direction: column;
     padding: 10px 20px;
-    gap: 5px;
+    gap: 20px;
 
-    .admin-users-title {
+    .eventDash-title {
       display: flex;
       align-items: center;
       gap: 10px;
 
-      .admin-users-title-icon {
+      .eventDash-title-icon {
         color: var(--gold);
         font-size: 32px;
       }
-
       h1 {
         font-family: var(--font-title);
         font-size: 28px;
         color: var(--black);
       }
     }
-
     p {
       font-family: var(--font-body);
       font-size: 16px;
       color: var(--gray-600);
     }
-  }
-  .admin-users-main {
-    display: flex;
-    .admin-users-main-left {
-      width: 75%;
-      margin-left: 20px;
-      margin-right: 20px;
 
-      .admin-users-body-stats {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        margin-bottom: 24px;
+    .eventDash-top-graphs {
+      display: flex;
+      justify-content: space-around;
+      gap: 1rem;
+    }
+    .btn-add-event {
+      background-color: var(--gold);
+      color: var(--white);
+      border: none;
+      padding: 8px 16px;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 16px;
+      cursor: pointer;
+      transition: var(--transition);
+      width: 19%;
+
+      &:hover {
+        background-color: var(--gold-dark);
       }
+    }
+  }
+  .eventDash-main {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 30px;
 
-      .user-grid-client-cell {
+    .eventDash-section {
+      width: 75%;
+
+      .user-grid-user-cell {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -66,23 +81,31 @@
       .user-grid-info {
         display: flex;
         flex-direction: column;
-        gap: 2px;
         align-items: center;
+        gap: 2px;
+        min-width: 5rem;
         padding: 5px 0px 5px 0px;
         border-radius: var(--radius-md);
         text-transform: capitalize;
-        &.status-actif {
+        &.status-publié {
           color: var(--success);
           background-color: #e6f4ea;
         }
-        &.status-suspendu {
+        &.status-annulé {
+          color: var(--error);
+          background-color: #fef2f2;
+        }
+        &.status-brouillon {
           color: var(--warning);
           background-color: #fffbeb;
         }
-
-        .user-grid-fullname {
-          font-weight: 600;
-          color: var(--black);
+        &.status-plannifié {
+          color: var(--warning);
+          background-color: #fffbeb;
+        }
+        &.status-terminé {
+          color: var(--info);
+          background-color: #eff6ff;
         }
       }
 
@@ -127,12 +150,12 @@
         color: var(--black);
       }
     }
-    .admin-users-main-aside {
-      width: 22%;
-      display: flex;
+    .eventDash-aside {
+      width: 23%;
+
+      .no-event-selected {
+        font-family: var(--font-body);
+      }
     }
   }
-}
-.swal2-container {
-  font-family: var(--font-body);
 }

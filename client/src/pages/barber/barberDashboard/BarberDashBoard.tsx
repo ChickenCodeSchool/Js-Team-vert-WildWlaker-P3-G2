@@ -22,6 +22,10 @@ function formatDateKey(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
+
 function BarberDashBoard() {
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -32,11 +36,16 @@ function BarberDashBoard() {
     useState<Appointment | null>(null);
 
   useEffect(() => {
-    fetch(`${apiUrl}/api/appointments`)
+    if (!BARBER_ID) return;
+    const headers = {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    };
+
+    fetch(`${apiUrl}/api/appointments/barber/${BARBER_ID}`, { headers })
       .then((res) => res.json())
       .then((data) => setReservations(data));
 
-    fetch(`${apiUrl}/api/reviews`)
+    fetch(`${apiUrl}/api/reviews/barber/${BARBER_ID}`)
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);

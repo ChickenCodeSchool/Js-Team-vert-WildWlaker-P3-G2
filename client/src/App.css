@@ -5,10 +5,10 @@
   padding: 0;
 }
 
-*::before,
+/* *::before,
 *::after {
   box-sizing: border-box;
-}
+} */
 
 :root {
   --black: #0f0f11;
