@@ -4,6 +4,15 @@ import type { Event } from "../../../types/event";
 import "./UpcomingEventCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const getEventImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
+
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 
 function formatEventDates(startStr: string, endStr: string): string {
   const start = new Date(startStr);
@@ -68,10 +77,7 @@ function UpcomingEventCard() {
             {" "}
             <div className="event-info">
               <img
-                src={
-                  event.image_url ||
-                  "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=400"
-                }
+                src={getEventImageUrl(event.image_url)}
                 alt={event.title}
                 className="event-image"
               />

@@ -28,7 +28,6 @@
     margin-top: 50px;
   }
   .adminNavBar-menu {
-    margin-top: 15px;
     color: var(--gray-300);
     text-decoration: none;
     font-size: 18px;
@@ -38,11 +37,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    border: 10px solid var(--black);
+    border-radius: 5px;
     &.active {
       color: var(--black);
       border: 10px solid var(--warning);
       background-color: var(--warning);
-      border-radius: 5px;
     }
   }
 }

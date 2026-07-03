@@ -7,21 +7,19 @@ export interface AdminFilterState {
   dateSortOrder: "asc" | "desc";
 }
 
-export function useAdminFilters<
-  T extends {
-    create_time: string;
-    status?: string;
-    postal_code?: string;
-    firstname?: string;
-    lastname?: string;
-    reporting?: number;
-  },
->(initialData: T[], searchFields: (keyof T)[] = ["firstname", "lastname"]) {
+export function useAdminFilters<T extends Record<string, unknown>>(
+  initialData: T[],
+  searchFields: (keyof T)[] = [],
+  defaultSortField?: keyof T,
+) {
   const [searchTerm, setSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [dateSortOrder, setDateSortOrder] = useState<"asc" | "desc">("desc");
-  const [sortField, setSortField] = useState<keyof T>("create_time");
+  const [sortField, setSortField] = useState<keyof T>(() => {
+    if (defaultSortField) return defaultSortField;
+    return "create_time" as keyof T;
+  });
 
   const filteredData = useMemo(() => {
     let result = [...initialData];
@@ -31,38 +29,49 @@ export function useAdminFilters<
       result = result.filter((item) =>
         searchFields.some((field) => {
           const val = item[field];
-          return val && String(val).toLowerCase().includes(lower);
+          return (
+            val !== undefined &&
+            val !== null &&
+            String(val).toLowerCase().includes(lower)
+          );
         }),
       );
     }
 
     if (locationFilter) {
       result = result.filter((item) => {
-        if ("location_type" in item) {
-          return (
-            (item as { location_type: string }).location_type === locationFilter
-          );
+        if ("location_type" in item && typeof item.location_type === "string") {
+          return item.location_type === locationFilter;
         }
-        const val = item.postal_code;
-        return val && String(val).startsWith(locationFilter);
+
+        const loc = item.location as string | undefined;
+        const pc = item.postal_code as string | undefined;
+        const val = loc || pc;
+
+        if (!val) return false;
+        return String(val).toLowerCase().includes(locationFilter.toLowerCase());
       });
     }
 
     if (statusFilter) {
       if (statusFilter === "signaler") {
-        result = result.filter((item) => item.reporting === 1);
+        result = result.filter(
+          (item) => (item.reporting as number | undefined) === 1,
+        );
       } else {
-        result = result.filter((item) => item.status === statusFilter);
+        result = result.filter(
+          (item) => (item.status as string | undefined) === statusFilter,
+        );
       }
     }
 
     result.sort((a, b) => {
-      const timeA = a[sortField]
-        ? new Date(a[sortField] as string).getTime()
-        : 0;
-      const timeB = b[sortField]
-        ? new Date(b[sortField] as string).getTime()
-        : 0;
+      const valA = a[sortField] as string | undefined;
+      const valB = b[sortField] as string | undefined;
+
+      const timeA = valA ? new Date(valA).getTime() : 0;
+      const timeB = valB ? new Date(valB).getTime() : 0;
+
       return dateSortOrder === "desc" ? timeB - timeA : timeA - timeB;
     });
 

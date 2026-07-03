@@ -52,6 +52,7 @@
       .user-grid-client-cell {
         display: flex;
         align-items: center;
+
         gap: 12px;
 
         .user-grid-avatar {
@@ -93,6 +94,7 @@
       .user-grid-actions-cell {
         display: flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
 
         .user-grid-icon-btn {

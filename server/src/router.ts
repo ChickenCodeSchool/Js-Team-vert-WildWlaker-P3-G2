@@ -17,11 +17,12 @@ import {
   uploadCustomerAvatar,
 } from "./modules/customer/customerAvatarActions";
 import eventActions from "./modules/event/eventActions";
+import { uploadEventImage } from "./modules/event/eventUpload";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-router.get("/api/admin-dashboard", verifyToken, adminDashboardAction.browse);
+router.get("/api/admin-dashboard", adminDashboardAction.browse);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(
@@ -58,10 +59,17 @@ router.post(
   customerUpload.single("avatar"),
   uploadCustomerAvatar,
 );
-router.get("/api/customers", verifyToken, customerActions.browse);
+router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", verifyToken, customerActions.read);
 router.put("/api/customers/:id", verifyToken, customerActions.edit);
 router.get("/api/events", eventActions.browse);
+router.post("/api/events", uploadEventImage.single("image"), eventActions.add);
+router.put(
+  "/api/events/:id",
+  uploadEventImage.single("image"),
+  eventActions.edit,
+);
+router.delete("/api/events/:id", eventActions.destroy);
 router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", verifyToken, prestationActions.add);
 router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
