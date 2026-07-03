@@ -72,6 +72,7 @@ function UserProfile() {
     try {
       const res = await fetch(`${API_URL}/api/users/${customer?.id_user}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
       if (!res.ok) throw new Error("Erreur lors de la suppression");
