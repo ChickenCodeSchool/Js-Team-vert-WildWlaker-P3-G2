@@ -2,6 +2,11 @@ import { useState } from "react";
 import { FiInfo } from "react-icons/fi";
 import "./barberDisponibilites.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
+
 type DaySchedule = {
   day: string;
   active: boolean;
@@ -85,8 +90,18 @@ function BarberDisponibilites() {
     setSaved(false);
   }
 
-  function handleSave() {
-    setSaved(true);
+  async function handleSave() {
+    try {
+      const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/schedule`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ schedule }),
+      });
+      if (!res.ok) throw new Error("Erreur lors de la sauvegarde");
+      setSaved(true);
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
