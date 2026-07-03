@@ -36,6 +36,7 @@ router.get(
   verifyToken,
   appointmentActions.readwithuserid,
 );
+router.post("/api/appointments", verifyToken, appointmentActions.add);
 router.put(
   "/api/appointments/:id/status",
   verifyToken,

@@ -76,10 +76,34 @@ const updateStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
+const add: RequestHandler = async (req, res, next) => {
+  try {
+    const { appointment_date, id_prestation, id_user_barber, id_user_customer, location_type } = req.body;
+
+    if (!appointment_date || !id_prestation || !id_user_barber || !id_user_customer) {
+      res.status(400).json({ message: "Données manquantes pour créer le rendez-vous" });
+      return;
+    }
+
+    const result = await appointmentRepository.create({
+      appointment_date,
+      id_prestation: Number(id_prestation),
+      id_user_barber: Number(id_user_barber),
+      id_user_customer: Number(id_user_customer),
+      location_type: location_type ?? "domicile",
+    });
+
+    res.status(201).json({ message: "Rendez-vous créé", id: (result as { insertId: number }).insertId });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   browse,
   browseforadmin,
   readwithuserid,
   readByBarber,
   updateStatus,
+  add,
 };

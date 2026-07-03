@@ -173,6 +173,27 @@ class AppointmentRepository {
 
     return rows as AppointmentWithDetails[];
   }
+  async create(data: {
+    appointment_date: string;
+    id_prestation: number;
+    id_user_barber: number;
+    id_user_customer: number;
+    location_type: string;
+  }) {
+    const [result] = await databaseClient.query(
+      `INSERT INTO appointment (appointment_date, status, location_type, id_prestation, id_user_barber, id_user_customer)
+       VALUES (?, 'En attente', ?, ?, ?, ?)`,
+      [
+        data.appointment_date,
+        data.location_type,
+        data.id_prestation,
+        data.id_user_barber,
+        data.id_user_customer,
+      ],
+    );
+    return result;
+  }
+
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Appointment
 
