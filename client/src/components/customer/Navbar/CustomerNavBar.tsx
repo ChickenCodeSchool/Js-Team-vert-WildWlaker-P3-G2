@@ -93,7 +93,13 @@ function CustomerNavBar() {
             </Link>
             {userInitials ? (
               <Link
-                to={user ? `/profile/${user.id}` : "/login"}
+                to={
+                  user
+                    ? user.role === "barber"
+                      ? "/barber/profile"
+                      : `/profile/${user.id}`
+                    : "/login"
+                }
                 className="navbar-desktop__avatar"
               >
                 {avatarUrl ? (
@@ -164,7 +170,13 @@ function CustomerNavBar() {
           </NavLink>
 
           <NavLink
-            to={user ? `/profile/${user.id}` : "/login"}
+            to={
+              user
+                ? user.role === "barber"
+                  ? "/barber/profile"
+                  : `/profile/${user.id}`
+                : "/login"
+            }
             className={({ isActive }) =>
               isActive ? "navbar__item navbar__item--active" : "navbar__item"
             }
