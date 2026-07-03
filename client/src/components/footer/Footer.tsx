@@ -1,50 +1,62 @@
 import "./Footer.css";
-import { FiMail, FiMapPin } from "react-icons/fi";
+import { FaInstagram } from "react-icons/fa";
+import { FiMail } from "react-icons/fi";
 
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer__container">
         <div className="footer__brand">
-          <h3 className="footer__brand-name">Secare</h3>
+          <h2 className="footer__brand-name">Secare</h2>
 
           <p className="footer__description">
-            Secare est une plateforme de réservation de services de coiffure en
-            ligne, offrant aux clients la possibilité de trouver et de réserver
-            des rendez-vous avec des coiffeurs professionnels.
+            Réservez votre coiffeur en quelques clics grâce à une expérience
+            simple, rapide et élégante.
           </p>
+
+          <div className="footer__socials">
+            <button
+              type="button"
+              className="footer__social"
+              onClick={() =>
+                (window.location.href = "mailto:contact@secare.com")
+              }
+            >
+              <FiMail />
+            </button>
+
+            <a
+              href="https://www.instagram.com/secare.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer__social"
+            >
+              <FaInstagram />
+            </a>
+          </div>
         </div>
 
         <div className="footer__column">
-          <h4 className="footer__column-links">Navigation</h4>
+          <h3>Navigation</h3>
 
-          <a href="/" className="footer__link">
-            Accueil
-          </a>
-          <a href="/search" className="footer__link">
-            Coiffeurs
-          </a>
-          <a href="/login" className="footer__link">
-            Réservations
-          </a>
+          <a href="/">Accueil</a>
+          <a href="/search">Coiffeurs</a>
+          <a href="/booking">Réserver</a>
+          <a href="/login">Mon profil</a>
         </div>
 
         <div className="footer__column">
-          <h4 className="footer__column-contact">Contact</h4>
+          <h3>Informations</h3>
 
-          <p className="footer__contact-item">
-            <FiMail />
-            contact@secare.fr
-          </p>
-
-          <p className="footer__contact-item">
-            <FiMapPin /> 123 Rue de la Paix, 75000 Paris
-          </p>
+          <a href="/mentions-legales">Mentions légales</a>
+          <a href="/confidentialite">Confidentialité</a>
+          <a href="/cgu">CGU</a>
         </div>
       </div>
 
       <div className="footer__bottom">
-        © {new Date().getFullYear()} Secare — Tous droits réservés.
+        © {new Date().getFullYear()} Secare — Projet réalisé à la Wild Code
+        School
       </div>
     </footer>
   );
