@@ -24,7 +24,12 @@ import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
 // --- Les routes Admin ---
-router.get("/api/admin-dashboard", verifyAdmin, adminDashboardAction.browse);
+router.get(
+  "/api/admin-dashboard",
+  verifyToken,
+  verifyAdmin,
+  adminDashboardAction.browse,
+);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(

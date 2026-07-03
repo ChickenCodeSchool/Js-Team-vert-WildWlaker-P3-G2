@@ -17,7 +17,7 @@ import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 
 type Tab = "connexion" | "inscription";
-type Role = "client" | "professionnel";
+type Role = "client" | "professionnel" | "admin";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -63,7 +63,13 @@ const Login = () => {
       }
       const data = await res.json();
       login(data.user, data.token);
-      navigate("/");
+      if (data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (data.user.role === "professionnel") {
+        navigate("/barber/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch {
       setError("Impossible de se connecter");
     }
