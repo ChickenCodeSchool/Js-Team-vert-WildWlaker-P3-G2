@@ -1,3 +1,6 @@
+//pour lancer le script, utilisez la commande suivante dans le terminal à la racine du projet :
+//npx ts-node server/bin/promote-user-to-admin.ts
+
 import path from "node:path";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";
