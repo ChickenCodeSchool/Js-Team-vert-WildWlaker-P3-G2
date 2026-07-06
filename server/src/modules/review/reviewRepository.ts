@@ -28,7 +28,17 @@ type AdminReview = Review & {
 };
 
 class ReviewRepository {
-  // The C of CRUD - Create operation
+  async create(data: {
+    rating: number;
+    comment: string;
+    id_appointment: number;
+  }) {
+    const [result] = await databaseClient.query<Result>(
+      "INSERT INTO review (rating, comment, id_appointment) VALUES (?, ?, ?)",
+      [data.rating, data.comment, data.id_appointment],
+    );
+    return result;
+  }
 
   async readAll(filters?: { startDate?: string; endDate?: string }) {
     const queryParams: string[] = [];
