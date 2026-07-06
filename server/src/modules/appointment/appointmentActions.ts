@@ -78,10 +78,23 @@ const updateStatus: RequestHandler = async (req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { appointment_date, id_prestation, id_user_barber, id_user_customer, location_type } = req.body;
+    const {
+      appointment_date,
+      id_prestation,
+      id_user_barber,
+      id_user_customer,
+      location_type,
+    } = req.body;
 
-    if (!appointment_date || !id_prestation || !id_user_barber || !id_user_customer) {
-      res.status(400).json({ message: "Données manquantes pour créer le rendez-vous" });
+    if (
+      !appointment_date ||
+      !id_prestation ||
+      !id_user_barber ||
+      !id_user_customer
+    ) {
+      res
+        .status(400)
+        .json({ message: "Données manquantes pour créer le rendez-vous" });
       return;
     }
 
@@ -93,7 +106,12 @@ const add: RequestHandler = async (req, res, next) => {
       location_type: location_type ?? "domicile",
     });
 
-    res.status(201).json({ message: "Rendez-vous créé", id: (result as { insertId: number }).insertId });
+    res
+      .status(201)
+      .json({
+        message: "Rendez-vous créé",
+        id: (result as { insertId: number }).insertId,
+      });
   } catch (err) {
     next(err);
   }

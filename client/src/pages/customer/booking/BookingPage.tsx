@@ -27,7 +27,13 @@ function BookingPage() {
   const prestations = usePrestations(booking.barber?.id_user);
 
   const handleConfirm = async () => {
-    if (!booking.barber || !booking.prestation || !booking.appointmentDate || !booking.appointmentTime || !user?.id) {
+    if (
+      !booking.barber ||
+      !booking.prestation ||
+      !booking.appointmentDate ||
+      !booking.appointmentTime ||
+      !user?.id
+    ) {
       return;
     }
     const appointmentDatetime = `${booking.appointmentDate} ${booking.appointmentTime}:00`;
@@ -39,7 +45,8 @@ function BookingPage() {
       },
       body: JSON.stringify({
         appointment_date: appointmentDatetime,
-        id_prestation: booking.prestation.id_prestation ?? booking.prestation.Id_prestation,
+        id_prestation:
+          booking.prestation.id_prestation ?? booking.prestation.Id_prestation,
         id_user_barber: booking.barber.id_user,
         id_user_customer: user.id,
         location_type: "domicile",
