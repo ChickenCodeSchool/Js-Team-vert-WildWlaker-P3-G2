@@ -10,6 +10,7 @@ type AuthContextType = {
   user: User | null;
   login: (userData: User, token: string) => void;
   logout: () => void;
+  fetchWithAuth: (url: string, options?: RequestInit) => Promise<Response>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -22,7 +23,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = (userData: User, token: string) => {
     localStorage.setItem("user", JSON.stringify(userData));
     localStorage.setItem("token", token);
-
     setUser(userData);
   };
 
@@ -32,8 +32,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   };
 
+  const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+      "Content-Type": "application/json",
+      ...(options.headers as Record<string, string>),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    return fetch(url, {
+      ...options,
+      headers,
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, fetchWithAuth }}>
       {children}
     </AuthContext.Provider>
   );
