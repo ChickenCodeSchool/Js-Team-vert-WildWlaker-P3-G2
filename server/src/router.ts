@@ -2,6 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
+import { verifyAdmin } from "./middleware/verifyAdmin";
 import { verifyToken } from "./middleware/verifyToken";
 import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
@@ -23,7 +24,13 @@ import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-router.get("/api/admin-dashboard", verifyToken, adminDashboardAction.browse);
+// --- Les routes Admin ---
+router.get(
+  "/api/admin-dashboard",
+  verifyToken,
+  verifyAdmin,
+  adminDashboardAction.browse,
+);
 router.get("/api/appointments", appointmentActions.browse);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(
