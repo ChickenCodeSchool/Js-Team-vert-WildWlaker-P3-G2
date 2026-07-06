@@ -24,6 +24,7 @@ import RecentActivityCard from "../../../components/admin/recentActivityCard/Rec
 import ReservationStatusGraph from "../../../components/admin/reservationsStatusGraph/ReservationsStatusGraph";
 import StatsGraphCard from "../../../components/admin/statsGraphCard/StatsGraphCard";
 import UpcomingEventCard from "../../../components/admin/upcomingEventCard/UpcomingEventCard";
+import { useAuth } from "../../../context/AuthContext";
 
 import type { Barber } from "../../../types/barber";
 import type { Review } from "../../../types/review";
@@ -90,7 +91,7 @@ const calculateEvolution = (current: number, previous: number): string => {
 
 function Dashboard() {
   const API_URL = import.meta.env.VITE_API_URL;
-
+  const { fetchWithAuth } = useAuth();
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [appointments, setAppointments] = useState<RawAppointment[]>([]);
@@ -123,7 +124,7 @@ function Dashboard() {
     const params = `?startDate=${currentPeriod.start}&endDate=${currentPeriod.end}`;
     const prevParams = `?startDate=${prevPeriod.start}&endDate=${prevPeriod.end}`;
 
-    fetch(`${API_URL}/api/admin-dashboard${params}`)
+    fetchWithAuth(`${API_URL}/api/admin-dashboard${params}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setBarbers(barbers);
@@ -131,7 +132,7 @@ function Dashboard() {
         setAppointments(appointments);
         setReviews(reviews);
       });
-    fetch(`${API_URL}/api/admin-dashboard${prevParams}`)
+    fetchWithAuth(`${API_URL}/api/admin-dashboard${prevParams}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setPrevBarbers(barbers);
@@ -139,7 +140,7 @@ function Dashboard() {
         setPrevAppointments(appointments);
         setPrevReviews(reviews);
       });
-  }, [currentPeriod, prevPeriod]);
+  }, [currentPeriod, prevPeriod, fetchWithAuth]);
 
   const daysOfWeek = useMemo(() => {
     return eachDayOfInterval({
