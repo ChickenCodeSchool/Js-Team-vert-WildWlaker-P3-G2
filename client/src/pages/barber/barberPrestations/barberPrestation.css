@@ -158,7 +158,27 @@
 
 @media (min-width: 700px) {
   .barber-prestation {
-    margin: 10rem;
-    background-color: var(--gray-50);
+    width: 100%;
+    max-width: 800px;
+    min-height: auto;
+    margin: 4rem auto;
+    padding: 5rem;
+  }
+
+  .barber-prestation__title,
+  .barber-prestation__form-title {
+    font-size: 1.8rem;
+  }
+
+  .barber-prestation__item {
+    padding: 2rem 2.5rem;
+  }
+
+  .barber-prestation__form {
+    max-width: 1120px;
+  }
+
+  .barber-prestation__actions {
+    max-width: 1120px;
   }
 }
