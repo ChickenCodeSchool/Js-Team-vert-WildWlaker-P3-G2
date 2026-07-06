@@ -71,7 +71,7 @@ const register: RequestHandler = async (req, res, next) => {
 
     const userId = result.insertId;
 
-    if (role === "professionnel") {
+    if (role === "barber") {
       await barberRepository.create({
         id_user: userId,
         name: `${firstname} ${lastname}`,
