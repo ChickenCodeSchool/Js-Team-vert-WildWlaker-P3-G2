@@ -77,6 +77,26 @@ class BarberRepository {
     return rows[0] as Barber | undefined;
   }
 
+  async create(data: {
+    id_user: number;
+    name: string;
+    postal_code: string;
+    city: string;
+    adress: string;
+  }) {
+    const query = `
+    INSERT INTO barber (id_user, name, postal_code, city, adress)
+    VALUES (?, ?, ?, ?, ?)`;
+    const [result] = await databaseClient.query(query, [
+      data.id_user,
+      data.name,
+      data.postal_code,
+      data.city,
+      data.adress,
+    ]);
+    return result;
+  }
+
   // The U of CRUD - Update operation
   async update(barber: Barber) {
     const barberQuery = `
