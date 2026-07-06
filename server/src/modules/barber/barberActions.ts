@@ -46,7 +46,7 @@ const edit: RequestHandler = async (req, res, next) => {
   try {
     const id_user = Number(req.params.id);
     const updatedCustomerData = { ...req.body, id_user };
-    if (req.user?.id !== Number(req.params.id)) {
+    if (req.user?.id !== Number(req.params.id) && req.user?.role !== "admin") {
       return res.sendStatus(403);
     }
 

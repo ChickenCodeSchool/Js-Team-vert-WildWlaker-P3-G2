@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 import "./LastestReservationCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -28,9 +29,9 @@ type RawAppointment = {
 
 function LatestReservationsCard() {
   const [appointments, setAppointments] = useState<Reservation[]>([]);
-
+  const { fetchWithAuth } = useAuth();
   useEffect(() => {
-    fetch(`${API_URL}/api/appointments`)
+    fetchWithAuth(`${API_URL}/api/admin/appointments`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();
@@ -65,7 +66,7 @@ function LatestReservationsCard() {
         setAppointments(formatted);
       })
       .catch((err) => console.error("Erreur chargement réservations :", err));
-  }, []);
+  }, [fetchWithAuth]);
 
   return (
     <div className="lastestreservations-card">

@@ -2,9 +2,7 @@ import express from "express";
 
 const router = express.Router();
 
-import { verifyAdmin } from "./middleware/verifyAdmin";
 import { verifyToken } from "./middleware/verifyToken";
-import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
 import barberAvailabilityActions from "./modules/barber/barberAvailabilityActions";
@@ -19,20 +17,10 @@ import {
   uploadCustomerAvatar,
 } from "./modules/customer/customerAvatarActions";
 import eventActions from "./modules/event/eventActions";
-import { uploadEventImage } from "./modules/event/eventUpload";
 import prestationActions from "./modules/prestation/prestationActions";
 import reviewActions from "./modules/review/reviewActions";
 import userActions from "./modules/user/userActions";
 
-// --- Les routes Admin ---
-router.get(
-  "/api/admin-dashboard",
-  verifyToken,
-  verifyAdmin,
-  adminDashboardAction.browse,
-);
-router.get("/api/appointments", appointmentActions.browse);
-router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(
   "/api/appointments/barber/:id",
   verifyToken,
@@ -73,21 +61,13 @@ router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", verifyToken, customerActions.read);
 router.put("/api/customers/:id", verifyToken, customerActions.edit);
 router.get("/api/events", eventActions.browse);
-router.post("/api/events", uploadEventImage.single("image"), eventActions.add);
-router.put(
-  "/api/events/:id",
-  uploadEventImage.single("image"),
-  eventActions.edit,
-);
-router.delete("/api/events/:id", eventActions.destroy);
+
 router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", verifyToken, prestationActions.add);
 router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
 router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
 router.post("/api/reviews", verifyToken, reviewActions.add);
 router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
-router.get("/api/reviews", reviewActions.browse);
-router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/reviews/barber/:id", reviewActions.browseByBarber);
 router.get("/api/users", verifyToken, userActions.browse);
 router.delete("/api/users/:id", verifyToken, userActions.deleteUser);

@@ -10,6 +10,7 @@ import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+import { useAuth } from "../../../context/AuthContext";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 import type { Appointment } from "../../../types/appointment";
@@ -29,6 +30,7 @@ const thisMonthRange = {
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
 function Users() {
+  const { fetchWithAuth } = useAuth();
   const [customers, setCustomers] = useState<(Customer & { id: number })[]>([]);
   const [monthlyNewUsers, setMonthlyNewUsers] = useState<Customer[]>([]);
   const [monthlyAppointments, setMonthlyAppointments] = useState<Appointment[]>(
@@ -41,7 +43,7 @@ function Users() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const loadAllData = useCallback(() => {
-    fetch(`${API_URL}/api/customers`)
+    fetchWithAuth(`${API_URL}/api/admin/customers`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();
@@ -73,21 +75,21 @@ function Users() {
         console.error("Erreur lors du chargement des clients :", err),
       );
 
-    fetch(`${API_URL}/api/reviews`)
+    fetchWithAuth(`${API_URL}/api/admin/reviews`)
       .then((res) => res.json())
       .then((data: Review[]) => setReviews(data))
       .catch((err) => console.error("Erreur lors du fetch des avis :", err));
 
-    fetch(`${API_URL}/api/customers${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/customers${params}`)
       .then((res) => res.json())
       .then((data: Customer[]) => setMonthlyNewUsers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
 
-    fetch(`${API_URL}/api/appointments${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/appointments${params}`)
       .then((res) => res.json())
       .then((data: Appointment[]) => setMonthlyAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
-  }, []);
+  }, [fetchWithAuth]);
 
   const {
     searchTerm,
@@ -108,7 +110,7 @@ function Users() {
     Customer & { id: number }
   >({
     apiBase: API_URL,
-    idField: "api/customers",
+    idField: "api/admin/customers",
     onActionComplete: loadAllData,
     onClose: () => setIsEditModalOpen(false),
   });
