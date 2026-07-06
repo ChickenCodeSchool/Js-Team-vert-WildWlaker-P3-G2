@@ -78,9 +78,7 @@ function CustomerAvis() {
       return (
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
-    return (
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    );
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
 
   const distribution = useMemo(() => {
@@ -113,9 +111,7 @@ function CustomerAvis() {
           <p className="customer-avis__average-label">Note moyenne</p>
           <p className="customer-avis__average-score">{average}</p>
           <StarRating rating={average} />
-          <p className="customer-avis__average-total">
-            Basée sur {total} avis
-          </p>
+          <p className="customer-avis__average-total">Basée sur {total} avis</p>
         </div>
         <div className="customer-avis__distribution">
           {distribution.map((d) => (
@@ -127,7 +123,9 @@ function CustomerAvis() {
               <div className="customer-avis__bar-track">
                 <div
                   className="customer-avis__bar-fill"
-                  style={{ width: total > 0 ? `${(d.count / total) * 100}%` : "0%" }}
+                  style={{
+                    width: total > 0 ? `${(d.count / total) * 100}%` : "0%",
+                  }}
                 />
               </div>
               <span className="customer-avis__bar-count">{d.count}</span>
