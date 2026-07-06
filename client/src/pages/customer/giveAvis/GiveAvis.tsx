@@ -41,7 +41,7 @@ function GiveAvis() {
 
   const activeRating = hovered || rating;
 
-return (
+  return (
     <div className="give-avis">
       {/* Header */}
       <div className="give-avis__header">
@@ -117,7 +117,7 @@ return (
         <span className="give-avis__counter">{comment.length}/500</span>
       </div>
 
-{/* Toggle */}
+      {/* Toggle */}
       <div className="give-avis__toggle-row">
         <div className="give-avis__toggle-info">
           <p className="give-avis__toggle-label">
