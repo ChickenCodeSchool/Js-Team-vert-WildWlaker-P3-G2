@@ -182,7 +182,7 @@ function EditEventModal({
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    placeholder="Ex: Salon du Mariage Bordeaux"
+                    placeholder="Ex: Nom de l'événement"
                     required
                   />
                 </div>
@@ -197,7 +197,7 @@ function EditEventModal({
                       name="location"
                       value={formData.location}
                       onChange={handleChange}
-                      placeholder="Ex: Parc des Expositions"
+                      placeholder="Ex: Lieu de l'événement"
                       required
                     />
                   </div>

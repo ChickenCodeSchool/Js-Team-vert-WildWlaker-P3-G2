@@ -18,6 +18,7 @@ import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
+import { useAuth } from "../../../context/AuthContext";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
 import type { Event } from "../../../types/event";
@@ -37,6 +38,8 @@ const truncateText = (text: string, maxLength: number) => {
 type DashboardEvent = Event & { id: number };
 
 function EventDash() {
+  const { fetchWithAuth } = useAuth();
+
   const [events, setEvents] = useState<DashboardEvent[]>([]);
   const [selectedEvent, setSelectedEvent] = useState<DashboardEvent | null>(
     null,
@@ -80,13 +83,16 @@ function EventDash() {
     try {
       const isEditing = eventToEdit !== null;
       const url = isEditing
-        ? `${API_URL}/api/events/${eventToEdit.id_event}`
-        : `${API_URL}/api/events`;
+        ? `${API_URL}/api/admin/events/${eventToEdit.id_event}`
+        : `${API_URL}/api/admin/events`;
 
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {
         method: method,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: formData,
       });
 
@@ -133,9 +139,9 @@ function EventDash() {
     if (!result.isConfirmed) return;
 
     try {
-      const url = `${API_URL}/api/events/${event.id_event}`;
+      const url = `${API_URL}/api/admin/events/${event.id_event}`;
 
-      const response = await fetch(url, {
+      const response = await fetchWithAuth(url, {
         method: "DELETE",
       });
 

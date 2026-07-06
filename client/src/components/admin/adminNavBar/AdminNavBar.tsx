@@ -1,13 +1,13 @@
 import {
-  FiAirplay,
-  FiAlertTriangle,
-  FiBarChart2,
+  // FiAirplay,
+  // FiAlertTriangle,
+  // FiBarChart2,
   FiCalendar,
-  FiCamera,
+  // FiCamera,
   FiHome,
   FiMessageSquare,
   FiScissors,
-  FiSettings,
+  // FiSettings,
   FiStar,
   FiUser,
 } from "react-icons/fi";
@@ -36,18 +36,18 @@ function AdminNavBar() {
       <NavLink to="/admin/reviews" className="adminNavBar-menu">
         <FiMessageSquare /> Avis & Commentaires
       </NavLink>
-      <NavLink to="/admin/reporting" className="adminNavBar-menu">
+      {/* <NavLink to="/admin/reporting" className="adminNavBar-menu">
         <FiAlertTriangle /> Signalements
-      </NavLink>
+      </NavLink> */}
       <h3>CONTENU</h3>
       <NavLink to="/admin/events" className="adminNavBar-menu">
         <FiStar /> Événements
       </NavLink>
-      <NavLink to="/admin/banniere" className="adminNavBar-menu">
+      {/* <NavLink to="/admin/banniere" className="adminNavBar-menu">
         <FiCamera />
         Bannières
-      </NavLink>
-      <h3>ANALYTICS</h3>
+      </NavLink> */}
+      {/* <h3>ANALYTICS</h3>
       <NavLink to="/admin/statistics" className="adminNavBar-menu">
         <FiBarChart2 /> Statistiques
       </NavLink>
@@ -57,7 +57,7 @@ function AdminNavBar() {
       </NavLink>
       <NavLink to="/admin/configuration" className="adminNavBar-menu">
         <FiSettings /> Paramètres
-      </NavLink>
+      </NavLink> */}
     </nav>
   );
 }

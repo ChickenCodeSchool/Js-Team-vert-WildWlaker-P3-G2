@@ -127,7 +127,7 @@ const login: RequestHandler = async (req, res, next) => {
 
 const deleteUser: RequestHandler = async (req, res, next) => {
   try {
-    if (req.user?.id !== Number(req.params.id)) {
+    if (req.user?.id !== Number(req.params.id) && req.user?.role !== "admin") {
       return res.sendStatus(403);
     }
     const id_user = Number(req.params.id);

@@ -26,13 +26,98 @@ import userActions from "./modules/user/userActions";
 
 // --- Les routes Admin ---
 router.get(
-  "/api/admin-dashboard",
+  "/api/admin/dashboard",
   verifyToken,
   verifyAdmin,
   adminDashboardAction.browse,
 );
-router.get("/api/appointments", appointmentActions.browse);
-router.get("/api/appointments/admin", appointmentActions.browseforadmin);
+router.get(
+  "/api/admin/appointmentsdetails",
+  verifyToken,
+  verifyAdmin,
+  appointmentActions.browseforadmin,
+);
+router.get(
+  "/api/admin/appointments",
+  verifyToken,
+  verifyAdmin,
+  appointmentActions.browse,
+);
+router.get(
+  "/api/admin/barbers",
+  verifyToken,
+  verifyAdmin,
+  barberActions.browse,
+);
+router.put(
+  "/api/admin/barbers/:id",
+  verifyToken,
+  verifyAdmin,
+  barberActions.edit,
+);
+router.delete(
+  "/api/admin/users/:id",
+  verifyToken,
+  verifyAdmin,
+  userActions.deleteUser,
+);
+router.post(
+  "/api/admin/events",
+  verifyToken,
+  verifyAdmin,
+  uploadEventImage.single("image"),
+  eventActions.add,
+);
+router.put(
+  "/api/admin/events/:id",
+  verifyToken,
+  verifyAdmin,
+  uploadEventImage.single("image"),
+  eventActions.edit,
+);
+router.delete(
+  "/api/admin/events/:id",
+  verifyToken,
+  verifyAdmin,
+  eventActions.destroy,
+);
+router.get(
+  "/api/admin/customers",
+  verifyToken,
+  verifyAdmin,
+  customerActions.browse,
+);
+router.put(
+  "/api/admin/customers/:id",
+  verifyToken,
+  verifyAdmin,
+  customerActions.edit,
+);
+router.get(
+  "/api/admin/appointments",
+  verifyToken,
+  verifyAdmin,
+  appointmentActions.browse,
+);
+router.get(
+  "/api/admin/reviews",
+  verifyToken,
+  verifyAdmin,
+  reviewActions.browse,
+);
+router.delete(
+  "/api/admin/reviews/:id",
+  verifyToken,
+  verifyAdmin,
+  reviewActions.destroy,
+);
+router.get(
+  "/api/admin/reviewsdetails",
+  verifyToken,
+  verifyAdmin,
+  reviewActions.browseforadmin,
+);
+
 router.get(
   "/api/appointments/barber/:id",
   verifyToken,
@@ -73,20 +158,12 @@ router.get("/api/customers", customerActions.browse);
 router.get("/api/customers/:id", verifyToken, customerActions.read);
 router.put("/api/customers/:id", verifyToken, customerActions.edit);
 router.get("/api/events", eventActions.browse);
-router.post("/api/events", uploadEventImage.single("image"), eventActions.add);
-router.put(
-  "/api/events/:id",
-  uploadEventImage.single("image"),
-  eventActions.edit,
-);
-router.delete("/api/events/:id", eventActions.destroy);
+
 router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", verifyToken, prestationActions.add);
 router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
 router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
 router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
-router.get("/api/reviews", reviewActions.browse);
-router.get("/api/reviews/admin", reviewActions.browseforadmin);
 router.get("/api/reviews/barber/:id", reviewActions.browseByBarber);
 router.get("/api/users", verifyToken, userActions.browse);
 router.delete("/api/users/:id", verifyToken, userActions.deleteUser);

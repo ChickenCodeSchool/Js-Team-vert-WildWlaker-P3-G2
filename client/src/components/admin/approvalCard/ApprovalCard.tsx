@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { FiEye } from "react-icons/fi";
+import { useAuth } from "../../../context/AuthContext";
 import { useEntityActions } from "../../../hooks/useEntityActions";
 import type { Barber } from "../../../types/barber";
 import EditUserModal from "../editUserModal/EditUserModal";
@@ -7,16 +8,17 @@ import "./ApprovalCard.css";
 
 function ApprovalCard() {
   const apiUrl = import.meta.env.VITE_API_URL;
+  const { fetchWithAuth } = useAuth();
   const [barbers, setBarbers] = useState<Barber[]>([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
 
   const loadbarbersData = useCallback(() => {
-    fetch(`${apiUrl}/api/barbers`)
+    fetchWithAuth(`${apiUrl}/api/admin/barbers`)
       .then((res) => res.json())
       .then((data) => setBarbers(data));
-  }, []);
+  }, [fetchWithAuth]);
 
   useEffect(() => {
     loadbarbersData();
@@ -26,7 +28,7 @@ function ApprovalCard() {
     Barber & { id: number }
   >({
     apiBase: apiUrl,
-    idField: "api/barbers",
+    idField: "api/admin/barbers",
     onActionComplete: loadbarbersData,
     onClose: () => setIsModalOpen(false),
   });
