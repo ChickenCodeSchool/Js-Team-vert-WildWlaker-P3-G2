@@ -106,12 +106,10 @@ const add: RequestHandler = async (req, res, next) => {
       location_type: location_type ?? "domicile",
     });
 
-    res
-      .status(201)
-      .json({
-        message: "Rendez-vous créé",
-        id: (result as { insertId: number }).insertId,
-      });
+    res.status(201).json({
+      message: "Rendez-vous créé",
+      id: (result as { insertId: number }).insertId,
+    });
   } catch (err) {
     next(err);
   }
