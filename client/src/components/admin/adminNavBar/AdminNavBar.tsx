@@ -5,17 +5,24 @@ import {
   FiCalendar,
   // FiCamera,
   FiHome,
+  FiLogOut,
   FiMessageSquare,
   FiScissors,
   // FiSettings,
   FiStar,
   FiUser,
 } from "react-icons/fi";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import "./AdminNavBar.css";
 import icon from "../../../assets/images/icon.png";
 
 function AdminNavBar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <nav className="adminNavBar-main">
       <img src={icon} alt="Icon" className="adminNavBar-icon" />
@@ -58,6 +65,13 @@ function AdminNavBar() {
       <NavLink to="/admin/configuration" className="adminNavBar-menu">
         <FiSettings /> Paramètres
       </NavLink> */}
+      <button
+        type="button"
+        className="adminNavBar-logout"
+        onClick={handleLogout}
+      >
+        <FiLogOut /> Déconnexion
+      </button>
     </nav>
   );
 }
