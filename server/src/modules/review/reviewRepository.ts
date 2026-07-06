@@ -81,6 +81,17 @@ class ReviewRepository {
     // Return the array of reviews
     return rows as AdminReview[];
   }
+  async readByBarber(barberId: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      `SELECT r.*
+       FROM review r
+       JOIN appointment a ON r.id_appointment = a.id_appointment
+       WHERE a.id_user_barber = ?`,
+      [barberId],
+    );
+    return rows as Review[];
+  }
+
   async delete(id: number) {
     await databaseClient.query<Result>(
       "DELETE FROM review WHERE id_review = ?",
