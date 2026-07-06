@@ -32,6 +32,11 @@ router.get(
   adminDashboardAction.browse,
 );
 router.get("/api/appointments", appointmentActions.browse);
+router.get(
+  "/api/appointments/me",
+  verifyToken,
+  appointmentActions.readMyAppointments,
+);
 router.get("/api/appointments/admin", appointmentActions.browseforadmin);
 router.get(
   "/api/appointments/barber/:id",
@@ -48,7 +53,7 @@ router.put(
   verifyToken,
   appointmentActions.updateStatus,
 );
-
+router.post("/api/appointments", verifyToken, appointmentActions.create);
 // --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !

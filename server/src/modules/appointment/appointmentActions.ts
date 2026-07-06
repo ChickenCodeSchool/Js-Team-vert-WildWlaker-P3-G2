@@ -76,10 +76,52 @@ const updateStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
+const create: RequestHandler = async (req, res, next) => {
+  console.log("BODY =", req.body);
+  console.log("USER =", req.user);
+  try {
+    const { appointment_date, location_type, id_prestation, id_user_barber } =
+      req.body;
+    const userId = Number(req.user?.id);
+
+    if (Number.isNaN(userId)) {
+      return res.sendStatus(403);
+    }
+
+    await appointmentRepository.create({
+      appointment_date,
+      location_type,
+      id_prestation,
+      id_user_barber,
+      id_user_customer: userId,
+    });
+
+    res.status(201).json({
+      message: "Rendez-vous créé avec succès",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+const readMyAppointments: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = Number(req.user?.id);
+    if (Number.isNaN(userId)) {
+      return res.sendStatus(403);
+    }
+    const appointments = await appointmentRepository.readwithuserid(userId);
+    res.status(200).json(appointments);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export default {
   browse,
   browseforadmin,
   readwithuserid,
   readByBarber,
   updateStatus,
+  create,
+  readMyAppointments,
 };

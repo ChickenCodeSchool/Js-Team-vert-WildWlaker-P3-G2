@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ReservationCard from "./ReservationCard";
 import "./MyReservations.css";
-import { useParams } from "react-router";
 import type { Review } from "../../../types/review";
 import type { Reservation } from "./ReservationType";
 
@@ -10,16 +9,16 @@ function MyReservations() {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [appointments, setAppointments] = useState<Reservation[]>([]);
   const API_URL = import.meta.env.VITE_API_URL;
-  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    const userId = Number(id);
     const token = localStorage.getItem("token");
+    console.log("TOKEN AU MOMENT DU FETCH:", token);
     if (!token) {
       console.error("Aucun token trouvé");
       return;
     }
-    fetch(`${API_URL}/api/appointments/user/${userId}`, {
+    console.log(API_URL);
+    fetch(`${API_URL}/api/reservations`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -30,8 +29,19 @@ function MyReservations() {
       })
       .then((data) => setAppointments(data))
       .catch((err) => console.error("Erreur chargement réservations", err));
-  }, [id]);
+  }, []);
+  fetch(`${API_URL}/api/appointments/me`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  }).then(async (res) => {
+    console.log("STATUS", res.status);
 
+    const text = await res.text();
+    console.log(text);
+
+    return JSON.parse(text);
+  });
   useEffect(() => {
     fetch(`${API_URL}/api/reviews`)
       .then((res) => {

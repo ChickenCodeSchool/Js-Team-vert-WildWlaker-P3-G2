@@ -200,7 +200,12 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
         type="button"
         className="booking-form__button"
         onClick={onNext}
-        disabled={!booking.prestation || !booking.appointmentDate}
+        disabled={
+          !booking.prestation ||
+          !booking.appointmentDate ||
+          !booking.appointmentTime ||
+          !booking.locationType
+        }
       >
         Continuer
       </button>
