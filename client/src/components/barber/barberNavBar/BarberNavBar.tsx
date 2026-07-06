@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { FaCommentAlt, FaCut } from "react-icons/fa";
-import { FiCalendar, FiHome, FiUser } from "react-icons/fi";
+import { FiCalendar, FiHome, FiLogOut, FiUser } from "react-icons/fi";
 import { GrDocumentConfig } from "react-icons/gr";
 import { MdFreeCancellation, MdPeopleAlt } from "react-icons/md";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import "./BarberNavBar.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -16,6 +16,13 @@ type BarberProfile = {
 function BarberNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [barber, setBarber] = useState<BarberProfile | null>(null);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/");
+  };
 
   useEffect(() => {
     if (window.innerWidth >= 1024) {
@@ -66,6 +73,10 @@ function BarberNavBar() {
           )}
         </div>
 
+        <NavLink to="/" className="NavBarHair-menu">
+          <FiHome /> Accueil
+        </NavLink>
+
         <NavLink to="/barber/dashBoard" className="NavBarHair-menu">
           <FiHome /> Tableau de Bord
         </NavLink>
@@ -112,6 +123,14 @@ function BarberNavBar() {
           <GrDocumentConfig />
           Paramètres
         </NavLink>
+
+        <button
+          type="button"
+          className="NavBarHair-menu NavBarHair-menu--logout"
+          onClick={handleLogout}
+        >
+          <FiLogOut /> Déconnexion
+        </button>
       </nav>
     </>
   );
