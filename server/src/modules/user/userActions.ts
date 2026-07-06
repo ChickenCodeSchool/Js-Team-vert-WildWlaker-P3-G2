@@ -2,6 +2,7 @@ import argon2 from "argon2";
 import type { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
 import { emailRegex, passwordRegex } from "../../utils/validation";
+import barberRepository from "../barber/barberRepository";
 import customerRepository from "../customer/customerRepository";
 import userRepository from "./userRepository";
 
@@ -70,14 +71,24 @@ const register: RequestHandler = async (req, res, next) => {
 
     const userId = result.insertId;
 
-    await customerRepository.create({
-      id_user: userId,
-      firstname,
-      lastname,
-      postal_code: postalCode,
-      city,
-      adress: address,
-    });
+    if (role === "barber") {
+      await barberRepository.create({
+        id_user: userId,
+        name: `${firstname} ${lastname}`,
+        postal_code: postalCode ?? "",
+        city: city ?? "",
+        adress: address ?? "",
+      });
+    } else {
+      await customerRepository.create({
+        id_user: userId,
+        firstname,
+        lastname,
+        postal_code: postalCode,
+        city,
+        adress: address,
+      });
+    }
 
     res.status(201).json({ message: "Utilisateur créé" });
   } catch (err) {

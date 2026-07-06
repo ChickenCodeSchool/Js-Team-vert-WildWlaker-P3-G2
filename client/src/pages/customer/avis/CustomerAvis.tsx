@@ -1,73 +1,24 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
+import { useLocation } from "react-router";
+import { useAuth } from "../../../context/AuthContext";
 import "./customerAvis.css";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 type SortOption = "recent" | "oldest";
 
-const MOCK_REVIEWS = [
-  {
-    id: 1,
-    name: "Thomas Laurent",
-    rating: 5,
-    prestation: "Coupe + Barbe",
-    comment:
-      "Excellent service ! Très professionnel et à l'écoute. Résultat impeccable, je recommande à 100%.",
-    date: "12 Mai 2026",
-    avatar: "https://i.pravatar.cc/150?img=11",
-  },
-  {
-    id: 2,
-    name: "Julien Moreau",
-    rating: 5,
-    prestation: "Coupe classique",
-    comment:
-      "Parfait comme toujours, rien à dire ! Je reviendrai sans hésiter.",
-    date: "12 Mai 2026",
-    avatar: "https://i.pravatar.cc/150?img=12",
-  },
-  {
-    id: 3,
-    name: "Antoine Girard",
-    rating: 5,
-    prestation: "Coloration",
-    comment:
-      "Très content de ma coloration, résultat au top ! Merci pour les conseils.",
-    date: "09 Mai 2026",
-    avatar: "https://i.pravatar.cc/150?img=13",
-  },
-  {
-    id: 4,
-    name: "Yanis Benali",
-    rating: 4.5,
-    prestation: "Dégradé + Barbe",
-    comment:
-      "Très satisfait de ma coupe, le dégradé est parfait. Ambiance agréable et coiffeur sympa.",
-    date: "14 Mai 2026",
-    avatar: "https://i.pravatar.cc/150?img=14",
-  },
-  {
-    id: 5,
-    name: "Karim Belkacem",
-    rating: 4,
-    prestation: "Soin capillaire",
-    comment:
-      "Bon accueil et soin de qualité. Juste un peu d'attente mais ça valait le coup.",
-    date: "10 Mai 2026",
-    avatar: "https://i.pravatar.cc/150?img=15",
-  },
-];
-
-const DISTRIBUTION = [
-  { star: 5, count: 96 },
-  { star: 4, count: 24 },
-  { star: 3, count: 6 },
-  { star: 2, count: 1 },
-  { star: 1, count: 1 },
-];
-
-const TOTAL = DISTRIBUTION.reduce((sum, d) => sum + d.count, 0);
-const AVERAGE = 4.8;
+type Review = {
+  id_review: number;
+  rating: number;
+  comment: string;
+  created_at: string;
+  customer_firstname: string;
+  customer_lastname: string;
+  customer_avatar: string;
+  prestation_name: string;
+};
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: "recent", label: "Plus récents" },
@@ -104,13 +55,48 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function CustomerAvis() {
+  const { user } = useAuth();
+  const location = useLocation();
   const [sort, setSort] = useState<SortOption>("recent");
   const [sortOpen, setSortOpen] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
-  const sortedReviews = [...MOCK_REVIEWS].sort((a, b) => {
-    if (sort === "recent") return b.id - a.id;
-    return a.id - b.id;
+  // In barber context, use the logged-in barber's id
+  // In customer context, expect barberId via location state
+  const isBarberContext = location.pathname.startsWith("/barber");
+  const barberId = isBarberContext ? user?.id : location.state?.barberId;
+
+  useEffect(() => {
+    if (!barberId) return;
+    fetch(`${API_URL}/api/reviews/barber/${barberId}`)
+      .then((res) => res.json())
+      .then((data) => setReviews(data));
+  }, [barberId]);
+
+  const sortedReviews = [...reviews].sort((a, b) => {
+    if (sort === "recent")
+      return (
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+    return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
   });
+
+  const distribution = useMemo(() => {
+    const counts: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    for (const r of reviews) {
+      const star = Math.round(r.rating);
+      if (star >= 1 && star <= 5) counts[star]++;
+    }
+    return [5, 4, 3, 2, 1].map((star) => ({ star, count: counts[star] }));
+  }, [reviews]);
+
+  const total = reviews.length;
+  const average =
+    total > 0
+      ? Math.round(
+          (reviews.reduce((sum, r) => sum + r.rating, 0) / total) * 10,
+        ) / 10
+      : 0;
 
   return (
     <div className="customer-avis">
@@ -123,12 +109,12 @@ function CustomerAvis() {
       <div className="customer-avis__summary">
         <div className="customer-avis__average">
           <p className="customer-avis__average-label">Note moyenne</p>
-          <p className="customer-avis__average-score">{AVERAGE}</p>
-          <StarRating rating={AVERAGE} />
-          <p className="customer-avis__average-total">Basée sur {TOTAL} avis</p>
+          <p className="customer-avis__average-score">{average}</p>
+          <StarRating rating={average} />
+          <p className="customer-avis__average-total">Basée sur {total} avis</p>
         </div>
         <div className="customer-avis__distribution">
-          {DISTRIBUTION.map((d) => (
+          {distribution.map((d) => (
             <div key={d.star} className="customer-avis__bar-row">
               <span className="customer-avis__bar-star">
                 {d.star}{" "}
@@ -137,7 +123,9 @@ function CustomerAvis() {
               <div className="customer-avis__bar-track">
                 <div
                   className="customer-avis__bar-fill"
-                  style={{ width: `${(d.count / TOTAL) * 100}%` }}
+                  style={{
+                    width: total > 0 ? `${(d.count / total) * 100}%` : "0%",
+                  }}
                 />
               </div>
               <span className="customer-avis__bar-count">{d.count}</span>
@@ -184,40 +172,55 @@ function CustomerAvis() {
       </div>
 
       {/* Liste des avis */}
-      <ul className="customer-avis__list">
-        {sortedReviews.map((review) => (
-          <li key={review.id} className="customer-avis__item">
-            <img
-              src={review.avatar}
-              alt={review.name}
-              className="customer-avis__avatar"
-            />
-            <div className="customer-avis__content">
-              <div className="customer-avis__item-header">
-                <div>
-                  <p className="customer-avis__name">{review.name}</p>
-                  <div className="customer-avis__rating-row">
-                    <StarRating rating={review.rating} />
-                    <span className="customer-avis__rating-value">
-                      {review.rating}
-                    </span>
+      {total === 0 ? (
+        <p className="customer-avis__empty">Aucun avis pour le moment.</p>
+      ) : (
+        <ul className="customer-avis__list">
+          {sortedReviews.map((review) => (
+            <li key={review.id_review} className="customer-avis__item">
+              <img
+                src={
+                  review.customer_avatar ||
+                  `https://api.dicebear.com/7.x/thumbs/svg?seed=${review.id_review}`
+                }
+                alt={`${review.customer_firstname} ${review.customer_lastname}`}
+                className="customer-avis__avatar"
+              />
+              <div className="customer-avis__content">
+                <div className="customer-avis__item-header">
+                  <div>
+                    <p className="customer-avis__name">
+                      {review.customer_firstname} {review.customer_lastname}
+                    </p>
+                    <div className="customer-avis__rating-row">
+                      <StarRating rating={review.rating} />
+                      <span className="customer-avis__rating-value">
+                        {review.rating}
+                      </span>
+                    </div>
+                    <p className="customer-avis__prestation">
+                      {review.prestation_name}
+                    </p>
                   </div>
-                  <p className="customer-avis__prestation">
-                    {review.prestation}
-                  </p>
+                  <div className="customer-avis__meta">
+                    <span className="customer-avis__date">
+                      {new Date(review.created_at).toLocaleDateString("fr-FR", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <button type="button" className="customer-avis__menu-btn">
+                      <FiMoreVertical size={18} />
+                    </button>
+                  </div>
                 </div>
-                <div className="customer-avis__meta">
-                  <span className="customer-avis__date">{review.date}</span>
-                  <button type="button" className="customer-avis__menu-btn">
-                    <FiMoreVertical size={18} />
-                  </button>
-                </div>
+                <p className="customer-avis__comment">{review.comment}</p>
               </div>
-              <p className="customer-avis__comment">{review.comment}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
