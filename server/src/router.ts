@@ -84,6 +84,7 @@ router.get("/api/prestations", prestationActions.browse);
 router.post("/api/prestations", verifyToken, prestationActions.add);
 router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
 router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
+router.post("/api/reviews", verifyToken, reviewActions.add);
 router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);
