@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { FiMoreVertical } from "react-icons/fi";
 import { useLocation } from "react-router";
-import useAuth from "../../../hooks/useAuth";
+import { useAuth } from "../../../context/AuthContext";
 import "./customerAvis.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
