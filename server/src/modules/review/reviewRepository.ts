@@ -28,7 +28,11 @@ type AdminReview = Review & {
 };
 
 class ReviewRepository {
-  async create(data: { rating: number; comment: string; id_appointment: number }) {
+  async create(data: {
+    rating: number;
+    comment: string;
+    id_appointment: number;
+  }) {
     const [result] = await databaseClient.query<Result>(
       "INSERT INTO review (rating, comment, id_appointment) VALUES (?, ?, ?)",
       [data.rating, data.comment, data.id_appointment],

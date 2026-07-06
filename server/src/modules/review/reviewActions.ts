@@ -67,7 +67,12 @@ const add: RequestHandler = async (req, res, next) => {
       comment: comment ?? "",
       id_appointment: Number(id_appointment),
     });
-    res.status(201).json({ message: "Avis publié", id: (result as { insertId: number }).insertId });
+    res
+      .status(201)
+      .json({
+        message: "Avis publié",
+        id: (result as { insertId: number }).insertId,
+      });
   } catch (err) {
     next(err);
   }
