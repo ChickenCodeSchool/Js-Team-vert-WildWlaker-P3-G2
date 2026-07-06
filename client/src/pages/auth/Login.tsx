@@ -17,7 +17,7 @@ import "./Login.css";
 import { useAuth } from "../../context/AuthContext";
 
 type Tab = "connexion" | "inscription";
-type Role = "client" | "professionnel";
+type Role = "client" | "barber" | "admin";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -63,7 +63,13 @@ const Login = () => {
       }
       const data = await res.json();
       login(data.user, data.token);
-      navigate("/");
+      if (data.user.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (data.user.role === "barber") {
+        navigate("/barber/dashboard");
+      } else {
+        navigate("/");
+      }
     } catch {
       setError("Impossible de se connecter");
     }
@@ -110,7 +116,7 @@ const Login = () => {
         setError(data.message ?? "Erreur lors de l'inscription");
         return;
       }
-      if (role === "professionnel") {
+      if (role === "barber") {
         navigate("/barber/dashboard");
       } else {
         navigate("/");
@@ -328,7 +334,7 @@ const Login = () => {
               onChange={(e) => setRole(e.target.value as Role)}
             >
               <option value="client">Je suis un client</option>
-              <option value="professionnel">Je suis un professionnel</option>
+              <option value="barber">Je suis un professionnel</option>
             </select>
             <FiChevronDown className="login__select-arrow" />
           </div>
