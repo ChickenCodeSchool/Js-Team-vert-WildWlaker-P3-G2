@@ -21,18 +21,32 @@ class PrestationRepository {
 
   async readByBarber(barberId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT p.* FROM prestation p INNER JOIN propose pr ON pr.id_prestation = p.id_prestation WHERE pr.id_user = ?",
+      `SELECT 
+      p.id_prestation AS Id_prestation,
+      p.name,
+      p.price,
+      p.duration_minutes
+      FROM prestation p  INNER JOIN propose pr ON pr.id_prestation = p.id_prestation
+      WHERE pr.id_user = ?`,
       [barberId],
     );
 
     return rows as Prestation[];
   }
 
-  async create(prestation: Omit<Prestation, "id_prestation">) {
+  async create(
+    prestation: Omit<Prestation, "id_prestation"> & { id_user: number },
+  ) {
     const [result] = await databaseClient.query<Result>(
       "INSERT INTO prestation (name, price, duration_minutes) VALUES (?, ?, ?)",
       [prestation.name, prestation.price, prestation.duration_minutes],
     );
+
+    await databaseClient.query(
+      "INSERT INTO propose (id_user, id_prestation) VALUES (?, ?)",
+      [prestation.id_user, result.insertId],
+    );
+
     return result.insertId;
   }
 
@@ -44,6 +58,10 @@ class PrestationRepository {
   }
 
   async delete(id: number) {
+    await databaseClient.query<Result>(
+      "DELETE FROM propose WHERE id_prestation = ?",
+      [id],
+    );
     await databaseClient.query<Result>(
       "DELETE FROM prestation WHERE id_prestation = ?",
       [id],
