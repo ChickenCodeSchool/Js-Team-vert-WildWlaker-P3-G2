@@ -22,7 +22,9 @@ function useBarberAppointments(barberId: number, status?: string) {
       ? `${API_URL}/api/appointments/barber/${barberId}?status=${encodeURIComponent(status)}`
       : `${API_URL}/api/appointments/barber/${barberId}`;
 
-    fetch(url)
+    fetch(url, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
       .then((res) => res.json())
       .then((data) => setAppointments(data));
   }, [barberId, status]);
