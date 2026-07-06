@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ModalReservation from "../../../components/barber/planning/modalReservation/ModalReservation";
 import PlanningCalendar from "../../../components/barber/planningCalendar/PlanningCalendar";
 import ReservationCardPlanning from "../../../components/barber/reservationCard/ReservationCardPlanning";
+import { useAuth } from "../../../context/AuthContext";
 import type { Appointment } from "../../../types/appointment";
 import "./BarberPlanning.css";
 
@@ -13,11 +14,9 @@ function formatDateKey(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
-
 function BarberPlanning() {
+  const { user } = useAuth();
+  const barberId = user?.id ?? null;
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -26,8 +25,8 @@ function BarberPlanning() {
     useState<Appointment | null>(null);
 
   useEffect(() => {
-    if (!BARBER_ID) return;
-    fetch(`${apiUrl}/api/appointments/barber/${BARBER_ID}`, {
+    if (!barberId) return;
+    fetch(`${apiUrl}/api/appointments/barber/${barberId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
@@ -36,7 +35,7 @@ function BarberPlanning() {
       .then((data) => {
         setReservations(data);
       });
-  }, []);
+  }, [barberId]);
 
   const selectedDateKey = formatDateKey(selectedDate);
 

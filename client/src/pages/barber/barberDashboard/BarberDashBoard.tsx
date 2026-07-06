@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import ModalReservation from "../../../components/barber/planning/modalReservation/ModalReservation";
-import ReservationCardPlanning from "../../../components/barber/reservationCard/ReservationCardPlanning";
-import StatsGraphCardBarber from "../../../components/barber/statsGraphCardBarber/StatsGraphCardBarber";
-import type { Appointment } from "../../../types/appointment";
-import "./BarberDashBoard.css";
-
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { GoClock } from "react-icons/go";
 import { PiStarThin } from "react-icons/pi";
+import ModalReservation from "../../../components/barber/planning/modalReservation/ModalReservation";
+import ReservationCardPlanning from "../../../components/barber/reservationCard/ReservationCardPlanning";
+import StatsGraphCardBarber from "../../../components/barber/statsGraphCardBarber/StatsGraphCardBarber";
+import { useAuth } from "../../../context/AuthContext";
+import type { Appointment } from "../../../types/appointment";
+import "./BarberDashBoard.css";
 
 type Review = {
   id_review: number;
@@ -22,11 +22,9 @@ function formatDateKey(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
-
 function BarberDashBoard() {
+  const { user } = useAuth();
+  const barberId = user?.id ?? null;
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const [reservations, setReservations] = useState<Appointment[]>([]);
@@ -36,19 +34,19 @@ function BarberDashBoard() {
     useState<Appointment | null>(null);
 
   useEffect(() => {
-    if (!BARBER_ID) return;
+    if (!barberId) return;
     const headers = {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     };
 
-    fetch(`${apiUrl}/api/appointments/barber/${BARBER_ID}`, { headers })
+    fetch(`${apiUrl}/api/appointments/barber/${barberId}`, { headers })
       .then((res) => res.json())
       .then((data) => setReservations(data));
 
-    fetch(`${apiUrl}/api/reviews/barber/${BARBER_ID}`)
+    fetch(`${apiUrl}/api/reviews/barber/${barberId}`)
       .then((res) => res.json())
       .then((data) => setReviews(data));
-  }, []);
+  }, [barberId]);
 
   const todayKey = formatDateKey(new Date());
   const currentMonth = new Date().getMonth();
