@@ -93,13 +93,26 @@ class ReviewRepository {
   }
   async readByBarber(barberId: number) {
     const [rows] = await databaseClient.query<Rows>(
-      `SELECT r.*
+      `SELECT r.*,
+        c.firstname AS customer_firstname,
+        c.lastname AS customer_lastname,
+        u.avatar_url AS customer_avatar,
+        p.name AS prestation_name
        FROM review r
        JOIN appointment a ON r.id_appointment = a.id_appointment
-       WHERE a.id_user_barber = ?`,
+       JOIN customer c ON a.id_user_customer = c.id_user
+       JOIN users u ON c.id_user = u.id_user
+       JOIN prestation p ON a.id_prestation = p.id_prestation
+       WHERE a.id_user_barber = ?
+       ORDER BY r.created_at DESC`,
       [barberId],
     );
-    return rows as Review[];
+    return rows as (Review & {
+      customer_firstname: string;
+      customer_lastname: string;
+      customer_avatar: string;
+      prestation_name: string;
+    })[];
   }
 
   async delete(id: number) {
