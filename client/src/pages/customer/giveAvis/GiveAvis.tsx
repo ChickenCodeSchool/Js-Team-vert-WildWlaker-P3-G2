@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { FiCalendar, FiPlus, FiX } from "react-icons/fi";
+import { FiCalendar } from "react-icons/fi";
 import { useNavigate, useParams } from "react-router";
 import "./giveAvis.css";
 
@@ -20,7 +20,6 @@ function GiveAvis() {
   const [rating, setRating] = useState(0);
   const [hovered, setHovered] = useState(0);
   const [comment, setComment] = useState("");
-  const [photos, setPhotos] = useState<string[]>([]);
   const [publishWithName, setPublishWithName] = useState(true);
 
   async function handleSubmit() {
@@ -42,18 +41,7 @@ function GiveAvis() {
 
   const activeRating = hovered || rating;
 
-  function handlePhotoAdd(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files;
-    if (!files) return;
-    const urls = Array.from(files).map((f) => URL.createObjectURL(f));
-    setPhotos((prev) => [...prev, ...urls]);
-  }
-
-  function handlePhotoRemove(index: number) {
-    setPhotos((prev) => prev.filter((_, i) => i !== index));
-  }
-
-  return (
+return (
     <div className="give-avis">
       {/* Header */}
       <div className="give-avis__header">
@@ -129,41 +117,7 @@ function GiveAvis() {
         <span className="give-avis__counter">{comment.length}/500</span>
       </div>
 
-      {/* Photos */}
-      <div className="give-avis__photos-section">
-        <p className="give-avis__label">Ajouter des photos</p>
-        <div className="give-avis__photos-grid">
-          {photos.map((url, i) => (
-            <div key={url} className="give-avis__photo-wrapper">
-              <img
-                src={url}
-                alt={`Aperçu ${i + 1}`}
-                className="give-avis__photo"
-              />
-              <button
-                type="button"
-                className="give-avis__photo-remove"
-                onClick={() => handlePhotoRemove(i)}
-              >
-                <FiX size={12} />
-              </button>
-            </div>
-          ))}
-          <label className="give-avis__photo-add">
-            <FiPlus size={20} className="give-avis__photo-add-icon" />
-            <span>Ajouter</span>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              hidden
-              onChange={handlePhotoAdd}
-            />
-          </label>
-        </div>
-      </div>
-
-      {/* Toggle */}
+{/* Toggle */}
       <div className="give-avis__toggle-row">
         <div className="give-avis__toggle-info">
           <p className="give-avis__toggle-label">
