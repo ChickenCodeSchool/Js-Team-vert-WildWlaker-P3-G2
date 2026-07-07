@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import ReservationCard from "./ReservationCard";
 import "./MyReservations.css";
-import { useParams } from "react-router";
 import type { Review } from "../../../types/review";
 import type { Reservation } from "./ReservationType";
 
@@ -10,27 +9,25 @@ function MyReservations() {
   const [activeTab, setActiveTab] = useState("upcoming");
   const [appointments, setAppointments] = useState<Reservation[]>([]);
   const API_URL = import.meta.env.VITE_API_URL;
-  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    const userId = Number(id);
     const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("Aucun token trouvé");
-      return;
-    }
-    fetch(`${API_URL}/api/appointments/user/${userId}`, {
+    if (!token) return;
+    fetch(`${API_URL}/api/appointments/me`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur ${res.status}`);
         return res.json();
       })
-      .then((data) => setAppointments(data))
-      .catch((err) => console.error("Erreur chargement réservations", err));
-  }, [id]);
+      .then((data) => {
+        console.log("Appointments :", data);
+        setAppointments(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   useEffect(() => {
     fetch(`${API_URL}/api/reviews`)

@@ -46,7 +46,7 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       lastname: lastname,
       email: email,
       city: city,
-      postalCode: postalCode,
+      postal_code: postalCode,
       adress: adress,
       phone: phone,
       birthday: formatBirthday(birthday),
@@ -57,6 +57,7 @@ function EditProfileModal({ customer, onClose, onSave, loadData }: Props) {
       const res = await fetch(`${API_URL}/api/customers/${customer.id_user}`, {
         method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify(updatedCustomer),

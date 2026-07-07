@@ -27,7 +27,15 @@ function CustomerNavBar() {
       user.role === "barber"
         ? `${API_URL}/api/barbers/${user.id}`
         : `${API_URL}/api/customers/${user.id}`;
-    fetch(endpoint)
+
+    const token = localStorage.getItem("token");
+
+    fetch(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.avatar_url) {
@@ -76,7 +84,7 @@ function CustomerNavBar() {
               Coiffeurs
             </NavLink>
             <NavLink
-              to={user ? `/reservations/${user.id}` : "/login"}
+              to={user ? `/reservations` : "/login"}
               className={({ isActive }) =>
                 isActive
                   ? "navbar-desktop__link navbar-desktop__link--active"
@@ -160,7 +168,7 @@ function CustomerNavBar() {
           </NavLink>
 
           <NavLink
-            to={user ? `/reservations/${user.id}` : "/login"}
+            to={user ? `/reservations` : "/login"}
             className={({ isActive }) =>
               isActive ? "navbar__item navbar__item--active" : "navbar__item"
             }

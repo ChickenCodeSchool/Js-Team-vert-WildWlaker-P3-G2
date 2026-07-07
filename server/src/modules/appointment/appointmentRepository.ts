@@ -4,7 +4,7 @@ import databaseClient from "../../../database/client";
 export type Appointment = {
   id_appointment: number;
   appointment_date: Date;
-  status: "en attente" | "confirmé" | "terminé" | "annulé";
+  status: "En attente" | "Confirmé" | "Terminé" | "Annulé";
   location_type: string;
   create_time: Date;
   id_prestation: number;
@@ -34,6 +34,11 @@ export type AppointmentWithDetails = Appointment & {
   duration_minutes?: number;
   price?: number;
 };
+export type NewAppointment = Omit<
+  Appointment,
+  "id_appointment" | "create_time" | "status"
+>;
+
 class AppointmentRepository {
   // The C of CRUD - Create operation
 
@@ -173,6 +178,30 @@ class AppointmentRepository {
 
     return rows as AppointmentWithDetails[];
   }
+
+  async create(
+    appointment: Omit<Appointment, "id_appointment" | "create_time" | "status">,
+  ) {
+    const query = `
+   INSERT INTO appointment (
+   appointment_date,
+   location_type,
+   id_prestation,
+   id_user_barber,
+   id_user_customer
+   ) VALUES (?, ?, ?, ?, ?)
+  `;
+    const [result] = await databaseClient.query<Rows>(query, [
+      appointment.appointment_date,
+      appointment.location_type,
+      appointment.id_prestation,
+      appointment.id_user_barber,
+      appointment.id_user_customer,
+    ]);
+
+    return result;
+  }
+
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Appointment
 

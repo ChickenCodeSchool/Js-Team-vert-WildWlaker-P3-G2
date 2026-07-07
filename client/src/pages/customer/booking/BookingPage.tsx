@@ -19,9 +19,9 @@ function BookingPage() {
 
   const [booking, setBooking] = useState<Booking>({
     barber: location.state?.barber,
+    locationType: "Salon",
   });
   const prestations = usePrestations(booking.barber?.id_user);
-
   return (
     <main className="reservation-page">
       <div className="reservation-page__container">

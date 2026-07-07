@@ -78,6 +78,7 @@
 
 @media (min-width: 1024px) {
   .profile-actions {
+    box-sizing: border-box;
     position: sticky;
     top: 2rem;
     display: flex;
