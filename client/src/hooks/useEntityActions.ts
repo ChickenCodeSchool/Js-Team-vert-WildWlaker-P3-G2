@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import Swal from "sweetalert2";
+import { useAuth } from "../context/AuthContext";
 
 export interface BaseEntity {
   id: number;
@@ -14,13 +15,13 @@ const formatBirthday = (val: string | null | undefined): string | null => {
   if (!val) return null;
   return String(val).substring(0, 10);
 };
-
 export function useEntityActions<T extends BaseEntity>(options: {
   apiBase: string;
   idField: string;
   onActionComplete?: () => void;
   onClose?: () => void;
 }) {
+  const { fetchWithAuth } = useAuth();
   const { apiBase, idField, onActionComplete, onClose } = options;
 
   const handleSave = useCallback(
@@ -31,11 +32,14 @@ export function useEntityActions<T extends BaseEntity>(options: {
           birthday: formatBirthday(entity.birthday),
         };
 
-        const response = await fetch(`${apiBase}/${idField}/${entity.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetchWithAuth(
+          `${apiBase}/${idField}/${entity.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          },
+        );
 
         if (!response.ok) throw new Error("Erreur lors de la mise à jour");
 
@@ -57,7 +61,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
         });
       }
     },
-    [apiBase, idField, onActionComplete, onClose],
+    [apiBase, idField, onActionComplete, onClose, fetchWithAuth],
   );
 
   const handleToggleSuspend = useCallback(
@@ -111,11 +115,14 @@ export function useEntityActions<T extends BaseEntity>(options: {
           birthday: formatBirthday(entity.birthday),
         };
 
-        const response = await fetch(`${apiBase}/${idField}/${entity.id}`, {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const response = await fetchWithAuth(
+          `${apiBase}/${idField}/${entity.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          },
+        );
 
         if (!response.ok) throw new Error("Erreur lors de la mise à jour");
 
@@ -133,7 +140,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
         Swal.fire("Erreur", "Une erreur est survenue", "error");
       }
     },
-    [apiBase, idField, onActionComplete, onClose],
+    [apiBase, idField, onActionComplete, onClose, fetchWithAuth],
   );
   const deleteUser = useCallback(
     async (entity: T) => {
@@ -151,9 +158,12 @@ export function useEntityActions<T extends BaseEntity>(options: {
       if (!result.isConfirmed) return;
 
       try {
-        const response = await fetch(`${apiBase}/api/users/${entity.id}`, {
-          method: "DELETE",
-        });
+        const response = await fetchWithAuth(
+          `${apiBase}/api/users/${entity.id}`,
+          {
+            method: "DELETE",
+          },
+        );
 
         if (!response.ok) throw new Error("Erreur lors de la suppression");
 
@@ -176,7 +186,7 @@ export function useEntityActions<T extends BaseEntity>(options: {
         );
       }
     },
-    [apiBase, onActionComplete, onClose],
+    [apiBase, onActionComplete, onClose, fetchWithAuth],
   );
 
   return { handleSave, handleToggleSuspend, deleteUser };

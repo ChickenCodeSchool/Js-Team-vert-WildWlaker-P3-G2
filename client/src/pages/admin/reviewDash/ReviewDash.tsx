@@ -10,6 +10,7 @@ import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
+import { useAuth } from "../../../context/AuthContext";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
 import type { AdminReview } from "../../../types/review";
@@ -29,6 +30,8 @@ const truncateText = (text: string, maxLength: number) => {
 };
 function ReviewDash() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const { fetchWithAuth } = useAuth();
+
   const today = new Date();
   const thirtyDaysAgo = subDays(today, 30);
 
@@ -46,7 +49,7 @@ function ReviewDash() {
   );
 
   const loadReviewsData = useCallback(() => {
-    fetch(`${API_URL}/api/reviews/admin`)
+    fetchWithAuth(`${API_URL}/api/admin/reviewsdetails`)
       .then((res) => res.json())
       .then((data: AdminReview[]) => {
         const formattedData = data.map((app: AdminReview) => ({
@@ -80,11 +83,11 @@ function ReviewDash() {
         console.error("Erreur lors du chargement des avis :", err),
       );
 
-    fetch(`${API_URL}/api/reviews${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/reviewsdetails${params}`)
       .then((res) => res.json())
       .then((data: AdminReview[]) => setMonthlyNewReviews(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel :", err));
-  }, [params]);
+  }, [params, fetchWithAuth]);
 
   useEffect(() => {
     loadReviewsData();
@@ -158,12 +161,13 @@ function ReviewDash() {
     });
     if (!result.isConfirmed) return;
     try {
-      const res = await fetch(
-        `${API_URL}/api/reviews/${selectedReview?.id_review}`,
+      const res = await fetchWithAuth(
+        `${API_URL}/api/admin/reviews/${selectedReview?.id_review}`,
         {
           method: "DELETE",
         },
       );
+      console.log(selectedReview);
       if (!res.ok) throw new Error("Erreur lors de la suppression");
       Swal.fire({
         icon: "success",

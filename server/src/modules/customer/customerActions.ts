@@ -4,12 +4,11 @@ import type { RequestHandler } from "express";
 import customerRepository from "./customerRepository";
 
 // The B of BREAD - Browse (Read All) operation
-const browse: RequestHandler = async (_req, res, next) => {
+const browse: RequestHandler = async (req, res, next) => {
   try {
-    // TODO: Réactiver la vérification de rôle plus tard
-    // if (req.user?.role !== "admin") {
-    //   return res.sendStatus(403);
-    // }
+    if (req.user?.role !== "admin") {
+      return res.sendStatus(403);
+    }
 
     const customers = await customerRepository.readAll();
 
@@ -36,7 +35,7 @@ const read: RequestHandler = async (req, res, next) => {
 };
 const edit: RequestHandler = async (req, res, next) => {
   try {
-    if (req.user?.id !== Number(req.params.id)) {
+    if (req.user?.id !== Number(req.params.id) && req.user?.role !== "admin") {
       return res.sendStatus(403);
     }
 

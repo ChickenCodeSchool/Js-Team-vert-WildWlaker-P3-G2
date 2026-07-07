@@ -1,21 +1,28 @@
 import {
-  FiAirplay,
-  FiAlertTriangle,
-  FiBarChart2,
+  // FiAirplay,
+  // FiAlertTriangle,
+  // FiBarChart2,
   FiCalendar,
-  FiCamera,
+  // FiCamera,
   FiHome,
+  FiLogOut,
   FiMessageSquare,
   FiScissors,
-  FiSettings,
+  // FiSettings,
   FiStar,
   FiUser,
 } from "react-icons/fi";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import "./AdminNavBar.css";
 import icon from "../../../assets/images/icon.png";
 
 function AdminNavBar() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/");
+  };
   return (
     <nav className="adminNavBar-main">
       <img src={icon} alt="Icon" className="adminNavBar-icon" />
@@ -36,18 +43,18 @@ function AdminNavBar() {
       <NavLink to="/admin/reviews" className="adminNavBar-menu">
         <FiMessageSquare /> Avis & Commentaires
       </NavLink>
-      <NavLink to="/admin/reporting" className="adminNavBar-menu">
+      {/* <NavLink to="/admin/reporting" className="adminNavBar-menu">
         <FiAlertTriangle /> Signalements
-      </NavLink>
+      </NavLink> */}
       <h3>CONTENU</h3>
       <NavLink to="/admin/events" className="adminNavBar-menu">
         <FiStar /> Événements
       </NavLink>
-      <NavLink to="/admin/banniere" className="adminNavBar-menu">
+      {/* <NavLink to="/admin/banniere" className="adminNavBar-menu">
         <FiCamera />
         Bannières
-      </NavLink>
-      <h3>ANALYTICS</h3>
+      </NavLink> */}
+      {/* <h3>ANALYTICS</h3>
       <NavLink to="/admin/statistics" className="adminNavBar-menu">
         <FiBarChart2 /> Statistiques
       </NavLink>
@@ -57,7 +64,14 @@ function AdminNavBar() {
       </NavLink>
       <NavLink to="/admin/configuration" className="adminNavBar-menu">
         <FiSettings /> Paramètres
-      </NavLink>
+      </NavLink> */}
+      <button
+        type="button"
+        className="adminNavBar-logout"
+        onClick={handleLogout}
+      >
+        <FiLogOut /> Déconnexion
+      </button>
     </nav>
   );
 }

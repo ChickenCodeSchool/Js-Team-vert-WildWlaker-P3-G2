@@ -9,6 +9,7 @@ import StatsCard from "../../../components/admin/statsCard/StatsCard";
 import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
+import { useAuth } from "../../../context/AuthContext";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 
 import type { Appointment } from "../../../types/appointment";
@@ -21,6 +22,8 @@ const truncateText = (text: string, maxLength: number) => {
 };
 function ReservationsDash() {
   const API_URL = import.meta.env.VITE_API_URL;
+  const { fetchWithAuth } = useAuth();
+
   const today = new Date();
   const thirtyDaysAgo = subDays(today, 30);
 
@@ -41,7 +44,7 @@ function ReservationsDash() {
   >(null);
 
   const loadAppointmentsData = useCallback(() => {
-    fetch(`${API_URL}/api/appointments/admin`)
+    fetchWithAuth(`${API_URL}/api/admin/appointmentsdetails`)
       .then((res) => res.json())
       .then((data: Appointment[]) => {
         const formattedData = data.map((app: Appointment) => ({
@@ -71,11 +74,11 @@ function ReservationsDash() {
         console.error("Erreur lors du chargement des réservations :", err),
       );
 
-    fetch(`${API_URL}/api/appointments${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/appointments${params}`)
       .then((res) => res.json())
       .then((data: Appointment[]) => setMonthlyNewAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel :", err));
-  }, [params]);
+  }, [params, fetchWithAuth]);
 
   useEffect(() => {
     loadAppointmentsData();

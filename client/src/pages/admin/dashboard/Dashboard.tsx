@@ -124,7 +124,7 @@ function Dashboard() {
     const params = `?startDate=${currentPeriod.start}&endDate=${currentPeriod.end}`;
     const prevParams = `?startDate=${prevPeriod.start}&endDate=${prevPeriod.end}`;
 
-    fetchWithAuth(`${API_URL}/api/admin-dashboard${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/dashboard${params}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setBarbers(barbers);
@@ -132,7 +132,7 @@ function Dashboard() {
         setAppointments(appointments);
         setReviews(reviews);
       });
-    fetchWithAuth(`${API_URL}/api/admin-dashboard${prevParams}`)
+    fetchWithAuth(`${API_URL}/api/admin/dashboard${prevParams}`)
       .then((res) => res.json())
       .then(({ barbers, users, appointments, reviews }) => {
         setPrevBarbers(barbers);

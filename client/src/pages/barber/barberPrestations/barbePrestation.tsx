@@ -7,14 +7,18 @@ const API_URL = import.meta.env.VITE_API_URL;
 const emptyForm = { name: "", duration: "", price: "" };
 
 function BarberPrestation() {
-  const initialPrestations = usePrestations();
+  const userString = localStorage.getItem("user");
+  const loggedUser = userString ? JSON.parse(userString) : null;
+  const barberId = loggedUser?.id ? Number(loggedUser.id) : undefined;
+
+  const initialPrestations = usePrestations(barberId);
   const [prestations, setPrestations] = useState<Prestation[]>([]);
+  const [form, setForm] = useState(emptyForm);
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
     setPrestations(initialPrestations);
   }, [initialPrestations]);
-  const [form, setForm] = useState(emptyForm);
-  const [editingId, setEditingId] = useState<number | null>(null);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -35,22 +39,37 @@ function BarberPrestation() {
   }
 
   async function handleDelete(id: number) {
-    await fetch(`${API_URL}/api/prestations/${id}`, { method: "DELETE" });
+    const res = await fetch(`${API_URL}/api/prestations/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!res.ok) return;
+
     setPrestations((prev) => prev.filter((p) => p.id_prestation !== id));
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    if (!barberId) return;
+
     const body = {
       name: form.name,
       price: Number(form.price),
       duration_minutes: Number(form.duration),
+      id_user: barberId,
     };
 
     if (editingId !== null) {
       await fetch(`${API_URL}/api/prestations/${editingId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(body),
       });
       setPrestations((prev) =>
@@ -61,7 +80,10 @@ function BarberPrestation() {
     } else {
       const res = await fetch(`${API_URL}/api/prestations`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify(body),
       });
       const newPrestation = await res.json();

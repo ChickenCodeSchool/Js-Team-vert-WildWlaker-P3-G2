@@ -10,9 +10,9 @@ import UserDataGrid, {
   type DataGridColumn,
 } from "../../../components/admin/userDataGrid/UserDataGrid";
 import UserProfilCard from "../../../components/admin/userProfilCard/UserProfilCard";
+import { useAuth } from "../../../context/AuthContext";
 import { useAdminFilters } from "../../../hooks/useAdminFilter";
 import { useEntityActions } from "../../../hooks/useEntityActions";
-
 import type { Appointment } from "../../../types/appointment";
 import type { Barber } from "../../../types/barber";
 import type { Review } from "../../../types/review";
@@ -29,6 +29,7 @@ const thisMonthRange = {
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
 
 function Barbers() {
+  const { fetchWithAuth } = useAuth();
   const [barbers, setBarbers] = useState<(Barber & { id: number })[]>([]);
   const [monthlyNewBarbers, setMonthlyNewBarbers] = useState<Barber[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
@@ -39,7 +40,7 @@ function Barbers() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const loadAllData = useCallback(() => {
-    fetch(`${API_URL}/api/barbers`)
+    fetchWithAuth(`${API_URL}/api/admin/barbers`)
       .then((res) => {
         if (!res.ok) throw new Error("Erreur réseau");
         return res.json();
@@ -70,19 +71,19 @@ function Barbers() {
       .catch((err) =>
         console.error("Erreur lors du chargement des clients :", err),
       );
-    fetch(`${API_URL}/api/reviews`)
+    fetchWithAuth(`${API_URL}/api/admin/reviews`)
       .then((res) => res.json())
       .then((data: Review[]) => setReviews(data))
       .catch((err) => console.error("Erreur lors du fetch des avis :", err));
-    fetch(`${API_URL}/api/appointments`)
+    fetchWithAuth(`${API_URL}/api/admin/appointments`)
       .then((res) => res.json())
       .then((data: Appointment[]) => setAppointments(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
-    fetch(`${API_URL}/api/barbers${params}`)
+    fetchWithAuth(`${API_URL}/api/admin/barbers${params}`)
       .then((res) => res.json())
       .then((data: Barber[]) => setMonthlyNewBarbers(data))
       .catch((err) => console.error("Erreur lors du fetch mensuel:", err));
-  }, []);
+  }, [fetchWithAuth]);
 
   const {
     searchTerm,
