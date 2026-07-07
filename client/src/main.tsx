@@ -15,7 +15,6 @@ import EventDash from "./pages/admin/eventDash/EventDash";
 import ReservationsDash from "./pages/admin/reservations/ReservationsDash";
 import ReviewDash from "./pages/admin/reviewDash/ReviewDash";
 import Users from "./pages/admin/users/Users";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/auth/Login";
 import BarberAnnulations from "./pages/barber/barberAnnulations/BarberAnnulations";
 import BarberDashBoard from "./pages/barber/barberDashboard/BarberDashBoard";
@@ -83,24 +82,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/barber",
-        element: <ProtectedRoute role="barber" />,
+        element: <BarberLayout />,
         children: [
-          {
-            element: <BarberLayout />,
-            children: [
-              { index: true, element: <Navigate to="dashboard" replace /> },
-              { path: "profile", element: <BarberProfil /> },
-              { path: "prestations", element: <BarberPrestation /> },
-              { path: "dashboard", element: <BarberDashBoard /> },
-              { path: "planning", element: <BarberPlanning /> },
-              { path: "signalement", element: <BarberSignalement /> },
-              { path: "statistics", element: <BarberStatistics /> },
-              { path: "annulations", element: <BarberAnnulations /> },
-              { path: "disponibilites", element: <BarberDisponibilites /> },
-              { path: "customer", element: <CustomerAvis /> },
-              { path: "parametres", element: <BarberParametres /> },
-            ],
-          },
+          { index: true, element: <Navigate to="dashboard" replace /> },
+          { path: "profile", element: <BarberProfil /> },
+          { path: "prestations", element: <BarberPrestation /> },
+          { path: "dashboard", element: <BarberDashBoard /> },
+          { path: "planning", element: <BarberPlanning /> },
+          { path: "signalement", element: <BarberSignalement /> },
+          { path: "statistics", element: <BarberStatistics /> },
+          { path: "annulations", element: <BarberAnnulations /> },
+          { path: "disponibilites", element: <BarberDisponibilites /> },
+          { path: "customer", element: <CustomerAvis /> },
+          { path: "parametres", element: <BarberParametres /> },
         ],
       },
     ],
