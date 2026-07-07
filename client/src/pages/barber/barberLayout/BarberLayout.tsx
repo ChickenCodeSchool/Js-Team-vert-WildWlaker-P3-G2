@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router";
-import { useAuth } from "../../../context/AuthContext";
 import BarberNavBar from "../../../components/barber/barberNavBar/BarberNavBar";
+import { useAuth } from "../../../context/AuthContext";
 import "./BarberLayout.css";
 
 function BarberLayout() {
