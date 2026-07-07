@@ -106,10 +106,12 @@ const create: RequestHandler = async (req, res, next) => {
 const readMyAppointments: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.user?.id);
+    console.log("USER ID UTILISÉ POUR LA REQUÊTE :", userId);
     if (Number.isNaN(userId)) {
       return res.sendStatus(403);
     }
     const appointments = await appointmentRepository.readwithuserid(userId);
+    console.log("RÉSULTAT SQL :", appointments);
     res.status(200).json(appointments);
   } catch (err) {
     next(err);

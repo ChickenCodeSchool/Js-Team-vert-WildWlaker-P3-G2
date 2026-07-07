@@ -12,36 +12,23 @@ function MyReservations() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("TOKEN AU MOMENT DU FETCH:", token);
-    if (!token) {
-      console.error("Aucun token trouvé");
-      return;
-    }
-    console.log(API_URL);
-    fetch(`${API_URL}/api/reservations`, {
+    if (!token) return;
+    fetch(`${API_URL}/api/appointments/me`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => {
         if (!res.ok) throw new Error(`Erreur ${res.status}`);
         return res.json();
       })
-      .then((data) => setAppointments(data))
-      .catch((err) => console.error("Erreur chargement réservations", err));
+      .then((data) => {
+        console.log("Appointments :", data);
+        setAppointments(data);
+      })
+      .catch((err) => console.error(err));
   }, []);
-  fetch(`${API_URL}/api/appointments/me`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  }).then(async (res) => {
-    console.log("STATUS", res.status);
 
-    const text = await res.text();
-    console.log(text);
-
-    return JSON.parse(text);
-  });
   useEffect(() => {
     fetch(`${API_URL}/api/reviews`)
       .then((res) => {

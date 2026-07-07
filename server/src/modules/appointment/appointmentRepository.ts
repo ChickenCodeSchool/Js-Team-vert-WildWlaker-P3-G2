@@ -182,7 +182,6 @@ class AppointmentRepository {
   async create(
     appointment: Omit<Appointment, "id_appointment" | "create_time" | "status">,
   ) {
-    console.log("INSERT", appointment);
     const query = `
    INSERT INTO appointment (
    appointment_date,

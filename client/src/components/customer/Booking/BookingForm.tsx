@@ -7,22 +7,14 @@ import type { Booking } from "./BookingTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-type PrestationWithBothIds = Prestation & {
-  id_prestation?: number;
-};
-
 type Props = {
   booking: Booking;
   setBooking: React.Dispatch<React.SetStateAction<Booking>>;
-  prestations: PrestationWithBothIds[];
+  prestations: Prestation[];
   onNext: () => void;
 };
 
 function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
-  const getPrestationId = (prestation: PrestationWithBothIds) => {
-    return prestation.Id_prestation ?? prestation.id_prestation;
-  };
-
   const [slots, setSlots] = useState<string[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
 
@@ -73,9 +65,9 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
             </p>
           ) : (
             prestations.map((prestation) => {
-              const prestationId = getPrestationId(prestation);
+              const prestationId = prestation.id_prestation;
               const selectedId = booking.prestation
-                ? getPrestationId(booking.prestation as PrestationWithBothIds)
+                ? prestation.id_prestation
                 : undefined;
 
               const isSelected =
@@ -200,12 +192,7 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
         type="button"
         className="booking-form__button"
         onClick={onNext}
-        disabled={
-          !booking.prestation ||
-          !booking.appointmentDate ||
-          !booking.appointmentTime ||
-          !booking.locationType
-        }
+        disabled={!booking.prestation || !booking.appointmentDate}
       >
         Continuer
       </button>

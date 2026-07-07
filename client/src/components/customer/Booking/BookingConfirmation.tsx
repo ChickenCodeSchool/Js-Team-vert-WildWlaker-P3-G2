@@ -13,7 +13,6 @@ function BookingConfirmation({ booking }: Props) {
   const navigate = useNavigate();
   useEffect(() => {
     const confirmBooking = async () => {
-      
       const token = localStorage.getItem("token");
       if (
         !booking.barber ||
@@ -24,9 +23,7 @@ function BookingConfirmation({ booking }: Props) {
       ) {
         return;
       }
-
       try {
-        console.log("J'envoie la requête vers :", `${API_URL}/api/appointments`);
         const res = await fetch(`${API_URL}/api/appointments`, {
           method: "POST",
           headers: {
@@ -36,7 +33,7 @@ function BookingConfirmation({ booking }: Props) {
           body: JSON.stringify({
             appointment_date: `${booking.appointmentDate} ${booking.appointmentTime}:00`,
             location_type: booking.locationType,
-            id_prestation: booking.prestation.Id_prestation,
+            id_prestation: booking.prestation.id_prestation,
             id_user_barber: booking.barber.id_user,
           }),
         });
