@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         path: "/barber",
         element: <BarberLayout />,
         children: [
-          { index: true, element: <Navigate to="dashBoard" replace /> },
+          { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "profile", element: <BarberProfil /> },
           { path: "prestations", element: <BarberPrestation /> },
           { path: "dashboard", element: <BarberDashBoard /> },
