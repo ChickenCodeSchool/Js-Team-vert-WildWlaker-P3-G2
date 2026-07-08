@@ -39,7 +39,7 @@ router.put(
 
 // --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);
-router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
+router.get("/api/barbers/:id", barberActions.read);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.get("/api/barbers/:id/availability", barberAvailabilityActions.browse);
 router.put("/api/barbers/:id/schedule", barberAvailabilityActions.generate);

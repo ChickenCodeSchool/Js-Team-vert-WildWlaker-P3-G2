@@ -148,7 +148,7 @@ const deleteUser: RequestHandler = async (req, res, next) => {
 
     // On renvoie un statut 204 (No Content) ou 200 avec les données
     res.status(200).json({
-      message: "Client supprimé avec succès",
+      message: "Utilisateur supprimé avec succès",
       id: id_user,
     });
   } catch (err) {
