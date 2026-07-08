@@ -66,10 +66,7 @@ function BookingForm({ booking, setBooking, prestations, onNext }: Props) {
           ) : (
             prestations.map((prestation) => {
               const prestationId = prestation.id_prestation;
-              const selectedId = booking.prestation
-                ? prestation.id_prestation
-                : undefined;
-
+              const selectedId = booking.prestation?.id_prestation;
               const isSelected =
                 selectedId !== undefined && selectedId === prestationId;
 
