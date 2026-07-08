@@ -101,7 +101,7 @@ function Barbers() {
     Barber & { id: number }
   >({
     apiBase: API_URL,
-    idField: "api/barbers",
+    idField: "api/admin/barbers",
     onActionComplete: loadAllData,
     onClose: () => setIsEditModalOpen(false),
   });
