@@ -58,7 +58,7 @@ const router = createBrowserRouter([
           { index: true, element: <Home /> },
           { path: "search", element: <SearchPage /> },
           { path: "booking", element: <BookingPage /> },
-          { path: "reservations/:id", element: <Reservations /> },
+          { path: "reservations", element: <Reservations /> },
           { path: "profile/:id", element: <UserProfile /> },
           { path: "avis", element: <CustomerAvis /> },
           { path: "give-avis/:appointmentId", element: <GiveAvis /> },
@@ -84,7 +84,7 @@ const router = createBrowserRouter([
         path: "/barber",
         element: <BarberLayout />,
         children: [
-          { index: true, element: <Navigate to="dashBoard" replace /> },
+          { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "profile", element: <BarberProfil /> },
           { path: "prestations", element: <BarberPrestation /> },
           { path: "dashboard", element: <BarberDashBoard /> },

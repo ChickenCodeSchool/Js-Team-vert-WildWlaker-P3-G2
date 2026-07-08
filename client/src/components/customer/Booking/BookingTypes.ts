@@ -6,4 +6,5 @@ export type Booking = {
   prestation?: Prestation;
   appointmentDate?: string;
   appointmentTime?: string;
+  locationType?: string;
 };

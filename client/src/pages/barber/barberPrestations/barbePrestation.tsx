@@ -25,7 +25,7 @@ function BarberPrestation() {
   }
 
   function handleEdit(p: Prestation) {
-    setEditingId(p.Id_prestation);
+    setEditingId(p.id_prestation);
     setForm({
       name: p.name,
       duration: String(p.duration_minutes),
@@ -48,7 +48,7 @@ function BarberPrestation() {
 
     if (!res.ok) return;
 
-    setPrestations((prev) => prev.filter((p) => p.Id_prestation !== id));
+    setPrestations((prev) => prev.filter((p) => p.id_prestation !== id));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -74,7 +74,7 @@ function BarberPrestation() {
       });
       setPrestations((prev) =>
         prev.map((p) =>
-          p.Id_prestation === editingId ? { ...p, ...body } : p,
+          p.id_prestation === editingId ? { ...p, ...body } : p,
         ),
       );
     } else {
@@ -98,7 +98,7 @@ function BarberPrestation() {
       <h2 className="barber-prestation__title">Mes prestations</h2>
       <ul className="barber-prestation__list">
         {prestations.map((p) => (
-          <li className="barber-prestation__item" key={p.Id_prestation}>
+          <li className="barber-prestation__item" key={p.id_prestation}>
             <span className="barber-prestation__name">{p.name}</span>
             <span className="barber-prestation__duration">
               {p.duration_minutes} min
@@ -114,7 +114,7 @@ function BarberPrestation() {
             <button
               type="button"
               className="barber-prestation__delete-btn"
-              onClick={() => handleDelete(p.Id_prestation)}
+              onClick={() => handleDelete(p.id_prestation)}
             >
               🗑️
             </button>

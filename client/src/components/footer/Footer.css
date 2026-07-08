@@ -5,7 +5,7 @@
 @media (min-width: 1024px) {
   .footer {
     display: block;
-    margin-top: 5rem;
+    margin-top: 1rem;
     background: linear-gradient(135deg, #2a2119, #5b4425, #b0893f);
     color: var(--white);
   }

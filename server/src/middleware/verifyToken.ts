@@ -2,9 +2,11 @@ import type { RequestHandler } from "express";
 import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export const verifyToken: RequestHandler = (req, res, next) => {
+  console.log("Authorization:", req.headers.authorization);
   const auth = req.headers.authorization;
 
   if (!auth?.startsWith("Bearer ")) {
+    console.log("Pas de Bearer");
     return res.sendStatus(401);
   }
 
