@@ -167,7 +167,6 @@ function ReviewDash() {
           method: "DELETE",
         },
       );
-      console.log(selectedReview);
       if (!res.ok) throw new Error("Erreur lors de la suppression");
       Swal.fire({
         icon: "success",
