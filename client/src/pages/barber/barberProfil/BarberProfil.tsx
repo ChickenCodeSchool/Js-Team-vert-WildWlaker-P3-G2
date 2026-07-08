@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CiLogout } from "react-icons/ci";
 import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
 import {
   FiCalendar,
@@ -13,13 +14,12 @@ import {
   FiPlus,
   FiTrash2,
 } from "react-icons/fi";
-import { CiLogout } from "react-icons/ci";
 import { LuUpload } from "react-icons/lu";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
 import AfroImg from "../../../assets/images/Afro.jpg";
-import { useAuth } from "../../../context/AuthContext";
 import EditBarberModal from "../../../components/barber/EditBarberModal/EditBarberModal";
+import { useAuth } from "../../../context/AuthContext";
 import type { Barber } from "../../../types/barber";
 import "../../../components/customer/Profile/ProfileHeader.css";
 import "../../../components/customer/Profile/ProfileInfo.css";
@@ -118,7 +118,8 @@ function BarberProfil() {
     navigate("/login");
   };
 
-  if (loading) return <div className="barber-profil__loading">Chargement du profil…</div>;
+  if (loading)
+    return <div className="barber-profil__loading">Chargement du profil…</div>;
   if (!barberData) return null;
 
   return (
@@ -201,9 +202,13 @@ function BarberProfil() {
                     <FiCalendar className="profile-header__member-icon" />
                     <span>
                       Membre depuis{" "}
-                      {format(new Date(barberData.create_time), "dd MMMM yyyy", {
-                        locale: fr,
-                      })}
+                      {format(
+                        new Date(barberData.create_time),
+                        "dd MMMM yyyy",
+                        {
+                          locale: fr,
+                        },
+                      )}
                     </span>
                   </p>
                 )}
@@ -355,9 +360,7 @@ function BarberProfil() {
         />
       )}
 
-      {saved && (
-        <div className="barber-profil__toast">Profil enregistré ✓</div>
-      )}
+      {saved && <div className="barber-profil__toast">Profil enregistré ✓</div>}
     </div>
   );
 }
