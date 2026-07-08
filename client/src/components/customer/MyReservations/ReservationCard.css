@@ -129,3 +129,22 @@
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(255, 183, 3, 0.25);
 }
+.reservation-card__cancel-btn {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 0.75rem;
+  margin: 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-300);
+  background: var(--gold-dark);
+  color: var(--white);
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+.reservation-card__cancel-btn:hover {
+  background: var(--gold-soft);
+  color: var(--error);
+  transform: translateY(-2px);
+}

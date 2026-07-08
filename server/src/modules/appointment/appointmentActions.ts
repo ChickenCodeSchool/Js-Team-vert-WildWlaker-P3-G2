@@ -64,13 +64,42 @@ const readByBarber: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-
+const ALLOWED_STATUSES = ["pending", "confirmed", "completed", "cancelled"];
 const updateStatus: RequestHandler = async (req, res, next) => {
   try {
-    const id = Number(req.params.id);
+    const appointmentId = Number(req.params.id);
     const { status } = req.body as { status: string };
-    await appointmentRepository.updateStatus(id, status);
-    res.json({ success: true });
+    const userId = Number(req.user?.id);
+    const userRole = req.user?.role;
+    if (Number.isNaN(appointmentId) || Number.isNaN(userId)) {
+      return res.sendStatus(403);
+    }
+    if (!ALLOWED_STATUSES.includes(status)) {
+      return res.status(400).json({ message: "Statut invalide" });
+    }
+    const appointment = await appointmentRepository.readById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ message: "Rendez-vous introuvable" });
+    }
+    console.log("DEBUG →", {
+      id_user_customer: appointment.id_user_customer,
+      typeof_customer: typeof appointment.id_user_customer,
+      userId,
+      typeof_userId: typeof userId,
+      status_recu: status,
+    });
+    const isOwner = appointment.id_user_customer === userId;
+    const isBarber = appointment.id_user_barber === userId;
+    const isAdmin = userRole === "admin";
+    if (!isOwner && !isBarber && !isAdmin) {
+      return res.sendStatus(403);
+    }
+    if (isOwner && !isBarber && !isAdmin && status !== "cancelled") {
+      return res.sendStatus(403);
+    }
+
+    await appointmentRepository.updateStatus(appointmentId, status);
+    res.status(200).json({ message: "Statut mis à jour" });
   } catch (err) {
     next(err);
   }

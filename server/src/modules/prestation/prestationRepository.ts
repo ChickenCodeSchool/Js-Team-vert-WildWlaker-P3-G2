@@ -22,7 +22,7 @@ class PrestationRepository {
   async readByBarber(barberId: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
-      p.id_prestation AS Id_prestation,
+      p.id_prestation,
       p.name,
       p.price,
       p.duration_minutes

@@ -4,7 +4,7 @@ import databaseClient from "../../../database/client";
 export type Appointment = {
   id_appointment: number;
   appointment_date: Date;
-  status: "En attente" | "Confirmé" | "Terminé" | "Annulé";
+  status: "pending" | "confirmed" | "completed" | "cancelled";
   location_type: string;
   create_time: Date;
   id_prestation: number;
@@ -201,7 +201,13 @@ class AppointmentRepository {
 
     return result;
   }
-
+  async readById(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT * FROM appointment WHERE id_appointment = ?",
+      [id],
+    );
+    return (rows as Appointment[])[0] ?? null;
+  }
   // The U of CRUD - Update operation
   // TODO: Implement the update operation to modify an existing Appointment
 

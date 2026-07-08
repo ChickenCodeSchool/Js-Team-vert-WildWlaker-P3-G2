@@ -39,6 +39,14 @@ function MyReservations() {
       .catch((err) => console.error("Erreur chargement avis", err));
   }, []);
 
+  const handleCancelled = (appointmentId: number) => {
+    setAppointments((prev) =>
+      prev.map((a) =>
+        a.id_appointment === appointmentId ? { ...a, status: "cancelled" } : a,
+      ),
+    );
+  };
+
   const now = new Date();
 
   const filteredAppointments = appointments.filter((appointment) => {
@@ -86,6 +94,7 @@ function MyReservations() {
               key={appointment.id_appointment}
               reservation={appointment}
               review={review}
+              onCancelled={() => handleCancelled(appointment.id_appointment)}
             />
           );
         })}
