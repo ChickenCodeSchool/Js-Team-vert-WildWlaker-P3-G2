@@ -28,7 +28,7 @@ function ProfileActions({ onDeleteConfirm }: Props) {
         className="profile-actions__button"
         onClick={() => {
           if (user) {
-            navigate(`/reservations/${user.id}`);
+            navigate(`/reservations`);
           }
         }}
       >
