@@ -60,9 +60,13 @@ function BarberProfil() {
         const portfolio = await portfolioRes.json();
         setPhotos(
           portfolio.map(
-            (p: { id_portfolio: number; image_url: string; title: string }) => ({
+            (p: {
+              id_portfolio: number;
+              image_url: string;
+              title: string;
+            }) => ({
               id: p.id_portfolio,
-              src: `${API_URL}/${p.image_url}`,
+              src: `${API_URL}${p.image_url}`,
               title: p.title,
             }),
           ),
