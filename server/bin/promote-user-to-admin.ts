@@ -18,7 +18,7 @@ async function promoteToAdmin() {
     process.exit(1);
   }
 
-  const email = "hien123@test.com"; // Changez cet email par celui de l'utilisateur à promouvoir
+  const email = "giorgibestavashvili@laposte.net"; // Changez cet email par celui de l'utilisateur à promouvoir
 
   let connection: mysql.Connection | null = null;
 

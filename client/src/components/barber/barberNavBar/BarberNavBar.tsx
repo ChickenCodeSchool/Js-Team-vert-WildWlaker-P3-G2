@@ -5,6 +5,7 @@ import { GrDocumentConfig } from "react-icons/gr";
 import { MdFreeCancellation, MdPeopleAlt } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router";
 import "./BarberNavBar.css";
+import { useAuth } from "../../../context/AuthContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -17,10 +18,9 @@ function BarberNavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [barber, setBarber] = useState<BarberProfile | null>(null);
   const navigate = useNavigate();
-
+  const { logout } = useAuth();
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 

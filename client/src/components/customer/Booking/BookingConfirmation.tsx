@@ -1,5 +1,5 @@
 import confetti from "canvas-confetti";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import "./BookingConfirmation.css";
 import type { Booking } from "./BookingTypes";
@@ -11,55 +11,85 @@ type Props = {
 };
 function BookingConfirmation({ booking }: Props) {
   const navigate = useNavigate();
-  useEffect(() => {
-    const confirmBooking = async () => {
-      const token = localStorage.getItem("token");
-      if (
-        !booking.barber ||
-        !booking.prestation ||
-        !booking.appointmentDate ||
-        !booking.appointmentTime ||
-        !booking.locationType
-      ) {
-        return;
-      }
-      try {
-        const res = await fetch(`${API_URL}/api/appointments`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            appointment_date: `${booking.appointmentDate} ${booking.appointmentTime}:00`,
-            location_type: booking.locationType,
-            id_prestation: booking.prestation.id_prestation,
-            id_user_barber: booking.barber.id_user,
-          }),
-        });
-        console.log("POST STATUS :", res.status);
-        console.log(booking);
-        if (!res.ok) {
-          throw new Error("Erreur lors de la réservation");
-        }
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-        confetti({
-          particleCount: 80,
-          spread: 60,
-          origin: { y: 0.3 },
-          colors: ["#C9A84C", "#F5E6C8", "#8B6914"],
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    };
+  const confirmBooking = async () => {
+    const token = localStorage.getItem("token");
 
-    confirmBooking();
-  }, [booking]);
+    if (
+      !booking.barber ||
+      !booking.prestation ||
+      !booking.appointmentDate ||
+      !booking.appointmentTime ||
+      !booking.locationType
+    ) {
+      setError("Certaines informations sont manquantes.");
+      return;
+    }
+    if (!token) {
+      setError("Vous devez être connecté pour réserver.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`${API_URL}/api/appointments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          appointment_date: `${booking.appointmentDate} ${booking.appointmentTime}:00`,
+          location_type: booking.locationType,
+          id_prestation: booking.prestation.id_prestation,
+          id_user_barber: booking.barber.id_user,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.message ?? "Erreur lors de la réservation");
+      }
+
+      setSuccess(true);
+      confetti({
+        particleCount: 80,
+        spread: 60,
+        origin: { y: 0.3 },
+        colors: ["#C9A84C", "#F5E6C8", "#8B6914"],
+      });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Erreur lors de la réservation",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="booking-confirmation">
-      <h2 className="booking-confirmation__title">Réservation Confirmée🎉</h2>
+      <div>
+        {error && <p className="error">{error}</p>}
+        {!success && (
+          <button
+            type="button"
+            className="booking-confirm__button"
+            onClick={confirmBooking}
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? "Réservation en cours..."
+              : "Confirmer la réservation"}
+          </button>
+        )}
+        {success && <p>Votre réservation a été confirmée 🎉 !</p>}
+      </div>
 
       <p className="booking-confirmation__message">
         Votre rendez-vous à été enregistré
@@ -89,7 +119,6 @@ function BookingConfirmation({ booking }: Props) {
       >
         Voir mes réservations
       </button>
-
       <button
         type="button"
         className="booking-confirmation-home__button"

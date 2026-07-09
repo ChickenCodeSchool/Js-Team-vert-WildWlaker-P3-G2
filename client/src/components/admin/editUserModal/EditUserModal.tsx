@@ -23,7 +23,15 @@ interface EditUserModalProps<T> {
   onToggleSuspend: (user: T & { id: number }) => Promise<void> | void;
   deleteUser: () => void;
 }
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function EditUserModal<T extends Customer | Barber>({
   isOpen,
   onClose,
@@ -122,7 +130,10 @@ function EditUserModal<T extends Customer | Barber>({
             <div className="modal-grid-top">
               <div className="avatar-section">
                 <div className="avatar-wrapper">
-                  <img src={user.avatar_url} alt="Avatar de l'utilisateur" />
+                  <img
+                    src={getImageUrl(user.avatar_url)}
+                    alt="Avatar de l'utilisateur"
+                  />
                   <div className="camera-icon">
                     <FiCamera size={14} />
                   </div>

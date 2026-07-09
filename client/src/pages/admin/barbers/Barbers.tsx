@@ -27,7 +27,15 @@ const thisMonthRange = {
   end: format(today, "yyyy-MM-dd"),
 };
 const params = `?startDate=${thisMonthRange.start}&endDate=${thisMonthRange.end}`;
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function Barbers() {
   const { fetchWithAuth } = useAuth();
   const [barbers, setBarbers] = useState<(Barber & { id: number })[]>([]);
@@ -101,7 +109,7 @@ function Barbers() {
     Barber & { id: number }
   >({
     apiBase: API_URL,
-    idField: "api/barbers",
+    idField: "api/admin/barbers",
     onActionComplete: loadAllData,
     onClose: () => setIsEditModalOpen(false),
   });
@@ -181,7 +189,7 @@ function Barbers() {
       render: (barber) => (
         <div className="user-grid-client-cell">
           <img
-            src={`${barber.avatar_url}`}
+            src={getImageUrl(barber.avatar_url)}
             alt={barber.name}
             className="user-grid-avatar"
           />

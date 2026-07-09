@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { FiCalendar, FiClock } from "react-icons/fi";
 import { useNavigate } from "react-router";
 import "./ReservationCard.css";
@@ -8,6 +9,7 @@ import type { Reservation } from "./ReservationType";
 type Props = {
   reservation: Reservation;
   review?: Review;
+  onCancelled: () => void;
 };
 const statusLabels: Record<string, string> = {
   confirmed: "Confirmé",
@@ -16,8 +18,46 @@ const statusLabels: Record<string, string> = {
   cancelled: "Annulé",
 };
 
-function ReservationCard({ reservation, review }: Props) {
+function ReservationCard({ reservation, review, onCancelled }: Props) {
   const navigate = useNavigate();
+  const [isCancelling, setIsCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const API_URL = import.meta.env.VITE_API_URL;
+
+  const cancelAppointment = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    const confirmed = window.confirm(
+      "Confirmer l'annulation de ce rendez-vous ?",
+    );
+    if (!confirmed) return;
+    setIsCancelling(true);
+    setCancelError(null);
+    try {
+      const res = await fetch(
+        `${API_URL}/api/appointments/${reservation.id_appointment}/status`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ status: "cancelled" }),
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Impossible d'annuler ce rendez-vous");
+      }
+      onCancelled();
+    } catch (err) {
+      setCancelError(
+        err instanceof Error ? err.message : "Erreur lors de l'annulation",
+      );
+    } finally {
+      setIsCancelling(false);
+    }
+  };
 
   return (
     <article className="reservation-card">
@@ -56,8 +96,18 @@ function ReservationCard({ reservation, review }: Props) {
         {" "}
         {statusLabels[reservation.status] ?? reservation.status}
       </span>
-
-      {reservation.status === "completed" &&
+      {reservation.status !== "annulé" && reservation.status !== "terminé" && (
+        <button
+          type="button"
+          className="reservation-card__cancel-btn"
+          onClick={cancelAppointment}
+          disabled={isCancelling}
+        >
+          {isCancelling ? "Annulation..." : "Annuler"}
+        </button>
+      )}
+      {cancelError && <p className="error">{cancelError}</p>}
+      {reservation.status === "terminé" &&
         (review ? (
           <div className="reservation-card__review">
             <span>Votre note :</span>

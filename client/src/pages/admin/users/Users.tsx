@@ -20,7 +20,15 @@ import type { Review } from "../../../types/review";
 import "./Users.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 const today = new Date();
 const thirtyDaysAgo = subDays(today, 30);
 const thisMonthRange = {
@@ -188,7 +196,7 @@ function Users() {
       render: (customer) => (
         <div className="user-grid-client-cell">
           <img
-            src={`${customer.avatar_url}`}
+            src={getImageUrl(customer.avatar_url)}
             alt={`${customer.firstname} ${customer.lastname}`}
             className="user-grid-avatar"
           />

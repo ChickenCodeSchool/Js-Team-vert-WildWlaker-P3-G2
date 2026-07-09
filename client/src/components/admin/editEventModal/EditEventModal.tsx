@@ -10,7 +10,7 @@ interface EditEventModalProps {
   onSave: (formData: FormData) => void;
   onDelete: (event: Event & { id: number }) => Promise<void>;
 }
-const getEventImageUrl = (imageUrl: string | undefined) => {
+const getImageUrl = (imageUrl: string | undefined) => {
   if (!imageUrl) return "/placeholder-image.png";
 
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
@@ -50,7 +50,7 @@ function EditEventModal({
         end_date: event.end_date ? event.end_date.substring(0, 16) : "",
         location: event.location || "",
       });
-      setImagePreview(getEventImageUrl(event.image_url));
+      setImagePreview(getImageUrl(event.image_url));
       setSelectedFile(null);
     } else {
       setFormData({
@@ -61,7 +61,7 @@ function EditEventModal({
         end_date: "",
         location: "",
       });
-      setImagePreview(getEventImageUrl(undefined));
+      setImagePreview(getImageUrl(undefined));
       setSelectedFile(null);
     }
   }, [event]);

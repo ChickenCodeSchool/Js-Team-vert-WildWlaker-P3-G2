@@ -4,6 +4,10 @@ import "./MyReservations.css";
 import type { Review } from "../../../types/review";
 import type { Reservation } from "./ReservationType";
 
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const USER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
+
 function MyReservations() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [activeTab, setActiveTab] = useState("upcoming");
@@ -13,7 +17,7 @@ function MyReservations() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
-    fetch(`${API_URL}/api/appointments/me`, {
+    fetch(`${API_URL}/api/appointments/user/${USER_ID}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -38,6 +42,14 @@ function MyReservations() {
       .then((data) => setReviews(data))
       .catch((err) => console.error("Erreur chargement avis", err));
   }, []);
+
+  const handleCancelled = (appointmentId: number) => {
+    setAppointments((prev) =>
+      prev.map((a) =>
+        a.id_appointment === appointmentId ? { ...a, status: "cancelled" } : a,
+      ),
+    );
+  };
 
   const now = new Date();
 
@@ -86,6 +98,7 @@ function MyReservations() {
               key={appointment.id_appointment}
               reservation={appointment}
               review={review}
+              onCancelled={() => handleCancelled(appointment.id_appointment)}
             />
           );
         })}
