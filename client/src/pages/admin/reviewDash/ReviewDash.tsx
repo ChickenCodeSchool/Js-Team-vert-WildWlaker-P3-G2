@@ -28,6 +28,15 @@ const truncateText = (text: string, maxLength: number) => {
   }
   return text;
 };
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
+
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function ReviewDash() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { fetchWithAuth } = useAuth();
@@ -192,7 +201,7 @@ function ReviewDash() {
       render: (review) => (
         <div className="user-grid-user-cell">
           <img
-            src={review.barber_avatar_url}
+            src={getImageUrl(review.barber_avatar_url)}
             alt={review.barber_name}
             className="user-grid-avatar"
           />
@@ -206,7 +215,7 @@ function ReviewDash() {
       render: (review) => (
         <div className="user-grid-user-cell">
           <img
-            src={review.customer_avatar_url}
+            src={getImageUrl(review.customer_avatar_url)}
             alt={review.customer_firstname}
             className="user-grid-avatar"
           />

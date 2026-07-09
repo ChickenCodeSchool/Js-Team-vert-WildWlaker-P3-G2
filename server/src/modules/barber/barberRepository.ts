@@ -99,7 +99,7 @@ class BarberRepository {
 
   async readPortfolio(id: number) {
     const [rows] = await databaseClient.query<Rows>(
-      "SELECT id_portfolio, image_url, title FROM barber_portfolio WHERE id_user = ? ORDER BY id_portfolio ASC",
+      "SELECT id_picture AS id_portfolio, image_url, title FROM barber_portfolio WHERE id_user = ? ORDER BY id_portfolio ASC",
       [id],
     );
     return rows as { id_portfolio: number; image_url: string; title: string }[];

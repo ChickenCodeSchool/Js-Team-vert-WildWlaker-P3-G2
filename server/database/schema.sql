@@ -8,7 +8,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     forget_password VARCHAR(255) DEFAULT NULL,
     user_type VARCHAR(20) NOT NULL,
-    avatar_url VARCHAR(255) DEFAULT 'default-avatar.png',
+    avatar_url VARCHAR(255) DEFAULT '/uploads/avatars/default-avatar.png',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     phone VARCHAR(20) DEFAULT NULL,
     birthday DATE DEFAULT NULL,

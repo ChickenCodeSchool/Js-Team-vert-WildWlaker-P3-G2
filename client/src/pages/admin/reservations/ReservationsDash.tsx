@@ -20,6 +20,15 @@ const truncateText = (text: string, maxLength: number) => {
   }
   return text;
 };
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
+
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function ReservationsDash() {
   const API_URL = import.meta.env.VITE_API_URL;
   const { fetchWithAuth } = useAuth();
@@ -147,7 +156,7 @@ function ReservationsDash() {
       render: (appointment) => (
         <div className="user-grid-user-cell">
           <img
-            src={appointment.barber_avatar}
+            src={getImageUrl(appointment.barber_avatar)}
             alt={appointment.barber_name}
             className="user-grid-avatar"
           />
@@ -161,7 +170,7 @@ function ReservationsDash() {
       render: (appointment) => (
         <div className="user-grid-user-cell">
           <img
-            src={appointment.customer_avatar}
+            src={getImageUrl(appointment.customer_avatar)}
             alt={appointment.customer_firstname}
             className="user-grid-avatar"
           />
