@@ -18,7 +18,15 @@ import "./ReservationDetailCard.css";
 interface ReservationDetailCardProps {
   selectedReservation: Appointment;
 }
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function ReservationDetailCard({
   selectedReservation,
 }: ReservationDetailCardProps) {
@@ -37,7 +45,7 @@ function ReservationDetailCard({
         <div className="reservationdetailcard-user-info">
           <img
             className="reservationdetailcard-avatar"
-            src={selectedReservation.barber_avatar}
+            src={getImageUrl(selectedReservation.barber_avatar)}
             alt={selectedReservation.barber_name}
           />
 
@@ -57,7 +65,7 @@ function ReservationDetailCard({
         <div className="reservationdetailcard-user-info">
           <img
             className="reservationdetailcard-avatar"
-            src={selectedReservation.customer_avatar}
+            src={getImageUrl(selectedReservation.customer_avatar)}
             alt={selectedReservation.customer_firstname}
           />
           <div className="reservationdetailcard-user-info-text">
@@ -158,7 +166,7 @@ function ReservationDetailCard({
           <div className="reservationdetailcard-prestation-info-text">
             <span>Adresse</span>
             {selectedReservation.location_type?.toLowerCase() ===
-              "a domicile" && (
+              "domicile" && (
               <>
                 <p>{selectedReservation.customer_adress}</p>
                 <p>{selectedReservation.customer_city}</p>
@@ -166,8 +174,7 @@ function ReservationDetailCard({
               </>
             )}
 
-            {selectedReservation.location_type?.toLowerCase() ===
-              "au salon" && (
+            {selectedReservation.location_type?.toLowerCase() === "salon" && (
               <>
                 <p>{selectedReservation.barber_adress}</p>
                 <p>{selectedReservation.barber_city}</p>

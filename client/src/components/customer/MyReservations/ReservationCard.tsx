@@ -96,19 +96,18 @@ function ReservationCard({ reservation, review, onCancelled }: Props) {
         {" "}
         {statusLabels[reservation.status] ?? reservation.status}
       </span>
-      {reservation.status !== "cancelled" &&
-        reservation.status !== "completed" && (
-          <button
-            type="button"
-            className="reservation-card__cancel-btn"
-            onClick={cancelAppointment}
-            disabled={isCancelling}
-          >
-            {isCancelling ? "Annulation..." : "Annuler"}
-          </button>
-        )}
+      {reservation.status !== "annulé" && reservation.status !== "terminé" && (
+        <button
+          type="button"
+          className="reservation-card__cancel-btn"
+          onClick={cancelAppointment}
+          disabled={isCancelling}
+        >
+          {isCancelling ? "Annulation..." : "Annuler"}
+        </button>
+      )}
       {cancelError && <p className="error">{cancelError}</p>}
-      {reservation.status === "completed" &&
+      {reservation.status === "terminé" &&
         (review ? (
           <div className="reservation-card__review">
             <span>Votre note :</span>

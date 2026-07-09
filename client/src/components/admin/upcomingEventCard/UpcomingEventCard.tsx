@@ -4,7 +4,7 @@ import type { Event } from "../../../types/event";
 import "./UpcomingEventCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
-const getEventImageUrl = (imageUrl: string | undefined) => {
+const getImageUrl = (imageUrl: string | undefined) => {
   if (!imageUrl) return "/placeholder-image.png";
 
   if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
@@ -77,7 +77,7 @@ function UpcomingEventCard() {
             {" "}
             <div className="event-info">
               <img
-                src={getEventImageUrl(event.image_url)}
+                src={getImageUrl(event.image_url)}
                 alt={event.title}
                 className="event-image"
               />

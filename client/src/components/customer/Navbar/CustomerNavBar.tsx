@@ -103,9 +103,11 @@ function CustomerNavBar() {
               <Link
                 to={
                   user
-                    ? user.role === "barber"
-                      ? "/barber/profile"
-                      : `/profile/${user.id}`
+                    ? user.role === "admin"
+                      ? "/admin/dashboard"
+                      : user.role === "barber"
+                        ? "/barber/profile"
+                        : `/profile/${user.id}`
                     : "/login"
                 }
                 className="navbar-desktop__avatar"

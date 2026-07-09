@@ -20,7 +20,15 @@ interface ReviewDetailCardProps {
   selectedReview: AdminReview;
   handleDeleteReview: () => void;
 }
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function ReviewDetailCard({
   selectedReview,
   handleDeleteReview,
@@ -40,7 +48,7 @@ function ReviewDetailCard({
         <div className="reviewdetailcard-user-info">
           <img
             className="reviewdetailcard-avatar"
-            src={selectedReview.barber_avatar_url}
+            src={getImageUrl(selectedReview.barber_avatar_url)}
             alt={selectedReview.barber_name}
           />
 
@@ -60,7 +68,7 @@ function ReviewDetailCard({
         <div className="reviewdetailcard-user-info">
           <img
             className="reviewdetailcard-avatar"
-            src={selectedReview.customer_avatar_url}
+            src={getImageUrl(selectedReview.customer_avatar_url)}
             alt={selectedReview.customer_firstname}
           />
           <div className="reviewdetailcard-user-info-text">

@@ -15,12 +15,13 @@ import {
 import { NavLink, useNavigate } from "react-router";
 import "./AdminNavBar.css";
 import icon from "../../../assets/images/icon.png";
+import { useAuth } from "../../../context/AuthContext";
 
 function AdminNavBar() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
   return (
