@@ -1,12 +1,13 @@
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { CiLogout } from "react-icons/ci";
 import { FaBirthdayCake, FaHouseUser } from "react-icons/fa";
 import {
   FiCalendar,
   FiEdit,
+  FiEdit2,
   FiImage,
-  FiLogOut,
   FiMail,
   FiMapPin,
   FiPhone,
@@ -18,6 +19,7 @@ import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
 import AfroImg from "../../../assets/images/Afro.jpg";
 import EditBarberModal from "../../../components/barber/EditBarberModal/EditBarberModal";
+import { useAuth } from "../../../context/AuthContext";
 import type { Barber } from "../../../types/barber";
 import "../../../components/customer/Profile/ProfileHeader.css";
 import "../../../components/customer/Profile/ProfileInfo.css";
@@ -33,40 +35,34 @@ const INITIAL_PHOTOS: Photo[] = Array.from({ length: 12 }, (_, i) => ({
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
-
 function BarberProfil() {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+  const barberId = user?.id ?? null;
   const [activeTab, setActiveTab] = useState("informations");
+  const [barberData, setBarberData] = useState<Barber | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const [barberData, setBarberData] = useState<Barber | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [avatarSrc, setAvatarSrc] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const loadData = useCallback(() => {
-    fetch(`${API_URL}/api/barbers/${BARBER_ID}`)
+    if (!barberId) return;
+    fetch(`${API_URL}/api/barbers/${barberId}`)
       .then((res) => {
         if (!res.ok) throw new Error("Impossible de charger le profil");
         return res.json();
       })
-      .then((data: Barber) => {
-        setBarberData(data);
-        if (data.avatar_url) {
-          setAvatarSrc(`${API_URL}${data.avatar_url}`);
-        }
-      })
+      .then((data: Barber) => setBarberData(data))
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [barberId]);
 
   useEffect(() => {
     loadData();
@@ -79,14 +75,13 @@ function BarberProfil() {
     formData.append("avatar", file);
     setUploading(true);
     try {
-      const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/avatar`, {
+      const res = await fetch(`${API_URL}/api/barbers/${barberId}/avatar`, {
         method: "POST",
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         body: formData,
       });
       if (!res.ok) throw new Error("Échec de l'upload");
-      const data = (await res.json()) as { avatar_url: string };
-      setAvatarSrc(`${API_URL}${data.avatar_url}`);
+      loadData();
     } catch (err) {
       console.error(err);
     } finally {
@@ -119,13 +114,13 @@ function BarberProfil() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    logout();
     navigate("/login");
   };
 
-  if (loading) {
+  if (loading)
     return <div className="barber-profil__loading">Chargement du profil…</div>;
-  }
+  if (!barberData) return null;
 
   return (
     <div className="barber-profil-page">
@@ -149,20 +144,35 @@ function BarberProfil() {
       </div>
 
       {activeTab === "informations" && (
-        <>
+        <main className="profile-page">
           {/* ── Header ── */}
           <section className="profile-header">
+            <button
+              type="button"
+              className="profile-header__back-button"
+              onClick={() => window.history.back()}
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              className="profile-page__edit-button"
+              onClick={() => setShowEditModal(true)}
+            >
+              <FiEdit2 />
+            </button>
+
             <div className="profile-header__content">
               <div className="profile-page__avatar-wrapper">
-                {avatarSrc ? (
+                {barberData.avatar_url ? (
                   <img
-                    src={avatarSrc}
-                    alt={`Avatar de ${barberData?.name}`}
+                    src={`${API_URL}${barberData.avatar_url}`}
+                    alt={`Avatar de ${barberData.name}`}
                     className="profile-header__avatar"
                   />
                 ) : (
                   <div className="barber-profil__avatar-placeholder">
-                    {barberData?.name?.slice(0, 2).toUpperCase()}
+                    {barberData.name?.slice(0, 2).toUpperCase()}
                   </div>
                 )}
                 <button
@@ -185,13 +195,9 @@ function BarberProfil() {
 
               <div className="profile-header__identity">
                 <p className="profile-header__eyebrow">Profil coiffeur</p>
-                <h1 className="profile-header__name">
-                  {barberData?.name || "Non renseigné"}
-                </h1>
-                <p className="profile-header__email">
-                  {barberData?.email || ""}
-                </p>
-                {barberData?.create_time && (
+                <h1 className="profile-header__name">{barberData.name}</h1>
+                <p className="profile-header__email">{barberData.email}</p>
+                {barberData.create_time && (
                   <p className="profile-header__member-since">
                     <FiCalendar className="profile-header__member-icon" />
                     <span>
@@ -216,37 +222,37 @@ function BarberProfil() {
               <div className="profile-info__item">
                 <FiMail className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.email || "Non renseigné"}
+                  {barberData.email || "Non renseigné"}
                 </span>
               </div>
               <div className="profile-info__item">
                 <FiPhone className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.phone || "Non renseigné"}
+                  {barberData.phone || "Non renseigné"}
                 </span>
               </div>
               <div className="profile-info__item">
                 <FiMapPin className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.city || "Non renseigné"}
+                  {barberData.city || "Non renseigné"}
                 </span>
               </div>
               <div className="profile-info__item">
                 <MdOutlineLocalPostOffice className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.postal_code || "Non renseigné"}
+                  {barberData.postal_code || "Non renseigné"}
                 </span>
               </div>
               <div className="profile-info__item">
                 <FaHouseUser className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.adress || "Non renseigné"}
+                  {barberData.adress || "Non renseigné"}
                 </span>
               </div>
               <div className="profile-info__item">
                 <FaBirthdayCake className="profile-info__icon" />
                 <span className="profile-info__label">
-                  {barberData?.birthday
+                  {barberData.birthday
                     ? format(new Date(barberData.birthday), "dd MMMM yyyy", {
                         locale: fr,
                       })
@@ -279,11 +285,11 @@ function BarberProfil() {
               className="profile-actions__button"
               onClick={handleLogout}
             >
-              <FiLogOut className="profile-actions__icon" />
+              <CiLogout className="profile-actions__icon" />
               <span>Déconnexion</span>
             </button>
           </section>
-        </>
+        </main>
       )}
 
       {activeTab === "galerie" && (
@@ -342,13 +348,19 @@ function BarberProfil() {
         </div>
       )}
 
-      {showEditModal && barberData && (
+      {showEditModal && (
         <EditBarberModal
           barber={barberData}
           onClose={() => setShowEditModal(false)}
-          onSave={loadData}
+          onSave={() => {
+            loadData();
+            setSaved(true);
+            setTimeout(() => setSaved(false), 3000);
+          }}
         />
       )}
+
+      {saved && <div className="barber-profil__toast">Profil enregistré ✓</div>}
     </div>
   );
 }

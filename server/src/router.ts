@@ -44,7 +44,8 @@ router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.get("/api/barbers/:id/availability", barberAvailabilityActions.browse);
 router.put("/api/barbers/:id/schedule", barberAvailabilityActions.generate);
 router.get("/api/barbers/:id/prestations", prestationActions.browseByBarber);
-router.put("/api/barbers/:id", barberActions.edit);
+router.put("/api/barbers/:id", verifyToken, barberActions.edit);
+
 router.post(
   "/api/barbers/:id/avatar",
   verifyToken,
