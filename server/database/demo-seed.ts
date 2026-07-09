@@ -135,7 +135,10 @@ const demo = async () => {
     const avatarsDir = path.resolve("public/uploads/avatars");
     fs.mkdirSync(avatarsDir, { recursive: true });
 
-    const barberUserIds = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+    const barberUserIds = [
+      2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+      22, 23, 24, 25, 26, 27, 28, 29, 30, 31,
+    ];
     for (let i = 0; i < barberUserIds.length; i++) {
       const id = barberUserIds[i];
       const filename = `demo-barber-${id}.jpg`;
@@ -143,7 +146,9 @@ const demo = async () => {
       if (!fs.existsSync(filePath)) {
         // randomuser.me fournit de vrais portraits (hommes, indices 1-99)
         const portraitIndex = (i % 70) + 1;
-        const res = await fetch(`https://randomuser.me/api/portraits/men/${portraitIndex}.jpg`);
+        const res = await fetch(
+          `https://randomuser.me/api/portraits/men/${portraitIndex}.jpg`,
+        );
         const buffer = await res.arrayBuffer();
         fs.writeFileSync(filePath, Buffer.from(buffer));
       }
@@ -398,19 +403,19 @@ const demo = async () => {
     console.info("🖼️  Insertion des portfolios...");
 
     const portfolioEntries = [
-      { id_user: 2,  filename: "thomas-fade1.jpg",  title: "Dégradé à blanc parfait",      seed: "barber-t1" },
-      { id_user: 2,  filename: "thomas-fade2.jpg",  title: "Fade skin classique",           seed: "barber-t2" },
-      { id_user: 2,  filename: "thomas-beard1.jpg", title: "Barbe sculptée au rasoir",      seed: "barber-t3" },
-      { id_user: 2,  filename: "thomas-beard2.jpg", title: "Taille ronde précise",          seed: "barber-t4" },
-      { id_user: 2,  filename: "thomas-cut1.jpg",   title: "Coupe pompadour moderne",       seed: "barber-t5" },
-      { id_user: 3,  filename: "maxime-color1.jpg", title: "Coloration mèches dorées",      seed: "barber-m1" },
-      { id_user: 3,  filename: "maxime-color2.jpg", title: "Décoloration platinum",         seed: "barber-m2" },
-      { id_user: 3,  filename: "maxime-retro1.jpg", title: "Pompadour vintage années 50",   seed: "barber-m3" },
-      { id_user: 4,  filename: "sofiane-afro1.jpg", title: "Tresse box braid complète",     seed: "barber-s1" },
-      { id_user: 4,  filename: "sofiane-fade1.jpg", title: "Dégradé afro contour",          seed: "barber-s2" },
-      { id_user: 5,  filename: "rafik-fade1.jpg",   title: "Skin fade parfait",             seed: "barber-r1" },
-      { id_user: 9,  filename: "mehdi-cut1.jpg",    title: "Coupe moderne Lyon",            seed: "barber-me1" },
-      { id_user: 11, filename: "samir-fade1.jpg",   title: "Dégradé Marseille",             seed: "barber-sa1" },
+      { id_user: 2, filename: "thomas-fade1.jpg", title: "Dégradé à blanc parfait", seed: "barber-t1" },
+      { id_user: 2, filename: "thomas-fade2.jpg", title: "Fade skin classique", seed: "barber-t2" },
+      { id_user: 2, filename: "thomas-beard1.jpg", title: "Barbe sculptée au rasoir", seed: "barber-t3" },
+      { id_user: 2, filename: "thomas-beard2.jpg", title: "Taille ronde précise", seed: "barber-t4" },
+      { id_user: 2, filename: "thomas-cut1.jpg", title: "Coupe pompadour moderne", seed: "barber-t5" },
+      { id_user: 3, filename: "maxime-color1.jpg", title: "Coloration mèches dorées", seed: "barber-m1" },
+      { id_user: 3, filename: "maxime-color2.jpg", title: "Décoloration platinum", seed: "barber-m2" },
+      { id_user: 3, filename: "maxime-retro1.jpg", title: "Pompadour vintage années 50", seed: "barber-m3" },
+      { id_user: 4, filename: "sofiane-afro1.jpg", title: "Tresse box braid complète", seed: "barber-s1" },
+      { id_user: 4, filename: "sofiane-fade1.jpg", title: "Dégradé afro contour", seed: "barber-s2" },
+      { id_user: 5, filename: "rafik-fade1.jpg", title: "Skin fade parfait", seed: "barber-r1" },
+      { id_user: 9, filename: "mehdi-cut1.jpg", title: "Coupe moderne Lyon", seed: "barber-me1" },
+      { id_user: 11, filename: "samir-fade1.jpg", title: "Dégradé Marseille", seed: "barber-sa1" },
     ];
 
     const uploadsDir = path.resolve("uploads/portfolio");
@@ -419,7 +424,9 @@ const demo = async () => {
     for (const entry of portfolioEntries) {
       const filePath = path.join(uploadsDir, entry.filename);
       if (!fs.existsSync(filePath)) {
-        const res = await fetch(`https://picsum.photos/seed/${entry.seed}/600/400`);
+        const res = await fetch(
+          `https://picsum.photos/seed/${entry.seed}/600/400`,
+        );
         const buffer = await res.arrayBuffer();
         fs.writeFileSync(filePath, Buffer.from(buffer));
         console.info(`  ➜ ${entry.filename} téléchargée`);
@@ -428,7 +435,10 @@ const demo = async () => {
 
     await database.query(
       `INSERT INTO barber_portfolio (id_user, image_url, title) VALUES ${portfolioEntries
-        .map((e) => `(${e.id_user}, 'uploads/portfolio/${e.filename}', '${e.title.replace(/'/g, "\\'")}')`)
+        .map(
+          (e) =>
+            `(${e.id_user}, 'uploads/portfolio/${e.filename}', '${e.title.replace(/'/g, "\\'")}')`,
+        )
         .join(", ")}`,
     );
 
@@ -444,14 +454,7 @@ const demo = async () => {
     ];
 
     // Génération des créneaux de 30 minutes
-    const morningTimes = [
-      "09:00",
-      "09:30",
-      "10:00",
-      "10:30",
-      "11:00",
-      "11:30",
-    ];
+    const morningTimes = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
     const afternoonTimes = [
       "14:00",
       "14:30",
@@ -484,7 +487,11 @@ const demo = async () => {
           const endH = endM >= 60 ? h + 1 : h;
           const endMin = endM >= 60 ? endM - 60 : endM;
           const endTime = `${String(endH).padStart(2, "0")}:${String(endMin).padStart(2, "0")}`;
-          slots.push([`${dateStr} ${time}:00`, `${dateStr} ${endTime}:00`, barberId]);
+          slots.push([
+            `${dateStr} ${time}:00`,
+            `${dateStr} ${endTime}:00`,
+            barberId,
+          ]);
         }
       }
     }
