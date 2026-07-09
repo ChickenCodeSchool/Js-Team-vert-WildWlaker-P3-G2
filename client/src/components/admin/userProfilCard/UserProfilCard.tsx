@@ -32,7 +32,15 @@ interface UserProfilCardProps {
   onToggleSuspendClick: () => void;
   deleteUser: () => void;
 }
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 function UserProfilCard({
   selectedUser,
   selectedUserStats,
@@ -53,7 +61,7 @@ function UserProfilCard({
       <div className="userProfilCard-header">
         <img
           className="userProfilCard-avatar"
-          src={selectedUser.avatar_url}
+          src={getImageUrl(selectedUser.avatar_url)}
           alt={displayName}
         />
         <h3>{displayName}</h3>

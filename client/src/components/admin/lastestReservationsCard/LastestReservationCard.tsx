@@ -6,7 +6,15 @@ import { useAuth } from "../../../context/AuthContext";
 import "./LastestReservationCard.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
+const getImageUrl = (imageUrl: string | undefined) => {
+  if (!imageUrl) return "/placeholder-image.png";
 
+  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
+    return imageUrl;
+  }
+
+  return `${import.meta.env.VITE_API_URL}${imageUrl}`;
+};
 interface Reservation {
   id: string;
   client: { name: string; avatar: string };
@@ -98,7 +106,7 @@ function LatestReservationsCard() {
                   <td>
                     <div className="client-info">
                       <img
-                        src={res.client.avatar}
+                        src={getImageUrl(res.client.avatar)}
                         alt={res.client.name}
                         className="client-avatar"
                       />
