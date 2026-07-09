@@ -17,7 +17,6 @@ import {
 import { LuUpload } from "react-icons/lu";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useNavigate } from "react-router";
-import AfroImg from "../../../assets/images/Afro.jpg";
 import EditBarberModal from "../../../components/barber/EditBarberModal/EditBarberModal";
 import { useAuth } from "../../../context/AuthContext";
 import type { Barber } from "../../../types/barber";
@@ -26,12 +25,7 @@ import "../../../components/customer/Profile/ProfileInfo.css";
 import "../../../components/customer/Profile/ProfileActions.css";
 import "./BarberProfil.css";
 
-type Photo = { id: number; src: string };
-
-const INITIAL_PHOTOS: Photo[] = Array.from({ length: 12 }, (_, i) => ({
-  id: i + 1,
-  src: AfroImg,
-}));
+type Photo = { id: number; src: string; title: string };
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -45,23 +39,40 @@ function BarberProfil() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [saved, setSaved] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [photos, setPhotos] = useState<Photo[]>(INITIAL_PHOTOS);
+  const [photos, setPhotos] = useState<Photo[]>([]);
   const [deleteMode, setDeleteMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
 
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const loadData = useCallback(() => {
+  const loadData = useCallback(async () => {
     if (!barberId) return;
-    fetch(`${API_URL}/api/barbers/${barberId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Impossible de charger le profil");
-        return res.json();
-      })
-      .then((data: Barber) => setBarberData(data))
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
+    try {
+      const [barberRes, portfolioRes] = await Promise.all([
+        fetch(`${API_URL}/api/barbers/${barberId}`),
+        fetch(`${API_URL}/api/barbers/${barberId}/portfolio`),
+      ]);
+      if (!barberRes.ok) throw new Error("Impossible de charger le profil");
+      const barber = await barberRes.json();
+      setBarberData(barber);
+      if (portfolioRes.ok) {
+        const portfolio = await portfolioRes.json();
+        setPhotos(
+          portfolio.map(
+            (p: { id_portfolio: number; image_url: string; title: string }) => ({
+              id: p.id_portfolio,
+              src: `${API_URL}/${p.image_url}`,
+              title: p.title,
+            }),
+          ),
+        );
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, [barberId]);
 
   useEffect(() => {
@@ -96,6 +107,7 @@ function BarberProfil() {
     const newPhotos: Photo[] = Array.from(files).map((file, i) => ({
       id: Date.now() + i,
       src: URL.createObjectURL(file),
+      title: file.name,
     }));
     setPhotos((prev) => [...prev, ...newPhotos]);
     e.target.value = "";
@@ -304,7 +316,7 @@ function BarberProfil() {
               >
                 <img
                   src={photo.src}
-                  alt={`Réalisation ${photo.id}`}
+                  alt={photo.title}
                   className="barber-profil__grid-item"
                 />
               </button>

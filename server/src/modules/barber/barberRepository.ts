@@ -97,6 +97,14 @@ class BarberRepository {
     return result;
   }
 
+  async readPortfolio(id: number) {
+    const [rows] = await databaseClient.query<Rows>(
+      "SELECT id_portfolio, image_url, title FROM barber_portfolio WHERE id_user = ? ORDER BY id_portfolio ASC",
+      [id],
+    );
+    return rows as { id_portfolio: number; image_url: string; title: string }[];
+  }
+
   // The U of CRUD - Update operation
   async update(barber: Barber) {
     const barberQuery = `
