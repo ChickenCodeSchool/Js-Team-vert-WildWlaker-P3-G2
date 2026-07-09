@@ -403,19 +403,84 @@ const demo = async () => {
     console.info("🖼️  Insertion des portfolios...");
 
     const portfolioEntries = [
-      { id_user: 2, filename: "thomas-fade1.jpg", title: "Dégradé à blanc parfait", seed: "barber-t1" },
-      { id_user: 2, filename: "thomas-fade2.jpg", title: "Fade skin classique", seed: "barber-t2" },
-      { id_user: 2, filename: "thomas-beard1.jpg", title: "Barbe sculptée au rasoir", seed: "barber-t3" },
-      { id_user: 2, filename: "thomas-beard2.jpg", title: "Taille ronde précise", seed: "barber-t4" },
-      { id_user: 2, filename: "thomas-cut1.jpg", title: "Coupe pompadour moderne", seed: "barber-t5" },
-      { id_user: 3, filename: "maxime-color1.jpg", title: "Coloration mèches dorées", seed: "barber-m1" },
-      { id_user: 3, filename: "maxime-color2.jpg", title: "Décoloration platinum", seed: "barber-m2" },
-      { id_user: 3, filename: "maxime-retro1.jpg", title: "Pompadour vintage années 50", seed: "barber-m3" },
-      { id_user: 4, filename: "sofiane-afro1.jpg", title: "Tresse box braid complète", seed: "barber-s1" },
-      { id_user: 4, filename: "sofiane-fade1.jpg", title: "Dégradé afro contour", seed: "barber-s2" },
-      { id_user: 5, filename: "rafik-fade1.jpg", title: "Skin fade parfait", seed: "barber-r1" },
-      { id_user: 9, filename: "mehdi-cut1.jpg", title: "Coupe moderne Lyon", seed: "barber-me1" },
-      { id_user: 11, filename: "samir-fade1.jpg", title: "Dégradé Marseille", seed: "barber-sa1" },
+      {
+        id_user: 2,
+        filename: "thomas-fade1.jpg",
+        title: "Dégradé à blanc parfait",
+        seed: "barber-t1",
+      },
+      {
+        id_user: 2,
+        filename: "thomas-fade2.jpg",
+        title: "Fade skin classique",
+        seed: "barber-t2",
+      },
+      {
+        id_user: 2,
+        filename: "thomas-beard1.jpg",
+        title: "Barbe sculptée au rasoir",
+        seed: "barber-t3",
+      },
+      {
+        id_user: 2,
+        filename: "thomas-beard2.jpg",
+        title: "Taille ronde précise",
+        seed: "barber-t4",
+      },
+      {
+        id_user: 2,
+        filename: "thomas-cut1.jpg",
+        title: "Coupe pompadour moderne",
+        seed: "barber-t5",
+      },
+      {
+        id_user: 3,
+        filename: "maxime-color1.jpg",
+        title: "Coloration mèches dorées",
+        seed: "barber-m1",
+      },
+      {
+        id_user: 3,
+        filename: "maxime-color2.jpg",
+        title: "Décoloration platinum",
+        seed: "barber-m2",
+      },
+      {
+        id_user: 3,
+        filename: "maxime-retro1.jpg",
+        title: "Pompadour vintage années 50",
+        seed: "barber-m3",
+      },
+      {
+        id_user: 4,
+        filename: "sofiane-afro1.jpg",
+        title: "Tresse box braid complète",
+        seed: "barber-s1",
+      },
+      {
+        id_user: 4,
+        filename: "sofiane-fade1.jpg",
+        title: "Dégradé afro contour",
+        seed: "barber-s2",
+      },
+      {
+        id_user: 5,
+        filename: "rafik-fade1.jpg",
+        title: "Skin fade parfait",
+        seed: "barber-r1",
+      },
+      {
+        id_user: 9,
+        filename: "mehdi-cut1.jpg",
+        title: "Coupe moderne Lyon",
+        seed: "barber-me1",
+      },
+      {
+        id_user: 11,
+        filename: "samir-fade1.jpg",
+        title: "Dégradé Marseille",
+        seed: "barber-sa1",
+      },
     ];
 
     const uploadsDir = path.resolve("uploads/portfolio");
@@ -520,8 +585,12 @@ const demo = async () => {
     console.info("");
     console.info("ADMIN  → admin@secare.fr");
     console.info("BARBERS (30) :");
-    console.info("  Bordeaux    → thomas@secare.fr / maxime@secare.fr / sofiane@secare.fr");
-    console.info("  Paris       → rafik@secare.fr / kevin@secare.fr / ibrahim@secare.fr / jordan@secare.fr");
+    console.info(
+      "  Bordeaux    → thomas@secare.fr / maxime@secare.fr / sofiane@secare.fr",
+    );
+    console.info(
+      "  Paris       → rafik@secare.fr / kevin@secare.fr / ibrahim@secare.fr / jordan@secare.fr",
+    );
     console.info("  Lyon        → mehdi@secare.fr / leo@secare.fr");
     console.info("  Marseille   → samir@secare.fr / julien@secare.fr");
     console.info("  Lille       → nabil@secare.fr / theo@secare.fr");
@@ -529,12 +598,24 @@ const demo = async () => {
     console.info("  Nantes      → xavier@secare.fr / killian@secare.fr");
     console.info("  Toulouse    → rayan@secare.fr / lucas@secare.fr");
     console.info("  Nice        → pierre@secare.fr / ali@secare.fr");
-    console.info("  Autres      → tony(Rennes) / enzo(Montpellier) / bilal(Grenoble)");
-    console.info("              → hugo(Dijon) / adam(Rouen) / nassim(Clermont)");
-    console.info("              → dylan(Reims) / mathieu(Metz) / florian(Tours)");
-    console.info("CLIENTS (10) → jean.dupont / lucie.martin / karim.benali / yasmine.oui");
-    console.info("             → antoine.girard / sarah.camus / marc.dupuis / chloe.richard");
-    console.info("             → nicolas.petit / emma.blanc  (tous @gmail.com)");
+    console.info(
+      "  Autres      → tony(Rennes) / enzo(Montpellier) / bilal(Grenoble)",
+    );
+    console.info(
+      "              → hugo(Dijon) / adam(Rouen) / nassim(Clermont)",
+    );
+    console.info(
+      "              → dylan(Reims) / mathieu(Metz) / florian(Tours)",
+    );
+    console.info(
+      "CLIENTS (10) → jean.dupont / lucie.martin / karim.benali / yasmine.oui",
+    );
+    console.info(
+      "             → antoine.girard / sarah.camus / marc.dupuis / chloe.richard",
+    );
+    console.info(
+      "             → nicolas.petit / emma.blanc  (tous @gmail.com)",
+    );
     console.info("─────────────────────────────────────────────────────────");
   } catch (err) {
     const { message, stack } = err as Error;
