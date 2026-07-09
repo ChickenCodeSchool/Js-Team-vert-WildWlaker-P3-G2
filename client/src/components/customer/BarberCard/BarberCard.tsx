@@ -50,9 +50,9 @@ function BarberCard({ barber, onProfileClick }: BarberCardProps) {
           </div>
         </div>
         <div className="barber-card__right">
-          <span className="barber-card__distance">
+          {/* <span className="barber-card__distance">
             📍 À {barber.delivery_radius} km
-          </span>
+          </span> */}
           <FiChevronRight className="barber-card__arrow" />
         </div>
       </div>

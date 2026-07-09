@@ -23,23 +23,40 @@ function SearchPage() {
       async (position) => {
         const { latitude, longitude } = position.coords;
 
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
-        );
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
+          );
+          if (!response.ok) {
+            throw new Error("Erreur de géolocalisation");
+          }
 
-        const data = await response.json();
-        const city = data.address.city;
+          const data = await response.json();
+          const city =
+            data.address.city ?? data.address.town ?? data.address.village;
+          if (!city) {
+            alert("Impossible de déterminer votre ville.");
+            setIsNearMeActive(false);
+            return;
+          }
 
-        const nearbyBarbers = barbers.filter(
-          (barber) => barber.city.toLowerCase() === city.toLowerCase(),
-        );
+          const nearbyBarbers = barbers.filter(
+            (barber) => barber.city.toLowerCase() === city.toLowerCase(),
+          );
 
-        setFilteredBarbers(nearbyBarbers);
-        setIsNearMeActive(true);
+          setFilteredBarbers(nearbyBarbers);
+          setIsNearMeActive(true);
+        } catch (err) {
+          console.error(err);
+          alert("Impossible de récupérer votre position");
+          setIsNearMeActive(false);
+        }
       },
+
       (error) => {
         console.error(error);
         alert("Impossible d'obtenir votre position.");
+        setIsNearMeActive(false);
       },
     );
   };
@@ -84,11 +101,10 @@ function SearchPage() {
           onChange={(e) => {
             const checked = e.target.checked;
 
-            setIsNearMeActive(checked);
-
             if (checked) {
               handleNearMe();
             } else {
+              setIsNearMeActive(false);
               setFilteredBarbers([]);
             }
           }}

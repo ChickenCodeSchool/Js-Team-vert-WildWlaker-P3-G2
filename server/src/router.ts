@@ -36,11 +36,6 @@ router.put(
   verifyToken,
   appointmentActions.updateStatus,
 );
-router.get(
-  "/api/appointments/me",
-  verifyToken,
-  appointmentActions.readMyAppointments,
-);
 router.post("/api/appointments", verifyToken, appointmentActions.create);
 // --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);

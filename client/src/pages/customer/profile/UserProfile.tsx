@@ -28,10 +28,7 @@ function UserProfile() {
 
   const user = JSON.parse(localStorage.getItem("user") || "null");
   const userId = user?.id;
-  console.log("USER:", user);
-  console.log("USER ID:", userId);
   useEffect(() => {
-    console.log("useEffect UserProfile");
     const token = localStorage.getItem("token");
     fetch(`${API_URL}/api/customers/${userId}`, {
       headers: {
@@ -70,8 +67,10 @@ function UserProfile() {
 
   const handleDeleteAccount = async () => {
     try {
+      const token = localStorage.getItem("token");
       const res = await fetch(`${API_URL}/api/users/${customer?.id_user}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error("Erreur lors de la suppression");
