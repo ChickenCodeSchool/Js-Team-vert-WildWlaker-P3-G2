@@ -8,10 +8,6 @@ import adminDashboardAction from "./modules/adminDashboard/adminDashboardAction"
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
 import barberAvailabilityActions from "./modules/barber/barberAvailabilityActions";
-import {
-  upload as barberUpload,
-  uploadAvatar,
-} from "./modules/barber/barberAvatarActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import {
@@ -57,17 +53,9 @@ router.post("/api/appointments", verifyToken, appointmentActions.create);
 // --- Les routes Barbier ---
 router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read); // La voilà, la fameuse route !
-router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.get("/api/barbers/:id/availability", barberAvailabilityActions.browse);
-router.put("/api/barbers/:id/schedule", barberAvailabilityActions.generate);
 router.get("/api/barbers/:id/prestations", prestationActions.browseByBarber);
 router.put("/api/barbers/:id", barberActions.edit);
-router.post(
-  "/api/barbers/:id/avatar",
-  verifyToken,
-  barberUpload.single("avatar"),
-  uploadAvatar,
-);
 router.post(
   "/api/users/:id/avatar",
   verifyToken,
@@ -86,9 +74,6 @@ router.put(
 );
 router.delete("/api/events/:id", eventActions.destroy);
 router.get("/api/prestations", prestationActions.browse);
-router.post("/api/prestations", verifyToken, prestationActions.add);
-router.put("/api/prestations/:id", verifyToken, prestationActions.edit);
-router.delete("/api/prestations/:id", verifyToken, prestationActions.destroy);
 router.delete("/api/reviews/:id", verifyToken, reviewActions.destroy);
 router.get("/api/reviews", reviewActions.browse);
 router.get("/api/reviews/admin", reviewActions.browseforadmin);

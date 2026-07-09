@@ -35,7 +35,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const userString = localStorage.getItem("user");
 const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
+const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
 
 function BarberProfil() {
   const navigate = useNavigate();
@@ -60,6 +60,7 @@ function BarberProfil() {
       })
       .then((data: Barber) => {
         setBarberData(data);
+
         if (data.avatar_url) {
           setAvatarSrc(`${API_URL}${data.avatar_url}`);
         }

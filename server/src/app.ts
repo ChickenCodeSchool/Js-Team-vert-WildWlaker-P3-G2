@@ -62,10 +62,12 @@ app.use(express.json());
 // Import the API router
 import router from "./router";
 import routerAdmin from "./routerAdmin";
+import routerBarber from "./routerBarber";
 
 // Mount the API router under the "/api" endpoint
 app.use(router);
 app.use("/api/admin", routerAdmin);
+app.use("/api/barber", routerBarber);
 
 /* ************************************************************************* */
 

@@ -5,7 +5,7 @@ import "./barberDisponibilites.css";
 const API_URL = import.meta.env.VITE_API_URL;
 const userString = localStorage.getItem("user");
 const loggedUser = userString ? JSON.parse(userString) : null;
-const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : 4;
+const BARBER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
 
 type DaySchedule = {
   day: string;
@@ -91,13 +91,22 @@ function BarberDisponibilites() {
   }
 
   async function handleSave() {
+    if (!BARBER_ID) return;
+
     try {
-      const res = await fetch(`${API_URL}/api/barbers/${BARBER_ID}/schedule`, {
+      const res = await fetch(`${API_URL}/api/barber/${BARBER_ID}/schedule`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: JSON.stringify({ schedule }),
       });
-      if (!res.ok) throw new Error("Erreur lors de la sauvegarde");
+
+      if (!res.ok) {
+        throw new Error("Erreur lors de la sauvegarde");
+      }
+
       setSaved(true);
     } catch (err) {
       console.error(err);

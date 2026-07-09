@@ -150,11 +150,15 @@ class AppointmentRepository {
     return rows as AppointmentWithDetails[];
   }
 
-  async updateStatus(id: number, status: string) {
+  async updateStatus(id: number, status: string, barberId: number) {
     await databaseClient.query(
-      "UPDATE appointment SET status = ? WHERE id_appointment = ?",
-      [status, id],
+      `UPDATE appointment
+     SET status = ?
+     WHERE id_appointment = ?
+       AND id_user_barber = ?`,
+      [status, id, barberId],
     );
+
     return true;
   }
 

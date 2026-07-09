@@ -22,7 +22,7 @@ class PrestationRepository {
   async readByBarber(barberId: number) {
     const [rows] = await databaseClient.query<Rows>(
       `SELECT 
-      p.id_prestation AS Id_prestation,
+      p.id_prestation,
       p.name,
       p.price,
       p.duration_minutes
@@ -50,21 +50,47 @@ class PrestationRepository {
     return result.insertId;
   }
 
-  async update(id: number, prestation: Omit<Prestation, "id_prestation">) {
+  async update(
+    id: number,
+    prestation: Omit<Prestation, "id_prestation"> & { id_user: number },
+  ) {
     await databaseClient.query<Result>(
-      "UPDATE prestation SET name = ?, price = ?, duration_minutes = ? WHERE id_prestation = ?",
-      [prestation.name, prestation.price, prestation.duration_minutes, id],
+      `UPDATE prestation p
+     INNER JOIN propose pr
+       ON pr.id_prestation = p.id_prestation
+     SET
+       p.name = ?,
+       p.price = ?,
+       p.duration_minutes = ?
+     WHERE p.id_prestation = ?
+       AND pr.id_user = ?`,
+      [
+        prestation.name,
+        prestation.price,
+        prestation.duration_minutes,
+        id,
+        prestation.id_user,
+      ],
     );
   }
 
-  async delete(id: number) {
+  async delete(id: number, idUser: number) {
     await databaseClient.query<Result>(
-      "DELETE FROM propose WHERE id_prestation = ?",
-      [id],
+      `DELETE FROM propose
+     WHERE id_prestation = ?
+     AND id_user = ?`,
+      [id, idUser],
     );
+
     await databaseClient.query<Result>(
-      "DELETE FROM prestation WHERE id_prestation = ?",
-      [id],
+      `DELETE FROM prestation
+     WHERE id_prestation = ?
+     AND NOT EXISTS (
+       SELECT 1
+       FROM propose
+       WHERE id_prestation = ?
+     )`,
+      [id, id],
     );
   }
 }

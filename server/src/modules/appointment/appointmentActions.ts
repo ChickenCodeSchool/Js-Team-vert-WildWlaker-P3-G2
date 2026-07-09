@@ -52,13 +52,23 @@ const readwithuserid: RequestHandler = async (req, res, next) => {
 
 const readByBarber: RequestHandler = async (req, res, next) => {
   try {
-    const barberId = Number(req.params.id);
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    if (Number(req.params.id) !== req.user.id) {
+      return res.sendStatus(403);
+    }
+
+    const barberId = req.user.id;
     const status =
       typeof req.query.status === "string" ? req.query.status : undefined;
+
     const appointments = await appointmentRepository.readByBarber(
       barberId,
       status,
     );
+
     res.json(appointments);
   } catch (err) {
     next(err);
@@ -67,9 +77,16 @@ const readByBarber: RequestHandler = async (req, res, next) => {
 
 const updateStatus: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
     const id = Number(req.params.id);
+    const barberId = req.user.id;
     const { status } = req.body as { status: string };
-    await appointmentRepository.updateStatus(id, status);
+
+    await appointmentRepository.updateStatus(id, status, barberId);
+
     res.json({ success: true });
   } catch (err) {
     next(err);
