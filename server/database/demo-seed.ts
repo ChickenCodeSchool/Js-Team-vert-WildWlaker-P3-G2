@@ -483,7 +483,7 @@ const demo = async () => {
       },
     ];
 
-    const uploadsDir = path.resolve("uploads/portfolio");
+    const uploadsDir = path.resolve("public/uploads/portfolio");
     fs.mkdirSync(uploadsDir, { recursive: true });
 
     for (const entry of portfolioEntries) {
@@ -502,7 +502,7 @@ const demo = async () => {
       `INSERT INTO barber_portfolio (id_user, image_url, title) VALUES ${portfolioEntries
         .map(
           (e) =>
-            `(${e.id_user}, 'uploads/portfolio/${e.filename}', '${e.title.replace(/'/g, "\\'")}')`,
+            `(${e.id_user}, '/uploads/portfolio/${e.filename}', '${e.title.replace(/'/g, "\\'")}')`,
         )
         .join(", ")}`,
     );

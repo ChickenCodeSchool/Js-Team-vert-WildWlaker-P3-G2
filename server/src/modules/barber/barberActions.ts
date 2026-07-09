@@ -63,5 +63,15 @@ const edit: RequestHandler = async (req, res, next) => {
   }
 };
 
+const readPortfolio: RequestHandler = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    const portfolio = await barberRepository.readPortfolio(id);
+    res.json(portfolio);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // On n'oublie pas d'exposer "read" ici pour le routeur !
-export default { browse, read, edit };
+export default { browse, read, edit, readPortfolio };

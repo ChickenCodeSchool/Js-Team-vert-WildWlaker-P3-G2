@@ -3,6 +3,8 @@ import { Link } from "react-router";
 import type { Barber } from "../../types/barber";
 import "./Carrousel.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 type CarrouselProps = {
   barbers: Barber[];
   selectedBarber?: Barber;
@@ -38,7 +40,7 @@ function Carrousel({
             <div className="carrousel__image-wrapper">
               <img
                 className="carrousel__image"
-                src={barber.avatar_url}
+                src={`${API_URL}${barber.avatar_url}`}
                 alt={barber.name}
               />
             </div>
