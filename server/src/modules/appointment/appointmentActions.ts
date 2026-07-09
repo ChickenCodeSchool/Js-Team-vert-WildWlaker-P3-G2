@@ -81,13 +81,7 @@ const updateStatus: RequestHandler = async (req, res, next) => {
     if (!appointment) {
       return res.status(404).json({ message: "Rendez-vous introuvable" });
     }
-    console.log("DEBUG →", {
-      id_user_customer: appointment.id_user_customer,
-      typeof_customer: typeof appointment.id_user_customer,
-      userId,
-      typeof_userId: typeof userId,
-      status_recu: status,
-    });
+
     const isOwner = appointment.id_user_customer === userId;
     const isBarber = appointment.id_user_barber === userId;
     const isAdmin = userRole === "admin";
@@ -106,8 +100,6 @@ const updateStatus: RequestHandler = async (req, res, next) => {
 };
 
 const create: RequestHandler = async (req, res, next) => {
-  console.log("BODY =", req.body);
-  console.log("USER =", req.user);
   try {
     const { appointment_date, location_type, id_prestation, id_user_barber } =
       req.body;
@@ -135,12 +127,10 @@ const create: RequestHandler = async (req, res, next) => {
 const readMyAppointments: RequestHandler = async (req, res, next) => {
   try {
     const userId = Number(req.user?.id);
-    console.log("USER ID UTILISÉ POUR LA REQUÊTE :", userId);
     if (Number.isNaN(userId)) {
       return res.sendStatus(403);
     }
     const appointments = await appointmentRepository.readwithuserid(userId);
-    console.log("RÉSULTAT SQL :", appointments);
     res.status(200).json(appointments);
   } catch (err) {
     next(err);
