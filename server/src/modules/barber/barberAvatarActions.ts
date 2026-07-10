@@ -33,11 +33,20 @@ export const upload = multer({
 
 export const uploadAvatar: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    if (Number(req.params.id) !== req.user.id) {
+      return res.sendStatus(403);
+    }
+
     if (!req.file) {
       res.status(400).json({ error: "Aucun fichier fourni" });
       return;
     }
-    const barberId = Number(req.params.id);
+
+    const barberId = req.user.id;
     const avatarUrl = `/uploads/avatars/${req.file.filename}`;
 
     await databaseClient.query(

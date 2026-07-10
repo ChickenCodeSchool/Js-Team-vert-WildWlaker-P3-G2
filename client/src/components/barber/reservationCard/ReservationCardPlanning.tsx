@@ -12,6 +12,8 @@ type Props = {
   onShowDetails?: () => void;
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function ReservationCardPlanning({
   avatar,
   time,
@@ -29,7 +31,7 @@ function ReservationCardPlanning({
     >
       <div className="planning-reservation-card-left">
         <img
-          src={avatar}
+          src={`${API_URL}${avatar}`}
           alt={customerName}
           className="planning-reservation-card-avatar"
         />

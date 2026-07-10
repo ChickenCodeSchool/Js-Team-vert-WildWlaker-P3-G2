@@ -18,13 +18,30 @@ function useBarberAppointments(barberId: number, status?: string) {
   const [appointments, setAppointments] = useState<BarberAppointment[]>([]);
 
   useEffect(() => {
-    const url = status
-      ? `${API_URL}/api/appointments/barber/${barberId}?status=${encodeURIComponent(status)}`
-      : `${API_URL}/api/appointments/barber/${barberId}`;
+    if (!barberId) return;
 
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => setAppointments(data));
+    const url = status
+      ? `${API_URL}/api/barber/${barberId}/appointments?status=${encodeURIComponent(status)}`
+      : `${API_URL}/api/barber/${barberId}/appointments`;
+
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Erreur lors du chargement des rendez-vous");
+        }
+
+        return res.json();
+      })
+      .then((data) => {
+        setAppointments(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, [barberId, status]);
 
   return { appointments, setAppointments };

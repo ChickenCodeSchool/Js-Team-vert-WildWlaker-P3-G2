@@ -27,8 +27,9 @@ function calcTrend(current: number, last: number) {
   return Math.round(((current - last) / last) * 100);
 }
 
-// Hardcodé à 1 en attendant l'authentification
-const BARBER_ID = 1;
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const BARBER_ID = Number(loggedUser?.id ?? 0);
 
 function BarberStatistics() {
   const stats = useBarberStatistics(BARBER_ID);

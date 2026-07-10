@@ -24,7 +24,7 @@ type Props = {
 
 function ModalReservation({ reservation, onClose }: Props) {
   const date = new Date(reservation.appointment_date);
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const formattedDate = date.toLocaleDateString("fr-FR", {
     day: "numeric",
     month: "long",
@@ -43,7 +43,7 @@ function ModalReservation({ reservation, onClose }: Props) {
 
         <div className="modal-reservation-user">
           <img
-            src={reservation.customer_avatar}
+            src={`${API_URL}${reservation.customer_avatar}`}
             alt={`${reservation.customer_firstname} ${reservation.customer_lastname}`}
           />
 

@@ -64,7 +64,7 @@ function ReservationCard({ reservation, review, onCancelled }: Props) {
       <div className="reservation-card__header">
         <img
           className="reservation-card__avatar"
-          src={reservation.barber_avatar}
+          src={`${API_URL}${reservation.barber_avatar}`}
           alt={reservation.barber_name}
         />
         <div className="reservation-card__title-container">

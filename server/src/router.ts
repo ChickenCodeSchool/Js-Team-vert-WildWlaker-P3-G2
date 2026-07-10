@@ -6,10 +6,6 @@ import { verifyToken } from "./middleware/verifyToken";
 import appointmentActions from "./modules/appointment/appointmentActions";
 import barberActions from "./modules/barber/barberActions";
 import barberAvailabilityActions from "./modules/barber/barberAvailabilityActions";
-import {
-  upload as barberUpload,
-  uploadAvatar,
-} from "./modules/barber/barberAvatarActions";
 import barberStatisticsActions from "./modules/barber/barberStatisticsActions";
 import customerActions from "./modules/customer/customerActions";
 import {
@@ -42,17 +38,10 @@ router.get("/api/barbers", barberActions.browse);
 router.get("/api/barbers/:id", barberActions.read);
 router.get("/api/barbers/:id/statistics", barberStatisticsActions.browse);
 router.get("/api/barbers/:id/availability", barberAvailabilityActions.browse);
-router.put("/api/barbers/:id/schedule", barberAvailabilityActions.generate);
 router.get("/api/barbers/:id/prestations", prestationActions.browseByBarber);
 router.get("/api/barbers/:id/portfolio", barberActions.readPortfolio);
 router.put("/api/barbers/:id", verifyToken, barberActions.edit);
 
-router.post(
-  "/api/barbers/:id/avatar",
-  verifyToken,
-  barberUpload.single("avatar"),
-  uploadAvatar,
-);
 router.post(
   "/api/users/:id/avatar",
   verifyToken,
