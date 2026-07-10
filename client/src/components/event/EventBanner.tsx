@@ -11,7 +11,7 @@ type EventBannerProps = {
   location: string;
   image: string;
 };
-
+const API_URL = import.meta.env.VITE_API_URL;
 function formatDate(raw: string): string {
   const d = new Date(raw);
   const date = d.toLocaleDateString("fr-FR", {
@@ -29,7 +29,11 @@ function formatDate(raw: string): string {
 function EventBanner(props: EventBannerProps) {
   return (
     <section className="event_banner">
-      <img src={props.image} alt={props.title} className="event_image" />
+      <img
+        src={`${API_URL}${props.image}`}
+        alt={props.title}
+        className="event_image"
+      />
 
       <div className="event-banner_control">
         <div className="event_content">
