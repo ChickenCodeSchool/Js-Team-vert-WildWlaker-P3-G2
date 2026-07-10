@@ -90,22 +90,22 @@
   font-size: 0.85rem;
 }
 /* Confirmé */
-.reservation-card__status--confirmed {
+.reservation-card__status--confirmé {
   background-color: #e6f4ea;
   color: var(--success);
 }
 /* En attente */
-.reservation-card__status--pending {
+.reservation-card__status--en {
   background-color: #fffbeb;
   color: var(--warning);
 }
 /* Terminé */
-.reservation-card__status--completed {
+.reservation-card__status--terminé {
   background-color: var(--gray-100);
   color: var(--gray-600);
 }
 /* Annulé */
-.reservation-card__status--cancelled {
+.reservation-card__status--annulé {
   background-color: #fef2f2;
   color: var(--error);
 }

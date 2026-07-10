@@ -74,26 +74,6 @@ function BookingConfirmation({ booking }: Props) {
 
   return (
     <div className="booking-confirmation">
-      <div>
-        {error && <p className="error">{error}</p>}
-        {!success && (
-          <button
-            type="button"
-            className="booking-confirm__button"
-            onClick={confirmBooking}
-            disabled={isSubmitting}
-          >
-            {isSubmitting
-              ? "Réservation en cours..."
-              : "Confirmer la réservation"}
-          </button>
-        )}
-        {success && <p>Votre réservation a été confirmée 🎉 !</p>}
-      </div>
-
-      <p className="booking-confirmation__message">
-        Votre rendez-vous à été enregistré
-      </p>
       <div className="booking-confirmation__card">
         <p className="booking-confirmation__item">
           <strong>Barber:</strong> {booking.barber?.name}
@@ -111,6 +91,22 @@ function BookingConfirmation({ booking }: Props) {
         <p className="booking-confirmation__item">
           <strong>Heure :</strong> {booking.appointmentTime ?? "-"}
         </p>
+      </div>
+      <div className="booking-confirm">
+        {error && <p className="error">{error}</p>}
+        {!success && (
+          <button
+            type="button"
+            className="booking-confirm__button"
+            onClick={confirmBooking}
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? "Réservation en cours..."
+              : "Confirmer la réservation"}
+          </button>
+        )}
+        {success && <p> Votre réservation a été confirmée 🎉 !</p>}
       </div>
       <button
         type="button"
