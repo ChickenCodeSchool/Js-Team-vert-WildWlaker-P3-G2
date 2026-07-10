@@ -42,7 +42,7 @@ function ReservationCard({ reservation, review, onCancelled }: Props) {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ status: "cancelled" }),
+          body: JSON.stringify({ status: "annulé" }),
         },
       );
 

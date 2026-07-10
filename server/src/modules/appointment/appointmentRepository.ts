@@ -4,7 +4,7 @@ import databaseClient from "../../../database/client";
 export type Appointment = {
   id_appointment: number;
   appointment_date: Date;
-  status: "pending" | "confirmed" | "completed" | "cancelled";
+  status: "en attente" | "confirmé" | "terminé" | "annulé";
   location_type: string;
   create_time: Date;
   id_prestation: number;

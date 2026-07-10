@@ -33,13 +33,13 @@
 }
 .booking-confirmation__button {
   width: 100%;
-  margin-top: 2rem;
+
   padding: 1rem;
 
-  border: none;
+  border: 1px solid var(--gray-300);
   border-radius: var(--radius-md);
-  background: var(--gold-dark);
-  color: var(--white);
+  background: var(--gold-soft);
+  color: var(--black);
   font-weight: 600;
   font-family: var(--font-body);
   cursor: pointer;
@@ -89,7 +89,12 @@
 }
 .booking-confirm__button:hover {
   background: var(--gold-soft);
-  color: var(--black);
+  color: var(--success);
   border: 1px solid var(--black);
   transform: translateY(-2px);
+}
+.booking-confirm p {
+  font-size: 600;
+  margin: 1rem;
+  font-family: var(--font-body);
 }

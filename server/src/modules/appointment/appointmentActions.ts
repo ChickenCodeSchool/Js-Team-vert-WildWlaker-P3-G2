@@ -64,7 +64,7 @@ const readByBarber: RequestHandler = async (req, res, next) => {
     next(err);
   }
 };
-const ALLOWED_STATUSES = ["pending", "confirmed", "completed", "cancelled"];
+const ALLOWED_STATUSES = ["en attente", "confirmé", "terminé", "annulé"];
 const updateStatus: RequestHandler = async (req, res, next) => {
   try {
     const appointmentId = Number(req.params.id);
@@ -88,7 +88,7 @@ const updateStatus: RequestHandler = async (req, res, next) => {
     if (!isOwner && !isBarber && !isAdmin) {
       return res.sendStatus(403);
     }
-    if (isOwner && !isBarber && !isAdmin && status !== "cancelled") {
+    if (isOwner && !isBarber && !isAdmin && status !== "annulé") {
       return res.sendStatus(403);
     }
 

@@ -4,10 +4,6 @@ import "./MyReservations.css";
 import type { Review } from "../../../types/review";
 import type { Reservation } from "./ReservationType";
 
-const userString = localStorage.getItem("user");
-const loggedUser = userString ? JSON.parse(userString) : null;
-const USER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
-
 function MyReservations() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [activeTab, setActiveTab] = useState("upcoming");
@@ -17,6 +13,11 @@ function MyReservations() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
+
+    const userString = localStorage.getItem("user");
+    const loggedUser = userString ? JSON.parse(userString) : null;
+    const USER_ID = loggedUser?.id ? Number(loggedUser.id) : null;
+
     fetch(`${API_URL}/api/appointments/user/${USER_ID}`, {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -46,7 +47,7 @@ function MyReservations() {
   const handleCancelled = (appointmentId: number) => {
     setAppointments((prev) =>
       prev.map((a) =>
-        a.id_appointment === appointmentId ? { ...a, status: "cancelled" } : a,
+        a.id_appointment === appointmentId ? { ...a, status: "annulé" } : a,
       ),
     );
   };
