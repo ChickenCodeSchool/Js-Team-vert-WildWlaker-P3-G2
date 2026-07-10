@@ -326,3 +326,29 @@
   font-size: 13px;
   color: var(--gray-600);
 }
+@media (min-width: 1024px) {
+  .planning-calendar {
+    max-width: 100%;
+  }
+
+  /* .planning-topbar {
+    grid-template-columns: 36px 1fr 36px;
+    margin-bottom: 32px;
+  }
+
+  .planning-topbar h2 {
+    font-size: 18px;
+  }
+
+  .icon-button {
+    font-size: 28px;
+  }
+
+  .filter-button {
+    font-size: 22px;
+  }
+
+  .planning-month-navigation {
+    margin-bottom: 20px;
+  } */
+}

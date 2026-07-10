@@ -180,7 +180,7 @@ function CustomerAvis() {
             <li key={review.id_review} className="customer-avis__item">
               <img
                 src={
-                  review.customer_avatar ||
+                  `${API_URL}${review.customer_avatar}` ||
                   `https://api.dicebear.com/7.x/thumbs/svg?seed=${review.id_review}`
                 }
                 alt={`${review.customer_firstname} ${review.customer_lastname}`}
