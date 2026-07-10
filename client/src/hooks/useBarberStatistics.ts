@@ -35,7 +35,13 @@ function useBarberStatistics(barberId: number) {
   const [stats, setStats] = useState<BarberStats | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/api/barbers/${barberId}/statistics`)
+    if (!barberId) return;
+
+    fetch(`${API_URL}/api/barber/${barberId}/statistics`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => res.json())
       .then((data) => setStats(data));
   }, [barberId]);

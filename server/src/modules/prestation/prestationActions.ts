@@ -19,16 +19,22 @@ const browse: RequestHandler = async (_req, res, next) => {
 
 const add: RequestHandler = async (req, res, next) => {
   try {
-    const { name, price, duration_minutes, id_user } = req.body;
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
+    const { name, price, duration_minutes } = req.body;
+
     const insertId = await PrestationRepository.create({
       name,
       price,
       duration_minutes,
-      id_user,
+      id_user: req.user.id,
     });
+
     res
       .status(201)
-      .json({ Id_prestation: insertId, name, price, duration_minutes });
+      .json({ id_prestation: insertId, name, price, duration_minutes });
   } catch (err) {
     next(err);
   }
@@ -36,10 +42,26 @@ const add: RequestHandler = async (req, res, next) => {
 
 const edit: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
     const id = Number(req.params.id);
     const { name, price, duration_minutes } = req.body;
-    await PrestationRepository.update(id, { name, price, duration_minutes });
-    res.json({ Id_prestation: id, name, price, duration_minutes });
+
+    await PrestationRepository.update(id, {
+      name,
+      price,
+      duration_minutes,
+      id_user: req.user.id,
+    });
+
+    res.json({
+      id_prestation: id,
+      name,
+      price,
+      duration_minutes,
+    });
   } catch (err) {
     next(err);
   }
@@ -47,8 +69,14 @@ const edit: RequestHandler = async (req, res, next) => {
 
 const destroy: RequestHandler = async (req, res, next) => {
   try {
+    if (!req.user) {
+      return res.sendStatus(401);
+    }
+
     const id = Number(req.params.id);
-    await PrestationRepository.delete(id);
+
+    await PrestationRepository.delete(id, req.user.id);
+
     res.sendStatus(204);
   } catch (err) {
     next(err);

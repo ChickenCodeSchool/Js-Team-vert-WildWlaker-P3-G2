@@ -27,7 +27,7 @@ function BarberPlanning() {
 
   useEffect(() => {
     if (!BARBER_ID) return;
-    fetch(`${apiUrl}/api/appointments/barber/${BARBER_ID}`, {
+    fetch(`${apiUrl}/api/barber/${BARBER_ID}/appointments`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

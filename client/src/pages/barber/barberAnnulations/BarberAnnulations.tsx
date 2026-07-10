@@ -4,8 +4,9 @@ import "./barberAnnulations.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Hardcodé en attendant l'authentification
-const BARBER_ID = 1;
+const userString = localStorage.getItem("user");
+const loggedUser = userString ? JSON.parse(userString) : null;
+const BARBER_ID = Number(loggedUser?.id ?? 0);
 
 function formatDate(dateStr: string) {
   return new Date(dateStr).toLocaleDateString("fr-FR", {
@@ -24,11 +25,18 @@ function BarberAnnulations() {
   );
 
   function handleRelancer(id: number) {
-    fetch(`${API_URL}/api/appointments/${id}/status`, {
+    fetch(`${API_URL}/api/barber/appointments/${id}/status`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
       body: JSON.stringify({ status: "En attente" }),
-    }).then(() => {
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("Erreur lors de la relance");
+      }
+
       setAppointments((prev) => prev.filter((a) => a.id_appointment !== id));
     });
   }
@@ -36,9 +44,12 @@ function BarberAnnulations() {
   function handleRelancerTous() {
     Promise.all(
       appointments.map((a) =>
-        fetch(`${API_URL}/api/appointments/${a.id_appointment}/status`, {
+        fetch(`${API_URL}/api/barber/appointments/${a.id_appointment}/status`, {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           body: JSON.stringify({ status: "En attente" }),
         }),
       ),

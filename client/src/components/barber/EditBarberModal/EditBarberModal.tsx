@@ -37,7 +37,7 @@ function EditBarberModal({ barber, onClose, onSave }: Props) {
     };
 
     try {
-      const res = await fetch(`${API_URL}/api/barbers/${barber.id_user}`, {
+      const res = await fetch(`${API_URL}/api/barber/${barber.id_user}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

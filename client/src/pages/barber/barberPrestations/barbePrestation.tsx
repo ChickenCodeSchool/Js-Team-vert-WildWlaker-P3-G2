@@ -39,7 +39,7 @@ function BarberPrestation() {
   }
 
   async function handleDelete(id: number) {
-    const res = await fetch(`${API_URL}/api/prestations/${id}`, {
+    const res = await fetch(`${API_URL}/api/barber/prestations/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -60,11 +60,10 @@ function BarberPrestation() {
       name: form.name,
       price: Number(form.price),
       duration_minutes: Number(form.duration),
-      id_user: barberId,
     };
 
     if (editingId !== null) {
-      await fetch(`${API_URL}/api/prestations/${editingId}`, {
+      await fetch(`${API_URL}/api/barber/prestations/${editingId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +77,7 @@ function BarberPrestation() {
         ),
       );
     } else {
-      const res = await fetch(`${API_URL}/api/prestations`, {
+      const res = await fetch(`${API_URL}/api/barber/prestations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
