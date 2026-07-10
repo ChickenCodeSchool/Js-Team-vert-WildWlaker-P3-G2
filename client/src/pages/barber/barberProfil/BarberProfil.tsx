@@ -90,9 +90,11 @@ function BarberProfil() {
     formData.append("avatar", file);
     setUploading(true);
     try {
-      const res = await fetch(`${API_URL}/api/barbers/${barberId}/avatar`, {
+      const res = await fetch(`${API_URL}/api/barber/${barberId}/avatar`, {
         method: "POST",
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: formData,
       });
       if (!res.ok) throw new Error("Échec de l'upload");

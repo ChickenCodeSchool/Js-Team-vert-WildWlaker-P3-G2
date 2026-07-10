@@ -91,22 +91,22 @@ function BarberDashBoard() {
         <StatsGraphCardBarber
           Icon={FaRegCalendarAlt}
           value={reservationsThisMonth.length}
-          title="NOMBRE DE RDV "
-          cycle="mois"
+          title="RENDEZ-VOUS "
+          cycle="Ce mois"
         />
 
         <StatsGraphCardBarber
           Icon={GoClock}
           value={upcomingReservations.length}
-          title="EN ATTENTES"
-          cycle="avenir"
+          title="RÉSERVATIONS"
+          cycle="En attente"
         />
 
         <StatsGraphCardBarber
           Icon={PiStarThin}
           value={reviews.length}
-          title="AVIS"
-          cycle="total"
+          title="AVIS CLIENTS"
+          cycle="Au total"
         />
       </div>
 
