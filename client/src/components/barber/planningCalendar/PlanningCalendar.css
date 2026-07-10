@@ -326,3 +326,8 @@
   font-size: 13px;
   color: var(--gray-600);
 }
+@media (min-width: 1024px) {
+  .planning-calendar {
+    max-width: 100%;
+  }
+}
